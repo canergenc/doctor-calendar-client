@@ -85,9 +85,9 @@ class Index extends React.Component {
                   <Row className="align-items-center">
                     <div className="col">
                       <h6 className="text-uppercase text-light ls-1 mb-1">
-                        Overview
+                        Genel
                       </h6>
-                      <h2 className="text-white mb-0">Sales value</h2>
+                      <h2 className="text-white mb-0">Nöbet Grafiği</h2>
                     </div>
                     <div className="col">
                       <Nav className="justify-content-end" pills>
@@ -99,8 +99,8 @@ class Index extends React.Component {
                             href="#pablo"
                             onClick={e => this.toggleNavs(e, 1)}
                           >
-                            <span className="d-none d-md-block">Month</span>
-                            <span className="d-md-none">M</span>
+                            <span className="d-none d-md-block">Ay</span>
+                            <span className="d-md-none">A</span>
                           </NavLink>
                         </NavItem>
                         <NavItem>
@@ -112,8 +112,8 @@ class Index extends React.Component {
                             href="#pablo"
                             onClick={e => this.toggleNavs(e, 2)}
                           >
-                            <span className="d-none d-md-block">Week</span>
-                            <span className="d-md-none">W</span>
+                            <span className="d-none d-md-block">Hafta</span>
+                            <span className="d-md-none">H</span>
                           </NavLink>
                         </NavItem>
                       </Nav>
@@ -138,9 +138,9 @@ class Index extends React.Component {
                   <Row className="align-items-center">
                     <div className="col">
                       <h6 className="text-uppercase text-muted ls-1 mb-1">
-                        Performance
+                        Performans
                       </h6>
-                      <h2 className="mb-0">Total orders</h2>
+                      <h2 className="mb-0">Toplam nöbet</h2>
                     </div>
                   </Row>
                 </CardHeader>
@@ -162,7 +162,7 @@ class Index extends React.Component {
                 <CardHeader className="border-0">
                   <Row className="align-items-center">
                     <div className="col">
-                      <h3 className="mb-0">Page visits</h3>
+                      <h3 className="mb-0">Ziyaretler</h3>
                     </div>
                     <div className="col text-right">
                       <Button

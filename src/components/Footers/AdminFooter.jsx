@@ -5,10 +5,10 @@
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Copyright 2019 Doctor Calendar (https://www.creative-tim.com)
 * Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Doctor Calendar
 
 =========================================================
 
@@ -35,7 +35,7 @@ class Footer extends React.Component {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Creative Tim
+                Doctor Calendar
               </a>
             </div>
           </Col>
@@ -48,7 +48,7 @@ class Footer extends React.Component {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  Creative Tim
+                  Doctor Calendar
                 </NavLink>
               </NavItem>
 
@@ -58,7 +58,7 @@ class Footer extends React.Component {
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  About Us
+                  Hakkında
                 </NavLink>
               </NavItem>
 

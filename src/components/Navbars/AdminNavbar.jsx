@@ -71,35 +71,35 @@ class AdminNavbar extends React.Component {
                     </span>
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
-                        Jessica Jones
+                        Doctor Trash
                       </span>
                     </Media>
                   </Media>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   <DropdownItem className="noti-title" header tag="div">
-                    <h6 className="text-overflow m-0">Welcome!</h6>
+                    <h6 className="text-overflow m-0">Hoşgeldiniz!</h6>
                   </DropdownItem>
                   <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-single-02" />
-                    <span>My profile</span>
+                    <span>Profilim</span>
                   </DropdownItem>
                   <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-settings-gear-65" />
-                    <span>Settings</span>
+                    <span>Ayarlar</span>
                   </DropdownItem>
                   <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-calendar-grid-58" />
-                    <span>Activity</span>
+                    <span>Aktivite</span>
                   </DropdownItem>
                   <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-support-16" />
-                    <span>Support</span>
+                    <span>Ayarlar</span>
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
                     <i className="ni ni-user-run" />
-                    <span>Logout</span>
+                    <span>Çıkış</span>
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

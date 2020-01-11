@@ -38,10 +38,10 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Traffic
+                            Toplam Nöbet
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            350,897
+                            43
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -54,7 +54,7 @@ class Header extends React.Component {
                         <span className="text-success mr-2">
                           <i className="fa fa-arrow-up" /> 3.48%
                         </span>{" "}
-                        <span className="text-nowrap">Since last month</span>
+                        <span className="text-nowrap">Geçen Aydan İtibaren</span>
                       </p>
                     </CardBody>
                   </Card>
@@ -68,10 +68,10 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            New users
+                            Yeni nöbet
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
-                            2,356
+                            2
                           </span>
                         </div>
                         <Col className="col-auto">
@@ -84,7 +84,7 @@ class Header extends React.Component {
                         <span className="text-danger mr-2">
                           <i className="fas fa-arrow-down" /> 3.48%
                         </span>{" "}
-                        <span className="text-nowrap">Since last week</span>
+                        <span className="text-nowrap">Geçen Haftadan İtibaren</span>
                       </p>
                     </CardBody>
                   </Card>
@@ -98,9 +98,9 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Sales
+                            Aktif Nöbet
                           </CardTitle>
-                          <span className="h2 font-weight-bold mb-0">924</span>
+                          <span className="h2 font-weight-bold mb-0">2</span>
                         </div>
                         <Col className="col-auto">
                           <div className="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -112,7 +112,7 @@ class Header extends React.Component {
                         <span className="text-warning mr-2">
                           <i className="fas fa-arrow-down" /> 1.10%
                         </span>{" "}
-                        <span className="text-nowrap">Since yesterday</span>
+                        <span className="text-nowrap">Dünden itibaren</span>
                       </p>
                     </CardBody>
                   </Card>
@@ -126,7 +126,7 @@ class Header extends React.Component {
                             tag="h5"
                             className="text-uppercase text-muted mb-0"
                           >
-                            Performance
+                            Performans
                           </CardTitle>
                           <span className="h2 font-weight-bold mb-0">
                             49,65%
@@ -142,7 +142,7 @@ class Header extends React.Component {
                         <span className="text-success mr-2">
                           <i className="fas fa-arrow-up" /> 12%
                         </span>{" "}
-                        <span className="text-nowrap">Since last month</span>
+                        <span className="text-nowrap">Geçen Aydan İtibaren</span>
                       </p>
                     </CardBody>
                   </Card>
