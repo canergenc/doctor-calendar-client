@@ -46,10 +46,14 @@ import {
   chartExample2
 } from "variables/charts.jsx";
 
+import Calender from '../containers/Calender/Calender';
+
 import Header from "components/Headers/Header.jsx";
 
 class Index extends React.Component {
   state = {
+    year: null,
+    month: null,
     activeNav: 1,
     chartExample1Data: "data1"
   };
@@ -68,6 +72,7 @@ class Index extends React.Component {
     // this.chartReference.update();
   };
   componentWillMount() {
+
     if (window.Chart) {
       parseOptions(Chart, chartOptions());
     }
@@ -80,57 +85,9 @@ class Index extends React.Component {
         <Container className="mt--7" fluid>
           <Row>
             <Col className="mb-5 mb-xl-0" xl="8">
-              <Card className="bg-gradient-default shadow">
-                <CardHeader className="bg-transparent">
-                  <Row className="align-items-center">
-                    <div className="col">
-                      <h6 className="text-uppercase text-light ls-1 mb-1">
-                        Genel
-                      </h6>
-                      <h2 className="text-white mb-0">Nöbet Grafiği</h2>
-                    </div>
-                    <div className="col">
-                      <Nav className="justify-content-end" pills>
-                        <NavItem>
-                          <NavLink
-                            className={classnames("py-2 px-3", {
-                              active: this.state.activeNav === 1
-                            })}
-                            href="#pablo"
-                            onClick={e => this.toggleNavs(e, 1)}
-                          >
-                            <span className="d-none d-md-block">Ay</span>
-                            <span className="d-md-none">A</span>
-                          </NavLink>
-                        </NavItem>
-                        <NavItem>
-                          <NavLink
-                            className={classnames("py-2 px-3", {
-                              active: this.state.activeNav === 2
-                            })}
-                            data-toggle="tab"
-                            href="#pablo"
-                            onClick={e => this.toggleNavs(e, 2)}
-                          >
-                            <span className="d-none d-md-block">Hafta</span>
-                            <span className="d-md-none">H</span>
-                          </NavLink>
-                        </NavItem>
-                      </Nav>
-                    </div>
-                  </Row>
-                </CardHeader>
-                <CardBody>
-                  {/* Chart */}
-                  <div className="chart">
-                    <Line
-                      data={chartExample1[this.state.chartExample1Data]}
-                      options={chartExample1.options}
-                      getDatasetAtEvent={e => console.log(e)}
-                    />
-                  </div>
-                </CardBody>
-              </Card>
+
+
+              <Calender />
             </Col>
             <Col xl="4">
               <Card className="shadow">
