@@ -14,16 +14,7 @@ export default class Calender extends React.Component {
     month: null
   };
 
-  componentDidMount() {
-    console.log('[Calender] componentDidMount');
-    this.createState(this.props);
-  }
-
-  // componentWillReceiveProps(nextProps) {
-  //   this.createState(nextProps, true);
-  // }
-
-  componentWillMount(){
+  componentWillMount() {
     console.log('[Calender] componentWillMount');
     this.createState();
   }
@@ -56,14 +47,8 @@ export default class Calender extends React.Component {
           days: moment(curMonth).daysInMonth(),
           editDay: null
         },
-        nextMonth: {
-          date: nextMonth,
-          slug: nextMonth.replace("-", "/")
-        },
-        prevMonth: {
-          date: prevMonth,
-          slug: prevMonth.replace("-", "/")
-        }
+        nextMonth: nextMonth,
+        prevMonth: prevMonth
       },
       () => {
         // console.warn(this.state);
@@ -103,10 +88,77 @@ export default class Calender extends React.Component {
       days.push(<Day key={i} {...props} />);
     }
     console.log('build days end');
-    
+
     return days;
   }
 
+  nextMonthClickHandler = () => {
+    const year=moment(this.state.nextMonth).format("YYYY");
+    const month=moment(this.state.nextMonth).format("MM");
+    console.log(this.state.nextMonth);
+    const curMonth =
+    year && month
+        ? `${year}-${month}`
+        : moment().format("YYYY-MM");
+
+    const nextMonth = moment(curMonth)
+      .add(1, "M")
+      .format("YYYY-MM");
+
+    const prevMonth = moment(curMonth)
+      .subtract(1, "M")
+      .format("YYYY-MM");
+
+    this.setState(
+      {
+        curMonth: {
+          date: curMonth,
+          name: moment(curMonth).format("MMMM YYYY"),
+          days: moment(curMonth).daysInMonth(),
+          editDay: null
+        },
+        nextMonth: nextMonth,
+        prevMonth: prevMonth
+      },
+      () => {
+        // console.warn(this.state);
+      }
+    );
+  }
+
+  prevMonthClickHandler = () => {
+    const year=moment(this.state.prevMonth).format("YYYY");
+    const month=moment(this.state.prevMonth).format("MM");
+    console.log(this.state.prevMonth);
+    const curMonth =
+    year && month
+        ? `${year}-${month}`
+        : moment().format("YYYY-MM");
+
+    const nextMonth = moment(curMonth)
+      .add(1, "M")
+      .format("YYYY-MM");
+
+    const prevMonth = moment(curMonth)
+      .subtract(1, "M")
+      .format("YYYY-MM");
+
+    this.setState(
+      {
+        curMonth: {
+          date: curMonth,
+          name: moment(curMonth).format("MMMM YYYY"),
+          days: moment(curMonth).daysInMonth(),
+          editDay: null
+        },
+        nextMonth: nextMonth,
+        prevMonth: prevMonth
+      },
+      () => {
+        // console.warn(this.state);
+      }
+    );
+  }
   render() {
     const weekdays = moment.weekdays();
     const days = this.buildDays();
@@ -116,7 +168,9 @@ export default class Calender extends React.Component {
         <HeaderMonth
           curMonth={this.state.curMonth}
           nextMonth={this.state.nextMonth}
+          nextMonthClick={this.nextMonthClickHandler}
           prevMonth={this.state.prevMonth}
+          prevMonthClick={this.prevMonthClickHandler}
         />
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>

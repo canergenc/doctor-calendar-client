@@ -1,21 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./HeaderMonth.scss";
 
 const headerMonth = props => (
   <header className="month-header">
     <div className="row">
-      <Link to={"/" + props.prevMonth.slug}>
-        <i className="fas fa-chevron-circle-left" />
-      </Link>
+        <i className="fas fa-chevron-circle-left" onClick={props.prevMonthClick} />
     </div>
     <div className="row">
       <h1>{props.curMonth.name}</h1>
     </div>
     <div className="row" >
-      <Link to={"/" + props.nextMonth.slug}>
+      <button onClick={props.nextMonthClick}>
         <i className="fas fa-chevron-circle-right"  />
-      </Link>
+      </button>
     </div>
   </header>
 );

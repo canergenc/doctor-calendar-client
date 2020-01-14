@@ -51,6 +51,7 @@
     "rc-color-picker": "^1.2.6",
     "rc-time-picker": "^3.7.3",
     "react": "^16.12.0",
+    "react-beautiful-dnd": "^12.2.0",
     "react-chartjs-2": "^2.8.0",
     "react-copy-to-clipboard": "^5.0.2",
     "react-datetime": "^2.16.3",
