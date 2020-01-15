@@ -5,6 +5,7 @@ import ReminderForm from "./ReminderForm/ReminderForm";
 import Reminder from "./Reminder/Reminder";
 import _sortBy from "lodash/sortBy";
 import "./Day.scss";
+import {} from 'react-beautiful-dnd';
 
 const defaultColor = "#000";
 

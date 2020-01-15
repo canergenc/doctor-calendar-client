@@ -43,6 +43,7 @@
     "not op_mini all"
   ],
   "dependencies": {
+    "axios": "^0.19.1",
     "chart.js": "^2.9.3",
     "classnames": "^2.2.6",
     "moment": "^2.24.0",
@@ -62,7 +63,8 @@
     "react-scripts": "^2.1.8",
     "reactstrap": "^7.1.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.0.0"
   },
   "devDependencies": {
     "@types/googlemaps": "^3.39.1",
