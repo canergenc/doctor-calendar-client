@@ -25,7 +25,7 @@ import {
 } from "reactstrap";
 import Calender from '../containers/Calender/Calender';
 import Header from "components/Headers/Header.jsx";
-import DoctorColumn from '../containers/Doctors/Doctors';
+import Doctors from '../containers/Doctors/Doctors';
 class Index extends React.Component {
   state = {
     activeNav: 1,
@@ -40,17 +40,19 @@ class Index extends React.Component {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-
+          <DragDropContext onDragEnd={this.onDragEnd} >
             <Col className="mb-5 mb-xl-0" xl="10">
               <Calender />
             </Col>
 
             <Col xl="2">
-                <DoctorColumn />
+              <Doctors />
             </Col>
+            </DragDropContext>
           </Row>
 
         </Container>
+        {/* Page content */}
       </>
     );
   }

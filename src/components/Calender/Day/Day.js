@@ -5,7 +5,7 @@ import ReminderForm from "./ReminderForm/ReminderForm";
 import Reminder from "./Reminder/Reminder";
 import _sortBy from "lodash/sortBy";
 import "./Day.scss";
-import {} from 'react-beautiful-dnd';
+import { Droppable } from 'react-beautiful-dnd';
 
 const defaultColor = "#000";
 
@@ -78,43 +78,49 @@ class Day extends React.Component {
       : "day";
 
     return (
-      <article className={cssClasses}>
-        {!this.props.editDay && (
-          <button
-            className="btn-new-reminder"
-            onClick={() => this.props.handleSetEditDay(this.props.day)}
+      <Droppable droppableId={'day_'+this.props.day}>
+        {provided => (
+          <article className={cssClasses}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
           >
-            <i className="fas fa-plus-circle" />
-          </button>
-        )}
+            {!this.props.editDay && (
+              <button
+                className="btn-new-reminder"
+                onClick={() => this.props.handleSetEditDay(this.props.day)}
+              >
+                <i className="fas fa-plus-circle" />
+              </button>
+            )}
 
-        {this.props.editDay === this.props.day ? (
-          <ReminderForm
-            reminder={this.state.editReminder}
-            handleSetColor={this.handleSetColor}
-            handleSetEditDay={this.props.handleSetEditDay}
-            handleCreateUpdateReminder={this.handleCreateUpdateReminder}
-            defaultColor={defaultColor}
-          />
-        ) : (
-          <React.Fragment>
-            <header>{this.props.day}</header>
+            {this.props.editDay === this.props.day ? (
+              <ReminderForm
+                reminder={this.state.editReminder}
+                handleSetColor={this.handleSetColor}
+                handleSetEditDay={this.props.handleSetEditDay}
+                handleCreateUpdateReminder={this.handleCreateUpdateReminder}
+                defaultColor={defaultColor}
+              />
+            ) : (
+                <React.Fragment>
+                  <header>{this.props.day}</header>
 
-            {reminders.length
-              ? reminders.map((reminder, i) => {
-                  return (
-                    <Reminder
-                      key={i}
-                      reminder={reminder}
-                      handleSetEdit={this.handleSetEdit}
-                      handleDeleteReminder={this.handleDeleteReminder}
-                    />
-                  );
-                })
-              : null}
-          </React.Fragment>
-        )}
-      </article>
+                  {reminders.length
+                    ? reminders.map((reminder, i) => {
+                      return (
+                        <Reminder
+                          key={i}
+                          reminder={reminder}
+                          handleSetEdit={this.handleSetEdit}
+                          handleDeleteReminder={this.handleDeleteReminder}
+                        />
+                      );
+                    })
+                    : null}
+                </React.Fragment>
+              )}
+          </article>)}
+      </Droppable>
     );
   }
 }

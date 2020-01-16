@@ -14,9 +14,7 @@ import Doctor from '../../components/Doctor/Doctor';
 class Doctors extends Component {
 
     state = {
-        doctors: [],
-        doctorIds: [],
-        loading: true
+        doctors: []
     }
 
     onDragEnd = result => {
@@ -32,30 +30,40 @@ class Doctors extends Component {
         ) {
             return;
         }
-        const newDoctorIds = Array.from(this.state.doctorIds);
-        newDoctorIds.splice(source.index, 1);
-        newDoctorIds.splice(destination.index, 0, draggableId);
 
-        this.setState({doctorIds:newDoctorIds});
+        if (destination.droppableId === source.droppableId) {
+
+            const newDoctors = Object.assign([], this.state.doctors);
+            const quote = this.state.doctors[source.index];
+            newDoctors.splice(source.index, 1);
+            newDoctors.splice(destination.index, 0, quote);
+
+            this.setState({ doctors: newDoctors });
+            return;
+        }
+
+        const newDoctors = Object.assign([], this.state.doctors);
+        const quote = this.state.doctors[source.index];
+        newDoctors.splice(source.index, 1);
+        newDoctors.splice(destination.index, 0, quote);
+
+        this.setState({ doctors: newDoctors });
+
     }
 
-    componentDidMount() {
+    componentWillMount() {
         axios.get('/doctors.json')
             .then(res => {
                 const doctors = [];
-                const doctorIds = [];
                 for (let key in res.data) {
-                    if (key != 0) {
+                    if (key !== "0") {
                         doctors.push({
                             ...res.data[key],
                             id: key
                         });
-                        doctorIds.push({
-                            key
-                        });
                     }
                 }
-                this.setState({ loading: false, doctors: doctors, doctorIds: doctorIds });
+                this.setState({ loading: false, doctors: doctors });
             })
             .catch(err => {
                 this.setState({ loading: false });
@@ -64,7 +72,7 @@ class Doctors extends Component {
 
     render() {
         return (
-            <DragDropContext onDragEnd={this.onDragEnd} >
+            
                 <Card className="shadow">
                     <CardHeader className="bg-transparent">
                         <Row className="align-items-center">
@@ -94,7 +102,7 @@ class Doctors extends Component {
                         </Droppable>
                     </CardBody>
                 </Card>
-            </DragDropContext>
+            
         );
     }
 }

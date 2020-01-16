@@ -4,6 +4,7 @@ import HeaderWeekDays from "../../components/Calender/HeaderWeekDays/HeaderWeekD
 import Day from "../../components/Calender/Day/Day";
 import moment from "moment";
 import "./Calender.scss";
+import { DragDropContext } from 'react-beautiful-dnd';
 
 export default class Calender extends React.Component {
   state = {
@@ -159,11 +160,16 @@ export default class Calender extends React.Component {
       }
     );
   }
+  onDragEnd = result => {
+
+}
+
   render() {
     const weekdays = moment.weekdays();
     const days = this.buildDays();
 
     return (
+      <DragDropContext onDragEnd={this.onDragEnd} >
       <div className="month">
         <HeaderMonth
           curMonth={this.state.curMonth}
@@ -175,6 +181,7 @@ export default class Calender extends React.Component {
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>
       </div>
+      </DragDropContext>
     );
   }
 }
