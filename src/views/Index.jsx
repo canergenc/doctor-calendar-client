@@ -40,7 +40,7 @@ class Index extends React.Component {
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
-          <DragDropContext onDragEnd={this.onDragEnd} >
+
             <Col className="mb-5 mb-xl-0" xl="10">
               <Calender />
             </Col>
@@ -48,7 +48,6 @@ class Index extends React.Component {
             <Col xl="2">
               <Doctors />
             </Col>
-            </DragDropContext>
           </Row>
 
         </Container>

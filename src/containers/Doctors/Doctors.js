@@ -72,7 +72,7 @@ class Doctors extends Component {
 
     render() {
         return (
-            
+            <DragDropContext onDragEnd={this.onDragEnd} >
                 <Card className="shadow">
                     <CardHeader className="bg-transparent">
                         <Row className="align-items-center">
@@ -102,7 +102,7 @@ class Doctors extends Component {
                         </Droppable>
                     </CardBody>
                 </Card>
-            
+            </DragDropContext>
         );
     }
 }
