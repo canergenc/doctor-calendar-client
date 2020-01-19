@@ -20,18 +20,11 @@ button {
 .month {
   font: normal 16px "Montserrat", sans-serif;
   padding: 15px;
-  background: linear-gradient(
-      to right top,
-      #004d7a,
-      #00c1d3,
-      #00c1d3,
-      #a8eb12
-    )
-    no-repeat;
+  background: #ffffff;
   background-attachment: fixed;
   margin-bottom: auto;
   .days {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.04);
     display: flex;
     flex-wrap: wrap;
     margin-top: -3px;

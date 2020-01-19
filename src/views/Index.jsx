@@ -23,10 +23,12 @@ import {
   Row,
   Col
 } from "reactstrap";
+import { DragDropContext } from 'react-beautiful-dnd';
 import Calender from '../containers/Calender/Calender';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
 class Index extends React.Component {
+
   state = {
     activeNav: 1,
     chartExample1Data: "data1"
@@ -39,17 +41,19 @@ class Index extends React.Component {
         <Header />
         {/* Page content */}
         <Container className="mt--7" fluid>
-          <Row>
+          <DragDropContext onDragEnd={this.onDragEnd} >
+            <Row>
 
-            <Col className="mb-5 mb-xl-0" xl="10">
-              <Calender />
-            </Col>
+              <Col className="mb-5 mb-xl-0" xl="10">
+                <Calender />
+              </Col>
 
-            <Col xl="2">
-              <Doctors />
-            </Col>
-          </Row>
+              <Col xl="2">
+                <Doctors  />
+              </Col>
+            </Row>
 
+          </DragDropContext>
         </Container>
         {/* Page content */}
       </>

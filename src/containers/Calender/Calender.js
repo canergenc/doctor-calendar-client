@@ -94,11 +94,11 @@ export default class Calender extends React.Component {
   }
 
   nextMonthClickHandler = () => {
-    const year=moment(this.state.nextMonth).format("YYYY");
-    const month=moment(this.state.nextMonth).format("MM");
+    const year = moment(this.state.nextMonth).format("YYYY");
+    const month = moment(this.state.nextMonth).format("MM");
     console.log(this.state.nextMonth);
     const curMonth =
-    year && month
+      year && month
         ? `${year}-${month}`
         : moment().format("YYYY-MM");
 
@@ -128,11 +128,11 @@ export default class Calender extends React.Component {
   }
 
   prevMonthClickHandler = () => {
-    const year=moment(this.state.prevMonth).format("YYYY");
-    const month=moment(this.state.prevMonth).format("MM");
+    const year = moment(this.state.prevMonth).format("YYYY");
+    const month = moment(this.state.prevMonth).format("MM");
     console.log(this.state.prevMonth);
     const curMonth =
-    year && month
+      year && month
         ? `${year}-${month}`
         : moment().format("YYYY-MM");
 
@@ -160,16 +160,13 @@ export default class Calender extends React.Component {
       }
     );
   }
-  onDragEnd = result => {
 
-}
 
   render() {
     const weekdays = moment.weekdays();
     const days = this.buildDays();
 
     return (
-      <DragDropContext onDragEnd={this.onDragEnd} >
       <div className="month">
         <HeaderMonth
           curMonth={this.state.curMonth}
@@ -181,7 +178,6 @@ export default class Calender extends React.Component {
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>
       </div>
-      </DragDropContext>
     );
   }
 }

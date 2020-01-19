@@ -19,27 +19,50 @@ import React from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
+  Dropdown,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
   Media
 } from "reactstrap";
+import axios from '../../axios-orders';
 
 class AdminNavbar extends React.Component {
+
+  state = {
+    locations: []
+  }
+
+  componentDidMount() {
+    console.log('[AdminNavbar] componentWillMount')
+    axios.get('/locations.json')
+      .then(res => {
+        const locations = [];
+        for (let key in res.data) {
+          if (key !== "0") {
+            locations.push({
+              ...res.data[key],
+              id: key
+            });
+          }
+        }
+        this.setState({ loading: false, locations: locations });
+      })
+      .catch(err => {
+        this.setState({ loading: true });
+      });
+  }
+
   render() {
+    const toggle = () => { }
     return (
       <>
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+
           <Container fluid>
             <Link
               className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
@@ -47,19 +70,23 @@ class AdminNavbar extends React.Component {
             >
               {this.props.brandText}
             </Link>
-            <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-              <FormGroup className="mb-0">
-                <InputGroup className="input-group-alternative">
-                  <InputGroupAddon addonType="prepend">
-                    <InputGroupText>
-                      <i className="fas fa-search" />
-                    </InputGroupText>
-                  </InputGroupAddon>
-                  <Input placeholder="Search" type="text" />
-                </InputGroup>
-              </FormGroup>
-            </Form>
+
             <Nav className="align-items-center d-none d-md-flex" navbar>
+              <Dropdown isOpen={false} toggle={toggle}>
+                <DropdownMenu className="dropdown">
+
+                <DropdownItem >
+                      test
+                    </DropdownItem>
+{/* 
+                  {this.state.locations.map((location) => (
+                    <DropdownItem key={location.id}>
+                      {location.name}
+                    </DropdownItem>
+                  ))} */}
+
+                </DropdownMenu>
+              </Dropdown>
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">

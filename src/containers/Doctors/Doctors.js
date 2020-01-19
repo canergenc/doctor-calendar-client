@@ -6,10 +6,13 @@ import {
     Row
 } from "reactstrap";
 import axios from '../../axios-orders';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { Droppable, DragDropContext } from 'react-beautiful-dnd';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
 
 
 import Doctor from '../../components/Doctor/Doctor';
+
 
 class Doctors extends Component {
 
@@ -17,8 +20,18 @@ class Doctors extends Component {
         doctors: []
     }
 
+    copy = (source, destination, droppableSource, droppableDestination) => {
+        const sourceClone = Array.from(source);
+        const destClone = Array.from(destination);
+        const item = sourceClone[droppableSource.index];
+
+        destClone.splice(droppableDestination.index, 0, { ...item, id: "1" });
+        return destClone;
+    };
+
+
     onDragEnd = result => {
-        const { destination, source, draggableId } = result;
+        const { destination, source } = result;
 
         if (!destination) {
             return;
@@ -33,12 +46,21 @@ class Doctors extends Component {
 
         if (destination.droppableId === source.droppableId) {
 
-            const newDoctors = Object.assign([], this.state.doctors);
-            const quote = this.state.doctors[source.index];
-            newDoctors.splice(source.index, 1);
-            newDoctors.splice(destination.index, 0, quote);
+            // const newDoctors = Object.assign([], this.state.doctors);
+            // const quote = this.state.doctors[source.index];
+            // newDoctors.splice(source.index, 1);
+            // newDoctors.splice(destination.index, 0, quote);
 
-            this.setState({ doctors: newDoctors });
+            // this.setState({ doctors: newDoctors });
+
+            this.setState({
+                [destination.droppableId]: this.copy(
+                    this.state.doctors,
+                    this.state[destination.droppableId],
+                    source,
+                    destination
+                )
+            });
             return;
         }
 
@@ -72,40 +94,47 @@ class Doctors extends Component {
 
     render() {
         return (
-            <DragDropContext onDragEnd={this.onDragEnd} >
-                <Card className="shadow">
-                    <CardHeader className="bg-transparent">
-                        <Row className="align-items-center">
-                            <div className="col">
-                                <h2 className="mb-0">Doktorlar</h2>
-                            </div>
-                        </Row>
-                    </CardHeader>
-                    <CardBody>
-                        <Droppable droppableId="1" >
-                            {provided => (
-                                <div
-                                    ref={provided.innerRef}
-                                    {...provided.droppableProps}
-                                >
-                                    {this.state.doctors.map((doctor, index) => (
-                                        <Doctor
-                                            key={doctor.id}
-                                            name={doctor.name}
-                                            title={doctor.title}
-                                            index={index}
-                                            id={doctor.id}
-                                        />
-                                    ))}
-                                    {provided.placeholder}
-                                </div>)}
-                        </Droppable>
-                    </CardBody>
-                </Card>
-            </DragDropContext>
+
+            <Card className="shadow">
+                <CardHeader className="bg-transparent">
+                    <Row className="align-items-center">
+                        <div className="col">
+                            <h2 className="mb-0">Doktorlar</h2>
+                        </div>
+                    </Row>
+                </CardHeader>
+                <CardBody>
+
+                    <Droppable droppableId="DoctorList_1" isDropDisabled={true}>
+                        {(provided) => (
+                            <div
+                                ref={provided.innerRef}
+                            >
+                                {this.state.doctors.map((doctor, index) => (
+                                    <Doctor
+                                        key={doctor.id}
+                                        name={doctor.name}
+                                        title={doctor.title}
+                                        index={index}
+                                        id={doctor.id}
+                                    />
+                                ))}
+                            </div>)}
+                    </Droppable>
+
+                </CardBody>
+            </Card>
+
         );
     }
 }
 
+
+
+const mapStateToProps = state => {
+    return {
+
+    }
+}
 export default Doctors;
 
