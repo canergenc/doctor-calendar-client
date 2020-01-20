@@ -24,6 +24,12 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
+  Form,
+  FormGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Input,
+  InputGroup,
   Navbar,
   Nav,
   Container,
@@ -71,22 +77,47 @@ class AdminNavbar extends React.Component {
               {this.props.brandText}
             </Link>
 
+                {/* <select
+                    className="dropdown-menu-right"
+                    value="test"
+                    onChange={this.toggle} >
+                    {this.state.locations.map(location => (
+                        <option key={location.id} value={location.id}>
+                            {location.name}
+                        </option>
+                    ))}
+                </select> */}
+
+                    {/* <Dropdown isOpen={false} toggle={toggle} nav>
+                      <DropdownMenu className="dropdown-menu-arrow">
+
+                        {this.state.locations.map((location) => (
+                          <DropdownItem className="noti-title" key={location.id}>
+                            {location.name}
+                          </DropdownItem>
+                        ))} 
+
+                      </DropdownMenu>
+                    </Dropdown> */}
             <Nav className="align-items-center d-none d-md-flex" navbar>
-              <Dropdown isOpen={false} toggle={toggle}>
-                <DropdownMenu className="dropdown">
+            <UncontrolledDropdown nav>
+                <DropdownToggle className="pr-0" nav>
+                  <Media className="align-items-center">
 
-                <DropdownItem >
-                      test
-                    </DropdownItem>
-{/* 
+                      <span className="mb-0 text-sm font-weight-bold">
+                      Samatya Hastanesi
+                      </span>
+                  </Media>
+                </DropdownToggle>
+                <DropdownMenu className="dropdown-menu-arrow" right>
                   {this.state.locations.map((location) => (
-                    <DropdownItem key={location.id}>
-                      {location.name}
-                    </DropdownItem>
-                  ))} */}
-
+                          <DropdownItem className="noti-title" key={location.id}>
+                            {location.name}
+                          </DropdownItem>
+                        ))} 
                 </DropdownMenu>
-              </Dropdown>
+              </UncontrolledDropdown>
+
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
