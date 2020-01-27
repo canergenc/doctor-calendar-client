@@ -26,7 +26,7 @@ import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 
 // Reducers
-import reminders from "./store/reducers/reminders";
+import doctors from "./store/reducers/doctors";
 
 import "assets/vendor/nucleo/css/nucleo.css";
 import "assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
@@ -41,7 +41,7 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : null) || compose;
 
-const store = createStore(reminders, composeEnhancers(applyMiddleware(thunk)));
+const store = createStore(doctors, composeEnhancers(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>

@@ -4,20 +4,28 @@ import HeaderWeekDays from "../../components/Calender/HeaderWeekDays/HeaderWeekD
 import Day from "../../components/Calender/Day/Day";
 import moment from "moment";
 import "./Calender.scss";
-import { DragDropContext } from 'react-beautiful-dnd';
+import { connect } from "react-redux";
+import * as actions from '../../store/actions/index';
+import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import axios from '../../axios-orders';
 
-export default class Calender extends React.Component {
+class Calender extends React.Component {
   state = {
     curMonth: {},
     nextMonth: {},
     prevMonth: {},
     year: null,
-    month: null
+    month: null,
+    reminders: ['2020-01-11', '2020-01-12']
   };
 
   componentWillMount() {
     console.log('[Calender] componentWillMount');
     this.createState();
+  }
+
+  componentDidMount() {
+    // this.props.onInitReminders();
   }
 
   createState() {
@@ -71,14 +79,16 @@ export default class Calender extends React.Component {
     const days = [];
     const props = {
       editDay: this.state.curMonth.editDay,
-      handleSetEditDay: this.handleSetEditDay
+      handleSetEditDay: this.handleSetEditDay,
+
     };
 
     for (let i = 1; i <= this.state.curMonth.days; i++) {
       let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`; // Add leading zeros
       props["date"] = date;
       props["day"] = i;
-
+      props["reminders"] = this.state.reminders;
+      
       if (i === 1) {
         props["firstDayIndex"] = moment(date)
           .startOf("month")
@@ -182,3 +192,17 @@ export default class Calender extends React.Component {
   }
 }
 
+
+const mapStateToProps = state => {
+  return {
+    reminders: state.reminders
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onInitReminders: () => dispatch(actions.initReminders())
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Calender, axios));

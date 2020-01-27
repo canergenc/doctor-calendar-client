@@ -19,17 +19,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
 import {
-  Dropdown,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
@@ -40,7 +33,8 @@ import axios from '../../axios-orders';
 class AdminNavbar extends React.Component {
 
   state = {
-    locations: []
+    locations: [],
+    defaultLocationName: null
   }
 
   componentDidMount() {
@@ -56,7 +50,7 @@ class AdminNavbar extends React.Component {
             });
           }
         }
-        this.setState({ loading: false, locations: locations });
+        this.setState({ loading: false, locations: locations, defaultLocationName: locations[0].name });
       })
       .catch(err => {
         this.setState({ loading: true });
@@ -64,7 +58,6 @@ class AdminNavbar extends React.Component {
   }
 
   render() {
-    const toggle = () => { }
     return (
       <>
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -77,44 +70,21 @@ class AdminNavbar extends React.Component {
               {this.props.brandText}
             </Link>
 
-                {/* <select
-                    className="dropdown-menu-right"
-                    value="test"
-                    onChange={this.toggle} >
-                    {this.state.locations.map(location => (
-                        <option key={location.id} value={location.id}>
-                            {location.name}
-                        </option>
-                    ))}
-                </select> */}
-
-                    {/* <Dropdown isOpen={false} toggle={toggle} nav>
-                      <DropdownMenu className="dropdown-menu-arrow">
-
-                        {this.state.locations.map((location) => (
-                          <DropdownItem className="noti-title" key={location.id}>
-                            {location.name}
-                          </DropdownItem>
-                        ))} 
-
-                      </DropdownMenu>
-                    </Dropdown> */}
             <Nav className="align-items-center d-none d-md-flex" navbar>
-            <UncontrolledDropdown nav>
+              <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
-
-                      <span className="mb-0 text-sm font-weight-bold">
-                      Samatya Hastanesi
-                      </span>
+                    <span className="mb-0 text-md font-weight-bold">
+                      {this.state.defaultLocationName}
+                    </span>
                   </Media>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   {this.state.locations.map((location) => (
-                          <DropdownItem className="noti-title" key={location.id}>
-                            {location.name}
-                          </DropdownItem>
-                        ))} 
+                    <DropdownItem className="noti-title" key={location.id}>
+                      {location.name}
+                    </DropdownItem>
+                  ))}
                 </DropdownMenu>
               </UncontrolledDropdown>
 

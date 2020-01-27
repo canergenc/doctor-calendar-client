@@ -1,98 +1,43 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import {
     Card,
     CardHeader,
     CardBody,
     Row
 } from "reactstrap";
+import { Droppable } from 'react-beautiful-dnd';
 import axios from '../../axios-orders';
-import { Droppable, DragDropContext } from 'react-beautiful-dnd';
-import styled from 'styled-components';
-import { connect } from 'react-redux';
-
-
+import Spinner from '../../components/UI/Spinner/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import * as doctorsActions from '../../store/actions/index';
 import Doctor from '../../components/Doctor/Doctor';
 
 
 class Doctors extends Component {
 
-    state = {
-        doctors: []
-    }
-
-    copy = (source, destination, droppableSource, droppableDestination) => {
-        const sourceClone = Array.from(source);
-        const destClone = Array.from(destination);
-        const item = sourceClone[droppableSource.index];
-
-        destClone.splice(droppableDestination.index, 0, { ...item, id: "1" });
-        return destClone;
-    };
-
-
-    onDragEnd = result => {
-        const { destination, source } = result;
-
-        if (!destination) {
-            return;
-        }
-
-        if (
-            destination.droppableId === source.droppableId &&
-            destination.index === source.index
-        ) {
-            return;
-        }
-
-        if (destination.droppableId === source.droppableId) {
-
-            // const newDoctors = Object.assign([], this.state.doctors);
-            // const quote = this.state.doctors[source.index];
-            // newDoctors.splice(source.index, 1);
-            // newDoctors.splice(destination.index, 0, quote);
-
-            // this.setState({ doctors: newDoctors });
-
-            this.setState({
-                [destination.droppableId]: this.copy(
-                    this.state.doctors,
-                    this.state[destination.droppableId],
-                    source,
-                    destination
-                )
-            });
-            return;
-        }
-
-        const newDoctors = Object.assign([], this.state.doctors);
-        const quote = this.state.doctors[source.index];
-        newDoctors.splice(source.index, 1);
-        newDoctors.splice(destination.index, 0, quote);
-
-        this.setState({ doctors: newDoctors });
-
-    }
-
-    componentWillMount() {
-        axios.get('/doctors.json')
-            .then(res => {
-                const doctors = [];
-                for (let key in res.data) {
-                    if (key !== "0") {
-                        doctors.push({
-                            ...res.data[key],
-                            id: key
-                        });
-                    }
-                }
-                this.setState({ loading: false, doctors: doctors });
-            })
-            .catch(err => {
-                this.setState({ loading: false });
-            });
+    componentDidMount() {
+        this.props.onInitDoctors();
     }
 
     render() {
+
+        let doctorList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <Spinner />
+
+        if (this.props.doctors) {
+
+            doctorList = this.props.doctors.map((doctor, index) => (
+                <Doctor
+                    key={doctor.id}
+                    name={doctor.name}
+                    title={doctor.title}
+                    index={index}
+                    id={doctor.id}
+                />
+            ));
+        }
+
         return (
 
             <Card className="shadow">
@@ -110,15 +55,7 @@ class Doctors extends Component {
                             <div
                                 ref={provided.innerRef}
                             >
-                                {this.state.doctors.map((doctor, index) => (
-                                    <Doctor
-                                        key={doctor.id}
-                                        name={doctor.name}
-                                        title={doctor.title}
-                                        index={index}
-                                        id={doctor.id}
-                                    />
-                                ))}
+                                {doctorList}
                             </div>)}
                     </Droppable>
 
@@ -129,12 +66,19 @@ class Doctors extends Component {
     }
 }
 
-
-
 const mapStateToProps = state => {
     return {
-
-    }
+        doctors: state.doctors,
+        error: state.error
+    };
 }
-export default Doctors;
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onInitDoctors: () => dispatch(doctorsActions.initDoctors())
+    };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Doctors, axios));
 

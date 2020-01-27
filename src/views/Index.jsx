@@ -1,64 +1,87 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import React from "react";
 
-// reactstrap components
 import {
   Container,
   Row,
   Col
 } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
+import { connect } from 'react-redux';
 import Calender from '../containers/Calender/Calender';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
+import * as actions from '../store/actions/index';
+
 class Index extends React.Component {
 
-  state = {
-    activeNav: 1,
-    chartExample1Data: "data1"
-  };
+  onDragEnd = result => {
 
+    const { destination, source } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    switch (source.droppableId) {
+      case destination.droppableId:
+        console.log('reorder');
+        break;
+      case 'DoctorList_1':
+        console.log('create reminder');
+        console.log(destination);
+        console.log(source);
+
+        
+        this.props.createReminder();
+        break;
+      default:
+        console.log('move');
+        break;
+    }
+  };
 
   render() {
     return (
       <>
         <Header />
-        {/* Page content */}
+        
         <Container className="mt--7" fluid>
           <DragDropContext onDragEnd={this.onDragEnd} >
             <Row>
-
               <Col className="mb-5 mb-xl-0" xl="10">
                 <Calender />
               </Col>
-
               <Col xl="2">
-                <Doctors  />
+                <Doctors />
               </Col>
             </Row>
-
           </DragDropContext>
         </Container>
-        {/* Page content */}
+        
       </>
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    doctors: state.doctors,
+    reminders: state.reminders
+  };
+};
 
-export default Index;
+const mapDispatchToProps = dispatch => {
+  return {
+    createReminder: (payload) => dispatch(actions.createReminder(payload))
+  };
+};
+
+
+export default connect(
+  mapStateToProps, mapDispatchToProps)(Index);
