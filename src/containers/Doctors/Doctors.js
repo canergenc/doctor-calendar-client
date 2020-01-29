@@ -8,7 +8,7 @@ import {
     Row
 } from "reactstrap";
 import { Droppable } from 'react-beautiful-dnd';
-import axios from '../../axios-orders';
+import Api from '../../api';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as doctorsActions from '../../store/actions/index';
@@ -80,5 +80,5 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Doctors, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Doctors, Api));
 

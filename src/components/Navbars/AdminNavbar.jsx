@@ -28,7 +28,7 @@ import {
   Container,
   Media
 } from "reactstrap";
-import axios from '../../axios-orders';
+import Api from '../../api';
 
 class AdminNavbar extends React.Component {
 
@@ -39,7 +39,7 @@ class AdminNavbar extends React.Component {
 
   componentDidMount() {
     console.log('[AdminNavbar] componentWillMount')
-    axios.get('/locations.json')
+    Api.get('/locations.json')
       .then(res => {
         const locations = [];
         for (let key in res.data) {
