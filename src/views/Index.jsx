@@ -1,18 +1,22 @@
 import React from "react";
-
-import {
-  Container,
-  Row,
-  Col
-} from "reactstrap";
-import { DragDropContext } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
-import Calender from '../containers/Calender/Calender';
+import { Container, Row, Col } from "reactstrap";
+import { DragDropContext } from 'react-beautiful-dnd';
+import Calender from '../containers/Calendar/Calendar';
+import withErrorHandler from '../hoc/withErrorHandler/withErrorHandler';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
-import * as actions from '../store/actions/index';
 
 class Index extends React.Component {
+
+  copy = (source, destination, droppableSource, droppableDestination) => {
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(destination);
+    const item = sourceClone[droppableSource.index];
+
+    destClone.splice(droppableDestination.index, 0, { ...item, id: "1232" });
+    return destClone;
+  };
 
   onDragEnd = result => {
 
@@ -34,12 +38,14 @@ class Index extends React.Component {
         console.log('reorder');
         break;
       case 'DoctorList_1':
+
         console.log('create reminder');
         console.log(destination);
         console.log(source);
+        const doctor=this.props.doctors[source.index];
+        console.log(doctor);
 
-        
-        this.props.createReminder();
+
         break;
       default:
         console.log('move');
@@ -51,7 +57,7 @@ class Index extends React.Component {
     return (
       <>
         <Header />
-        
+
         <Container className="mt--7" fluid>
           <DragDropContext onDragEnd={this.onDragEnd} >
             <Row>
@@ -64,24 +70,17 @@ class Index extends React.Component {
             </Row>
           </DragDropContext>
         </Container>
-        
+
       </>
     );
   }
 }
+
 const mapStateToProps = state => {
   return {
-    doctors: state.doctors,
-    reminders: state.reminders
+      doctors: state.doctors.doctors,
+      error: state.doctors.error
   };
-};
+}
 
-const mapDispatchToProps = dispatch => {
-  return {
-    createReminder: (payload) => dispatch(actions.createReminder(payload))
-  };
-};
-
-
-export default connect(
-  mapStateToProps, mapDispatchToProps)(Index);
+export default connect(mapStateToProps)(Index);

@@ -1,3 +1,3 @@
-export { initReminders, createReminder, updateReminder, deleteReminder} from "./reminders";
+export { initReminders,createReminder } from "./reminders";
 export { initDoctors } from "./doctors";
 

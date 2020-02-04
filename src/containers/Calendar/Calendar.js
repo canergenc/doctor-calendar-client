@@ -1,32 +1,32 @@
-import React from "react";
-import HeaderMonth from "../../components/Calender/HeaderMonth/HeaderMonth";
-import HeaderWeekDays from "../../components/Calender/HeaderWeekDays/HeaderWeekDays";
-import Day from "../../components/Calender/Day/Day";
+import React, { Component } from "react";
+import HeaderMonth from "../../components/Calendar/HeaderMonth/HeaderMonth";
+import HeaderWeekDays from "../../components/Calendar/HeaderWeekDays/HeaderWeekDays";
+import Day from "../../components/Calendar/Day/Day";
+import Spinner from '../../components/UI/Spinner/Spinner';
 import moment from "moment";
-import "./Calender.scss";
+import "./Calendar.scss";
 import { connect } from "react-redux";
 import * as actions from '../../store/actions/index';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import axios from '../../axios-orders';
 
-class Calender extends React.Component {
+class Calendar extends Component {
+
   state = {
     curMonth: {},
     nextMonth: {},
     prevMonth: {},
     year: null,
     month: null,
-    reminders: ['2020-01-11', '2020-01-12']
+    calenderDay: []
   };
 
-  componentWillMount() {
-    console.log('[Calender] componentWillMount');
+  componentDidMount() {
+    console.log('[Calendar] componentDidMount');
+    this.props.onInitReminders();
     this.createState();
   }
 
-  componentDidMount() {
-    // this.props.onInitReminders();
-  }
 
   createState() {
     console.log('createState');
@@ -65,30 +65,37 @@ class Calender extends React.Component {
     );
   }
 
-  handleSetEditDay = day => {
-    this.setState({
-      curMonth: {
-        ...this.state.curMonth,
-        editDay: day
-      }
-    });
-  };
-
   buildDays() {
-    console.log('buildDays');
-    const days = [];
-    const props = {
-      editDay: this.state.curMonth.editDay,
-      handleSetEditDay: this.handleSetEditDay,
 
-    };
+    const days = [];
+    const props = {};
+
+    console.log("buildDays")
 
     for (let i = 1; i <= this.state.curMonth.days; i++) {
       let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`; // Add leading zeros
       props["date"] = date;
       props["day"] = i;
-      props["reminders"] = this.state.reminders;
-      
+
+      let array = this.props.reminders;
+      const calendar = [];
+      if (array) {
+        array.forEach(element => {
+          
+          element.calendar.forEach(dateRow => {
+            
+            if (dateRow != null && dateRow) {
+              
+              if (dateRow.date == date) {
+                calendar.push(dateRow);
+              }
+            }
+          });
+        });
+      }
+
+      props["reminders"] = calendar;
+
       if (i === 1) {
         props["firstDayIndex"] = moment(date)
           .startOf("month")
@@ -98,9 +105,9 @@ class Calender extends React.Component {
       }
       days.push(<Day key={i} {...props} />);
     }
-    console.log('build days end');
-
     return days;
+
+
   }
 
   nextMonthClickHandler = () => {
@@ -171,10 +178,16 @@ class Calender extends React.Component {
     );
   }
 
-
   render() {
     const weekdays = moment.weekdays();
-    const days = this.buildDays();
+
+    let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
+
+    console.log("prop.reminders");
+
+    if (this.props.reminders) {
+      days = this.buildDays();
+    }
 
     return (
       <div className="month">
@@ -195,7 +208,8 @@ class Calender extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    reminders: state.reminders
+    reminders: state.reminders.reminders,
+    error: state.reminders.error
   };
 };
 
@@ -205,4 +219,4 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Calender, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Calendar, axios));

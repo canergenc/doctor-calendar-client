@@ -8,31 +8,27 @@ export const setReminders = (reminders) => {
   };
 };
 
-export const fetchRemindersFailed = () => {
+export const fetchRemindersFailed = (error) => {
   return {
     type: actionTypes.FETCH_REMINDERS_FAILED
   };
 };
 
-//Initial
 export const initReminders = () => {
-  console.log('initReminders');
   return dispatch => {
     axios.get('/locations.json')
       .then(res => {
-
-        const reminders = [];
-        for (let key in res.data) {
-          if (key !== "0") {
-            reminders.push({
-              ...res.data[key].calendar,
-              id: key
-            });
-          }
+        const reminders = []
+        if (res.data) {
+          res.data.forEach(element => {
+            if (element !== null) {
+              if (element.calendar && element.calendar.length > 0) {
+                reminders.push(element);
+              }
+            }
+          });
+          dispatch(setReminders(reminders));
         }
-        console.log(reminders);
-        dispatch(setReminders(reminders));
-
       })
       .catch(err => {
         dispatch(fetchRemindersFailed());
@@ -40,51 +36,30 @@ export const initReminders = () => {
   }
 }
 
-// Action creators
-const createReminderAction = reminder => {
-  console.log('test 2')
-  console.log(reminder)
-
+export const createReminderSuccess = (id, reminderData) => {
   return {
-    type: actionTypes.CREATE_REMINDER,
-    reminder: reminder
+      type: actionTypes.CREATE_REMINDER_SUCCESS,
+      reminderId: id,
+      reminderData: reminderData
   };
 };
 
-
-const updateReminderAction = reminder => {
+export const createReminderFailed = (error) => {
   return {
-    type: actionTypes.UPDATE_REMINDER,
-    reminder: reminder
+      type: actionTypes.CREATE_REMINDER_FAIL,
+      error: error
   };
 };
 
-const deleteReminderAction = (date, id) => {
-  return {
-    type: actionTypes.DELETE_REMINDER,
-    date: date,
-    id: id
-  };
-};
-
-// Actions
-export const createReminder = payload => {
-  console.log('test');
-  console.log(payload);
-
+export const createReminder = (reminderData) => {
   return dispatch => {
-    dispatch(createReminderAction(payload));
+    axios.post('/locations.json', reminderData)
+      .then(response => {
+        console.log(response.data);
+        dispatch(createReminderSuccess(response.data, reminderData));
+      })
+      .catch(error => {
+        dispatch(createReminderFailed(error));
+      });
   };
-};
-
-export const updateReminder = payload => {
-  return dispatch => {
-    dispatch(updateReminderAction(payload));
-  };
-};
-
-export const deleteReminder = (date, id) => {
-  return dispatch => {
-    dispatch(deleteReminderAction(date, id));
-  };
-};
+}

@@ -26,7 +26,6 @@ class Doctors extends Component {
         let doctorList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <Spinner />
 
         if (this.props.doctors) {
-
             doctorList = this.props.doctors.map((doctor, index) => (
                 <Doctor
                     key={doctor.id}
@@ -37,7 +36,6 @@ class Doctors extends Component {
                 />
             ));
         }
-
         return (
 
             <Card className="shadow">
@@ -68,8 +66,8 @@ class Doctors extends Component {
 
 const mapStateToProps = state => {
     return {
-        doctors: state.doctors,
-        error: state.error
+        doctors: state.doctors.doctors,
+        error: state.doctors.error
     };
 }
 
@@ -78,7 +76,6 @@ const mapDispatchToProps = dispatch => {
         onInitDoctors: () => dispatch(doctorsActions.initDoctors())
     };
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Doctors, axios));
 

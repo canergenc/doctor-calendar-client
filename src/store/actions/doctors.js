@@ -5,7 +5,7 @@ export const setDoctors = (doctors) => {
     return {
         type: actionTypes.SET_DOCTORS,
         doctors: doctors
-    };
+    };  
 };
 
 export const fetchDoctorsFailed = (error) => {
