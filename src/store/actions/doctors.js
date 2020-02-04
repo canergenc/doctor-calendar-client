@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
+import Api from '../../api';
 
 export const setDoctors = (doctors) => {
     return {
@@ -16,7 +16,7 @@ export const fetchDoctorsFailed = (error) => {
 
 export const initDoctors = () => {
     return dispatch => {
-        axios.get('/doctors.json')
+        Api.get('/doctors.json')
             .then(res => {
                 const doctors = [];
                 for (let key in res.data) {

@@ -8,7 +8,7 @@ import "./Calendar.scss";
 import { connect } from "react-redux";
 import * as actions from '../../store/actions/index';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import axios from '../../axios-orders';
+import Api from '../../api';
 
 class Calendar extends Component {
 
@@ -219,4 +219,4 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Calendar, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Calender, Api));

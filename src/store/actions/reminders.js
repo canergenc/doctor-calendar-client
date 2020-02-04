@@ -1,5 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import axios from '../../axios-orders';
+import Api from '../../api';
 
 export const setReminders = (reminders) => {
   return {
@@ -16,7 +16,7 @@ export const fetchRemindersFailed = (error) => {
 
 export const initReminders = () => {
   return dispatch => {
-    axios.get('/locations.json')
+    Api.get('/locations.json')
       .then(res => {
         const reminders = []
         if (res.data) {
