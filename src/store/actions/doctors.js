@@ -5,7 +5,7 @@ export const setDoctors = (doctors) => {
     return {
         type: actionTypes.SET_DOCTORS,
         doctors: doctors
-    };  
+    };
 };
 
 export const fetchDoctorsFailed = (error) => {
@@ -16,16 +16,16 @@ export const fetchDoctorsFailed = (error) => {
 
 export const initDoctors = () => {
     return dispatch => {
-        Api.get('/doctors.json')
+        Api.get('/users')
             .then(res => {
                 const doctors = [];
                 for (let key in res.data) {
-                    if (key !== "0") {
-                        doctors.push({
-                            ...res.data[key],
-                            id: key
-                        });
-                    }
+
+                    doctors.push({
+                        ...res.data[key],
+                        id: key
+                    });
+
                 }
                 dispatch(setDoctors(doctors));
             })

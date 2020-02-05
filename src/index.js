@@ -18,6 +18,7 @@ import AuthLayout from "layouts/Auth";
 // Reducers
 import doctorsReducer from "./store/reducers/doctors";
 import remindersReducer from "./store/reducers/reminders";
+import locationsReducer from "./store/reducers/locations";
 
 // Redux Chrome Devtool Extension
 const composeEnhancers =
@@ -27,7 +28,8 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   doctors: doctorsReducer,
-  reminders: remindersReducer
+  reminders: remindersReducer,
+  locations: locationsReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

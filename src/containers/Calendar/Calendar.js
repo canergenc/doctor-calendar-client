@@ -86,7 +86,7 @@ class Calendar extends Component {
             
             if (dateRow != null && dateRow) {
               
-              if (dateRow.date == date) {
+              if (dateRow.date === date) {
                 calendar.push(dateRow);
               }
             }
@@ -219,4 +219,4 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Calender, Api));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Calendar, Api));

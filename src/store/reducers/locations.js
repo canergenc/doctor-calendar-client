@@ -1,23 +1,23 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    doctors: null,
+    locations: null,
     error: false
 };
 
 const reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case actionTypes.SET_DOCTORS:
+    switch (action.Type) {
+        case actionTypes.SET_LOCATIONS:
             return {
                 ...state,
-                doctors: action.doctors,
+                locations: action.locations,
                 error: false
             };
-        case actionTypes.FETCH_DOCTORS_FAILED:
+        case actionTypes.FETCH_LOCATIONS_FAILED:
             return {
                 ...state,
                 error: true
-            };
+            }
         default:
             return state;
     }

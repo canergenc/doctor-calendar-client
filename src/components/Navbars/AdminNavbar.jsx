@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index';
+
 // reactstrap components
 import {
   DropdownMenu,
@@ -11,36 +14,30 @@ import {
   Container,
   Media
 } from "reactstrap";
-import Api from '../../api';
 
 class AdminNavbar extends React.Component {
 
-  state = {
-    locations: [],
-    defaultLocationName: null
-  }
-
   componentDidMount() {
-    console.log('[AdminNavbar] componentWillMount')
-    Api.get('/locations.json')
-      .then(res => {
-        const locations = [];
-        for (let key in res.data) {
-          if (key !== "0") {
-            locations.push({
-              ...res.data[key],
-              id: key
-            });
-          }
-        }
-        this.setState({ loading: false, locations: locations, defaultLocationName: locations[0].name });
-      })
-      .catch(err => {
-        this.setState({ loading: true });
-      });
+    this.props.onInitLocations();
   }
 
   render() {
+
+    let locations = <DropdownItem className="noti-title" key="nothing"></DropdownItem>;
+    let defaultLocationName = "Lokasyonlar yükleniyor...";
+    if (this.props.locations) {
+      locations = this.props.locations.map((location) => (
+        <DropdownItem className="noti-title" key={location.id}>
+          {location.name}
+        </DropdownItem>
+      ));
+    }
+    console.log(this.props.defaultLocationName)
+
+    if (this.props.defaultLocationName) {
+      defaultLocationName = this.props.defaultLocationName;
+    }
+
     return (
       <>
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -58,16 +55,12 @@ class AdminNavbar extends React.Component {
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
                     <span className="mb-0 text-md font-weight-bold">
-                      {this.state.defaultLocationName}
+                      {defaultLocationName}
                     </span>
                   </Media>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
-                  {this.state.locations.map((location) => (
-                    <DropdownItem className="noti-title" key={location.id}>
-                      {location.name}
-                    </DropdownItem>
-                  ))}
+                  {locations}
                 </DropdownMenu>
               </UncontrolledDropdown>
 
@@ -122,4 +115,18 @@ class AdminNavbar extends React.Component {
   }
 }
 
-export default AdminNavbar;
+const mapStateToProps = state => {
+  return {
+    locations: state.locations.locations,
+    defaultLocationName: state.locations.defaultLocationName
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onInitLocations: () => dispatch(actions.initLocations())
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminNavbar);

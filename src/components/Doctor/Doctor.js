@@ -35,10 +35,10 @@ class Doctor extends Component {
                             {...provided.dragHandleProps}
                             isDragging={snapshot.isDragging}
                         >
-                            {this.props.title} {this.props.name}
+                            {this.props.title} {this.props.fullName}
                         </Container>
                         {snapshot.isDragging && (
-                            <Clone>{this.props.title} {this.props.name}</Clone>
+                            <Clone>{this.props.title} {this.props.fullName}</Clone>
                         )}
                     </React.Fragment>
                 )}

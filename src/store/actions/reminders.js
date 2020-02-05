@@ -16,7 +16,7 @@ export const fetchRemindersFailed = (error) => {
 
 export const initReminders = () => {
   return dispatch => {
-    Api.get('/locations.json')
+    Api.get('/locations')
       .then(res => {
         const reminders = []
         if (res.data) {
@@ -53,7 +53,7 @@ export const createReminderFailed = (error) => {
 
 export const createReminder = (reminderData) => {
   return dispatch => {
-    axios.post('/locations.json', reminderData)
+    Api.post('/locations/'+reminderData.id, reminderData)
       .then(response => {
         console.log(response.data);
         dispatch(createReminderSuccess(response.data, reminderData));

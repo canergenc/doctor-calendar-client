@@ -11,7 +11,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import Api from '../../api';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import * as doctorsActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 import Doctor from '../../components/Doctor/Doctor';
 
 
@@ -28,13 +28,17 @@ class Doctors extends Component {
         if (this.props.doctors) {
             doctorList = this.props.doctors.map((doctor, index) => (
                 <Doctor
+                    {...doctor}
                     key={doctor.id}
-                    name={doctor.name}
-                    title={doctor.title}
                     index={index}
-                    id={doctor.id}
+                // key={doctor.id}
+                // name={doctor.fullName}
+                // title={doctor.title}
+                // index={index}
+                // id={doctor.id}
                 />
             ));
+            console.log(this.props.doctors)
         }
         return (
 
@@ -73,7 +77,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitDoctors: () => dispatch(doctorsActions.initDoctors())
+        onInitDoctors: () => dispatch(actions.initDoctors())
     };
 }
 

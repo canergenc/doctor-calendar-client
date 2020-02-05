@@ -8,7 +8,7 @@ class Day extends Component {
   buildReminder = () => {
     const reminders = [];
 
-    if (this.props.reminders != null && this.props.reminders != undefined) {
+    if (this.props.reminders !== null && this.props.reminders !== undefined) {
       if (this.props.reminders.length>0) {
         debugger;
         let array = this.props.reminders;

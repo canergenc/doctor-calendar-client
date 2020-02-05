@@ -36,24 +36,24 @@ import {
 } from "reactstrap";
 
 class Login extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       email: '',
-      password:''
+      password: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleInputChange(event){
+  handleInputChange(event) {
     const target = event.target;
-    if(target.type === 'email')  
-    this.setState({email: event.target.value});
+    if (target.type === 'email')
+      this.setState({ email: event.target.value });
     else
-    this.setState({password: event.target.value});
+      this.setState({ password: event.target.value });
   }
-  handleSubmit(event){
-    Api.post('users/login',{email: this.state.email, password:this.state.password}).then(res => {
+  handleSubmit(event) {
+    Api.post('users/login', { email: this.state.email, password: this.state.password }).then(res => {
       console.log(res);
       alert(res.data.token);
     }).catch(ex => {
@@ -113,7 +113,7 @@ class Login extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange}/>
+                    <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -123,7 +123,7 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" value={this.state.password} onChange={this.handleInputChange}/>
+                    <Input placeholder="Password" type="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">

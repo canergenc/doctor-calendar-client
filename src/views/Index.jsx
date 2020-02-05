@@ -3,20 +3,12 @@ import { connect } from 'react-redux';
 import { Container, Row, Col } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
 import Calender from '../containers/Calendar/Calendar';
-import withErrorHandler from '../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
 
 class Index extends React.Component {
 
-  copy = (source, destination, droppableSource, droppableDestination) => {
-    const sourceClone = Array.from(source);
-    const destClone = Array.from(destination);
-    const item = sourceClone[droppableSource.index];
-
-    destClone.splice(droppableDestination.index, 0, { ...item, id: "1232" });
-    return destClone;
-  };
 
   onDragEnd = result => {
 
@@ -42,9 +34,19 @@ class Index extends React.Component {
         console.log('create reminder');
         console.log(destination);
         console.log(source);
-        const doctor=this.props.doctors[source.index];
+        const doctor = this.props.doctors[source.index];
         console.log(doctor);
 
+        const reminder = {
+          id:1,
+          name:"acıbadem test",
+          calendar:{
+            userId: doctor.id,
+            date: destination.droppableId
+          }
+        }
+
+        this.props.createReminder(reminder);
 
         break;
       default:
@@ -78,9 +80,13 @@ class Index extends React.Component {
 
 const mapStateToProps = state => {
   return {
-      doctors: state.doctors.doctors,
-      error: state.doctors.error
+    doctors: state.doctors.doctors,
+    error: state.doctors.error
   };
 }
-
-export default connect(mapStateToProps)(Index);
+const mapDispatchToProps = dispatch => {
+  return {
+    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData))
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Index);
