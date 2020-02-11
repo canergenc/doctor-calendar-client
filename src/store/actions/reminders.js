@@ -16,15 +16,13 @@ export const fetchRemindersFailed = (error) => {
 
 export const initReminders = () => {
   return dispatch => {
-    Api.get('/locations')
+    Api.get('/calendars')
       .then(res => {
         const reminders = []
         if (res.data) {
           res.data.forEach(element => {
             if (element !== null) {
-              if (element.calendar && element.calendar.length > 0) {
-                reminders.push(element);
-              }
+              reminders.push(element);
             }
           });
           dispatch(setReminders(reminders));
@@ -38,28 +36,55 @@ export const initReminders = () => {
 
 export const createReminderSuccess = (id, reminderData) => {
   return {
-      type: actionTypes.CREATE_REMINDER_SUCCESS,
-      reminderId: id,
-      reminderData: reminderData
+    type: actionTypes.CREATE_REMINDER_SUCCESS,
+    reminderId: id,
+    reminderData: reminderData
   };
 };
 
 export const createReminderFailed = (error) => {
   return {
-      type: actionTypes.CREATE_REMINDER_FAIL,
-      error: error
+    type: actionTypes.CREATE_REMINDER_FAIL,
+    error: error
   };
 };
 
 export const createReminder = (reminderData) => {
   return dispatch => {
-    Api.post('/locations/'+reminderData.id, reminderData)
+    Api.post('/calendars', reminderData)
       .then(response => {
         console.log(response.data);
         dispatch(createReminderSuccess(response.data, reminderData));
       })
       .catch(error => {
         dispatch(createReminderFailed(error));
+      });
+  };
+}
+
+
+export const deleteReminderSuccess = (id) => {
+  return {
+    type: actionTypes.DELETE_REMINDER_SUCCESS,
+    reminderId: id
+  };
+};
+
+export const deleteReminderFailed = (error) => {
+  return {
+    type: actionTypes.DELETE_REMINDER_FAIL,
+    error: error
+  };
+};
+
+export const deleteReminder = (reminderId) => {
+  return dispatch => {
+    Api.delete('/calendars/' + reminderId)
+      .then(response => {
+        dispatch(deleteReminderSuccess(reminderId));
+      })
+      .catch(error => {
+        dispatch(deleteReminderFailed(error));
       });
   };
 }

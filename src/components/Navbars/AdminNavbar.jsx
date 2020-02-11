@@ -24,18 +24,18 @@ class AdminNavbar extends React.Component {
   render() {
 
     let locations = <DropdownItem className="noti-title" key="nothing"></DropdownItem>;
-    let defaultLocationName = "Lokasyonlar yükleniyor...";
+    let activeLocationName = this.props.error ? "Lokasyonlar yüklenemedi" : "Lokasyonlar yükleniyor...";
     if (this.props.locations) {
+
       locations = this.props.locations.map((location) => (
         <DropdownItem className="noti-title" key={location.id}>
           {location.name}
         </DropdownItem>
       ));
     }
-    console.log(this.props.defaultLocationName)
 
-    if (this.props.defaultLocationName) {
-      defaultLocationName = this.props.defaultLocationName;
+    if (this.props.activeLocationName) {
+      activeLocationName = this.props.activeLocationName;
     }
 
     return (
@@ -55,7 +55,7 @@ class AdminNavbar extends React.Component {
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
                     <span className="mb-0 text-md font-weight-bold">
-                      {defaultLocationName}
+                      {activeLocationName}
                     </span>
                   </Media>
                 </DropdownToggle>
@@ -118,7 +118,8 @@ class AdminNavbar extends React.Component {
 const mapStateToProps = state => {
   return {
     locations: state.locations.locations,
-    defaultLocationName: state.locations.defaultLocationName
+    activeLocationName: state.locations.activeLocationName,
+    error: state.locations.error
   }
 }
 

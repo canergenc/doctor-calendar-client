@@ -19,14 +19,11 @@ export const initDoctors = () => {
         Api.get('/users')
             .then(res => {
                 const doctors = [];
-                for (let key in res.data) {
-
+                res.data.forEach(element => {
                     doctors.push({
-                        ...res.data[key],
-                        id: key
+                        ...element
                     });
-
-                }
+                });
                 dispatch(setDoctors(doctors));
             })
             .catch(err => {

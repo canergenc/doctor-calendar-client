@@ -9,12 +9,16 @@ class Day extends Component {
     const reminders = [];
 
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
-      if (this.props.reminders.length>0) {
-        debugger;
+      if (this.props.reminders.length > 0) {
+
         let array = this.props.reminders;
         array.forEach(element => {
-            reminders.push(<Reminder key={element.userid} date={element.date} />);
-          
+          reminders.push(<Reminder
+            key={element.id}
+            description={element.description}
+            //onClickDeleteReminder={this.props.deleteReminder(element.id)}
+          />
+          );
         });
       }
     }
@@ -22,21 +26,9 @@ class Day extends Component {
   }
 
 
+
   render() {
     let reminders = this.buildReminder();
-
-
-    // array.forEach((element,i) => {
-    //   if (element.calendar && element.calendar.length > 0) {
-    //     reminders.push(<Reminder key={i} reminder={element.calendar.date} />);
-    //   }
-    // });
-
-    // console.log("reminders");
-
-    //console.log("date");
-    //console.log(this.props.date);
-
 
     const cssClasses = this.props.firstDayIndex
       ? `day first-index-${this.props.firstDayIndex}`
@@ -60,4 +52,19 @@ class Day extends Component {
   }
 }
 
+
+// const mapStateToProps = state => {
+//   return {
+//     //error: state.reminders.error
+//   };
+// }
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     deleteReminder: (reminderId) => dispatch(actions.deleteReminder(reminderId)),
+//     onInitReminders: () => dispatch(actions.initReminders())
+//   }
+// }
+
+// export default connect(mapStateToProps,mapDispatchToProps)(Day);
 export default Day;

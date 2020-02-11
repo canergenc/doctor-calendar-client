@@ -28,6 +28,10 @@ const reducer = (state = initialState, action) => {
         loading: false,
         reminders: state.orders.concat(newReminder)
       };
+    case actionTypes.DELETE_REMINDER_SUCCESS:
+      return {
+        reminderId:action.reminderId
+      };
     default:
       return state;
   }

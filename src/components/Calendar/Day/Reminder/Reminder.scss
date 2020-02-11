@@ -1,10 +1,11 @@
 .reminder {
-  color: #fff;
+  color: #00918e;
   position: relative;
-  font-size: 12px;
+  font-size: 16px;
   padding: 3px 5px;
-  margin-bottom: 3px;
-
+  margin-bottom: 5px;
+  background: #6decb9;
+  border-radius: 4px;
   &:hover {
     .tools {
       visibility: visible;
@@ -20,11 +21,12 @@
     top: 0;
     right: 0;
     visibility: hidden;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 5px 3px;
+    background: #42dee1;
+    padding: 2px 3px;
     display: flex;
     justify-content: flex-end;
     z-index: 1;
+    border-radius: 4px;
 
     button {
       float: right;

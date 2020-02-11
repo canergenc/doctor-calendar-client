@@ -5,7 +5,8 @@ export const setLocations = (locations) => {
     return {
         type: actionTypes.SET_LOCATIONS,
         locations: locations,
-        defaultLocationName: locations[0].name
+        activeLocationName: locations[0].name,
+        activeLocationId: locations[0].id
     };
 };
 
@@ -19,21 +20,12 @@ export const initLocations = () => {
     return dispatch => {
         api.get('/locations')
             .then(res => {
-                console.log('init Locations inside')
-                console.log(res.data);
-
                 const locations = [];
-                for (let key in res.data) {
+                res.data.forEach(element => {
                     locations.push({
-                        ...res.data[key],
-                        id: key
+                        ...element
                     });
-
-                }
-                console.log('init locations to array ');
-                
-                console.log(locations[0].name);
-
+                });
                 dispatch(setLocations(locations));
             })
             .catch(err => {

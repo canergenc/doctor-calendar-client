@@ -32,8 +32,10 @@ class Calendar extends Component {
     console.log('createState');
 
     const now = new Date();
-    const month = now.getMonth();
+    const month = now.getMonth() + 1;
     const year = now.getFullYear();
+
+    console.log(month);
 
     const curMonth =
       year && month
@@ -77,24 +79,18 @@ class Calendar extends Component {
       props["date"] = date;
       props["day"] = i;
 
-      let array = this.props.reminders;
       const calendar = [];
-      if (array) {
-        array.forEach(element => {
-          
-          element.calendar.forEach(dateRow => {
-            
-            if (dateRow != null && dateRow) {
-              
-              if (dateRow.date === date) {
-                calendar.push(dateRow);
-              }
-            }
-          });
+      
+      if (this.props.reminders) {
+        this.props.reminders.forEach(dateRow => {
+          if (moment(dateRow.date).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
+            calendar.push(dateRow);
+          }
         });
       }
 
       props["reminders"] = calendar;
+      //props["deleteReminder"]=this.props.deleteReminder;
 
       if (i === 1) {
         props["firstDayIndex"] = moment(date)
@@ -177,13 +173,14 @@ class Calendar extends Component {
       }
     );
   }
-
+  deleteReminderHandler = (reminderId) => {
+    //this.props.deleteReminder(reminderId);
+    //this.props.onInitReminders();
+  }
   render() {
     const weekdays = moment.weekdays();
 
     let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
-
-    console.log("prop.reminders");
 
     if (this.props.reminders) {
       days = this.buildDays();
@@ -215,6 +212,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    //deleteReminder:(reminderId)=>dispatch(actions.deleteReminder(reminderId)),
     onInitReminders: () => dispatch(actions.initReminders())
   };
 }

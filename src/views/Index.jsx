@@ -2,13 +2,13 @@ import React from "react";
 import { connect } from 'react-redux';
 import { Container, Row, Col } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
+import moment from "moment";
 import Calender from '../containers/Calendar/Calendar';
 import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
 
 class Index extends React.Component {
-
 
   onDragEnd = result => {
 
@@ -30,23 +30,18 @@ class Index extends React.Component {
         console.log('reorder');
         break;
       case 'DoctorList_1':
-
-        console.log('create reminder');
-        console.log(destination);
-        console.log(source);
         const doctor = this.props.doctors[source.index];
-        console.log(doctor);
-
+        
         const reminder = {
-          id:1,
-          name:"acıbadem test",
-          calendar:{
-            userId: doctor.id,
-            date: destination.droppableId
-          }
+          locationId: this.props.activeLocationId,
+          userId: doctor.id,
+          date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+          description: doctor.fullName,
+          type: {},
+          additionalProp1: {}
         }
-
         this.props.createReminder(reminder);
+        this.props.onInitReminders();
 
         break;
       default:
@@ -81,12 +76,14 @@ class Index extends React.Component {
 const mapStateToProps = state => {
   return {
     doctors: state.doctors.doctors,
-    error: state.doctors.error
+    error: state.doctors.error,
+    activeLocationId: state.locations.activeLocationId
   };
 }
 const mapDispatchToProps = dispatch => {
   return {
-    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData))
+    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
+    onInitReminders: () => dispatch(actions.initReminders())
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Index);

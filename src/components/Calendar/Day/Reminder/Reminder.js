@@ -1,15 +1,20 @@
-import React from "react";
+import React, { Component } from "react";
 import "./Reminder.scss";
 
-const reminder = props => (
-  <article className="reminder" style={{ background: "black" }}>
-    <div className="tools">
-      <button >
-        <i className="fas fa-trash-alt" />
-      </button>
-    </div>
-    <strong>{props.date}</strong>
-  </article>
-);
+class Reminder extends Component {
 
-export default reminder;
+  render() {
+    return (
+      <article className="reminder">
+        <div className="tools">
+          <button onClick={this.props.onClickDeleteReminder}>
+            <i className="fas fa-trash-alt" />
+          </button>
+        </div>
+        <strong>{this.props.description}</strong>
+      </article>
+    );
+  }
+};
+
+export default Reminder;

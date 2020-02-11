@@ -38,7 +38,6 @@ class Doctors extends Component {
                 // id={doctor.id}
                 />
             ));
-            console.log(this.props.doctors)
         }
         return (
 
