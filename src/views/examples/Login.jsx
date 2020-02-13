@@ -32,7 +32,9 @@ import {
   InputGroupText,
   InputGroup,
   Row,
-  Col
+  Col,
+  UncontrolledAlert,
+  Alert
 } from "reactstrap";
 
 class Login extends React.Component {
@@ -53,14 +55,30 @@ class Login extends React.Component {
       this.setState({ password: event.target.value });
   }
   handleSubmit(event) {
+    if(!this.state.email || !this.state.password) { alert("Zorunlu Alanlar Boş Bırakılamaz!") }
     Api.post('users/login', { email: this.state.email, password: this.state.password }).then(res => {
       console.log(res);
       alert(res.data.token);
     }).catch(ex => {
-      alert(ex);
+      console.log(ex);
+      if(!ex && !ex.message)
+      this.alertExample(ex.message);
+      else
+      this.alertExample(ex);
     })
     event.preventDefault();
   }
+  alertExample(value) {
+    return (
+      <div>
+        <Alert color="primary">
+        This is a primary alert — check it out!
+      </Alert>
+      </div>
+      
+    );
+  }
+
   render() {
     return (
       <>
