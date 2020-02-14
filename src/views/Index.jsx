@@ -37,11 +37,10 @@ class Index extends React.Component {
           userId: doctor.id,
           date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
           description: doctor.fullName,
-          type: {},
-          additionalProp1: {}
+          type: {}
         }
         this.props.createReminder(reminder);
-        this.props.onInitReminders();
+        //this.props.onInitReminders();
 
         break;
       default:

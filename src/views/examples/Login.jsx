@@ -33,7 +33,6 @@ import {
   InputGroup,
   Row,
   Col,
-  UncontrolledAlert,
   Alert
 } from "reactstrap";
 

@@ -35,8 +35,6 @@ class Calendar extends Component {
     const month = now.getMonth() + 1;
     const year = now.getFullYear();
 
-    console.log(month);
-
     const curMonth =
       year && month
         ? `${year}-${month}`
@@ -78,19 +76,18 @@ class Calendar extends Component {
       let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`; // Add leading zeros
       props["date"] = date;
       props["day"] = i;
-
       const calendar = [];
       
       if (this.props.reminders) {
         this.props.reminders.forEach(dateRow => {
-          if (moment(dateRow.date).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
+          if (moment.unix(dateRow.date._seconds).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             calendar.push(dateRow);
           }
         });
       }
 
       props["reminders"] = calendar;
-      //props["deleteReminder"]=this.props.deleteReminder;
+      props["deleteReminder"] = this.deleteReminderHandler;
 
       if (i === 1) {
         props["firstDayIndex"] = moment(date)
@@ -173,10 +170,11 @@ class Calendar extends Component {
       }
     );
   }
+
   deleteReminderHandler = (reminderId) => {
-    //this.props.deleteReminder(reminderId);
-    //this.props.onInitReminders();
+    this.props.deleteReminder(reminderId);
   }
+
   render() {
     const weekdays = moment.weekdays();
 
@@ -212,7 +210,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    //deleteReminder:(reminderId)=>dispatch(actions.deleteReminder(reminderId)),
+    deleteReminder: (reminderId) => dispatch(actions.deleteReminder(reminderId)),
     onInitReminders: () => dispatch(actions.initReminders())
   };
 }

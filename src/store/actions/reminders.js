@@ -54,6 +54,7 @@ export const createReminder = (reminderData) => {
     Api.post('/calendars', reminderData)
       .then(response => {
         console.log(response.data);
+        dispatch(initReminders());
         dispatch(createReminderSuccess(response.data, reminderData));
       })
       .catch(error => {
@@ -82,6 +83,7 @@ export const deleteReminder = (reminderId) => {
     Api.delete('/calendars/' + reminderId)
       .then(response => {
         dispatch(deleteReminderSuccess(reminderId));
+        dispatch(initReminders());
       })
       .catch(error => {
         dispatch(deleteReminderFailed(error));

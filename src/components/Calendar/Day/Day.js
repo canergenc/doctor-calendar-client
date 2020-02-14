@@ -16,7 +16,7 @@ class Day extends Component {
           reminders.push(<Reminder
             key={element.id}
             description={element.description}
-            //onClickDeleteReminder={this.props.deleteReminder(element.id)}
+            onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
           />
           );
         });
@@ -24,7 +24,6 @@ class Day extends Component {
     }
     return reminders;
   }
-
 
 
   render() {
@@ -52,19 +51,4 @@ class Day extends Component {
   }
 }
 
-
-// const mapStateToProps = state => {
-//   return {
-//     //error: state.reminders.error
-//   };
-// }
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     deleteReminder: (reminderId) => dispatch(actions.deleteReminder(reminderId)),
-//     onInitReminders: () => dispatch(actions.initReminders())
-//   }
-// }
-
-// export default connect(mapStateToProps,mapDispatchToProps)(Day);
 export default Day;
