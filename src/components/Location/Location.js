@@ -16,15 +16,20 @@ class Location extends Component {
 
     componentDidMount() {
         this.props.onInitLocations();
-      }
-      
+    }
+
+    changeActiveLocation(e){
+
+    }
+
     render() {
+        
         let locations = <DropdownItem className="noti-title" key="nothing"></DropdownItem>;
         let activeLocationName = this.props.error ? "Lokasyonlar yüklenemedi" : "Lokasyonlar yükleniyor...";
         if (this.props.locations) {
 
             locations = this.props.locations.map((location) => (
-                <DropdownItem className="noti-title" key={location.id}>
+                <DropdownItem className="noti-title" key={location.id} onClick={this.changeActiveLocation}>
                     {location.name}
                 </DropdownItem>
             ));
@@ -33,6 +38,7 @@ class Location extends Component {
         if (this.props.activeLocationName) {
             activeLocationName = this.props.activeLocationName;
         }
+
         return (
             <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
@@ -53,17 +59,17 @@ class Location extends Component {
 
 const mapStateToProps = state => {
     return {
-      locations: state.locations.locations,
-      activeLocationName: state.locations.activeLocationName,
-      error: state.locations.error
+        locations: state.locations.locations,
+        activeLocationName: state.locations.activeLocationName,
+        error: state.locations.error
     }
-  }
-  
-  const mapDispatchToProps = dispatch => {
+}
+
+const mapDispatchToProps = dispatch => {
     return {
-      onInitLocations: () => dispatch(actions.initLocations())
+        onInitLocations: () => dispatch(actions.initLocations())
     }
-  }
+}
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Location);

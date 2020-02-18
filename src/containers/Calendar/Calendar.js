@@ -27,7 +27,6 @@ class Calendar extends Component {
     this.createState();
   }
 
-
   createState() {
     console.log('createState');
 
@@ -66,11 +65,11 @@ class Calendar extends Component {
   }
 
   buildDays() {
+    
+    console.log("buildDays");
 
     const days = [];
     const props = {};
-
-    console.log("buildDays")
 
     for (let i = 1; i <= this.state.curMonth.days; i++) {
       let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`; // Add leading zeros
@@ -99,8 +98,6 @@ class Calendar extends Component {
       days.push(<Day key={i} {...props} />);
     }
     return days;
-
-
   }
 
   nextMonthClickHandler = () => {

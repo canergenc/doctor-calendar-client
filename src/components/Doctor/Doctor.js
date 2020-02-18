@@ -10,7 +10,7 @@ margin-bottom: 8px;
 align-items: flex-start;
 align-content: flex-start;
 border: 1px solid lightgrey;
-border-radius: 2px;
+border-radius: 4px;
 font-size: 18px;
 background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
 `;

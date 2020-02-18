@@ -26,9 +26,6 @@ class Index extends React.Component {
     }
 
     switch (source.droppableId) {
-      case destination.droppableId:
-        console.log('reorder');
-        break;
       case 'DoctorList_1':
         const doctor = this.props.doctors[source.index];
         
@@ -40,11 +37,10 @@ class Index extends React.Component {
           type: {}
         }
         this.props.createReminder(reminder);
-        //this.props.onInitReminders();
 
         break;
       default:
-        console.log('move');
+        console.log('switch default');
         break;
     }
   };
@@ -81,8 +77,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
-    onInitReminders: () => dispatch(actions.initReminders())
+    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData))
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
