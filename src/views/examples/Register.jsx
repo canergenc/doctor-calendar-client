@@ -32,8 +32,45 @@ import {
   Row,
   Col
 } from "reactstrap";
-
+import Api from '../../api';
 class Register extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      fullName: '',
+      title: ''
+    };
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleInputChange(event) {
+    const target = event.target;
+    if (target.type === 'email')
+      this.setState({ email: event.target.value });
+    else if (target.type === 'password')
+      this.setState({ password: event.target.value });
+    else if (target.name === 'title')
+      this.setState({ title: event.target.value });
+    else if (target.name === 'fullName')
+      this.setState({ fullName: event.target.value });
+  }
+  handleSubmit(event) {
+    if (!this.state.email || !this.state.password) { alert("Zorunlu Alanlar Boş Bırakılamaz!"); return; }
+    Api.post('users', { email: this.state.email, password: this.state.password, fullName: this.state.fullName, title: this.state.title }).then(res => {
+      console.log("then");
+      console.log(res);
+      alert(res.data);
+    }).catch(ex => {
+      debugger;
+      console.log("catch");
+      console.log(ex);
+      if (ex.response && ex.response.data)
+        alert(ex.response.data.error.message)
+    })
+    event.preventDefault();
+  }
   render() {
     return (
       <>
@@ -41,7 +78,7 @@ class Register extends React.Component {
           <Card className="bg-secondary shadow border-0">
             <CardHeader className="bg-transparent pb-5">
               <div className="text-muted text-center mt-2 mb-4">
-                <small>Sign up with</small>
+                <small>Kayıt ol</small>
               </div>
               <div className="text-center">
                 <Button
@@ -56,7 +93,7 @@ class Register extends React.Component {
                       src={require("assets/img/icons/common/github.svg")}
                     />
                   </span>
-                  <span className="btn-inner--text">Github</span>
+                  <span className="btn-inner--text">Github(v2)</span>
                 </Button>
                 <Button
                   className="btn-neutral btn-icon"
@@ -70,15 +107,15 @@ class Register extends React.Component {
                       src={require("assets/img/icons/common/google.svg")}
                     />
                   </span>
-                  <span className="btn-inner--text">Google</span>
+                  <span className="btn-inner--text">Google(v2)</span>
                 </Button>
               </div>
             </CardHeader>
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
-                <small>Or sign up with credentials</small>
+                <small>Kayıt ol</small>
               </div>
-              <Form role="form">
+              <Form role="form" onSubmit={this.handleSubmit}>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
                     <InputGroupAddon addonType="prepend">
@@ -86,7 +123,17 @@ class Register extends React.Component {
                         <i className="ni ni-hat-3" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Name" type="text" />
+                    <Input placeholder="Ad ve Soyad" type="text" name="fullName" value={this.state.fullName} onChange={this.handleInputChange} />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-hat-3" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input placeholder="Ünvan" type="text" name="title" value={this.state.title} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -96,7 +143,7 @@ class Register extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" />
+                    <Input placeholder="Email*" type="email" value={this.state.email} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -106,13 +153,13 @@ class Register extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" />
+                    <Input placeholder="Password*" type="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <div className="text-muted font-italic">
                   <small>
-                    password strength:{" "}
-                    <span className="text-success font-weight-700">strong</span>
+                    password gücü:{" "}
+                    <span className="text-success font-weight-700">Güçlü</span>
                   </small>
                 </div>
                 <Row className="my-4">
@@ -128,9 +175,9 @@ class Register extends React.Component {
                         htmlFor="customCheckRegister"
                       >
                         <span className="text-muted">
-                          I agree with the{" "}
+                          Kabul ediyorum{" "}
                           <a href="#pablo" onClick={e => e.preventDefault()}>
-                            Privacy Policy
+                            Gizlilik politakası
                           </a>
                         </span>
                       </label>
@@ -138,8 +185,8 @@ class Register extends React.Component {
                   </Col>
                 </Row>
                 <div className="text-center">
-                  <Button className="mt-4" color="primary" type="button">
-                    Create account
+                  <Button className="mt-4" color="primary" type="submit">
+                    Hesap oluştur
                   </Button>
                 </div>
               </Form>

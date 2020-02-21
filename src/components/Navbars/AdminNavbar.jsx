@@ -31,7 +31,7 @@ class AdminNavbar extends React.Component {
             </Link>
 
             <Nav className="align-items-center d-none d-md-flex" navbar>
-              
+
               <Location />
 
               <UncontrolledDropdown nav>
@@ -57,10 +57,6 @@ class AdminNavbar extends React.Component {
                   <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-single-02" />
                     <span>Profilim</span>
-                  </DropdownItem>
-                  <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-settings-gear-65" />
-                    <span>Ayarlar</span>
                   </DropdownItem>
                   <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-calendar-grid-58" />
