@@ -9,6 +9,13 @@ export const setGroups = (groups) => {
     };
 };
 
+export const setActiveGroupId = (groupId) => {
+    return {
+        type: actionTypes.SET_ACTIVE_GROUP_ID,
+        activeGroupId: groupId
+    };
+};
+
 export const fetchGroupsFailed = (error) => {
     return {
         type: actionTypes.FETCH_GROUPS_FAILED
@@ -32,3 +39,4 @@ export const initGroups = () => {
             });
     }
 }
+

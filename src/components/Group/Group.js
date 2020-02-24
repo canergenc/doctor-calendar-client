@@ -24,6 +24,7 @@ export const ArrowRight = Arrow({ text: ">", className: "arrow-next" });
 class Group extends Component {
 
     state = {
+        groupId: null,
         alignCenter: true,
         clickWhenDrag: false,
         dragging: true,
@@ -57,7 +58,7 @@ class Group extends Component {
                 outline
                 key={el.id}
                 color={this.state.colors[index]}
-                className={this.state.class[index] & ` ${selected ? "active" : ""}`}
+                className={this.state.class[index] & " " & ` ${selected ? "active" : ""}`}
             > {el.name}
             </Button>
         ));
@@ -71,19 +72,30 @@ class Group extends Component {
 
     onSelect = key => {
         console.log(`onSelect: ${key}`);
-        this.setState({ selected: key });
+        this.props.setActiveGroupId(key);
+
+        this.setState({
+            selected: key
+        });
+
         const filterData = {
-            groupId: key
+            params:{
+                where:{
+                    groupId: key
+                }
+            }
         };
         this.props.getReminders(filterData);
+        console.log("activeGroupId:" + this.props.activeGroupId);
     };
 
     componentDidMount() {
+        console.log("[Group] componentDidMount");
         this.props.onInitGroups();
     }
 
     render() {
-        console.log("render");
+        console.log("Groups render");
         const {
             alignCenter,
             clickWhenDrag,
@@ -99,7 +111,6 @@ class Group extends Component {
 
         let scrollMenu = this.props.error ? "Gruplar yüklenemedi" : "Gruplar yükleniyor...";
         if (this.props.groups) {
-            console.log(this.props.groups);
             let menu = this.createMenu(this.props.groups, this.state.selected);
             scrollMenu = <ScrollMenu
                 alignCenter={alignCenter}
@@ -141,6 +152,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitGroups: () => dispatch(actions.initGroups()),
+        setActiveGroupId: (groupId) => dispatch(actions.setActiveGroupId(groupId)),
         getReminders: (filterData) => dispatch(actions.getReminders(filterData))
     }
 }

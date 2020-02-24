@@ -15,6 +15,12 @@ const reducer = (state = initialState, action) => {
                 activeGroupId: action.groups[0].id,
                 error: false
             };
+        case actionTypes.SET_ACTIVE_GROUP_ID:
+            return {
+                ...state,
+                activeGroupId: action.activeGroupId,
+                error: false
+            };
         case actionTypes.FETCH_GROUPS_FAILED:
             return {
                 ...state,

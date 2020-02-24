@@ -32,7 +32,7 @@ class Index extends React.Component {
 
         const reminder = {
           locationId: this.props.activeLocationId,
-          groupId:this.props.activeGroupId,
+          groupId: this.props.activeGroupId,
           userId: doctor.id,
           date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
           description: doctor.fullName,
@@ -90,4 +90,3 @@ const mapDispatchToProps = dispatch => {
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
- 

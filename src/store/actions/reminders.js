@@ -41,6 +41,9 @@ export const getReminders = (filterData) => {
       .then(res => {
         const reminders = []
         if (res.data) {
+          console.log("getReminders");
+          
+          console.log(res.data);
           res.data.forEach(element => {
             if (element !== null) {
               reminders.push(element);

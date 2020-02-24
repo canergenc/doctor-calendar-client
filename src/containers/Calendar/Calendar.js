@@ -79,7 +79,7 @@ class Calendar extends Component {
       
       if (this.props.reminders) {
         this.props.reminders.forEach(dateRow => {
-          if (moment.unix(dateRow.date._seconds).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
+          if (moment(dateRow.date).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             calendar.push(dateRow);
           }
         });
