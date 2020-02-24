@@ -6,12 +6,12 @@ const Container = styled.div`
 display: flex;
 user-select: none;
 padding: 8px;
-margin-bottom: 8px;
+margin-bottom: 6px;
 align-items: flex-start;
 align-content: flex-start;
 border: 1px solid lightgrey;
 border-radius: 4px;
-font-size: 18px;
+font-size: 14px;
 background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
 `;
 const Clone = styled(Container)`

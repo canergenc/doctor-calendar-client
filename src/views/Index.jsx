@@ -7,6 +7,7 @@ import Calender from '../containers/Calendar/Calendar';
 import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
+import Location from '../components/Location/Location';
 
 class Index extends React.Component {
 
@@ -28,9 +29,10 @@ class Index extends React.Component {
     switch (source.droppableId) {
       case 'DoctorList_1':
         const doctor = this.props.doctors[source.index];
-        
+
         const reminder = {
           locationId: this.props.activeLocationId,
+          groupId:this.props.activeGroupId,
           userId: doctor.id,
           date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
           description: doctor.fullName,
@@ -45,6 +47,8 @@ class Index extends React.Component {
     }
   };
 
+
+
   render() {
     return (
       <>
@@ -52,6 +56,11 @@ class Index extends React.Component {
 
         <Container className="mt--7" fluid>
           <DragDropContext onDragEnd={this.onDragEnd} >
+            <Row>
+              <Col className="mb-5 mb-xl-0" xl="10">
+                <Location />
+              </Col>
+            </Row>
             <Row>
               <Col className="mb-5 mb-xl-0" xl="10">
                 <Calender />
@@ -72,7 +81,8 @@ const mapStateToProps = state => {
   return {
     doctors: state.doctors.doctors,
     error: state.doctors.error,
-    activeLocationId: state.locations.activeLocationId
+    activeLocationId: state.locations.activeLocationId,
+    activeGroupId: state.locations.activeGroupId
   };
 }
 const mapDispatchToProps = dispatch => {
@@ -81,3 +91,4 @@ const mapDispatchToProps = dispatch => {
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
+ 

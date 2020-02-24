@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Location from '../Location/Location';
 
 // reactstrap components
 import {
@@ -32,8 +31,6 @@ class AdminNavbar extends React.Component {
 
             <Nav className="align-items-center d-none d-md-flex" navbar>
               
-              <Location />
-
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">

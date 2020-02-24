@@ -31,11 +31,6 @@ class Doctors extends Component {
                     {...doctor}
                     key={doctor.id}
                     index={index}
-                // key={doctor.id}
-                // name={doctor.fullName}
-                // title={doctor.title}
-                // index={index}
-                // id={doctor.id}
                 />
             ));
         }

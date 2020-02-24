@@ -1,57 +1,130 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
+import PropTypes from "prop-types";
+import ScrollMenu from "react-horizontal-scrolling-menu";
+
+import './Location.css';
 
 // reactstrap components
-import {
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    DropdownToggle,
-    Media
-} from "reactstrap";
+import { Button } from "reactstrap";
 
+const Arrow = ({ text, className }) => {
+    return <div className={className}>{text}</div>;
+};
+
+Arrow.propTypes = {
+    text: PropTypes.string,
+    className: PropTypes.string
+};
+
+export const ArrowLeft = Arrow({ text: "<", className: "arrow-prev" });
+export const ArrowRight = Arrow({ text: ">", className: "arrow-next" });
 
 class Location extends Component {
+
+    state = {
+        alignCenter: true,
+        clickWhenDrag: false,
+        dragging: true,
+        hideArrows: false,
+        hideSingleArrow: true,
+        scrollToSelected: false,
+        selected: "item1",
+        translate: 0,
+        transition: 0.3,
+        wheel: true,
+        colors: [
+            "primary",
+            "success",
+            "info",
+            "warning",
+            "danger"
+        ],
+        class: [
+            "btn-primary",
+            "btn-success",
+            "btn-info",
+            "btn-warning",
+            "btn-danger"
+        ]
+    }
+
+    createMenu = (list, selected) => {
+        console.log("create menu");
+        let menu = list.map((el, index) => (
+            <Button
+                outline
+                key={el.id}
+                color={this.state.colors[index]}
+                className={this.state.class[index] & ` ${selected ? "active" : ""}`}
+            > {el.name}
+            </Button>
+        ));
+        return menu;
+    }
+
+    onUpdate = ({ translate }) => {
+        console.log(`onUpdate: translate: ${translate}`);
+        this.setState({ translate });
+    };
+
+    onSelect = key => {
+        console.log(`onSelect: ${key}`);
+        this.setState({ selected: key });
+        const filterData = {
+            groupId: key
+        };
+        this.props.getReminders(filterData);
+    };
 
     componentDidMount() {
         this.props.onInitLocations();
     }
 
-    changeActiveLocation(e){
-
-    }
-
     render() {
-        
-        let locations = <DropdownItem className="noti-title" key="nothing"></DropdownItem>;
-        let activeLocationName = this.props.error ? "Lokasyonlar yüklenemedi" : "Lokasyonlar yükleniyor...";
+        console.log("render");
+        const {
+            alignCenter,
+            clickWhenDrag,
+            hideArrows,
+            dragging,
+            hideSingleArrow,
+            scrollToSelected,
+            selected,
+            translate,
+            transition,
+            wheel
+        } = this.state;
+
+        let scrollMenu = this.props.error ? "Gruplar yüklenemedi" : "Gruplar yükleniyor...";
         if (this.props.locations) {
-
-            locations = this.props.locations.map((location) => (
-                <DropdownItem className="noti-title" key={location.id} onClick={this.changeActiveLocation}>
-                    {location.name}
-                </DropdownItem>
-            ));
+            console.log(this.props.locations);
+            let menu = this.createMenu(this.props.locations, this.state.selected);
+            scrollMenu = <ScrollMenu
+                alignCenter={alignCenter}
+                arrowLeft={ArrowLeft}
+                arrowRight={ArrowRight}
+                clickWhenDrag={clickWhenDrag}
+                data={menu}
+                dragging={dragging}
+                hideArrows={hideArrows}
+                hideSingleArrow={hideSingleArrow}
+                onSelect={this.onSelect}
+                onUpdate={this.onUpdate}
+                scrollToSelected={scrollToSelected}
+                selected={selected}
+                transition={+transition}
+                translate={translate}
+                wheel={wheel}
+            />
         }
 
-        if (this.props.activeLocationName) {
-            activeLocationName = this.props.activeLocationName;
-        }
 
         return (
-            <UncontrolledDropdown nav>
-                <DropdownToggle className="pr-0" nav>
-                    <Media className="align-items-center">
-                        <span className="mb-0 text-md font-weight-bold">
-                            {activeLocationName}
-                        </span>
-                    </Media>
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-menu-arrow" right>
-                    {locations}
-                </DropdownMenu>
-            </UncontrolledDropdown>
+            <div className="location">
+                {scrollMenu}
+            </div>
         );
     }
 }
@@ -67,7 +140,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitLocations: () => dispatch(actions.initLocations())
+        onInitLocations: () => dispatch(actions.initLocations()),
+        getReminders: (filterData) => dispatch(actions.getReminders(filterData))
     }
 }
 

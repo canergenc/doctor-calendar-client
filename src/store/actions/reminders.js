@@ -34,6 +34,27 @@ export const initReminders = () => {
   }
 }
 
+
+export const getReminders = (filterData) => {
+  return dispatch => {
+    Api.get('/calendars',filterData)
+      .then(res => {
+        const reminders = []
+        if (res.data) {
+          res.data.forEach(element => {
+            if (element !== null) {
+              reminders.push(element);
+            }
+          });
+          dispatch(setReminders(reminders));
+        }
+      })
+      .catch(err => {
+        dispatch(fetchRemindersFailed());
+      });
+  }
+}
+
 export const createReminderSuccess = (id, reminderData) => {
   return {
     type: actionTypes.CREATE_REMINDER_SUCCESS,
