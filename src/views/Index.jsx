@@ -7,7 +7,7 @@ import Calender from '../containers/Calendar/Calendar';
 import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
-import Location from '../components/Location/Location';
+import Group from '../components/Group/Group';
 
 class Index extends React.Component {
 
@@ -58,7 +58,7 @@ class Index extends React.Component {
           <DragDropContext onDragEnd={this.onDragEnd} >
             <Row>
               <Col className="mb-5 mb-xl-0" xl="10">
-                <Location />
+                <Group />
               </Col>
             </Row>
             <Row>
@@ -81,8 +81,7 @@ const mapStateToProps = state => {
   return {
     doctors: state.doctors.doctors,
     error: state.doctors.error,
-    activeLocationId: state.locations.activeLocationId,
-    activeGroupId: state.locations.activeGroupId
+    activeGroupId: state.groups.activeGroupId
   };
 }
 const mapDispatchToProps = dispatch => {

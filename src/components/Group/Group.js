@@ -4,7 +4,7 @@ import * as actions from '../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 
-import './Location.css';
+import './Group.css';
 
 // reactstrap components
 import { Button } from "reactstrap";
@@ -21,7 +21,7 @@ Arrow.propTypes = {
 export const ArrowLeft = Arrow({ text: "<", className: "arrow-prev" });
 export const ArrowRight = Arrow({ text: ">", className: "arrow-next" });
 
-class Location extends Component {
+class Group extends Component {
 
     state = {
         alignCenter: true,
@@ -79,7 +79,7 @@ class Location extends Component {
     };
 
     componentDidMount() {
-        this.props.onInitLocations();
+        this.props.onInitGroups();
     }
 
     render() {
@@ -98,9 +98,9 @@ class Location extends Component {
         } = this.state;
 
         let scrollMenu = this.props.error ? "Gruplar yüklenemedi" : "Gruplar yükleniyor...";
-        if (this.props.locations) {
-            console.log(this.props.locations);
-            let menu = this.createMenu(this.props.locations, this.state.selected);
+        if (this.props.groups) {
+            console.log(this.props.groups);
+            let menu = this.createMenu(this.props.groups, this.state.selected);
             scrollMenu = <ScrollMenu
                 alignCenter={alignCenter}
                 arrowLeft={ArrowLeft}
@@ -122,7 +122,7 @@ class Location extends Component {
 
 
         return (
-            <div className="location">
+            <div className="group">
                 {scrollMenu}
             </div>
         );
@@ -132,18 +132,18 @@ class Location extends Component {
 
 const mapStateToProps = state => {
     return {
-        locations: state.locations.locations,
-        activeLocationName: state.locations.activeLocationName,
-        error: state.locations.error
+        groups: state.groups.groups,
+        activeGroupId: state.groups.activeGroupId,
+        error: state.groups.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitLocations: () => dispatch(actions.initLocations()),
+        onInitGroups: () => dispatch(actions.initGroups()),
         getReminders: (filterData) => dispatch(actions.getReminders(filterData))
     }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Location);
+export default connect(mapStateToProps, mapDispatchToProps)(Group);
