@@ -7,7 +7,7 @@ import Calender from '../containers/Calendar/Calendar';
 import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Doctors from '../containers/Doctors/Doctors';
-import Group from '../components/Group/Group';
+import Location from '../components/Location/Location';
 
 class Index extends React.Component {
 
@@ -29,14 +29,13 @@ class Index extends React.Component {
     switch (source.droppableId) {
       case 'DoctorList_1':
         const doctor = this.props.doctors[source.index];
-
         const reminder = {
           locationId: this.props.activeLocationId,
-          groupId: this.props.activeGroupId,
+          groupId: "5e53975e62398900983c869c",
           userId: doctor.id,
           date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
           description: doctor.fullName,
-          type: {}
+          type: {"Nöbet": 0}
         }
         this.props.createReminder(reminder);
 
@@ -58,7 +57,7 @@ class Index extends React.Component {
           <DragDropContext onDragEnd={this.onDragEnd} >
             <Row>
               <Col className="mb-5 mb-xl-0" xl="10">
-                <Group />
+                <Location />
               </Col>
             </Row>
             <Row>
@@ -81,7 +80,7 @@ const mapStateToProps = state => {
   return {
     doctors: state.doctors.doctors,
     error: state.doctors.error,
-    activeGroupId: state.groups.activeGroupId
+    activeLocationId: state.locations.activeLocationId
   };
 }
 const mapDispatchToProps = dispatch => {

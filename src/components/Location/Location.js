@@ -4,7 +4,7 @@ import * as actions from '../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 
-import './Group.css';
+import './Location.css';
 
 // reactstrap components
 import { Button } from "reactstrap";
@@ -21,10 +21,10 @@ Arrow.propTypes = {
 export const ArrowLeft = Arrow({ text: "<", className: "arrow-prev" });
 export const ArrowRight = Arrow({ text: ">", className: "arrow-next" });
 
-class Group extends Component {
+class Location extends Component {
 
     state = {
-        groupId: null,
+        locationId: null,
         alignCenter: true,
         clickWhenDrag: false,
         dragging: true,
@@ -72,7 +72,7 @@ class Group extends Component {
 
     onSelect = key => {
         console.log(`onSelect: ${key}`);
-        this.props.setActiveGroupId(key);
+        this.props.setActiveLocationId(key);
 
         this.setState({
             selected: key
@@ -81,21 +81,21 @@ class Group extends Component {
         const filterData = {
             params:{
                 where:{
-                    groupId: key
+                    locationId: key
                 }
             }
         };
         this.props.getReminders(filterData);
-        console.log("activeGroupId:" + this.props.activeGroupId);
+        console.log("activeLocationId:" + this.props.activeLocationId);
     };
 
     componentDidMount() {
-        console.log("[Group] componentDidMount");
-        this.props.onInitGroups();
+        console.log("[Location] componentDidMount");
+        this.props.onInitLocations();
     }
 
     render() {
-        console.log("Groups render");
+        console.log("Locations render");
         const {
             alignCenter,
             clickWhenDrag,
@@ -110,8 +110,8 @@ class Group extends Component {
         } = this.state;
 
         let scrollMenu = this.props.error ? "Gruplar yüklenemedi" : "Gruplar yükleniyor...";
-        if (this.props.groups) {
-            let menu = this.createMenu(this.props.groups, this.state.selected);
+        if (this.props.locations) {
+            let menu = this.createMenu(this.props.locations, this.state.selected);
             scrollMenu = <ScrollMenu
                 alignCenter={alignCenter}
                 arrowLeft={ArrowLeft}
@@ -133,7 +133,7 @@ class Group extends Component {
 
 
         return (
-            <div className="group">
+            <div className="location">
                 {scrollMenu}
             </div>
         );
@@ -143,19 +143,19 @@ class Group extends Component {
 
 const mapStateToProps = state => {
     return {
-        groups: state.groups.groups,
-        activeGroupId: state.groups.activeGroupId,
-        error: state.groups.error
+        locations: state.locations.locations,
+        activeLocationId: state.locations.activeLocationId,
+        error: state.locations.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitGroups: () => dispatch(actions.initGroups()),
-        setActiveGroupId: (groupId) => dispatch(actions.setActiveGroupId(groupId)),
+        onInitLocations: () => dispatch(actions.initLocations()),
+        setActiveLocationId: (locationId) => dispatch(actions.setActiveLocationId(locationId)),
         getReminders: (filterData) => dispatch(actions.getReminders(filterData))
     }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Group);
+export default connect(mapStateToProps, mapDispatchToProps)(Location);
