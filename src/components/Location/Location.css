@@ -1683,9 +1683,7 @@ a.btn-icon-only {
   border: 1px transparent solid;
   margin-right: 10px;
 }
-.menu-item-wrapper.active {
-  border: 1px blue solid;
-}
+
 .menu-item.active {
   border: 1px green solid;
 }

@@ -35,14 +35,25 @@ export const initReminders = () => {
 }
 
 
-export const getReminders = (filterData) => {
+export const getReminders = (locationId) => {
+  const filterData = {
+    params: {
+      filter: {
+        where: {
+          locationId: {
+            like: locationId
+          }
+        }
+      }
+    }
+  }
   return dispatch => {
-    Api.get('/calendars',filterData)
+    Api.get('/calendars', filterData)
       .then(res => {
         const reminders = []
         if (res.data) {
           console.log("getReminders");
-          
+
           console.log(res.data);
           res.data.forEach(element => {
             if (element !== null) {
@@ -77,8 +88,11 @@ export const createReminder = (reminderData) => {
   return dispatch => {
     Api.post('/calendars', reminderData)
       .then(response => {
+        console.log("create reminder then");
+        
         console.log(response.data);
-        dispatch(initReminders());
+        console.log(response.data.locationId);
+        dispatch(getReminders(response.data.locationId));
         dispatch(createReminderSuccess(response.data, reminderData));
       })
       .catch(error => {

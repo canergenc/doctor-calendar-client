@@ -12,7 +12,6 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 locations: action.locations,
-                activeLocationId: action.locations[0].id,
                 error: false
             };
         case actionTypes.SET_ACTIVE_LOCATION_ID:

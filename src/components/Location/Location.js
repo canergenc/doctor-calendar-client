@@ -57,8 +57,8 @@ class Location extends Component {
             <Button
                 outline
                 key={el.id}
-                color={this.state.colors[index]}
-                className={this.state.class[index] & " " & ` ${selected ? "active" : ""}`}
+                color={el.colorCode}
+                className={` ${selected === el.id ? "active" : ""}`}
             > {el.name}
             </Button>
         ));
@@ -80,26 +80,17 @@ class Location extends Component {
             this.setState({
                 selected: key
             });
+            this.props.setActiveLocationId(key);
         }
-        else{
+        else {
+            this.props.setActiveLocationId("");
+            locationId = "";
             this.setState({
                 selected: ""
             });
         }
 
-        const filterData = {
-            params: {
-                filter: {
-                    where: {
-                        locationId: {
-                            like: locationId
-                        }
-                    }
-                }
-            }
-        }
-
-        this.props.getReminders(filterData);
+        this.props.getReminders(locationId);
         console.log("activeLocationId:" + this.props.activeLocationId);
     };
 

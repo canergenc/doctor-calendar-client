@@ -28,16 +28,21 @@ class Index extends React.Component {
 
     switch (source.droppableId) {
       case 'DoctorList_1':
-        const doctor = this.props.doctors[source.index];
-        const reminder = {
-          locationId: this.props.activeLocationId,
-          groupId: "5e53975e62398900983c869c",
-          userId: doctor.id,
-          date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-          description: doctor.fullName,
-          type: {"Nöbet": 0}
+        if (this.props.activeLocationId !== "") {
+          const doctor = this.props.doctors[source.index];
+          const reminder = {
+            locationId: this.props.activeLocationId,
+            groupId: "5e53975e62398900983c869c",
+            userId: doctor.id,
+            date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+            description: doctor.fullName,
+            type: { "Nöbet": 0 }
+          }
+          this.props.createReminder(reminder);
         }
-        this.props.createReminder(reminder);
+        else {
+          console.log("location seçmelisiniz.")
+        }
 
         break;
       default:
