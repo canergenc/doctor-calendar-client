@@ -34,21 +34,7 @@ class Location extends Component {
         selected: "item1",
         translate: 0,
         transition: 0.3,
-        wheel: true,
-        colors: [
-            "primary",
-            "success",
-            "info",
-            "warning",
-            "danger"
-        ],
-        class: [
-            "btn-primary",
-            "btn-success",
-            "btn-info",
-            "btn-warning",
-            "btn-danger"
-        ]
+        wheel: true
     }
 
     createMenu = (list, selected) => {

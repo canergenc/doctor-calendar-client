@@ -5,7 +5,8 @@ import {
     Card,
     CardHeader,
     CardBody,
-    Row
+    Row,
+    Input
 } from "reactstrap";
 import { Droppable } from 'react-beautiful-dnd';
 import Api from '../../api';
@@ -18,18 +19,27 @@ import Doctor from '../../components/Doctor/Doctor';
 class Doctors extends Component {
 
     componentDidMount() {
-        this.props.onInitDoctors();
+        this.props.onInitUsers();
+    }
+
+    searchUser = (filter) => {
+        if (filter.length === 0) {
+            this.props.onInitUsers();
+        }
+        else if (filter.length > 2) {
+            this.props.searchUser(filter);
+        }
     }
 
     render() {
 
         let doctorList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <Spinner />
 
-        if (this.props.doctors) {
-            doctorList = this.props.doctors.map((doctor, index) => (
+        if (this.props.users) {
+            doctorList = this.props.users.map((user, index) => (
                 <Doctor
-                    {...doctor}
-                    key={doctor.id}
+                    {...user}
+                    key={user.id}
                     index={index}
                 />
             ));
@@ -38,14 +48,13 @@ class Doctors extends Component {
 
             <Card className="shadow">
                 <CardHeader className="bg-transparent">
-                    <Row className="align-items-center">
+                    <Row>
                         <div className="col">
-                            <h2 className="mb-0">Doktorlar</h2>
+                            <Input id="doctorSearch" placeholder="Doktorlar" onChange={(e) => this.searchUser(e.target.value)}></Input>
                         </div>
                     </Row>
                 </CardHeader>
                 <CardBody>
-
                     <Droppable droppableId="DoctorList_1" isDropDisabled={true}>
                         {(provided) => (
                             <div
@@ -54,24 +63,23 @@ class Doctors extends Component {
                                 {doctorList}
                             </div>)}
                     </Droppable>
-
                 </CardBody>
             </Card>
-
         );
     }
 }
 
 const mapStateToProps = state => {
     return {
-        doctors: state.doctors.doctors,
+        users: state.doctors.doctors,
         error: state.doctors.error
     };
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitDoctors: () => dispatch(actions.initDoctors())
+        onInitUsers: () => dispatch(actions.initDoctors()),
+        searchUser: (filterKey) => dispatch(actions.searchUser(filterKey))
     };
 }
 

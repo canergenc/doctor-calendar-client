@@ -62,12 +62,16 @@ class Index extends React.Component {
           <DragDropContext onDragEnd={this.onDragEnd} >
             <Row>
               <Col className="mb-5 mb-xl-0" xl="10">
-                <Location />
-              </Col>
-            </Row>
-            <Row>
-              <Col className="mb-5 mb-xl-0" xl="10">
-                <Calender />
+                <Row>
+                  <Col>
+                    <Location />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Calender />
+                  </Col>
+                </Row>
               </Col>
               <Col xl="2">
                 <Doctors />

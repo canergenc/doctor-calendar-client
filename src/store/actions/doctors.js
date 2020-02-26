@@ -31,3 +31,32 @@ export const initDoctors = () => {
             });
     }
 }
+
+export const searchUser = (filterKey) => {
+    const filterData = {
+        params: {
+            filter: {
+                where: {
+                    fullName: {
+                        like: filterKey
+                    }
+                }
+            }
+        }
+    }
+    return dispatch => {
+        Api.get('/users', filterData)
+            .then(res => {
+                const users = [];
+                res.data.forEach(element => {
+                    users.push({
+                        ...element
+                    });
+                });
+                dispatch(setDoctors(users));
+            })
+            .catch(err => {
+                dispatch(fetchDoctorsFailed());
+            });
+    }
+}
