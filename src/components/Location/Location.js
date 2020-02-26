@@ -73,18 +73,32 @@ class Location extends Component {
     onSelect = key => {
         console.log(`onSelect: ${key}`);
         this.props.setActiveLocationId(key);
+        let locationId = "";
 
-        this.setState({
-            selected: key
-        });
+        if (this.state.selected !== key) {
+            locationId = key;
+            this.setState({
+                selected: key
+            });
+        }
+        else{
+            this.setState({
+                selected: ""
+            });
+        }
 
         const filterData = {
-            params:{
-                where:{
-                    locationId: key
+            params: {
+                filter: {
+                    where: {
+                        locationId: {
+                            like: locationId
+                        }
+                    }
                 }
             }
-        };
+        }
+
         this.props.getReminders(filterData);
         console.log("activeLocationId:" + this.props.activeLocationId);
     };
