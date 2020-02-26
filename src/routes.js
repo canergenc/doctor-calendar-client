@@ -22,6 +22,7 @@ import Register from "views/examples/Register.jsx";
 import Login from "views/examples/Login.jsx";
 import Tables from "views/examples/Tables.jsx";
 import Icons from "views/examples/Icons.jsx";
+import Group from "./views/settings/group";
 
 var routes = [
   {
@@ -32,24 +33,38 @@ var routes = [
     layout: "/admin"
   },
   {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
+    path: "/user-profile",
+    name: "Profil",
+    icon: "ni ni-circle-08 text-primary",
+    component: Profile,
     layout: "/admin"
   },
   {
-    path: "/maps",
-    name: "Maps",
-    icon: "ni ni-pin-3 text-orange",
-    component: Maps,
+    path: "/group",
+    name: "Grup Tanımla",
+    icon: "ni ni-vector text-primary",
+    component: Group,
     layout: "/admin"
   },
   {
     path: "/user-profile",
-    name: "User Profile",
-    icon: "ni ni-single-02 text-yellow",
+    name: "Lokasyon Tanımla",
+    icon: "ni ni-shop text-primary",
     component: Profile,
+    layout: "/admin"
+  },
+  {
+    path: "/user-profile",
+    name: "Rol Tanımla",
+    icon: "ni ni-diamond text-primary",
+    component: Profile,
+    layout: "/admin"
+  },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "ni ni-planet text-blue",
+    component: Icons,
     layout: "/admin"
   },
   {

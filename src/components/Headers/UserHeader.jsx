@@ -40,7 +40,7 @@ class UserHeader extends React.Component {
           <Container className="d-flex align-items-center" fluid>
             <Row>
               <Col lg="7" md="10">
-                <h1 className="display-2 text-white">Merhaba Trash</h1>
+                <h1 className="display-2 text-white">Merhaba Caner</h1>
                 <p className="text-white mt-0 mb-5">
                   Bu senin profil sayfandır. Buradan tüm iş yönetimini görüntüleyebilirsin.
                 </p>
