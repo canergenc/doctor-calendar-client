@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 // Omitted
 import Api from '../../api';
 // reactstrap components
@@ -23,30 +23,30 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
-class Group extends React.Component {
 
+
+class Group extends Component {
     constructor(props) {
         super(props);
-        this.getGroupList();
-
         this.state = {
-            groupList: []
-        }
+            data: [],
+        };
+        //this.renderTableData = this.renderTableData.bind(this);
     }
-    getGroupList() {
+    renderTableData() {
         Api.get('groups').then(res => {
-            this.state.groupList.push(res.data);
-            const myD = res.data;
-            // return (
-            //     <tbody>
-            //         {
-            //             myD.map((item) =>
-            //                 <tr><td key={item.name}>test</td></tr>
-            //             )
-            //         }
-            //     </tbody>
-
-            // )
+            this.setState({
+                data: res.data
+            });
+            console.log(this.state.data);
+            return res.data.map((item, index) => {
+                return (
+                    <tr key={item.id}>
+                        <td>{item.name}</td>
+                        <td>***</td>
+                    </tr>
+                )
+            });
         }).catch(ex => {
             alert(ex);
         })
