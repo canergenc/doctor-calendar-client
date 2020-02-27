@@ -15,6 +15,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import Doctor from '../../components/Doctor/Doctor';
 
+import './Doctors.css';
+
 
 class Doctors extends Component {
 
@@ -46,7 +48,7 @@ class Doctors extends Component {
         }
         return (
 
-            <Card className="shadow" >
+            <Card className="shadow sticky" >
                 <CardHeader className="bg-transparent">
                     <Row>
                         <div className="col">
