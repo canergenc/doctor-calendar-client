@@ -15,8 +15,19 @@ export const fetchRemindersFailed = (error) => {
 };
 
 export const initReminders = () => {
+  const filterData = {
+    params: {
+      filter:{
+        include: [
+          {
+            relation: "location"
+          }
+        ]
+      }
+    }
+  }
   return dispatch => {
-    Api.get('/calendars')
+    Api.get('/calendars', filterData)
       .then(res => {
         const reminders = []
         if (res.data) {
@@ -43,7 +54,12 @@ export const getReminders = (locationId) => {
           locationId: {
             like: locationId
           }
-        }
+        },
+        include: [
+          {
+            relation: "location"
+          }
+        ]
       }
     }
   }

@@ -5,7 +5,7 @@ class Reminder extends Component {
 
   render() {
     return (
-      <article className="reminder" color={this.props.color}>
+      <article className={"reminder" +" "+ this.props.color} >
         <div className="tools">
           <button onClick={this.props.onClickDeleteReminder}>
             <i className="fas fa-trash-alt" />

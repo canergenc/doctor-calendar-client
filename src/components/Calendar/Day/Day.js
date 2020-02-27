@@ -10,13 +10,12 @@ class Day extends Component {
 
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
       if (this.props.reminders.length > 0) {
-
         let array = this.props.reminders;
         array.forEach(element => {
           reminders.push(<Reminder
             key={element.id}
             description={element.description}
-            color={element.color}
+            color={element.location.colorCode}
             onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
           />
           );

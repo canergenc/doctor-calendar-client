@@ -1,10 +1,10 @@
 .reminder {
-  color: #00918e;
+  // color: #00918e;
   position: relative;
   font-size: 16px;
   padding: 3px 5px;
   margin-bottom: 5px;
-  background: #6decb9;
+  // background: #6decb9;
   border-radius: 4px;
   &:hover {
     .tools {
@@ -37,4 +37,75 @@
       }
     }
   }
+}
+
+
+.primary {
+  color: #fff;
+  background-color: #5e72e4;
+  border-color: #5e72e4;
+}
+
+.secondary {
+  color: #212529;
+  background-color: #f7fafc;
+  border-color: #f7fafc;
+}
+
+.success {
+  color: #fff;
+  background-color: #2dce89;
+  border-color: #2dce89;
+}
+
+.info {
+  color: #fff;
+  background-color: #11cdef;
+  border-color: #11cdef;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.warning {
+  color: #fff;
+  background-color: #fb6340;
+  border-color: #fb6340;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.danger {
+  color: #fff;
+  background-color: #f5365c;
+  border-color: #f5365c;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.light {
+  color: #fff;
+  background-color: #adb5bd;
+  border-color: #adb5bd;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+
+
+.dark {
+  color: #fff;
+  background-color: #212529;
+  border-color: #212529;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+
+.default {
+  color: #fff;
+  background-color: #172b4d;
+  border-color: #172b4d;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.white {
+  color: #212529;
+  background-color: #fff;
+  border-color: #fff;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
