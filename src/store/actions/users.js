@@ -1,11 +1,11 @@
 import * as actionTypes from './actionTypes';
 import Api from '../../api';
 
-export const setUsers = (users,defaultUsers) => {
+export const setUsers = (users, defaultUsers) => {
     return {
         type: actionTypes.SET_USERS,
         users: users,
-        defaultUsers:defaultUsers
+        defaultUsers: defaultUsers
     };
 };
 
@@ -25,7 +25,7 @@ export const initUsers = () => {
                         ...element
                     });
                 });
-                dispatch(setUsers(users,users));
+                dispatch(setUsers(users, users));
             })
             .catch(err => {
                 dispatch(fetchUsersFailed());
@@ -52,6 +52,6 @@ export const searchUser = (filterKey, defaultUsers) => {
         users = defaultUsers;
     }
 
-    return dispatch =>{dispatch(setUsers(users,defaultUsers));}
+    return dispatch => { dispatch(setUsers(users, defaultUsers)); }
 
 }

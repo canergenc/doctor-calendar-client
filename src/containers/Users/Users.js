@@ -25,7 +25,7 @@ class Users extends Component {
     }
 
     searchUser = (filterKey) => {
-        this.props.searchUser(filterKey, this.props.users, this.props.defaultUsers);
+        this.props.searchUser(filterKey,this.props.defaultUsers);
     }
 
     render() {
@@ -77,7 +77,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: () => dispatch(actions.initUsers()),
-        searchUser: (filterKey, users) => dispatch(actions.searchUser(filterKey, users))
+        searchUser: (filterKey,defaultUsers) => dispatch(actions.searchUser(filterKey,defaultUsers))
     };
 }
 

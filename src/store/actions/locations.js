@@ -4,21 +4,22 @@ import api from '../../api';
 export const setLocations = (locations) => {
     return {
         type: actionTypes.SET_LOCATIONS,
-        locations: locations,
-        activeLocationId: locations[0].id
+        locations: locations
     };
 };
+
+
+export const fetchLocationsFailed = (error) => {
+    return {
+        type: actionTypes.FETCH_LOCATIONS_FAILED
+    };
+};
+
 
 export const setActiveLocationId = (locationId) => {
     return {
         type: actionTypes.SET_ACTIVE_LOCATION_ID,
         activeLocationId: locationId
-    };
-};
-
-export const fetchLocationsFailed = (error) => {
-    return {
-        type: actionTypes.FETCH_LOCATIONS_FAILED
     };
 };
 

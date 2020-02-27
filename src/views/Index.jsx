@@ -8,6 +8,11 @@ import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Users from '../containers/Users/Users';
 import Location from '../components/Location/Location';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { constants } from "../variables/constants";
+
+const MySwal = withReactContent(Swal)
 
 class Index extends React.Component {
 
@@ -28,7 +33,9 @@ class Index extends React.Component {
 
     switch (source.droppableId) {
       case 'UserList_1':
-        if (this.props.activeLocationId !== "") {
+        if (this.props.activeLocationId !== "" && this.props.activeLocationId !== null) {
+          console.log(this.props.activeLocationId);
+
           const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
@@ -42,6 +49,11 @@ class Index extends React.Component {
         }
         else {
           console.log("location seçmelisiniz.")
+          MySwal.fire({
+            icon: 'error',
+            title: 'Hay aksi,',
+            text: constants.ERROR_MESSAGE.serviceNotFound
+          })
         }
 
         break;
