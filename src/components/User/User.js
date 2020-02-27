@@ -19,7 +19,7 @@ const Clone = styled(Container)`
     transform: none!important;
   }
 `;
-class Doctor extends Component {
+class User extends Component {
     render() {
 
         return (
@@ -50,4 +50,4 @@ class Doctor extends Component {
 
 };
 
-export default Doctor;
+export default User;

@@ -6,7 +6,7 @@ import moment from "moment";
 import Calender from '../containers/Calendar/Calendar';
 import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
-import Doctors from '../containers/Doctors/Doctors';
+import Users from '../containers/Users/Users';
 import Location from '../components/Location/Location';
 
 class Index extends React.Component {
@@ -27,15 +27,15 @@ class Index extends React.Component {
     }
 
     switch (source.droppableId) {
-      case 'DoctorList_1':
+      case 'UserList_1':
         if (this.props.activeLocationId !== "") {
-          const doctor = this.props.doctors[source.index];
+          const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
             groupId: "5e53975e62398900983c869c",
-            userId: doctor.id,
+            userId: user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-            description: doctor.fullName,
+            description: user.fullName,
             type: { "Nöbet": 0 }
           }
           this.props.createReminder(reminder);
@@ -74,7 +74,7 @@ class Index extends React.Component {
                 </Row>
               </Col>
               <Col xl="2">
-                <Doctors />
+                <Users />
               </Col>
             </Row>
           </DragDropContext>
@@ -87,8 +87,8 @@ class Index extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    doctors: state.doctors.doctors,
-    error: state.doctors.error,
+    users: state.users.users,
+    error: state.users.error,
     activeLocationId: state.locations.activeLocationId
   };
 }

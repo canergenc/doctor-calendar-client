@@ -2,6 +2,8 @@
   background-color: white;
   padding-top: 10px;
   padding-left: 20px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
 .btn {

@@ -16,7 +16,7 @@ import AdminLayout from "layouts/Admin";
 import AuthLayout from "layouts/Auth";
 
 // Reducers
-import doctorsReducer from "./store/reducers/doctors";
+import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
 
@@ -27,7 +27,7 @@ const composeEnhancers =
     : null) || compose;
 
 const rootReducer = combineReducers({
-  doctors: doctorsReducer,
+  users: usersReducer,
   reminders: remindersReducer,
   locations: locationsReducer
 });

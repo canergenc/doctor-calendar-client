@@ -13,33 +13,28 @@ import Api from '../../api';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
-import Doctor from '../../components/Doctor/Doctor';
+import User from '../../components/User/User';
 
-import './Doctors.css';
+import './Users.css';
 
 
-class Doctors extends Component {
+class Users extends Component {
 
     componentDidMount() {
         this.props.onInitUsers();
     }
 
-    searchUser = (filter) => {
-        if (filter.length === 0) {
-            this.props.onInitUsers();
-        }
-        else if (filter.length > 2) {
-            this.props.searchUser(filter);
-        }
+    searchUser = (filterKey) => {
+        this.props.searchUser(filterKey, this.props.users, this.props.defaultUsers);
     }
 
     render() {
 
-        let doctorList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <Spinner />
+        let userList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <Spinner />
 
         if (this.props.users) {
-            doctorList = this.props.users.map((user, index) => (
-                <Doctor
+            userList = this.props.users.map((user, index) => (
+                <User
                     {...user}
                     key={user.id}
                     index={index}
@@ -52,17 +47,17 @@ class Doctors extends Component {
                 <CardHeader className="bg-transparent">
                     <Row>
                         <div className="col">
-                            <Input id="doctorSearch" placeholder="Doktorlar" onChange={(e) => this.searchUser(e.target.value)}></Input>
+                            <Input id="userSearch" placeholder="Doktorlar" onChange={(ev) => this.searchUser(ev.target.value)}></Input>
                         </div>
                     </Row>
                 </CardHeader>
                 <CardBody>
-                    <Droppable droppableId="DoctorList_1" isDropDisabled={true}>
+                    <Droppable droppableId="UserList_1" isDropDisabled={true}>
                         {(provided) => (
                             <div
                                 ref={provided.innerRef}
                             >
-                                {doctorList}
+                                {userList}
                             </div>)}
                     </Droppable>
                 </CardBody>
@@ -73,18 +68,19 @@ class Doctors extends Component {
 
 const mapStateToProps = state => {
     return {
-        users: state.doctors.doctors,
-        error: state.doctors.error
+        users: state.users.users,
+        defaultUsers: state.users.defaultUsers,
+        error: state.users.error
     };
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitUsers: () => dispatch(actions.initDoctors()),
-        searchUser: (filterKey) => dispatch(actions.searchUser(filterKey))
+        onInitUsers: () => dispatch(actions.initUsers()),
+        searchUser: (filterKey, users) => dispatch(actions.searchUser(filterKey, users))
     };
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Doctors, Api));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Users, Api));
 
