@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import Api from '../../api';
 // reactstrap components
 import {
+    Modal,
+    Button,
     Card,
     CardHeader,
     CardFooter,
@@ -11,22 +13,52 @@ import {
     PaginationLink,
     Table,
     Container,
-    Row
+    Row,
+    DropdownMenu,
+    DropdownItem,
+    UncontrolledDropdown,
+    DropdownToggle,
+    Form,
+    Input,
+    InputGroupAddon,
+    InputGroupText,
+    InputGroup,
+    Col,
+    FormGroup,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
 
 
-class Group extends Component {
+class Location extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
-            data: [],
-        };
-        //this.renderTableData = this.renderTableData.bind(this);
+            editModal: false,
+            name: '',
+            data: []
+        }
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    handleInputChange(event) {
+        const target = event.target;
+        if (target.name === 'name')
+            this.setState({ name: event.target.value });
+
+    }
+    handleSubmit(event) {
+
+        event.preventDefault();
+    }
+
     renderTableData() {
-        Api.get('groups').then(res => {
+        Api.get('locations', {
+            filter: {
+                include: [{ relation: "group" }]
+            }
+        }).then(res => {
             this.setState({
                 data: res.data
             });
@@ -34,20 +66,54 @@ class Group extends Component {
             alert(ex);
         })
     }
-
     componentDidMount() {
-        this.renderTableData()
+        this.renderTableData();
     }
 
-    render() {
+    toggleModal(state, item) {
+        this.setState({
+            [state]: !this.state[state],
+            name: item.name
+        });
+    };
 
-        let groups = "yükleniyor"
-        if (this.state.data) {
-            groups = this.state.data.map((item, index) => {
+    render() {
+        let locations = "Lokasyonlar Yükleniyor...";
+        console.log(this.state.data)
+        if (this.state.data.length > 0) {
+            locations = this.state.data.map((item, index) => {
                 return (
-                    <tr key={item.id}>
+                    <tr key={index}>
                         <td>{item.name}</td>
                         <td>***</td>
+                        <td className="text-right">
+                            <UncontrolledDropdown>
+                                <DropdownToggle
+                                    className="btn-icon-only text-light"
+                                    href="#pablo"
+                                    role="button"
+                                    size="sm"
+                                    color=""
+                                    onClick={e => e.preventDefault()}
+                                >
+                                    <i className="fas fa-ellipsis-v" />
+                                </DropdownToggle>
+                                <DropdownMenu className="dropdown-menu-arrow" right>
+                                    <DropdownItem
+                                        href="#pablo"
+                                        onClick={() => this.toggleModal("editModal", item)}
+                                    >
+                                        Düzenle
+                                </DropdownItem>
+                                    <DropdownItem
+                                        href="#pablo"
+                                        onClick={e => e.preventDefault()}
+                                    >
+                                        Kaldır
+                                </DropdownItem>
+                                </DropdownMenu>
+                            </UncontrolledDropdown>
+                        </td>
                     </tr>
                 )
             });
@@ -56,6 +122,52 @@ class Group extends Component {
         return (
             <>
                 <UserHeader />
+                <Modal
+                    className="modal-dialog-centered"
+                    isOpen={this.state.editModal}
+                    toggle={() => this.toggleModal("editModal")}
+                >
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="editModalLabel">Lokasyon Düzenle</h5>
+                        <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("editModal")}
+                        >
+                            <span aria-hidden={true}>×</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <Form role="form">
+                            <FormGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>
+                                            <i className="ni ni-single-copy-04" />
+                                        </InputGroupText>
+                                    </InputGroupAddon>
+                                    <Input placeholder="Lokasyon Adı" name="name" type="text" value={this.state.name} onChange={this.handleInputChange} />
+                                </InputGroup>
+                            </FormGroup>
+                        </Form>
+                    </div>
+                    <div className="modal-footer">
+                        <Button
+                            color="secondary"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("editModal")}
+                        >
+                            Kapat
+                        </Button>
+                        <Button color="primary" type="button">
+                            Değişiklikleri Kaydet
+                        </Button>
+                    </div>
+                </Modal>
+
                 {/* Page content */}
                 <Container className="mt--7" fluid>
                     {/* Table */}
@@ -63,7 +175,7 @@ class Group extends Component {
                         <div className="col">
                             <Card className="shadow">
                                 <CardHeader className="border-0">
-                                    <h3 className="mb-0">Grup Listesi</h3>
+                                    <h3 className="mb-0">Lokasyon Listesi</h3>
                                 </CardHeader>
                                 <Table className="align-items-center table-flush" responsive >
                                     <thead className="thead-light">
@@ -74,7 +186,7 @@ class Group extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {groups}
+                                        {locations}
                                     </tbody>
                                 </Table>
                                 <CardFooter className="py-4">
@@ -137,4 +249,4 @@ class Group extends Component {
     }
 }
 
-export default Group;
+export default Location;

@@ -35,30 +35,38 @@ import {
 } from "reactstrap";
 
 class Register extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
+      title: '',
       fullName: '',
       email: '',
-      password:''
+      password: ''
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  handleInputChange(event){
+  handleInputChange(event) {
     const target = event.target;
-    console.log(target);
-    if(target.type === 'email')  
-    this.setState({email: event.target.value});
-    else
-    this.setState({password: event.target.value});
+    if (target.type === 'email')
+      this.setState({ email: event.target.value });
+    else if (target.type === 'password')
+      this.setState({ password: event.target.value });
+    else if (target.name === 'fullName')
+      this.setState({ fullName: event.target.value });
+    else if (target.name === 'title')
+      this.setState({ title: event.target.value })
   }
-  handleSubmit(event){
-    Api.post('users/register',{email: this.state.email, password:this.state.password}).then(res => {
-      console.log(res);
-      alert(res.data.token);
+  handleSubmit(event) {
+    Api.post('users/register', { title: this.state.title, fullName: this.state.fullName, email: this.state.email, password: this.state.password }).then(res => {
+      console.log(res.data)
     }).catch(ex => {
-      alert(ex);
+      if (ex.response.data.error.details && ex.response.data.error.details.length > 0) {
+        ex.response.data.error.details.map((item) => {
+          alert(item.message)
+        })
+      } else
+        alert(ex.response.data.error.message)
     })
     event.preventDefault();
   }
@@ -104,17 +112,27 @@ class Register extends React.Component {
             </CardHeader>
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
-                <small>Or sign up with credentials</small>
+                <small>Lütfen bilgilerinizi giriniz</small>
               </div>
               <Form role="form" onSubmit={this.handleSubmit}>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
                     <InputGroupAddon addonType="prepend">
                       <InputGroupText>
-                        <i className="ni ni-hat-3" />
+                        <i className="ni ni-single-02" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Name" type="text" value={this.state.fullName} onChange={this.handleInputChange}/>
+                    <Input placeholder="Ad ve Soyad" name="fullName" type="text" value={this.state.fullName} onChange={this.handleInputChange} />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup className="input-group-alternative mb-3">
+                    <InputGroupAddon addonType="prepend">
+                      <InputGroupText>
+                        <i className="ni ni-badge" />
+                      </InputGroupText>
+                    </InputGroupAddon>
+                    <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -124,7 +142,7 @@ class Register extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange}/>
+                    <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <FormGroup>
@@ -134,7 +152,7 @@ class Register extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" value={this.state.password} onChange={this.handleInputChange}/>
+                    <Input placeholder="Password" type="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
                 </FormGroup>
                 <div className="text-muted font-italic">
@@ -156,9 +174,9 @@ class Register extends React.Component {
                         htmlFor="customCheckRegister"
                       >
                         <span className="text-muted">
-                          I agree with the{" "}
+                          Okudum, kabul ediyorum{" "}
                           <a href="#pablo" onClick={e => e.preventDefault()}>
-                            Privacy Policy
+                            Gizlilik politikası
                           </a>
                         </span>
                       </label>
@@ -166,7 +184,7 @@ class Register extends React.Component {
                   </Col>
                 </Row>
                 <div className="text-center">
-                  <Button className="mt-4" color="primary" type="button">
+                  <Button className="mt-4" color="primary" type="submit">
                     Kayıt Ol
                   </Button>
                 </div>
