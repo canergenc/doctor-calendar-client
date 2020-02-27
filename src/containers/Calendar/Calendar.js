@@ -63,39 +63,59 @@ class Calendar extends Component {
       }
     );
   }
+  convertJsonToDict = (object) => {
 
+    let dict = [];
+    object.forEach(x => {
+      dict.push({ key: x.id, value: x.colorCode });
+    });
+    return dict;
+  }
   buildDays() {
-    
+
     console.log("buildDays");
 
     const days = [];
     const props = {};
+    if (this.props.reminders && this.props.locations) {
+      for (let i = 1; i <= this.state.curMonth.days; i++) {
 
-    for (let i = 1; i <= this.state.curMonth.days; i++) {
-      let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`; // Add leading zeros
-      props["date"] = date;
-      props["day"] = i;
-      const calendar = [];
-      
-      if (this.props.reminders) {
+        let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`;
+        props["date"] = date;
+        props["day"] = i;
+        const calendar = [];
+        //let color = "";
+
+        //const colorDic = this.convertJsonToDict(this.props.locations);
         this.props.reminders.forEach(dateRow => {
           if (moment(dateRow.date).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             calendar.push(dateRow);
           }
+          // color = colorDic[Object.keys(dateRow.locationId)];
+          // console.log(color);
+
+          // console.log("------");
+
+          // console.log(dateRow.locationId);
+          // console.log(colorDic);
+
+          // console.log("------");
         });
-      }
 
-      props["reminders"] = calendar;
-      props["deleteReminder"] = this.deleteReminderHandler;
 
-      if (i === 1) {
-        props["firstDayIndex"] = moment(date)
-          .startOf("month")
-          .format("d");
-      } else {
-        delete props["firstDayIndex"];
+        props["reminders"] = calendar;
+        props["deleteReminder"] = this.deleteReminderHandler;
+        //props["color"] = color;
+
+        if (i === 1) {
+          props["firstDayIndex"] = moment(date)
+            .startOf("month")
+            .format("d");
+        } else {
+          delete props["firstDayIndex"];
+        }
+        days.push(<Day key={i} {...props} />);
       }
-      days.push(<Day key={i} {...props} />);
     }
     return days;
   }
@@ -201,6 +221,7 @@ class Calendar extends Component {
 const mapStateToProps = state => {
   return {
     reminders: state.reminders.reminders,
+    locations: state.locations.locations,
     error: state.reminders.error
   };
 };

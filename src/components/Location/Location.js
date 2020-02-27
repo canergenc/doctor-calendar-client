@@ -51,11 +51,6 @@ class Location extends Component {
         return menu;
     }
 
-    onUpdate = ({ translate }) => {
-        console.log(`onUpdate: translate: ${translate}`);
-        this.setState({ translate });
-    };
-
     onSelect = key => {
         console.log(`onSelect: ${key}`);
         this.props.setActiveLocationId(key);
@@ -113,7 +108,6 @@ class Location extends Component {
                 hideArrows={hideArrows}
                 hideSingleArrow={hideSingleArrow}
                 onSelect={this.onSelect}
-                onUpdate={this.onUpdate}
                 scrollToSelected={scrollToSelected}
                 selected={selected}
                 transition={+transition}

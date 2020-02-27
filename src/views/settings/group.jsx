@@ -3,23 +3,15 @@ import React, { Component } from "react";
 import Api from '../../api';
 // reactstrap components
 import {
-    Badge,
     Card,
     CardHeader,
     CardFooter,
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    DropdownToggle,
-    Media,
     Pagination,
     PaginationItem,
     PaginationLink,
-    Progress,
     Table,
     Container,
-    Row,
-    UncontrolledTooltip
+    Row
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
@@ -38,8 +30,20 @@ class Group extends Component {
             this.setState({
                 data: res.data
             });
-            console.log(this.state.data);
-            return res.data.map((item, index) => {
+        }).catch(ex => {
+            alert(ex);
+        })
+    }
+
+    componentDidMount() {
+        this.renderTableData()
+    }
+
+    render() {
+
+        let groups = "yükleniyor"
+        if (this.state.data) {
+            groups = this.state.data.map((item, index) => {
                 return (
                     <tr key={item.id}>
                         <td>{item.name}</td>
@@ -47,11 +51,8 @@ class Group extends Component {
                     </tr>
                 )
             });
-        }).catch(ex => {
-            alert(ex);
-        })
-    }
-    render() {
+        }
+
         return (
             <>
                 <UserHeader />
@@ -73,7 +74,7 @@ class Group extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        {groups}
                                     </tbody>
                                 </Table>
                                 <CardFooter className="py-4">

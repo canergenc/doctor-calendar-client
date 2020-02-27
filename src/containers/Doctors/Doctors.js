@@ -46,7 +46,7 @@ class Doctors extends Component {
         }
         return (
 
-            <Card className="shadow">
+            <Card className="shadow" >
                 <CardHeader className="bg-transparent">
                     <Row>
                         <div className="col">
