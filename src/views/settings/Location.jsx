@@ -25,16 +25,18 @@ import {
     InputGroup,
     Col,
     FormGroup,
+    CardBody,
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
-
 
 class Location extends Component {
     constructor(props) {
         super(props)
         this.state = {
             editModal: false,
+            deleteModal: false,
+            item: {},
             name: '',
             data: []
         }
@@ -49,8 +51,27 @@ class Location extends Component {
 
     }
     handleSubmit(event) {
-
+        if (this.state.item && this.state.name) {
+            this.state.item.name = this.state.name;
+            if (this.state.item.name === this.state.name) {
+                Api.post('locations/' + this.state.item.id, this.state.item).then((result) => {
+                    this.toggleModal('editModal', undefined)
+                }).catch((ex) => {
+                    alert(ex.response.message)
+                });
+            }
+        }
         event.preventDefault();
+    }
+
+    handleDelete(event) {
+        if (this.state.item && this.state.item.id) {
+            Api.delete('locations/' + this.state.id).then(result => {
+                this.toggleModal('deleteModal', undefined);
+            }).catch(ex => {
+                alert(ex.response.message)
+            })
+        }
     }
 
     renderTableData() {
@@ -73,44 +94,27 @@ class Location extends Component {
     toggleModal(state, item) {
         this.setState({
             [state]: !this.state[state],
-            name: item.name
+            name: item ? item.name : undefined,
+            item: item ? item : {}
         });
     };
 
     render() {
         let locations = "Lokasyonlar Yükleniyor...";
-        console.log(this.state.data)
         if (this.state.data.length > 0) {
-            locations = this.state.data.map((item, index) => {
+            locations = this.state.data.map((item) => {
                 return (
-                    <tr key={index}>
+                    <tr key={item.id}>
                         <td>{item.name}</td>
                         <td>***</td>
                         <td className="text-right">
                             <UncontrolledDropdown>
-                                <DropdownToggle
-                                    className="btn-icon-only text-light"
-                                    href="#pablo"
-                                    role="button"
-                                    size="sm"
-                                    color=""
-                                    onClick={e => e.preventDefault()}
-                                >
+                                <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
                                     <i className="fas fa-ellipsis-v" />
                                 </DropdownToggle>
                                 <DropdownMenu className="dropdown-menu-arrow" right>
-                                    <DropdownItem
-                                        href="#pablo"
-                                        onClick={() => this.toggleModal("editModal", item)}
-                                    >
-                                        Düzenle
-                                </DropdownItem>
-                                    <DropdownItem
-                                        href="#pablo"
-                                        onClick={e => e.preventDefault()}
-                                    >
-                                        Kaldır
-                                </DropdownItem>
+                                    <DropdownItem onClick={() => this.toggleModal("editModal", item)}>Düzenle</DropdownItem>
+                                    <DropdownItem onClick={() => this.toggleModal("deleteModal", item)}>Kaldır</DropdownItem>
                                 </DropdownMenu>
                             </UncontrolledDropdown>
                         </td>
@@ -118,15 +122,13 @@ class Location extends Component {
                 )
             });
         }
-
         return (
             <>
                 <UserHeader />
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={this.state.editModal}
-                    toggle={() => this.toggleModal("editModal")}
-                >
+                    toggle={() => this.toggleModal("editModal", undefined)}>
                     <div className="modal-header">
                         <h5 className="modal-title" id="editModalLabel">Lokasyon Düzenle</h5>
                         <button
@@ -134,8 +136,7 @@ class Location extends Component {
                             className="close"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("editModal")}
-                        >
+                            onClick={() => this.toggleModal("editModal", undefined)}>
                             <span aria-hidden={true}>×</span>
                         </button>
                     </div>
@@ -158,16 +159,39 @@ class Location extends Component {
                             color="secondary"
                             data-dismiss="modal"
                             type="button"
-                            onClick={() => this.toggleModal("editModal")}
-                        >
-                            Kapat
+                            onClick={() => this.toggleModal("editModal", undefined)}>Kapat
                         </Button>
-                        <Button color="primary" type="button">
-                            Değişiklikleri Kaydet
-                        </Button>
+                        <Button color="primary" type="submit" onClick={this.handleSubmit}>Değişiklikleri Kaydet</Button>
                     </div>
                 </Modal>
-
+                <Modal
+                    className="modal-dialog-centered"
+                    isOpen={this.state.deleteModal}
+                    toggle={() => this.toggleModal("deleteModal", undefined)}>
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="deleteModalLabel">Lokasyon Kaldır</h5>
+                        <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("deleteModal", undefined)}>
+                            <span aria-hidden={true}>×</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <h5>Silmek istediğinize emin misiniz ?</h5>
+                    </div>
+                    <div className="modal-footer">
+                        <Button
+                            color="secondary"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.toggleModal("deleteModal", undefined)}>Kapat
+                        </Button>
+                        <Button color="danger" type="submit" onClick={this.handleDelete}>Kaldır</Button>
+                    </div>
+                </Modal>
                 {/* Page content */}
                 <Container className="mt--7" fluid>
                     {/* Table */}
@@ -177,7 +201,16 @@ class Location extends Component {
                                 <CardHeader className="border-0">
                                     <h3 className="mb-0">Lokasyon Listesi</h3>
                                 </CardHeader>
-                                <Table className="align-items-center table-flush" responsive >
+                                <CardBody>
+
+                                    <Button className="btn-icon btn-3 float-right" color="primary" type="button">
+                                        <span className="btn-inner--icon">
+                                            <i className="ni ni-fat-add" />
+                                        </span>
+                                        <span className="btn-inner--text">Yeni</span>
+                                    </Button>
+                                </CardBody>
+                                <Table className="align-items-center table-flush" responsive>
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col">Adı</th>
@@ -185,9 +218,7 @@ class Location extends Component {
                                             <th scope="col" />
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {locations}
-                                    </tbody>
+                                    <tbody>{locations}</tbody>
                                 </Table>
                                 <CardFooter className="py-4">
                                     <nav aria-label="...">
