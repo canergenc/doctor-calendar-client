@@ -19,6 +19,7 @@ import AuthLayout from "layouts/Auth";
 import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
+import groupsReducer from "./store/reducers/groups";
 
 // Redux Chrome Devtool Extension
 const composeEnhancers =
@@ -29,7 +30,8 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   users: usersReducer,
   reminders: remindersReducer,
-  locations: locationsReducer
+  locations: locationsReducer,
+  groups: groupsReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

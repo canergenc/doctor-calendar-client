@@ -17,7 +17,7 @@ export const fetchRemindersFailed = (error) => {
 export const initReminders = () => {
   const filterData = {
     params: {
-      filter:{
+      filter: {
         include: [
           {
             relation: "location"
@@ -46,23 +46,7 @@ export const initReminders = () => {
 }
 
 
-export const getReminders = (locationId) => {
-  const filterData = {
-    params: {
-      filter: {
-        where: {
-          locationId: {
-            like: locationId
-          }
-        },
-        include: [
-          {
-            relation: "location"
-          }
-        ]
-      }
-    }
-  }
+export const getReminders = (filterData) => {
   return dispatch => {
     Api.get('/calendars', filterData)
       .then(res => {
@@ -98,10 +82,28 @@ export const createReminderFailed = (error) => {
 };
 
 export const createReminder = (reminderData) => {
+
+
   return dispatch => {
     Api.post('/calendars', reminderData)
       .then(response => {
-        dispatch(getReminders(response.data.locationId));
+        const filterData = {
+          params: {
+            filter: {
+              where: {
+                locationId: {
+                  like: response.data.locationId
+                }
+              },
+              include: [
+                {
+                  relation: "location"
+                }
+              ]
+            }
+          }
+        }
+        dispatch(getReminders(filterData));
         dispatch(createReminderSuccess(response.data, reminderData));
       })
       .catch(error => {

@@ -1,4 +1,5 @@
 export { initReminders, getReminders, createReminder, deleteReminder } from "./reminders";
-export { initLocations,setActiveLocationId } from "./locations";
-export { initUsers,searchUser } from "./users";
+export { initLocations, setActiveLocationId } from "./locations";
+export { initUsers, searchUser } from "./users";
+export { initGroups } from "./groups";
 

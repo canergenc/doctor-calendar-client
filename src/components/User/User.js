@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index';
 import 'pretty-checkbox';
 
 const Container = styled.div`
@@ -28,17 +30,40 @@ class User extends Component {
         this.state = { checkedRadio: null };
     }
 
-    OnSelect = (userId,id) => {
+    OnSelect = (userId, id) => {
+        console.log("userId:", userId);
+        
+        if (this.props.activeLocationId !== "") {
+            this.props.setActiveLocationId("");
+        }
+
+        const filterData = {
+            params: {
+                filter: {
+                    where: {
+                        userId: {
+                            like: userId
+                        }
+                    },
+                    include: [
+                        {
+                            relation: "location"
+                        }
+                    ]
+                }
+            }
+        }
+
         if (this.state.checkedRadio === userId) {
             this.setState({ checkedRadio: "nouserid" });
             id.target.checked = false;
+            this.props.iniReminders();
         }
         else {
             this.setState({ checkedRadio: userId });
             id.target.checked = true;
+            this.props.getReminders(filterData);
         }
-        console.log("userId:", userId);
-
     }
 
 
@@ -63,7 +88,7 @@ class User extends Component {
                                 <input
                                     type="radio"
                                     name="radio"
-                                    onClick={(e) => this.OnSelect(this.props.id,e)}
+                                    onClick={(e) => this.OnSelect(this.props.id, e)}
                                 />
                                 <div className="state p-success">
                                     <label></label>
@@ -81,4 +106,19 @@ class User extends Component {
     }
 };
 
-export default User;
+const mapStateToProps = state => {
+    return {
+        activeLocationId: state.locations.activeLocationId,
+        error: state.reminders.error
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        iniReminders: () => dispatch(actions.initReminders()),
+        getReminders: (filterData) => dispatch(actions.getReminders(filterData)),
+        setActiveLocationId: (locationId) => dispatch(actions.setActiveLocationId(locationId))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(User);
