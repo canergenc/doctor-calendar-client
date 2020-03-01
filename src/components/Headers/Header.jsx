@@ -18,16 +18,17 @@
 import React from "react";
 
 // reactstrap components
-import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
+//import { Card, CardBody, CardTitle, Container, Row, Col } from "reactstrap";
 
 class Header extends React.Component {
   render() {
     return (
       <>
-        <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
+        <div className="header bg-gradient-info pb-8 pt-5">
+        {/* YEDEK <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
           <Container fluid>
-            <div className="header-body">
-              {/* Card stats */}
+             <div className="header-body">
+              
               <Row>
                 <Col lg="6" xl="3">
                   <Card className="card-stats mb-4 mb-xl-0">
@@ -146,10 +147,10 @@ class Header extends React.Component {
                       </p>
                     </CardBody>
                   </Card>
-                </Col>
+                </Col> 
               </Row>
             </div>
-          </Container>
+          </Container>*/}
         </div>
       </>
     );
