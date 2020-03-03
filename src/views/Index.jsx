@@ -43,7 +43,8 @@ class Index extends React.Component {
             userId: user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
             description: user.fullName,
-            type: { "Nöbet": 0 }
+            type: 0
+            //type: { "Nöbet": 0 }
           }
           this.props.createReminder(reminder);
         }
@@ -98,6 +99,8 @@ class Index extends React.Component {
 }
 
 const mapStateToProps = state => {
+
+  console.log('All States', state);
   return {
     users: state.users.users,
     error: state.users.error,
@@ -106,7 +109,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData))
+    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
+    // createReminderFailed: (reminderData) => dispatch(actions.createReminderFailed(reminderData))
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Index);

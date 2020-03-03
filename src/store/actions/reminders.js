@@ -1,5 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import Api from '../../api';
+import { createReminderService } from "../../services"
+
 
 export const setReminders = (reminders) => {
   return {
@@ -17,7 +19,7 @@ export const fetchRemindersFailed = (error) => {
 export const initReminders = () => {
   const filterData = {
     params: {
-      filter:{
+      filter: {
         include: [
           {
             relation: "location"
@@ -91,13 +93,15 @@ export const createReminderSuccess = (id, reminderData) => {
 };
 
 export const createReminderFailed = (error) => {
+
+  console.log('in foo', error);
   return {
     type: actionTypes.CREATE_REMINDER_FAIL,
     error: error
   };
 };
 
-export const createReminder = (reminderData) => {
+export const createReminderOld = (reminderData) => {
   return dispatch => {
     Api.post('/calendars', reminderData)
       .then(response => {
@@ -107,6 +111,18 @@ export const createReminder = (reminderData) => {
       .catch(error => {
         dispatch(createReminderFailed(error));
       });
+  };
+}
+
+
+export const createReminder = (reminderData) => {
+  return dispatch => {
+    createReminderService(reminderData).then((response) => {
+      dispatch(getReminders(response.data.locationId));
+      dispatch(createReminderSuccess(response.data, reminderData));
+    }).catch((error) => {
+      dispatch(createReminderFailed(error));
+    });
   };
 }
 

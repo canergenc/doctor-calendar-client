@@ -15,7 +15,7 @@ class Day extends Component {
           reminders.push(<Reminder
             key={element.id}
             description={element.description}
-            color={element.location.colorCode}
+            color={element.location?element.location.colorCode:"#fff"}
             onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
           />
           );

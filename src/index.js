@@ -20,6 +20,12 @@ import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
 
+// import alertReducer from  "./store/reducers/alert.reducer";
+import authenticationReducer from  "./store/reducers/authentication.reducer";
+
+
+
+
 // Redux Chrome Devtool Extension
 const composeEnhancers =
   (process.env.NODE_ENV === "development"
@@ -29,7 +35,10 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   users: usersReducer,
   reminders: remindersReducer,
-  locations: locationsReducer
+  locations: locationsReducer,
+  // alertReducer:alertReducer,
+  auth:authenticationReducer
+  
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
@@ -40,7 +49,7 @@ ReactDOM.render(
       <Switch>
         <Route path="/admin" render={props => <AdminLayout {...props} />} />
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
-        <Redirect from="/" to="/admin/index" />
+        <Redirect from="/" to="/auth/login" />
       </Switch>
     </BrowserRouter>
   </Provider>,
