@@ -32,26 +32,9 @@ class User extends Component {
 
     OnSelect = (userId, id) => {
         console.log("userId:", userId);
-        
+
         if (this.props.activeLocationId !== "") {
             this.props.setActiveLocationId("");
-        }
-
-        const filterData = {
-            params: {
-                filter: {
-                    where: {
-                        userId: {
-                            like: userId
-                        }
-                    },
-                    include: [
-                        {
-                            relation: "location"
-                        }
-                    ]
-                }
-            }
         }
 
         if (this.state.checkedRadio === userId) {
@@ -62,6 +45,23 @@ class User extends Component {
         else {
             this.setState({ checkedRadio: userId });
             id.target.checked = true;
+
+            const filterData = {
+                params: {
+                    filter: {
+                        where: {
+                            userId: {
+                                like: userId
+                            }
+                        },
+                        include: [
+                            {
+                                relation: "location"
+                            }
+                        ]
+                    }
+                }
+            }
             this.props.getReminders(filterData);
         }
     }
