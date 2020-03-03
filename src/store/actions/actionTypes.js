@@ -15,3 +15,20 @@ export const SET_GROUPS = "SET_GROUPS";
 export const FETCH_GROUPS_FAILED = "FETCH_GROUPS_FAILED";
 export const SET_USERS = "SET_USERS";
 export const FETCH_USERS_FAILED = "FETCH_USERS_FAILED";
+
+// export const SET_LOGIN_PENDING = 'SET_LOGIN_PENDING';
+// export const SET_LOGIN_SUCCESS = 'SET_LOGIN_SUCCESS';
+// export const SET_LOGIN_ERROR = 'SET_LOGIN_ERROR';
+
+
+export const LOGIN_REQUEST = 'USERS_LOGIN_REQUEST';
+export const LOGIN_SUCCESS = 'USERS_LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'USERS_LOGIN_FAILURE';
+
+// export const ALERT_SUCCESS = 'ALERT_SUCCESS';
+// export const ALERT_ERROR = 'ALERT_ERROR';
+// export const ALERT_CLEAR = 'ALERT_CLEAR';
+
+
+
+

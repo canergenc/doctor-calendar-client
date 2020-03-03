@@ -15,11 +15,18 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+
+
+import * as actions from '../../store/actions/index';
+
+import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
 // Omitted
 import Api from '../../api';
 // reactstrap components
+
+
 import {
   Button,
   Card,
@@ -41,7 +48,8 @@ class Login extends React.Component {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      submitted: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -54,31 +62,41 @@ class Login extends React.Component {
       this.setState({ password: event.target.value });
   }
   handleSubmit(event) {
-    if(!this.state.email || !this.state.password) { alert("Zorunlu Alanlar Boş Bırakılamaz!") }
-    Api.post('users/login', { email: this.state.email, password: this.state.password }).then(res => {
-      console.log(res);
-      alert(res.data.token);
-    }).catch(ex => {
-      console.log(ex);
-      if(!ex && !ex.message)
-      this.alertExample(ex.message);
-      else
-      this.alertExample(ex);
-    })
     event.preventDefault();
+    this.setState({ submitted: true });
+    const { email, password } = this.state;
+    if (email && password) {
+      this.props.login(email, password);
+    }
+
+
+
+    // if(!this.state.email || !this.state.password) { alert("Zorunlu Alanlar Boş Bırakılamaz!") }
+    // Api.post('users/login', { email: this.state.email, password: this.state.password }).then(res => {
+    //   console.log(res);
+    //   alert(res.data.token);
+    // }).catch(ex => {
+    //   console.log(ex);
+    //   if(!ex && !ex.message)
+    //   this.alertExample(ex.message);
+    //   else
+    //   this.alertExample(ex);
+    // })
+    // event.preventDefault();
   }
   alertExample(value) {
     return (
       <div>
         <Alert color="primary">
-        This is a primary alert — check it out!
+          This is a primary alert — check it out!
       </Alert>
       </div>
-      
+
     );
   }
 
   render() {
+    const { email, password, submitted } = this.state;
     return (
       <>
         <Col lg="5" md="7">
@@ -87,6 +105,7 @@ class Login extends React.Component {
               <div className="text-muted text-center mt-2 mb-3">
                 <small>Doctor Calendar Giriş Yap</small>
               </div>
+              {this.props.statusText ? <div className='alert alert-info'>{this.props.statusText}</div> : ''}
               <div className="btn-wrapper text-center">
                 <Button
                   className="btn-neutral btn-icon"
@@ -123,6 +142,7 @@ class Login extends React.Component {
                 <small>Doctor Calendar App Giriş Yap</small>
               </div>
               <Form role="form" onSubmit={this.handleSubmit}>
+
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
@@ -131,7 +151,11 @@ class Login extends React.Component {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange} />
+
                   </InputGroup>
+                  {submitted && !email &&
+                    <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                  }
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
@@ -140,8 +164,13 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" value={this.state.password} onChange={this.handleInputChange} />
+                    <Input placeholder="Şifre" type="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
+
+                  {submitted && !password &&
+                    <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }} >Şifre gerekli.</div>
+                  }
+
                 </FormGroup>
                 <div className="custom-control custom-control-alternative custom-checkbox">
                   <input
@@ -158,6 +187,8 @@ class Login extends React.Component {
                 </div>
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit" >Giriş Yap</Button>
+
+                  
                 </div>
               </Form>
             </CardBody>
@@ -187,4 +218,29 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+
+
+
+
+
+
+
+const mapStateToProps = state => {
+
+ 
+  return {
+    isAuthenticating   : state.auth.isAuthenticating,
+    statusText         : state.auth.statusText
+    
+  };
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    login: (email, password) => dispatch(actions.loginProcess(email, password)),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+
+
+
+
