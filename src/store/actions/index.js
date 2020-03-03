@@ -2,4 +2,5 @@ export { initReminders, getReminders, createReminder, deleteReminder } from "./r
 export { initLocations, setActiveLocationId } from "./locations";
 export { initUsers, searchUser } from "./users";
 export { loginProcess } from "./auth";
+export { initGroups } from "./groups";
 

@@ -19,6 +19,7 @@ import AuthLayout from "layouts/Auth";
 import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
+import groupsReducer from "./store/reducers/groups";
 
 // import alertReducer from  "./store/reducers/alert.reducer";
 import authenticationReducer from  "./store/reducers/authentication.reducer";
@@ -37,8 +38,8 @@ const rootReducer = combineReducers({
   reminders: remindersReducer,
   locations: locationsReducer,
   // alertReducer:alertReducer,
-  auth:authenticationReducer
-  
+  auth:authenticationReducer,
+  groups: groupsReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

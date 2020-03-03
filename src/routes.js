@@ -21,7 +21,7 @@ import Register from "views/examples/Register.jsx";
 import Login from "views/examples/Login.jsx";
 import Tables from "views/examples/Tables.jsx";
 import Icons from "views/examples/Icons.jsx";
-import Group from "views/settings/Group.jsx";
+import Location from "views/settings/Location.jsx";
 
 var routes = [
   {
@@ -39,24 +39,10 @@ var routes = [
     layout: "/admin"
   },
   {
-    path: "/group",
-    name: "Grup Tanımla",
-    icon: "ni ni-vector text-primary",
-    component: Group,
-    layout: "/admin"
-  },
-  {
-    path: "/user-profile",
+    path: "/location",
     name: "Lokasyon Tanımla",
     icon: "ni ni-shop text-primary",
-    component: Profile,
-    layout: "/admin"
-  },
-  {
-    path: "/user-profile",
-    name: "Rol Tanımla",
-    icon: "ni ni-diamond text-primary",
-    component: Profile,
+    component: Location,
     layout: "/admin"
   },
   {

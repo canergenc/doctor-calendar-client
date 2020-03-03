@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 import api from '../../api';
-
+    
 export const setLocations = (locations) => {
     return {
         type: actionTypes.SET_LOCATIONS,

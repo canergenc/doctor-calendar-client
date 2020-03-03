@@ -44,7 +44,7 @@ class Location extends Component {
                 outline
                 key={el.id}
                 color={el.colorCode}
-                className={` ${selected === el.id ? "active" : ""}`}
+                className={` ${selected === el.id && this.props.activeLocationId!== "" ? "active" : ""}`}
             > {el.name}
             </Button>
         ));
@@ -52,9 +52,14 @@ class Location extends Component {
     }
 
     onSelect = key => {
+        
+
+
         console.log(`onSelect: ${key}`);
+        
         this.props.setActiveLocationId(key);
         let locationId = "";
+        
 
         if (this.state.selected !== key) {
             locationId = key;
@@ -71,8 +76,29 @@ class Location extends Component {
             });
         }
 
-        this.props.getReminders(locationId);
+        const filterData = {
+            params: {
+                filter: {
+                    where: {
+                        locationId: {
+                            like: locationId
+                        }
+                    },
+                    include: [
+                        {
+                            relation: "location"
+                        }
+                    ]
+                }
+            }
+        }
+
+        this.props.getReminders(filterData);
         console.log("activeLocationId:" + this.props.activeLocationId);
+        var myCheckbox = document.getElementsByName("radio");
+        Array.prototype.forEach.call(myCheckbox,function(el){
+            el.checked = false;
+        });
     };
 
     componentDidMount() {

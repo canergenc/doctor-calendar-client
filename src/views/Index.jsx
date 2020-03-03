@@ -69,6 +69,7 @@ class Index extends React.Component {
   render() {
     return (
       <>
+
         <Header />
 
         <Container className="mt--7" fluid>
