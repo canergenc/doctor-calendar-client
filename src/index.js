@@ -22,7 +22,9 @@ import locationsReducer from "./store/reducers/locations";
 import groupsReducer from "./store/reducers/groups";
 
 // import alertReducer from  "./store/reducers/alert.reducer";
-import authenticationReducer from  "./store/reducers/authentication.reducer";
+import authenticationReducer from  "./store/reducers/auth.reducer";
+import registerReducer from  "./store/reducers/register.reducer";
+
 
 
 
@@ -39,6 +41,7 @@ const rootReducer = combineReducers({
   locations: locationsReducer,
   // alertReducer:alertReducer,
   auth:authenticationReducer,
+  register:registerReducer,
   groups: groupsReducer
 });
 

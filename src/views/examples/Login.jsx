@@ -18,7 +18,6 @@
 
 
 import * as actions from '../../store/actions/index';
-
 import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
@@ -68,32 +67,17 @@ class Login extends React.Component {
     if (email && password) {
       this.props.login(email, password);
     }
-
-
-
-    // if(!this.state.email || !this.state.password) { alert("Zorunlu Alanlar Boş Bırakılamaz!") }
-    // Api.post('users/login', { email: this.state.email, password: this.state.password }).then(res => {
-    //   console.log(res);
-    //   alert(res.data.token);
-    // }).catch(ex => {
-    //   console.log(ex);
-    //   if(!ex && !ex.message)
-    //   this.alertExample(ex.message);
-    //   else
-    //   this.alertExample(ex);
-    // })
-    // event.preventDefault();
   }
-  alertExample(value) {
-    return (
-      <div>
-        <Alert color="primary">
-          This is a primary alert — check it out!
-      </Alert>
-      </div>
+  // alertExample(value) {
+  //   return (
+  //     <div>
+  //       <Alert color="primary">
+  //         This is a primary alert — check it out!
+  //     </Alert>
+  //     </div>
 
-    );
-  }
+  //   );
+  // }
 
   render() {
     const { email, password, submitted } = this.state;
@@ -105,7 +89,11 @@ class Login extends React.Component {
               <div className="text-muted text-center mt-2 mb-3">
                 <small>Doctor Calendar Giriş Yap</small>
               </div>
-              {this.props.statusText ? <div className='alert alert-info'>{this.props.statusText}</div> : ''}
+
+
+
+
+
               <div className="btn-wrapper text-center">
                 <Button
                   className="btn-neutral btn-icon"
@@ -143,6 +131,13 @@ class Login extends React.Component {
               </div>
               <Form role="form" onSubmit={this.handleSubmit}>
 
+                {this.props.statusText ?
+
+                  <Alert color="warning">
+                    {this.props.statusText}
+                  </Alert>
+                  : ''}
+
                 <FormGroup className="mb-3">
                   <InputGroup className="input-group-alternative">
                     <InputGroupAddon addonType="prepend">
@@ -154,7 +149,9 @@ class Login extends React.Component {
 
                   </InputGroup>
                   {submitted && !email &&
-                    <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+
+                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Email gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
                   }
                 </FormGroup>
                 <FormGroup>
@@ -168,27 +165,29 @@ class Login extends React.Component {
                   </InputGroup>
 
                   {submitted && !password &&
-                    <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }} >Şifre gerekli.</div>
+                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }} >Şifre gerekli.</div>
                   }
 
                 </FormGroup>
-                <div className="custom-control custom-control-alternative custom-checkbox">
+  
+                {/* <div className="custom-control custom-control-alternative custom-checkbox">
                   <input
                     className="custom-control-input"
                     id=" customCheckLogin"
                     type="checkbox"
                   />
-                  <label
+                  <label style={{display:'contents'}}
                     className="custom-control-label"
                     htmlFor=" customCheckLogin"
                   >
                     <span className="text-muted">Beni Hatırla</span>
                   </label>
-                </div>
+                </div>  */}
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit" >Giriş Yap</Button>
 
-                  
+
                 </div>
               </Form>
             </CardBody>
@@ -219,24 +218,16 @@ class Login extends React.Component {
 }
 
 
-
-
-
-
-
-
 const mapStateToProps = state => {
-
- 
   return {
-    isAuthenticating   : state.auth.isAuthenticating,
-    statusText         : state.auth.statusText
-    
+    isAuthenticating: state.auth.isAuthenticating,
+    statusText: state.auth.statusText
+
   };
 }
 const mapDispatchToProps = dispatch => {
   return {
-    login: (email, password) => dispatch(actions.loginProcess(email, password)),
+    login: (email, password) => dispatch(actions.authActions.login(email, password)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

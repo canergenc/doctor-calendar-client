@@ -1,34 +1,26 @@
-import { login } from "../../services"
+import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
 
-import { history } from '../../hoc/Config/history';
-
-
-
-export const loginProcess = (email, password) => {
+const login = (email, password) => {
     return dispatch => {
-        dispatch(request());
-        login(email, password).then((response) => {
+        dispatch(loginRequest());
+        userService.login(email, password).then((response) => {
             console.log('in reducer success', response);
-            // localStorage.setItem()
             dispatch(loginSuccess(response.token));
-
         }).catch((error) => {
-
-
             dispatch(loginFailure(error));
         });
     }
 }
 
 
-export const request = () => {
+export const loginRequest = () => {
     return {
         type: actionTypes.LOGIN_REQUEST,
     };
 };
 
-export const loginSuccess = (token) => {
+const loginSuccess = (token) => {
     localStorage.setItem('token', token);
     return {
         type: actionTypes.LOGIN_SUCCESS,
@@ -36,11 +28,10 @@ export const loginSuccess = (token) => {
             token: token
         }
     };
-
 }
 
 
-export const loginFailure = (err) => {
+const loginFailure = (err) => {
 
     console.log('in reducer error', err);
     return {
@@ -51,5 +42,13 @@ export const loginFailure = (err) => {
 
     };
 }
+
+
+
+
+
+export const authActions = {
+    login
+};
 
 

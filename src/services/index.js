@@ -1,4 +1,5 @@
-export  { createReminderService } from "./CalenderService";
-export  { login,register } from "./UserService";
+export  { calendarService } from "./calendar.service";
+export {userService} from "./user.service";
+
 
 

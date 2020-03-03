@@ -1,6 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import Api from '../../api';
-import { createReminderService } from "../../services"
+import { calendarService } from "../../services"
 
 
 export const setReminders = (reminders) => {
@@ -117,7 +117,7 @@ export const createReminderOld = (reminderData) => {
 
 export const createReminder = (reminderData) => {
   return dispatch => {
-    createReminderService(reminderData).then((response) => {
+    calendarService.createReminderService(reminderData).then((response) => {
       dispatch(getReminders(response.data.locationId));
       dispatch(createReminderSuccess(response.data, reminderData));
     }).catch((error) => {

@@ -15,12 +15,15 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
+import { connect } from 'react-redux';
 import React from "react";
 // Omitted
 import Api from '../../api';
+import * as actions from '../../store/actions/index';
 // reactstrap components
 import {
   Button,
+  Alert,
   Card,
   CardHeader,
   CardBody,
@@ -41,7 +44,8 @@ class Register extends React.Component {
       title: '',
       fullName: '',
       email: '',
-      password: ''
+      password: '',
+      submitted: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -58,19 +62,16 @@ class Register extends React.Component {
       this.setState({ title: event.target.value })
   }
   handleSubmit(event) {
-    Api.post('users/register', { title: this.state.title, fullName: this.state.fullName, email: this.state.email, password: this.state.password }).then(res => {
-      console.log(res.data)
-    }).catch(ex => {
-      if (ex.response.data.error.details && ex.response.data.error.details.length > 0) {
-        ex.response.data.error.details.map((item) => {
-          alert(item.message)
-        })
-      } else
-        alert(ex.response.data.error.message)
-    })
+
     event.preventDefault();
+    this.setState({ submitted: true });
+    const { title, fullName, email, password } = this.state;
+    if (title && fullName && email && password) {
+      this.props.register(email, fullName, title, password);
+    }
   }
   render() {
+    const { title, fullName, email, password, submitted } = this.state;
     return (
       <>
         <Col lg="6" md="8">
@@ -109,11 +110,19 @@ class Register extends React.Component {
                   <span className="btn-inner--text">Google(v2)</span>
                 </Button>
               </div>
+
             </CardHeader>
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
                 <small>Lütfen bilgilerinizi giriniz</small>
               </div>
+
+              {this.props.statusText ?
+                <Alert color="warning">
+                  {this.props.statusText}
+                </Alert>
+                : ''}
+
               <Form role="form" onSubmit={this.handleSubmit}>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -124,6 +133,12 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input placeholder="Ad ve Soyad" name="fullName" type="text" value={this.state.fullName} onChange={this.handleInputChange} />
                   </InputGroup>
+                  {submitted && !fullName &&
+
+                    <p style={{ fontSize: 12 }} className="text-warning">Ad ve soyad gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                  }
+
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -133,7 +148,19 @@ class Register extends React.Component {
                       </InputGroupText>
                     </InputGroupAddon>
                     <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={this.handleInputChange} />
+
+
                   </InputGroup>
+
+
+                  {submitted && !title &&
+
+                    <p style={{ fontSize: 12 }} className="text-warning">Ünvan gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                  }
+
+
+
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -144,6 +171,12 @@ class Register extends React.Component {
                     </InputGroupAddon>
                     <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange} />
                   </InputGroup>
+
+                  {submitted && !email &&
+
+                    <p style={{ fontSize: 12 }} className="text-warning">Email gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                  }
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
@@ -152,15 +185,20 @@ class Register extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Password" type="password" value={this.state.password} onChange={this.handleInputChange} />
+                    <Input placeholder="Şifre" type="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
+                  {submitted && !password &&
+
+                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                  }
                 </FormGroup>
-                <div className="text-muted font-italic">
+                {/* <div className="text-muted font-italic">
                   <small>
                     password strength:{" "}
                     <span className="text-success font-weight-700">strong</span>
                   </small>
-                </div>
+                </div> */}
                 <Row className="my-4">
                   <Col xs="12">
                     <div className="custom-control custom-control-alternative custom-checkbox">
@@ -197,4 +235,20 @@ class Register extends React.Component {
   }
 }
 
-export default Register;
+const mapStateToProps = state => {
+  return {
+    isRegistered: state.register.isRegistered,
+    user: state.register.user,
+    statusText: state.register.statusText
+
+
+  };
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    register: (email, fullName, title, password) => dispatch(actions.registerActions.register(email, fullName, title, password)),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Register);
+
+
