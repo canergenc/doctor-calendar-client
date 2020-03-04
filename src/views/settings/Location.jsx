@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions';
 // Omitted
 import Api from '../../api';
 // reactstrap components
@@ -23,9 +25,7 @@ import {
     InputGroupAddon,
     InputGroupText,
     InputGroup,
-    Col,
     FormGroup,
-    CardBody,
     Label,
 } from "reactstrap";
 // core components
@@ -401,4 +401,19 @@ class Location extends Component {
     }
 }
 
-export default Location;
+const mapStateToProps = state => {
+    return {
+        locations: state.locations.locations,
+        error: state.locations.error
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        initLocations: () => dispatch(actions.initLocations()),
+        createLocation: (locationData) => dispatch(actions.createLocation(locationData)),
+        deleteLocation: (locationId) => dispatch(actions.deleteLocation(locationId)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Location);

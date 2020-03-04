@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 import api from '../../api';
-    
+
 export const setLocations = (locations) => {
     return {
         type: actionTypes.SET_LOCATIONS,
@@ -40,4 +40,60 @@ export const initLocations = () => {
             });
     }
 }
+
+export const deleteLocation = (locationId) => {
+    return dispatch => {
+        api.delete('locations/' + locationId).then(result => {
+            dispatch(deleteLocationSuccess(locationId));
+            dispatch(initLocations());
+        }).catch(error => {
+            dispatch(deleteLocationFailed(error));
+        });
+    };
+};
+
+export const deleteLocationSuccess = (id) => {
+    return {
+        type: actionTypes.DELETE_LOCATION,
+        locationId: id
+    };
+};
+
+export const deleteLocationFailed = (error) => {
+    return {
+        type: actionTypes.DELETE_LOCATION_FAIL,
+        error: error
+    };
+};
+
+export const createLocation = (locationData) => {
+    return dispatch => {
+        api.post('/locations', locationData)
+            .then(response => {
+                dispatch(createLocationSuccess(response.data.id, locationData));
+                dispatch(initLocations());
+            })
+            .catch(error => {
+                dispatch(createLocationFailed(error))
+            });
+    };
+};
+
+export const createLocationSuccess = (id, locationData) => {
+    return {
+        type: actionTypes.CREATE_LOCATION_SUCCESS,
+        locationId: id,
+        locationData: locationData
+    };
+};
+
+export const createLocationFailed = (error) => {
+    return {
+        type: actionTypes.CREATE_LOCATION_FAIL,
+        error: error
+    };
+};
+
+
+
 
