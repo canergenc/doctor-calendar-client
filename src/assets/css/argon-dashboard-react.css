@@ -5861,11 +5861,11 @@ button.bg-darker:focus {
   margin-left: 4.5rem !important; }
 
 .m-7 {
-  margin: 6rem !important; }
+  margin: 2rem !important; }
 
 .mt-7,
 .my-7 {
-  margin-top: 6rem !important; }
+  margin-top: 2rem !important; }
 
 .mr-7,
 .mx-7 {
@@ -5873,7 +5873,7 @@ button.bg-darker:focus {
 
 .mb-7,
 .my-7 {
-  margin-bottom: 6rem !important; }
+  margin-bottom:2rem !important; }
 
 .ml-7,
 .mx-7 {
@@ -6532,7 +6532,7 @@ button.bg-darker:focus {
     margin-right: 6rem !important; }
   .mb-sm-7,
   .my-sm-7 {
-    margin-bottom: 6rem !important; }
+    margin-bottom: 2rem !important; }
   .ml-sm-7,
   .mx-sm-7 {
     margin-left: 6rem !important; }
@@ -7080,7 +7080,7 @@ button.bg-darker:focus {
     margin-right: 6rem !important; }
   .mb-md-7,
   .my-md-7 {
-    margin-bottom: 6rem !important; }
+    margin-bottom: 2rem !important; }
   .ml-md-7,
   .mx-md-7 {
     margin-left: 6rem !important; }
@@ -7628,7 +7628,7 @@ button.bg-darker:focus {
     margin-right: 6rem !important; }
   .mb-lg-7,
   .my-lg-7 {
-    margin-bottom: 6rem !important; }
+    margin-bottom: 2rem !important; }
   .ml-lg-7,
   .mx-lg-7 {
     margin-left: 6rem !important; }
@@ -8176,7 +8176,7 @@ button.bg-darker:focus {
     margin-right: 6rem !important; }
   .mb-xl-7,
   .my-xl-7 {
-    margin-bottom: 6rem !important; }
+    margin-bottom: 2rem !important; }
   .ml-xl-7,
   .mx-xl-7 {
     margin-left: 6rem !important; }

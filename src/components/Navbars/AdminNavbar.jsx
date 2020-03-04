@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import history from "../../hoc/Config/history"
+
 
 // reactstrap components
 import {
@@ -14,6 +16,12 @@ import {
 } from "reactstrap";
 
 class AdminNavbar extends React.Component {
+
+
+  logOut(){
+    localStorage.clear();
+    history.push('/');
+  }
 
   render() {
 
@@ -64,7 +72,7 @@ class AdminNavbar extends React.Component {
                     <span>Ayarlar</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem href="#pablo" onClick={this.logOut}>
                     <i className="ni ni-user-run" />
                     <span>Çıkış</span>
                   </DropdownItem>

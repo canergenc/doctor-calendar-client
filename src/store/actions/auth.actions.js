@@ -1,12 +1,23 @@
 import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
+import history from "../../hoc/Config/history"
+import { customVariables } from "../../hoc/Config/customVariables";
 
 const login = (email, password) => {
+
+
+
+
+
+
+
     return dispatch => {
         dispatch(loginRequest());
         userService.login(email, password).then((response) => {
             console.log('in reducer success', response);
             dispatch(loginSuccess(response.token));
+            history.push('/admin/index');
+
         }).catch((error) => {
             dispatch(loginFailure(error));
         });
@@ -21,7 +32,8 @@ export const loginRequest = () => {
 };
 
 const loginSuccess = (token) => {
-    localStorage.setItem('token', token);
+    localStorage.setItem(customVariables.TOKEN, token);
+
     return {
         type: actionTypes.LOGIN_SUCCESS,
         payload: {

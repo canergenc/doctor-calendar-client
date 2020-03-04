@@ -38,6 +38,7 @@ import {
   InputGroupText,
   InputGroup,
   Row,
+  Badge,
   Col,
   Alert
 } from "reactstrap";
@@ -85,16 +86,16 @@ class Login extends React.Component {
       <>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-3">
-                <small>Doctor Calendar Giriş Yap</small>
-              </div>
+            {/* <CardHeader className="bg-transparent pb-5"> */}
+            {/* <div className="text-muted text-center mt-2 mb-3">
+                <small>DC CALENDAR'A GİRİŞ YAP</small>
+              </div> */}
 
 
 
 
 
-              <div className="btn-wrapper text-center">
+            {/* <div className="btn-wrapper text-center">
                 <Button
                   className="btn-neutral btn-icon"
                   color="default"
@@ -123,15 +124,16 @@ class Login extends React.Component {
                   </span>
                   <span className="btn-inner--text">Google(v2)</span>
                 </Button>
-              </div>
-            </CardHeader>
+              </div> */}
+            {/* </CardHeader> */}
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
-                <small>Doctor Calendar App Giriş Yap</small>
+                {/* <small> </small> */}
+                <h1> <Badge color="light">DC CALENDAR GİRİŞ</Badge></h1>
               </div>
               <Form role="form" onSubmit={this.handleSubmit}>
 
-                {this.props.statusText ?
+                {submitted && this.props.statusText && !this.props.isAuthenticated ?
 
                   <Alert color="warning">
                     {this.props.statusText}
@@ -170,7 +172,7 @@ class Login extends React.Component {
                   }
 
                 </FormGroup>
-  
+
                 {/* <div className="custom-control custom-control-alternative custom-checkbox">
                   <input
                     className="custom-control-input"
@@ -185,7 +187,7 @@ class Login extends React.Component {
                   </label>
                 </div>  */}
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit" >Giriş Yap</Button>
+                  <Button block className="my-4" color="primary" type="submit" >Giriş Yap</Button>
 
 
                 </div>
@@ -221,7 +223,9 @@ class Login extends React.Component {
 const mapStateToProps = state => {
   return {
     isAuthenticating: state.auth.isAuthenticating,
-    statusText: state.auth.statusText
+    statusText: state.auth.statusText,
+    isAuthenticated: state.auth.isAuthenticated
+
 
   };
 }

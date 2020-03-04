@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Router, Switch, Redirect } from "react-router-dom";
 import registerServiceWorker from "./registerServiceWorker";
 
 // Redux
@@ -22,9 +22,9 @@ import locationsReducer from "./store/reducers/locations";
 import groupsReducer from "./store/reducers/groups";
 
 // import alertReducer from  "./store/reducers/alert.reducer";
-import authenticationReducer from  "./store/reducers/auth.reducer";
-import registerReducer from  "./store/reducers/register.reducer";
-
+import authenticationReducer from "./store/reducers/auth.reducer";
+import registerReducer from "./store/reducers/register.reducer";
+import history from "./hoc/Config/history";
 
 
 
@@ -40,8 +40,8 @@ const rootReducer = combineReducers({
   reminders: remindersReducer,
   locations: locationsReducer,
   // alertReducer:alertReducer,
-  auth:authenticationReducer,
-  register:registerReducer,
+  auth: authenticationReducer,
+  register: registerReducer,
   groups: groupsReducer
 });
 
@@ -49,13 +49,13 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router history={history}>
       <Switch>
         <Route path="/admin" render={props => <AdminLayout {...props} />} />
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
         <Redirect from="/" to="/auth/login" />
       </Switch>
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById("root")
 );
