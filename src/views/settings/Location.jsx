@@ -53,7 +53,6 @@ class Location extends Component {
 
     handleInputChange(event) {
         const target = event.target;
-        debugger;
         if (target.name === 'name')
             this.setState({ name: event.target.value });
         if (target.name === 'colorCode')
@@ -74,10 +73,11 @@ class Location extends Component {
     }
 
     handleAdd(event) {
+        debugger;
         if (this.state.name) {
             this.state.item.name = this.state.name;
             this.state.item.colorCode = this.state.colorCode;
-            this.state.item.groupId = '5e53975e62398900983c869c'; /* İleri de strorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+            this.state.item.groupId = '5e53975e62398900983c869c'; /* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
 
             Api.post('locations', this.state.item).then((result) => {
                 this.toggleModal('addModal', undefined)
@@ -93,7 +93,7 @@ class Location extends Component {
 
     handleDelete(event) {
         if (this.state.item && this.state.item.id) {
-            Api.delete('locations/' + this.state.id).then(result => {
+            Api.delete('locations/' + this.state.item.id).then(result => {
                 this.toggleModal('deleteModal', undefined);
             }).catch(ex => {
                 alert(ex.response.message)
@@ -191,35 +191,39 @@ class Location extends Component {
                                     </InputGroupAddon>
 
                                     <RadioGroup name="colorCode" value={this.state.colorCode} onChange={this.handleInputChange}>
-                                        <Input type="radio" name="colorCode" id="primary" value="primary" onChange={this.handleInputChange} />
-                                        <Label for="primary"><span class="primary"></span></Label>
 
-                                        <Input type="radio" name="colorCode" id="green" value="green" onChange={this.handleInputChange} />
-                                        <Label for="green"><span class="green"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="primary" value="primary" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="primary"><span type="radioSpan" class="radioSpan primary"></span></label>
 
-                                        <Input type="radio" name="color" id="yellow" />
-                                        <Label for="yellow"><span class="yellow"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="secondary" value="secondary" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="secondary"><span type="radioSpan" class="radioSpan secondary"></span></label>
 
-                                        <Input type="radio" name="color" id="olive" />
-                                        <Label for="olive"><span class="olive"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="success" value="success" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="success"><span type="radioSpan" class="radioSpan success"></span></label>
 
-                                        <Input type="radio" name="color" id="orange" />
-                                        <Label for="orange"><span class="orange"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="info" value="info" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="info"><span type="radioSpan" class="radioSpan info"></span></label>
 
-                                        <Input type="radio" name="color" id="teal" />
-                                        <Label for="teal"><span class="teal"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="warning" value="warning" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="warning"><span type="radioSpan" class="radioSpan warning"></span></label>
 
-                                        <Input type="radio" name="color" id="blue" />
-                                        <Label for="blue"><span class="blue"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="danger" value="danger" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="danger"><span type="radioSpan" class="radioSpan danger"></span></label>
 
-                                        <Input type="radio" name="color" id="violet" />
-                                        <Label for="violet"><span class="violet"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="light" value="light" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="light"><span type="radioSpan" class="radioSpan light"></span></label>
 
-                                        <Input type="radio" name="color" id="purple" />
-                                        <Label for="purple"><span class="purple"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="dark" value="dark" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="dark"><span type="radioSpan" class="radioSpan dark"></span></label>
 
-                                        <Input type="radio" name="color" id="pink" />
-                                        <Label for="pink"><span class="pink"></span></Label>
+                                        <input class="radioInput" type="radio" name="colorCode" id="default" value="default" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="default"><span type="radioSpan" class="radioSpan default"></span></label>
+
+                                        <input class="radioInput" type="radio" name="colorCode" id="white" value="white" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="white"><span type="radioSpan" class="radioSpan white"></span></label>
+
+                                        <input class="radioInput" type="radio" name="colorCode" id="darker" value="darker" onChange={this.handleInputChange} />
+                                        <label class="radioLabel" type="radioLabel" for="darker"><span type="radioSpan" class="radioSpan darker"></span></label>
                                     </RadioGroup>
 
                                 </InputGroup>
@@ -233,7 +237,7 @@ class Location extends Component {
                             type="button"
                             onClick={() => this.toggleModal("addModal", undefined)}>Kapat
                         </Button>
-                        <Button color="primary" type="submit" onClick={this.handleUpdate}>Değişiklikleri Kaydet</Button>
+                        <Button color="primary" type="submit" onClick={this.handleAdd}>Değişiklikleri Kaydet</Button>
                     </div>
                 </Modal>
                 {/* Edit Modal  */}
