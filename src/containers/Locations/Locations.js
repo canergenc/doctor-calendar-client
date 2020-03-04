@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-// Omitted
+
 // reactstrap components
 import {
     Modal,
@@ -110,26 +110,24 @@ class Location extends Component {
 
     render() {
         let locations = "Lokasyonlar Yükleniyor...";
-        if (this.state.data.length > 0) {
-            locations = this.state.data.map((item) => {
-                return (
-                    <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>***</td>
-                        <td className="text-right">
-                            <UncontrolledDropdown>
-                                <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
-                                    <i className="fas fa-ellipsis-v" />
-                                </DropdownToggle>
-                                <DropdownMenu className="dropdown-menu-arrow" right>
-                                    <DropdownItem onClick={() => this.toggleModal("editModal", item)}>Düzenle</DropdownItem>
-                                    <DropdownItem onClick={() => this.toggleModal("deleteModal", item)}>Kaldır</DropdownItem>
-                                </DropdownMenu>
-                            </UncontrolledDropdown>
-                        </td>
-                    </tr>
-                )
-            });
+        if (this.props.locations) {
+            console.log(this.props.locations)
+            locations = this.props.locations.map((location) => (
+                <tr key={location.id}>
+                    <td>{location.name}</td>
+                    <td className="text-right">
+                        <UncontrolledDropdown>
+                            <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
+                                <i className="fas fa-ellipsis-v"/>
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-arrow" right>
+                                <DropdownItem onClick={() => this.toggleModal("editModal", location)}>Düzenle</DropdownItem>
+                                <DropdownItem onClick={() => this.toggleModal("deleteModal", location)}>Kaldır</DropdownItem>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>
+                    </td>
+                </tr>
+            ));
         }
         return (
             <>
@@ -174,38 +172,38 @@ class Location extends Component {
 
                                     <RadioGroup name="colorCode" value={this.state.colorCode} onChange={this.handleInputChange}>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="primary" value="primary" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="primary"><span type="radioSpan" class="radioSpan primary"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="primary" value="primary" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="primary"><span type="radioSpan" className="radioSpan primary"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="secondary" value="secondary" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="secondary"><span type="radioSpan" class="radioSpan secondary"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="secondary" value="secondary" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="secondary"><span type="radioSpan" className="radioSpan secondary"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="success" value="success" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="success"><span type="radioSpan" class="radioSpan success"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="success" value="success" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="success"><span type="radioSpan" className="radioSpan success"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="info" value="info" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="info"><span type="radioSpan" class="radioSpan info"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="info" value="info" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="info"><span type="radioSpan" className="radioSpan info"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="warning" value="warning" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="warning"><span type="radioSpan" class="radioSpan warning"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="warning" value="warning" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="warning"><span type="radioSpan" className="radioSpan warning"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="danger" value="danger" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="danger"><span type="radioSpan" class="radioSpan danger"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="danger" value="danger" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="danger"><span type="radioSpan" className="radioSpan danger"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="light" value="light" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="light"><span type="radioSpan" class="radioSpan light"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="light" value="light" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="light"><span type="radioSpan" className="radioSpan light"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="dark" value="dark" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="dark"><span type="radioSpan" class="radioSpan dark"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="dark" value="dark" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="dark"><span type="radioSpan" className="radioSpan dark"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="default" value="default" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="default"><span type="radioSpan" class="radioSpan default"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="default" value="default" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="default"><span type="radioSpan" className="radioSpan default"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="white" value="white" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="white"><span type="radioSpan" class="radioSpan white"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="white" value="white" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="white"><span type="radioSpan" className="radioSpan white"></span></label>
 
-                                        <input class="radioInput" type="radio" name="colorCode" id="darker" value="darker" onChange={this.handleInputChange} />
-                                        <label class="radioLabel" type="radioLabel" for="darker"><span type="radioSpan" class="radioSpan darker"></span></label>
+                                        <input className="radioInput" type="radio" name="colorCode" id="darker" value="darker" onChange={this.handleInputChange} />
+                                        <label className="radioLabel" type="radioLabel" for="darker"><span type="radioSpan" className="radioSpan darker"></span></label>
                                     </RadioGroup>
 
                                 </InputGroup>
@@ -298,11 +296,11 @@ class Location extends Component {
                         <div className="col">
                             <Card className="shadow">
                                 <CardHeader className="border-0">
-                                    <div class="row">
-                                        <div class="col-md-11">
+                                    <div className="row">
+                                        <div className="col-md-11">
                                             <h3 className="mb-0">Lokasyon Listesi</h3>
                                         </div>
-                                        <div class="col-md-1">
+                                        <div className="col-md-1">
                                             <Button className="btn-icon btn-3" color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
@@ -317,11 +315,12 @@ class Location extends Component {
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col">Adı</th>
-                                            <th scope="col">Bağlı Olduğu Grup</th>
-                                            <th scope="col" />
+                                            <th scope="col"/>
                                         </tr>
                                     </thead>
-                                    <tbody>{locations}</tbody>
+                                    <tbody>
+                                        {locations}
+                                    </tbody>
                                 </Table>
                                 <CardFooter className="py-4">
                                     <nav aria-label="...">
