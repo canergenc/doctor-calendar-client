@@ -21,15 +21,12 @@ import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
-// Omitted
-import Api from '../../api';
+
+
 // reactstrap components
-
-
 import {
   Button,
   Card,
-  CardHeader,
   CardBody,
   FormGroup,
   Form,

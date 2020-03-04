@@ -94,6 +94,33 @@ export const createLocationFailed = (error) => {
     };
 };
 
+export const updateLocation = (locationId, locationData) => {
+    return dispatch => {
+        api.post('/locations/' + locationId, locationData)
+            .then(response => {
+                dispatch(updateLocationSuccess(response.data.id, locationData));
+                dispatch(initLocations());
+            })
+            .catch(error => {
+                dispatch(updateLocationFailed(error))
+            });
+    };
+};
+
+export const updateLocationSuccess = (id, locationData) => {
+    return {
+        type: actionTypes.UPDATE_LOCATION_SUCCESS,
+        locationId: id,
+        locationData: locationData
+    };
+};
+
+export const updateLocationFailed = (error) => {
+    return {
+        type: actionTypes.UPDATE_LOCATION_FAIL,
+        error: error
+    };
+};
 
 
 

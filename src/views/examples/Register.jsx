@@ -17,9 +17,8 @@
 */
 import { connect } from 'react-redux';
 import React from "react";
-// Omitted
-import Api from '../../api';
 import * as actions from '../../store/actions/index';
+
 // reactstrap components
 import {
   Button,

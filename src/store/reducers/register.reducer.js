@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes';
-import { constants } from '../../variables/constants';
 // import jwtDecode from 'jwt-decode';
 
 const initialState = {

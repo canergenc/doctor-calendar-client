@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 // Omitted
-import Api from '../../api';
 // reactstrap components
 import {
     Modal,
@@ -25,13 +24,12 @@ import {
     InputGroupAddon,
     InputGroupText,
     InputGroup,
-    FormGroup,
-    Label,
+    FormGroup
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
 import "./Location.scss";
-import { RadioGroup, Radio } from "pretty-checkbox-react";
+import { RadioGroup } from "pretty-checkbox-react";
 
 class Location extends Component {
     constructor(props) {
@@ -60,13 +58,10 @@ class Location extends Component {
     }
     handleUpdate(event) {
         if (this.state.item && this.state.name) {
-            this.state.item.name = this.state.name;
+            this.setState({ item: { name: this.state.name } });
             if (this.state.item.name === this.state.name) {
-                Api.post('locations/' + this.state.item.id, this.state.item).then((result) => {
-                    this.toggleModal('editModal', undefined)
-                }).catch((ex) => {
-                    alert(ex.response.message)
-                });
+                this.props.updateLocation(this.state.item);
+                this.toggleModal('editModal', undefined);
             }
         }
         event.preventDefault();
@@ -75,45 +70,32 @@ class Location extends Component {
     handleAdd(event) {
         debugger;
         if (this.state.name) {
-            this.state.item.name = this.state.name;
-            this.state.item.colorCode = this.state.colorCode;
-            this.state.item.groupId = '5e53975e62398900983c869c'; /* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+            const location = {
+                name: this.state.name,
+                colorCode: this.state.colorCode,
+                groupId: '5e53975e62398900983c869c'/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+            }
 
-            Api.post('locations', this.state.item).then((result) => {
-                this.toggleModal('addModal', undefined)
-            }).catch((ex) => {
-                alert(ex.response.message)
-            });
+            this.props.createLocation(location);
+            this.toggleModal('addModal', undefined);
 
         } else {
-            alert('Adı alanı zorunludur!')
+            alert('Ad alanı zorunludur!')
         }
         event.preventDefault();
     }
 
-    handleDelete(event) {
+    handleDelete() {
         if (this.state.item && this.state.item.id) {
-            Api.delete('locations/' + this.state.item.id).then(result => {
-                this.toggleModal('deleteModal', undefined);
-            }).catch(ex => {
-                alert(ex.response.message)
-            })
+            this.props.deleteLocation(this.state.item.id)
+            this.toggleModal('deleteModal', undefined);
         }
     }
 
     renderTableData() {
-        Api.get('locations', {
-            filter: {
-                include: [{ relation: "group" }]
-            }
-        }).then(res => {
-            this.setState({
-                data: res.data
-            });
-        }).catch(ex => {
-            alert(ex);
-        })
+        this.props.initLocations();
     }
+
     componentDidMount() {
         this.renderTableData();
     }
@@ -413,6 +395,7 @@ const mapDispatchToProps = dispatch => {
         initLocations: () => dispatch(actions.initLocations()),
         createLocation: (locationData) => dispatch(actions.createLocation(locationData)),
         deleteLocation: (locationId) => dispatch(actions.deleteLocation(locationId)),
+        updateLocation: (locationId, locationData) => dispatch(actions.updateLocation(locationId, locationData)),
     };
 };
 

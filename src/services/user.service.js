@@ -13,7 +13,7 @@ export const login = (email, password) => {
 }
 
 
-export const register = (email, fullName, password) => {
+export const register = (email, fullName, password, title) => {
     return request({
         url: `/users`,
         method: 'POST',
