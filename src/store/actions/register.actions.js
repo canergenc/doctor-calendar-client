@@ -32,6 +32,7 @@ const registerRequest = () => {
 const registerFailure = (err) => {
     console.log('in reducer error', err);
     return {
+        erorObj: err,
         type: actionTypes.REGISTER_FAILURE,
         statusCode: err.data.error.statusCode, // BadRequestError
         statusText: err.data.error.message,  // Invalid email or password

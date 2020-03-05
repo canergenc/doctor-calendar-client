@@ -4,13 +4,6 @@ import history from "../../hoc/Config/history"
 import { customVariables } from "../../hoc/Config/customVariables";
 
 const login = (email, password) => {
-
-
-
-
-
-
-
     return dispatch => {
         dispatch(loginRequest());
         userService.login(email, password).then((response) => {
@@ -36,9 +29,7 @@ const loginSuccess = (token) => {
 
     return {
         type: actionTypes.LOGIN_SUCCESS,
-        payload: {
-            token: token
-        }
+        token: token
     };
 }
 
@@ -48,6 +39,7 @@ const loginFailure = (err) => {
     console.log('in reducer error', err);
     return {
         type: actionTypes.LOGIN_FAILURE,
+        erorObj: err,
         statusCode: err.data.error.statusCode, // BadRequestError
         statusText: err.data.error.message,  // Invalid email or password
         statusName: err.data.error.name,   // BadRequestError
