@@ -11,6 +11,8 @@ import Location from '../components/Location/Location';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";
+import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
+import api from "../api";
 
 const MySwal = withReactContent(Swal)
 
@@ -64,12 +66,9 @@ class Index extends React.Component {
     }
   };
 
-
-
   render() {
     return (
       <>
-
         <Header />
 
         <Container className="mt--7" fluid>
@@ -93,25 +92,23 @@ class Index extends React.Component {
             </Row>
           </DragDropContext>
         </Container>
-
       </>
     );
   }
 }
 
 const mapStateToProps = state => {
-
-  console.log('All States', state);
   return {
     users: state.users.users,
     error: state.users.error,
     activeLocationId: state.locations.activeLocationId
   };
-}
+};
+
 const mapDispatchToProps = dispatch => {
   return {
-    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
-    // createReminderFailed: (reminderData) => dispatch(actions.createReminderFailed(reminderData))
+    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData))
   };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Index);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Index,api));
