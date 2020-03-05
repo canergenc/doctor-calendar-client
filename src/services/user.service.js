@@ -1,7 +1,7 @@
 import request from "../hoc/Config/apiCentral";
 
 
-const login = (email, password) => {
+export const login = (email, password) => {
     return request({
         url: `/users/login`,
         method: 'POST',
@@ -13,8 +13,7 @@ const login = (email, password) => {
 }
 
 
-
-const register = (email, fullName, title, password, ) => {
+export const register = (email, fullName, password, title) => {
     return request({
         url: `/users`,
         method: 'POST',

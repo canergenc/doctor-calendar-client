@@ -1,27 +1,8 @@
-/*!
-
-=========================================================
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
 import Index from "views/Index.jsx";
-import Profile from "views/examples/Profile.jsx";
-import Register from "views/examples/Register.jsx";
-import Login from "views/examples/Login.jsx";
-import Tables from "views/examples/Tables.jsx";
-import Icons from "views/examples/Icons.jsx";
-import Location from "views/settings/Location.jsx";
+import Profile from "containers/Profile/Profile.js";
+import Register from "containers/Register/Register.js";
+import Login from "containers/Login/Login.js";
+import Location from "containers/Locations/Locations.js";
 
 var routes = [
   {
@@ -43,20 +24,6 @@ var routes = [
     name: "Lokasyon Tanımla",
     icon: "ni ni-shop text-primary",
     component: Location,
-    layout: "/admin"
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "ni ni-planet text-blue",
-    component: Icons,
-    layout: "/admin"
-  },
-  {
-    path: "/tables",
-    name: "Tables",
-    icon: "ni ni-bullet-list-67 text-red",
-    component: Tables,
     layout: "/admin"
   },
   {
