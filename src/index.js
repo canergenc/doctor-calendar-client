@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {  Route, Router, Switch, Redirect } from "react-router-dom";
+import { Route, Router, Switch, Redirect } from "react-router-dom";
 import registerServiceWorker from "./registerServiceWorker";
 
 // Redux
@@ -26,9 +26,6 @@ import authenticationReducer from "./store/reducers/auth.reducer";
 import registerReducer from "./store/reducers/register.reducer";
 import history from "./hoc/Config/history";
 
-
-
-
 // Redux Chrome Devtool Extension
 const composeEnhancers =
   (process.env.NODE_ENV === "development"
@@ -51,9 +48,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Switch>
-        <Route path="/admin" render={props => <AdminLayout {...props} />} />
+        <Route path="/admin" render={props => <AdminLayout  {...props} />} /> 
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
-        <Redirect from="/" to="/auth/login" />
+        <Redirect from="/" to="/admin/index" />
+
       </Switch>
     </Router>
   </Provider>,

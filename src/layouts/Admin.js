@@ -8,6 +8,8 @@ import AdminFooter from "components/Footers/AdminFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import routes from "routes.js";
+import { customVariables } from "../hoc/Config/customVariables";
+import history from "../hoc/Config/history";
 
 class Admin extends React.Component {
   componentDidUpdate(e) {
@@ -17,17 +19,28 @@ class Admin extends React.Component {
   }
   getRoutes = routes => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            component={prop.component}
-            key={key}
-          />
-        );
+      console.log('prop', prop);
+      let token = localStorage.getItem(customVariables.TOKEN);
+      console.log(token);
+
+      if (!token) {
+        history.push("/auth/login");
       } else {
-        return null;
+        if (prop.layout === "/admin") {
+          return (
+            <Route
+              path={prop.layout + prop.path}
+              component={prop.component}
+              key={key}
+            />
+          );
+        } else {
+          return null;
+        }
+
       }
+
+
     });
   };
   getBrandText = path => {

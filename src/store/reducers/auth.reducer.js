@@ -1,5 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 import { constants } from '../../variables/constants';
+import { helperService } from "../../services/helper.service"
 // import jwtDecode from 'jwt-decode';
 
 const initialState = {
@@ -24,7 +25,7 @@ const reducer = (state = initialState, action) => {
                 isAuthenticating: false,
                 isAuthenticated: true,
                 token: action.token,
-                userName: 'TEST' , // jwtDecode(action.token).userName,
+                userName: 'TEST', // jwtDecode(action.token).userName,
                 statusText: constants.SUCCESS_MESSAGE.loginSuccess
             };
         case actionTypes.LOGIN_FAILURE:
@@ -33,7 +34,9 @@ const reducer = (state = initialState, action) => {
                 isAuthenticated: false,
                 token: null,
                 userName: null,
-                statusText: `Authentication Error: ${action.statusCode} ${action.statusText}`
+                //statusText: `Authentication Error: ${action.statusCode} ${action.statusText}`
+                statusText: helperService.getErrorMessage(action.erorObj)
+
             };
         default:
             return state;

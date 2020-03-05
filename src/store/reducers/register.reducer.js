@@ -1,4 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
+import { constants } from '../../variables/constants';
+import { helperService } from "../../services/helper.service"
+
 // import jwtDecode from 'jwt-decode';
 
 const initialState = {
@@ -27,7 +30,8 @@ const reducer = (state = initialState, action) => {
                 isRegistiring: false,
                 isRegistered: false,
                 user: {},
-                statusText: `Authentication Error: ${action.statusCode} ${action.statusText}`
+                //statusText: `Authentication Error: ${action.statusCode} ${action.statusText}`
+                statusText: helperService.getErrorMessage(action.erorObj)
             };
         default:
             return state;

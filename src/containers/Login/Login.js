@@ -1,7 +1,25 @@
+/*!
+
+* Argon Dashboard React - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
+* Copyright 2019 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+*/
+
 import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
+import Api from '../../api';
 
 import {
   Button,
@@ -31,19 +49,26 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleInputChange(event) {
+    console.log(event.target);
+    this.setState({ submitted: false });
     const target = event.target;
     if (target.type === 'email')
       this.setState({ email: event.target.value });
     else
       this.setState({ password: event.target.value });
+
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({ submitted: true });
-    const { email, password } = this.state;
-    if (email && password) {
-      this.props.login(email, password);
+    if (this.state.email && this.state.password) {
+      if (this.state.password.length >= 8) {
+        this.setState({ submitted: true });
+        this.props.login(this.state.email, this.state.password);
+      }
     }
+
+
+    // event.preventDefault();
   }
   // alertExample(value) {
   //   return (
@@ -62,46 +87,7 @@ class Login extends React.Component {
       <>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
-            {/* <CardHeader className="bg-transparent pb-5"> */}
-            {/* <div className="text-muted text-center mt-2 mb-3">
-                <small>DC CALENDAR'A GİRİŞ YAP</small>
-              </div> */}
-
-
-
-
-
-            {/* <div className="btn-wrapper text-center">
-                <Button
-                  className="btn-neutral btn-icon"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/github.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Github(v2)</span>
-                </Button>
-                <Button
-                  className="btn-neutral btn-icon"
-                  color="default"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  <span className="btn-inner--icon">
-                    <img
-                      alt="..."
-                      src={require("assets/img/icons/common/google.svg")}
-                    />
-                  </span>
-                  <span className="btn-inner--text">Google(v2)</span>
-                </Button>
-              </div> */}
-            {/* </CardHeader> */}
+           
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
                 {/* <small> </small> */}
@@ -126,11 +112,12 @@ class Login extends React.Component {
                     <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange} />
 
                   </InputGroup>
-                  {submitted && !email &&
+                  {!email &&
 
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Email gerekli.</p>
                     // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
                   }
+
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative">
@@ -142,8 +129,13 @@ class Login extends React.Component {
                     <Input placeholder="Şifre" type="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
 
-                  {submitted && !password &&
+                  {!password &&
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }} >Şifre gerekli.</div>
+                  }
+
+                  {password.length < 8 && password &&
+                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre 8 karakter olmalı.</p>
                     // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }} >Şifre gerekli.</div>
                   }
 
