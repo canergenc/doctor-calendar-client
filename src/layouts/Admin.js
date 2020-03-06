@@ -36,9 +36,7 @@ class Admin extends React.Component {
   }
   getRoutes = routes => {
     return routes.map((prop, key) => {
-      console.log('prop', prop);
       let token = localStorage.getItem(customVariables.TOKEN);
-      console.log(token);
 
       if (!token) {
         history.push("/auth/login");

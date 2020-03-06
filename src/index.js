@@ -20,6 +20,7 @@ import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
 import groupsReducer from "./store/reducers/groups";
+import userInfoReducer from "./store/reducers/user.info.reducer";
 
 // import alertReducer from  "./store/reducers/alert.reducer";
 import authenticationReducer from "./store/reducers/auth.reducer";
@@ -39,7 +40,8 @@ const rootReducer = combineReducers({
   // alertReducer:alertReducer,
   auth: authenticationReducer,
   register: registerReducer,
-  groups: groupsReducer
+  groups: groupsReducer,
+  userInfo:userInfoReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

@@ -5,9 +5,9 @@ import { customVariables } from "../Config/customVariables";
 
 const request = async function(options, isHeader = true) {
   let authHeader = null;
-  // if (isHeader) {
-  //   authHeader = await AsyncStorage.getItem(customVariables.TOKEN); 
-  // }
+  if (isHeader) {
+    authHeader = localStorage.getItem(customVariables.TOKEN); 
+  }
 
   const client = axios.create({
     baseURL: customVariables.BASE_URL,

@@ -2,14 +2,22 @@ import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
 import history from "../../hoc/Config/history"
 import { customVariables } from "../../hoc/Config/customVariables";
+import { userInfoActions } from "./user.info.actions"
+
 
 const login = (email, password) => {
     return dispatch => {
         dispatch(loginRequest());
         userService.login(email, password).then((response) => {
-            console.log('in reducer success', response);
-            dispatch(loginSuccess(response.token));
-            history.push('/admin/index');
+            localStorage.setItem(customVariables.TOKEN, response.token);
+            dispatch(loginSuccess(response.token))
+            userService.userMe().then((response) => {
+                console.log('userMe', response.id);
+                dispatch(userInfoActions.getUserInfo(response.id));
+            }).catch((error) => {
+                dispatch(loginFailure(error));
+            });
+
 
         }).catch((error) => {
             dispatch(loginFailure(error));
@@ -18,14 +26,14 @@ const login = (email, password) => {
 }
 
 
-export const loginRequest = () => {
+const loginRequest = () => {
     return {
         type: actionTypes.LOGIN_REQUEST,
     };
 };
 
 const loginSuccess = (token) => {
-    localStorage.setItem(customVariables.TOKEN, token);
+
 
     return {
         type: actionTypes.LOGIN_SUCCESS,
@@ -36,7 +44,6 @@ const loginSuccess = (token) => {
 
 const loginFailure = (err) => {
 
-    console.log('in reducer error', err);
     return {
         type: actionTypes.LOGIN_FAILURE,
         erorObj: err,
@@ -46,9 +53,6 @@ const loginFailure = (err) => {
 
     };
 }
-
-
-
 
 
 export const authActions = {

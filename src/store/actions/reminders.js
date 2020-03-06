@@ -78,7 +78,6 @@ export const createReminderSuccess = (id, reminderData) => {
 
 export const createReminderFailed = (error) => {
 
-  console.log('in foo', error);
   return {
     type: actionTypes.CREATE_REMINDER_FAIL,
     error: error

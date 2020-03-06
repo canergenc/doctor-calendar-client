@@ -31,7 +31,6 @@ class User extends Component {
     }
 
     OnSelect = (userId, id) => {
-        console.log("userId:", userId);
 
         if (this.props.activeLocationId !== "") {
             this.props.setActiveLocationId("");

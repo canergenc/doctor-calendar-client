@@ -6,7 +6,6 @@ const register = (email, fullName, title, password) => {
     return dispatch => {
         dispatch(registerRequest());
         userService.register(email, fullName, title, password).then((response) => {
-            console.log('in reducer registersuccess', response);
             dispatch(registerSuccess(response));
         }).catch((error) => {
             dispatch(registerFailure(error));
@@ -30,7 +29,6 @@ const registerRequest = () => {
 }
 
 const registerFailure = (err) => {
-    console.log('in reducer error', err);
     return {
         erorObj: err,
         type: actionTypes.REGISTER_FAILURE,

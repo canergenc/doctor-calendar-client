@@ -34,7 +34,6 @@ class Index extends React.Component {
     switch (source.droppableId) {
       case 'UserList_1':
         if (this.props.activeLocationId !== "" && this.props.activeLocationId !== null) {
-          console.log(this.props.activeLocationId);
 
           const user = this.props.users[source.index];
           const reminder = {
@@ -49,7 +48,6 @@ class Index extends React.Component {
           this.props.createReminder(reminder);
         }
         else {
-          console.log("location seçmelisiniz.")
           MySwal.fire({
             icon: 'error',
             title: 'Hay aksi,',
@@ -59,7 +57,6 @@ class Index extends React.Component {
 
         break;
       default:
-        console.log('switch default');
         break;
     }
   };
@@ -101,7 +98,6 @@ class Index extends React.Component {
 
 const mapStateToProps = state => {
 
-  console.log('All States', state);
   return {
     users: state.users.users,
     error: state.users.error,

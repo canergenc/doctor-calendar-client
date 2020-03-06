@@ -22,12 +22,19 @@ import { Button, Container, Row, Col } from "reactstrap";
 
 class UserHeader extends React.Component {
   render() {
+
+    const { fullName } = this.props;
+
+    const headerTitle= `Merhaba ${fullName}`;
+
     return (
+
+
       <>
         <div
           className="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
           style={{
-            minHeight: "600px",
+            minHeight: "100px",
             backgroundImage:
               "url(" + require("assets/img/theme/profile-cover.jpg") + ")",
             backgroundSize: "cover",
@@ -39,18 +46,18 @@ class UserHeader extends React.Component {
           {/* Header container */}
           <Container className="d-flex align-items-center" fluid>
             <Row>
-              <Col lg="7" md="10">
-                <h1 className="display-2 text-white">Merhaba Caner</h1>
-                <p className="text-white mt-0 mb-5">
+              <Col  md="12">
+        <h1  style={{fontSize:25}} className="display-2 text-white">{headerTitle}</h1>
+                {/* <p className="text-white mt-0 mb-5">
                   Bu senin profil sayfandır. Buradan tüm iş yönetimini görüntüleyebilirsin.
-                </p>
-                <Button
+                </p> */}
+                {/* <Button
                   color="info"
                   href="#pablo"
                   onClick={e => e.preventDefault()}
                 >
                   Profili Düzenle
-                </Button>
+                </Button> */}
               </Col>
             </Row>
           </Container>

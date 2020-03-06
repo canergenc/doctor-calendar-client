@@ -27,9 +27,32 @@ export const register = (email, fullName, password, title) => {
     });
 }
 
+
+
+//return userId and name 
+export const userMe = () => {
+    return request({
+        url: `/users/me`,
+        method: 'GET',
+        data: null
+    },true);
+}
+
+
+export const userInfo = (id) => {
+    return request({
+        url: `/users/${id}`,
+        method: 'GET',
+        data:null
+    },true);
+}
+
+
 export const userService = {
     login,
-    register
+    register,
+    userMe,
+    userInfo
 };
 
 

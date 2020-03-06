@@ -1,5 +1,6 @@
 /*!
 
+=========================================================
 * Argon Dashboard React - v1.0.0
 =========================================================
 
@@ -14,16 +15,15 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-
 import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
 import Api from '../../api';
-
 import {
   Button,
   Card,
+  CardHeader,
   CardBody,
   FormGroup,
   Form,
