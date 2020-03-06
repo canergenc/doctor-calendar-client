@@ -4,6 +4,7 @@ import HeaderWeekDays from "../../components/Calendar/HeaderWeekDays/HeaderWeekD
 import Day from "../../components/Calendar/Day/Day";
 import Spinner from '../../components/UI/Spinner/Spinner';
 import moment from "moment";
+import 'moment/locale/tr';
 import "./Calendar.scss";
 import { connect } from "react-redux";
 import * as actions from '../../store/actions/index';
@@ -84,36 +85,41 @@ class Calendar extends Component {
         props["date"] = date;
         props["day"] = i;
         const calendar = [];
-        //let color = "";
 
-        //const colorDic = this.convertJsonToDict(this.props.locations);
         this.props.reminders.forEach(dateRow => {
           if (moment(dateRow.date).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             calendar.push(dateRow);
           }
-          // color = colorDic[Object.keys(dateRow.locationId)];
-          // console.log(color);
-
-          // console.log("------");
-
-          // console.log(dateRow.locationId);
-          // console.log(colorDic);
-
-          // console.log("------");
         });
-
 
         props["reminders"] = calendar;
         props["deleteReminder"] = this.deleteReminderHandler;
-        //props["color"] = color;
 
         if (i === 1) {
-          props["firstDayIndex"] = moment(date)
-            .startOf("month")
-            .format("d");
+          let startOfMonth = parseInt(moment(date).startOf("month").format("d"));
+          if (startOfMonth === 0) {
+            startOfMonth = 6;
+          }
+          else if (startOfMonth === 6) {
+            startOfMonth = 0;
+          }
+          else {
+            startOfMonth -= 1;
+          }
+          props["firstDayIndex"] = startOfMonth;
+
         } else {
           delete props["firstDayIndex"];
         }
+        
+        let isWeekend = false;
+        
+        if (moment(date).weekday() === 6 || moment(date).weekday() === 5) {
+          isWeekend=true;
+        }
+        
+        props["weekend"] = isWeekend;
+
         days.push(<Day key={i} {...props} />);
       }
     }
@@ -193,7 +199,8 @@ class Calendar extends Component {
   }
 
   render() {
-    const weekdays = moment.weekdays();
+    moment.locale('tr');
+    const weekdays = moment.weekdays(true);
 
     let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
 

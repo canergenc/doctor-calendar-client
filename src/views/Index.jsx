@@ -1,4 +1,4 @@
-import React from "react";
+import React,{Component} from "react";
 import { connect } from 'react-redux';
 import { Container, Row, Col } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -11,10 +11,12 @@ import Location from '../components/Location/Location';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";
+import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
+import api from "../api";
 
 const MySwal = withReactContent(Swal)
 
-class Index extends React.Component {
+class Index extends Component {
 
   onDragEnd = result => {
 
@@ -42,8 +44,7 @@ class Index extends React.Component {
             userId: user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
             description: user.fullName,
-            type: 0
-            //type: { "Nöbet": 0 }
+            type: { "Nöbet": 0 }
           }
           this.props.createReminder(reminder);
         }
@@ -61,12 +62,9 @@ class Index extends React.Component {
     }
   };
 
-
-
   render() {
     return (
       <>
-
         <Header />
 
         <Container className="mt--7" fluid>
@@ -90,7 +88,6 @@ class Index extends React.Component {
             </Row>
           </DragDropContext>
         </Container>
-
       </>
     );
   }
@@ -103,11 +100,12 @@ const mapStateToProps = state => {
     error: state.users.error,
     activeLocationId: state.locations.activeLocationId
   };
-}
+};
+
 const mapDispatchToProps = dispatch => {
   return {
-    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
-    // createReminderFailed: (reminderData) => dispatch(actions.createReminderFailed(reminderData))
+    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData))
   };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Index);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Index,api));

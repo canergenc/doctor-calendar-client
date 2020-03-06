@@ -20,6 +20,8 @@ $day-width: 14.28%; // 100 / 7 = 14.28
     }
   }
 
+
+
   header {
     font-size: 20px;
     font-weight: 700;
@@ -43,4 +45,8 @@ $day-width: 14.28%; // 100 / 7 = 14.28
       }
     }
   }
+}
+
+.weekend{
+  background-color: rgba(0, 0, 0, 0.02);
 }
