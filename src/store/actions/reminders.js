@@ -85,16 +85,17 @@ export const createReminderFailed = (error) => {
   };
 };
 
-export const createReminderOld = (reminderData) => {
+
+export const createReminder = (reminderData) => {
   return dispatch => {
-    Api.post('/calendars', reminderData)
-      .then(response => {
+    calendarService.createReminderService(reminderData)
+      .then((response) => {
         const filterData = {
           params: {
             filter: {
               where: {
                 locationId: {
-                  like: response.data.locationId
+                  like: reminderData.locationId
                 }
               },
               include: [
@@ -107,22 +108,9 @@ export const createReminderOld = (reminderData) => {
         }
         dispatch(getReminders(filterData));
         dispatch(createReminderSuccess(response.data, reminderData));
-      })
-      .catch(error => {
+      }).catch((error) => {
         dispatch(createReminderFailed(error));
       });
-  };
-}
-
-
-export const createReminder = (reminderData) => {
-  return dispatch => {
-    calendarService.createReminderService(reminderData).then((response) => {
-      dispatch(getReminders(response.data.locationId));
-      dispatch(createReminderSuccess(response.data, reminderData));
-    }).catch((error) => {
-      dispatch(createReminderFailed(error));
-    });
   };
 }
 

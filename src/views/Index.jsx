@@ -1,4 +1,4 @@
-import React from "react";
+import React,{Component} from "react";
 import { connect } from 'react-redux';
 import { Container, Row, Col } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -16,7 +16,7 @@ import api from "../api";
 
 const MySwal = withReactContent(Swal)
 
-class Index extends React.Component {
+class Index extends Component {
 
   onDragEnd = result => {
 
@@ -45,8 +45,7 @@ class Index extends React.Component {
             userId: user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
             description: user.fullName,
-            type: 0
-            //type: { "Nöbet": 0 }
+            type: { "Nöbet": 0 }
           }
           this.props.createReminder(reminder);
         }
