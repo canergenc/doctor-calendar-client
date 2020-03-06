@@ -11,12 +11,14 @@ const login = (email, password) => {
         userService.login(email, password).then((response) => {
             localStorage.setItem(customVariables.TOKEN, response.token);
             dispatch(loginSuccess(response.token))
-            userService.userMe().then((response) => {
-                console.log('userMe', response.id);
-                dispatch(userInfoActions.getUserInfo(response.id));
-            }).catch((error) => {
-                dispatch(loginFailure(error));
-            });
+            dispatch(userInfoActions.getUserInfo());
+            history.push('/admin/index');
+            // userService.userMe().then((response) => {
+            //     console.log('userMe', response.id);
+            //     dispatch(userInfoActions.getUserInfo(response.id));
+            // }).catch((error) => {
+            //     dispatch(loginFailure(error));
+            // });
 
 
         }).catch((error) => {

@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index';
 
 // reactstrap components
 import {
@@ -23,6 +24,10 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     console.log(props);
+  }
+
+  componentDidMount() {
+   this.props.getUserInfo();
   }
 
 
@@ -334,16 +339,16 @@ const mapStateToProps = state => {
     deviceId: state.userInfo.deviceId
   };
 }
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     register: (email, fullName, title, password) => dispatch(actions.registerActions.register(email, fullName, title, password)),
-//   };
-// }
+const mapDispatchToProps = dispatch => {
+  return {
+    getUserInfo: () => dispatch(actions.userInfoActions.getUserInfo()),
+  };
+}
 
 
 
 
 
-export default connect(mapStateToProps, null)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 // export default Profile;

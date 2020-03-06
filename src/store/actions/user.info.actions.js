@@ -4,27 +4,41 @@ import history from "../../hoc/Config/history"
 import { customVariables } from "../../hoc/Config/customVariables";
 
 
- const getUserInfo = (userId) => {
+const getUserInfo = () => {
     return dispatch => {
         dispatch(userInfoRequest());
-        userService.userInfo(userId).then((response) => {
-            console.log('info',response);
-            dispatch(userInfoSuccess(response))
-            history.push('/admin/index');
+
+        userService.userMe().then((response) => {
+            console.log('userMe', response.id);
+
+            const userId=response.id
+
+            userService.userInfo(userId).then((response) => {
+                console.log('info', response);
+                dispatch(userInfoSuccess(response))
+            }).catch((error) => {
+                console.log(error);
+                dispatch(userInfoFailure(error));
+            });
+
         }).catch((error) => {
-            console.log(error);
             dispatch(userInfoFailure(error));
         });
+
+
+
+
+
     }
 }
 
- const userInfoRequest = () => {
+const userInfoRequest = () => {
     return {
         type: actionTypes.USERINFO_REQUEST,
     };
 };
 
- const userInfoSuccess = (response) => {
+const userInfoSuccess = (response) => {
     return {
         type: actionTypes.USERINFO_SUCCESS,
         id: response.id,
@@ -39,7 +53,7 @@ import { customVariables } from "../../hoc/Config/customVariables";
 }
 
 
- const userInfoFailure = (err) => {
+const userInfoFailure = (err) => {
 
     return {
         type: actionTypes.USERINFO_FAILURE,
@@ -52,5 +66,5 @@ import { customVariables } from "../../hoc/Config/customVariables";
 }
 
 export const userInfoActions = {
-    getUserInfo,
+    getUserInfo
 };

@@ -4,5 +4,6 @@ export { initUsers, searchUser } from "./users";
 export { authActions } from "./auth.actions";
 export { registerActions } from "./register.actions";
 export { initGroups } from "./groups";
+export { userInfoActions } from "./user.info.actions";
 
 
