@@ -1,7 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 import { constants } from '../../variables/constants';
-import { helperService } from "../../services/helper.service"
-
+import { helperService } from "../../services/helper";
 const initialState = {
     id: null,
     email: "",

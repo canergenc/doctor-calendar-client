@@ -2,7 +2,7 @@ import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
 import history from "../../hoc/Config/history"
 import { customVariables } from "../../hoc/Config/customVariables";
-import { userInfoActions } from "./user.info.actions"
+import { userInfoActions } from "./user.info"
 
 
 const login = (email, password) => {
