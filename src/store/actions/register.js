@@ -1,11 +1,11 @@
-import { userService } from "../../services"
+import { authService } from "../../services/auth"
 import * as actionTypes from "./actionTypes";
 
 
 const register = (email, fullName, title, password) => {
     return dispatch => {
         dispatch(registerRequest());
-        userService.register(email, fullName, title, password).then((response) => {
+        authService.register(email, fullName, title, password).then((response) => {
             dispatch(registerSuccess(response));
         }).catch((error) => {
             dispatch(registerFailure(error));

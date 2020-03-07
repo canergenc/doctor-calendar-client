@@ -21,11 +21,25 @@ import './Users.css';
 class Users extends Component {
 
     componentDidMount() {
-        this.props.onInitUsers();
+        const filterData = {
+            filter: {
+                where: {
+                    groupId: {
+                        like: "5e53975e62398900983c869c"
+                    }
+                },
+                include:[
+                    {
+                        relation:"user"
+                    }
+                ]
+            }
+        };
+        this.props.onInitUsers(filterData);
     }
 
     searchUser = (filterKey) => {
-        this.props.searchUser(filterKey,this.props.defaultUsers);
+        this.props.searchUser(filterKey, this.props.defaultUsers);
     }
 
     render() {
@@ -76,8 +90,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitUsers: () => dispatch(actions.initUsers()),
-        searchUser: (filterKey,defaultUsers) => dispatch(actions.searchUser(filterKey,defaultUsers))
+        onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
+        searchUser: (filterKey, defaultUsers) => dispatch(actions.searchUser(filterKey, defaultUsers))
     };
 }
 

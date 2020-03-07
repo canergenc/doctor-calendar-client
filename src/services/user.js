@@ -1,60 +1,32 @@
 import request from "../hoc/Config/apiCentral";
 
-
-export const login = (email, password) => {
+const getUsers = (filterData) => {
     return request({
-        url: `/users/login`,
-        method: 'POST',
-        data: {
-            'email': email,
-            'password': password
-        }
+        url: '/user-groups',
+        method: 'GET',
+        params: filterData
     });
-}
-
-
-export const register = (email, fullName, password, title) => {
-    return request({
-        url: `/users`,
-        method: 'POST',
-        data: {
-            'email': email,
-            'password': password,
-            'fullName': fullName,
-            "deviceId": "QWE123",
-            "title": title
-        }
-    });
-}
-
-
+};
 
 //return userId and name 
-export const userMe = () => {
+const userMe = () => {
     return request({
         url: `/users/me`,
         method: 'GET',
         data: null
-    },true);
-}
+    }, true);
+};
 
-
-export const userInfo = (id) => {
+const userInfo = (id) => {
     return request({
         url: `/users/${id}`,
         method: 'GET',
-        data:null
-    },true);
-}
-
+        data: null
+    }, true);
+};
 
 export const userService = {
-    login,
-    register,
+    getUsers,
     userMe,
     userInfo
 };
-
-
-
-

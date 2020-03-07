@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import Api from '../../api';
+import {userService} from '../../services/user';
 
 export const setUsers = (users, defaultUsers) => {
     return {
@@ -15,12 +15,12 @@ export const fetchUsersFailed = (error) => {
     };
 };
 
-export const initUsers = () => {
+export const getUsers = (filterData) => {
     return dispatch => {
-        Api.get('/users')
+        userService.getUsers(filterData)
             .then(res => {
                 const users = [];
-                res.data.forEach(element => {
+                res.forEach(element => {
                     users.push({
                         ...element
                     });
@@ -42,8 +42,8 @@ export const searchUser = (filterKey, defaultUsers) => {
             users = defaultUsers
                 .filter(row => {
                     return (
-                        (row.fullName &&
-                            row.fullName.toLowerCase().includes(filterKey.toLowerCase().trim()))
+                        (row.user.fullName &&
+                            row.user.fullName.toLowerCase().includes(filterKey.toLowerCase().trim()))
                     );
                 })
         }

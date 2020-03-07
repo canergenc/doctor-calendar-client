@@ -9,9 +9,9 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import * as actions from '../../store/actions/index';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import Api from '../../api';
+import Api from "../../api";
 
-import 'moment/locale/tr';
+import "moment/locale/tr";
 import "./Calendar.scss";
 
 class Calendar extends Component {
@@ -68,7 +68,7 @@ class Calendar extends Component {
     );
   }
 
- 
+
   buildDays() {
 
     console.log("buildDays");

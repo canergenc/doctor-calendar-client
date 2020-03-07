@@ -24,7 +24,7 @@ class Admin extends React.Component {
       let token = localStorage.getItem(customVariables.TOKEN);
 
       if (!token) {
-        history.push("/auth/login");
+        return history.push("/auth/login");
       } else {
         if (prop.layout === "/admin") {
           return (

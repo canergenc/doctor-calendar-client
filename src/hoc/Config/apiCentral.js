@@ -1,5 +1,4 @@
 import axios from "axios";
-// import { AsyncStorage } from "react-native";
 import { customVariables } from "../Config/customVariables";
 
 
@@ -25,7 +24,7 @@ const request = async function(options, isHeader = true) {
       // other than 2xx
       //console.log('Status:', error.response.status);
       //console.log('Data:', error.response.data);
-      // console.log('Headers:', error.response.headers);
+      //console.log('Headers:', error.response.headers);
     } else {
       // Something else happened while setting up the request
       // triggered the error
