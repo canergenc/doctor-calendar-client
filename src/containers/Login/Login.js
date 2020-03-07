@@ -19,7 +19,6 @@ import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
-import Api from '../../api';
 
 import {
   Button,

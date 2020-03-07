@@ -4,12 +4,15 @@ import HeaderWeekDays from "../../components/Calendar/HeaderWeekDays/HeaderWeekD
 import Day from "../../components/Calendar/Day/Day";
 import Spinner from '../../components/UI/Spinner/Spinner';
 import moment from "moment";
-import 'moment/locale/tr';
-import "./Calendar.scss";
 import { connect } from "react-redux";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 import * as actions from '../../store/actions/index';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import Api from '../../api';
+
+import 'moment/locale/tr';
+import "./Calendar.scss";
 
 class Calendar extends Component {
 
@@ -64,14 +67,8 @@ class Calendar extends Component {
       }
     );
   }
-  convertJsonToDict = (object) => {
 
-    let dict = [];
-    object.forEach(x => {
-      dict.push({ key: x.id, value: x.colorCode });
-    });
-    return dict;
-  }
+ 
   buildDays() {
 
     console.log("buildDays");
@@ -111,13 +108,13 @@ class Calendar extends Component {
         } else {
           delete props["firstDayIndex"];
         }
-        
+
         let isWeekend = false;
-        
+
         if (moment(date).weekday() === 6 || moment(date).weekday() === 5) {
-          isWeekend=true;
+          isWeekend = true;
         }
-        
+
         props["weekend"] = isWeekend;
 
         days.push(<Day key={i} {...props} />);
@@ -198,6 +195,19 @@ class Calendar extends Component {
     this.props.deleteReminder(reminderId);
   }
 
+  downloadExcelHandler = () => {
+    if (this.props.reminders) {
+      const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+      const fileExtension = '.xlsx';
+
+      const ws = XLSX.utils.json_to_sheet(this.props.reminders);
+      const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+      const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const data = new Blob([excelBuffer], { type: fileType });
+      FileSaver.saveAs(data, "test" + fileExtension);
+    }
+  }
+
   render() {
     moment.locale('tr');
     const weekdays = moment.weekdays(true);
@@ -216,7 +226,9 @@ class Calendar extends Component {
           nextMonthClick={this.nextMonthClickHandler}
           prevMonth={this.state.prevMonth}
           prevMonthClick={this.prevMonthClickHandler}
+          downloadExcelClick={this.downloadExcelHandler}
         />
+
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>
       </div>

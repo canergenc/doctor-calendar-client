@@ -1,4 +1,3 @@
-import request from "../hoc/Config/apiCentral";
 import { customVariables } from "../hoc/Config/customVariables";
 
 
