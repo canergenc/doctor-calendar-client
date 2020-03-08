@@ -1,5 +1,4 @@
-import request from "../hoc/Config/apiCentral";
-
+import request from '../hoc/Config/apiCentral';
 
 export const login = (email, password) => {
     return request({
@@ -10,8 +9,7 @@ export const login = (email, password) => {
             'password': password
         }
     });
-}
-
+};
 
 export const register = (email, fullName, password, title) => {
     return request({
@@ -25,36 +23,9 @@ export const register = (email, fullName, password, title) => {
             "title": title
         }
     });
-}
-
-
-
-//return userId and name 
-export const userMe = () => {
-    return request({
-        url: `/users/me`,
-        method: 'GET',
-        data: null
-    },true);
-}
-
-
-export const userInfo = (id) => {
-    return request({
-        url: `/users/${id}`,
-        method: 'GET',
-        data:null
-    },true);
-}
-
-
-export const userService = {
-    login,
-    register,
-    userMe,
-    userInfo
 };
 
-
-
-
+export const authService = {
+    login,
+    register
+};

@@ -6,7 +6,6 @@ import ScrollMenu from "react-horizontal-scrolling-menu";
 
 import './Location.css';
 
-// reactstrap components
 import { Button } from "reactstrap";
 
 const Arrow = ({ text, className }) => {
@@ -25,16 +24,15 @@ class Location extends Component {
 
     state = {
         locationId: null,
-        alignCenter: true,
+        alignCenter: false,
         clickWhenDrag: false,
         dragging: true,
         hideArrows: false,
         hideSingleArrow: true,
         scrollToSelected: false,
-        selected: "item1",
         translate: 0,
         transition: 0.3,
-        wheel: true
+        wheel: false
     }
 
     createMenu = (list, selected) => {
@@ -44,7 +42,7 @@ class Location extends Component {
                 outline
                 key={el.id}
                 color={el.colorCode}
-                className={` ${selected === el.id && this.props.activeLocationId!== "" ? "active" : ""}`}
+                className={` ${selected === el.id && this.props.activeLocationId !== "" ? "active" : ""}`}
             > {el.name}
             </Button>
         ));
@@ -52,14 +50,11 @@ class Location extends Component {
     }
 
     onSelect = key => {
-        
-
 
         console.log(`onSelect: ${key}`);
-        
+
         this.props.setActiveLocationId(key);
         let locationId = "";
-        
 
         if (this.state.selected !== key) {
             locationId = key;
@@ -77,26 +72,24 @@ class Location extends Component {
         }
 
         const filterData = {
-            params: {
-                filter: {
-                    where: {
-                        locationId: {
-                            like: locationId
-                        }
-                    },
-                    include: [
-                        {
-                            relation: "location"
-                        }
-                    ]
-                }
+            filter: {
+                where: {
+                    locationId: {
+                        like: locationId
+                    }
+                },
+                include: [
+                    {
+                        relation: "location"
+                    }
+                ]
             }
         }
 
         this.props.getReminders(filterData);
         console.log("activeLocationId:" + this.props.activeLocationId);
         var myCheckbox = document.getElementsByName("radio");
-        Array.prototype.forEach.call(myCheckbox,function(el){
+        Array.prototype.forEach.call(myCheckbox, function (el) {
             el.checked = false;
         });
     };
@@ -115,7 +108,6 @@ class Location extends Component {
             dragging,
             hideSingleArrow,
             scrollToSelected,
-            selected,
             translate,
             transition,
             wheel
@@ -135,13 +127,11 @@ class Location extends Component {
                 hideSingleArrow={hideSingleArrow}
                 onSelect={this.onSelect}
                 scrollToSelected={scrollToSelected}
-                selected={selected}
                 transition={+transition}
                 translate={translate}
                 wheel={wheel}
             />
         }
-
 
         return (
             <div className="location">
@@ -150,7 +140,6 @@ class Location extends Component {
         );
     }
 }
-
 
 const mapStateToProps = state => {
     return {
@@ -167,6 +156,5 @@ const mapDispatchToProps = dispatch => {
         getReminders: (filterData) => dispatch(actions.getReminders(filterData))
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Location);

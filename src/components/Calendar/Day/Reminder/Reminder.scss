@@ -1,10 +1,8 @@
 .reminder {
-  // color: #00918e;
   position: relative;
   font-size: 16px;
   padding: 3px 5px;
   margin-bottom: 5px;
-  // background: #6decb9;
   border-radius: 4px;
   &:hover {
     .tools {
@@ -38,7 +36,6 @@
     }
   }
 }
-
 
 .primary {
   color: #fff;
@@ -86,15 +83,12 @@
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-
-
 .dark {
   color: #fff;
   background-color: #212529;
   border-color: #212529;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
-
 
 .default {
   color: #fff;

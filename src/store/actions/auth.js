@@ -1,14 +1,14 @@
-import { userService } from "../../services"
+import { authService } from "../../services/auth"
 import * as actionTypes from "./actionTypes";
 import history from "../../hoc/Config/history"
 import { customVariables } from "../../hoc/Config/customVariables";
-import { userInfoActions } from "./user.info.actions"
+import { userInfoActions } from "./user.info"
 
 
 const login = (email, password) => {
     return dispatch => {
         dispatch(loginRequest());
-        userService.login(email, password).then((response) => {
+        authService.login(email, password).then((response) => {
             localStorage.setItem(customVariables.TOKEN, response.token);
             dispatch(loginSuccess(response.token))
             dispatch(userInfoActions.getUserInfo());

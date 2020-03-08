@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "reactstrap";
 import "./HeaderMonth.scss";
 
 const headerMonth = props => (
@@ -9,7 +10,7 @@ const headerMonth = props => (
       </button>
     </div>
     <div className="row">
-      <h1>{props.curMonth.name}</h1>
+      <h1>{props.curMonth.name}<Button onClick={props.downloadExcelClick}>Excel<i className="fa fa-download" style={{marginLeft:"5px"}}></i></Button></h1>
     </div>
     <div className="row" >
       <button onClick={props.nextMonthClick}>

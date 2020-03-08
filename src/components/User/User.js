@@ -39,26 +39,24 @@ class User extends Component {
         if (this.state.checkedRadio === userId) {
             this.setState({ checkedRadio: "nouserid" });
             id.target.checked = false;
-            this.props.iniReminders();
+            this.props.initReminders();
         }
         else {
             this.setState({ checkedRadio: userId });
             id.target.checked = true;
 
             const filterData = {
-                params: {
-                    filter: {
-                        where: {
-                            userId: {
-                                like: userId
-                            }
-                        },
-                        include: [
-                            {
-                                relation: "location"
-                            }
-                        ]
-                    }
+                filter: {
+                    where: {
+                        userId: {
+                            like: userId
+                        }
+                    },
+                    include: [
+                        {
+                            relation: "location"
+                        }
+                    ]
                 }
             }
             this.props.getReminders(filterData);
@@ -81,13 +79,13 @@ class User extends Component {
                             {...provided.dragHandleProps}
                             isDragging={snapshot.isDragging}
                         >
-                            {this.props.title} {this.props.fullName}
+                            {this.props.user.title} {this.props.user.fullName}
 
                             <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto" }} >
                                 <input
                                     type="radio"
                                     name="radio"
-                                    onClick={(e) => this.OnSelect(this.props.id, e)}
+                                    onClick={(e) => this.OnSelect(this.props.user.id, e)}
                                 />
                                 <div className="state p-success">
                                     <label></label>
@@ -114,7 +112,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        iniReminders: () => dispatch(actions.initReminders()),
+        initReminders: () => dispatch(actions.initReminders()),
         getReminders: (filterData) => dispatch(actions.getReminders(filterData)),
         setActiveLocationId: (locationId) => dispatch(actions.setActiveLocationId(locationId))
     }

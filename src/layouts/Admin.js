@@ -12,17 +12,19 @@ import { customVariables } from "../hoc/Config/customVariables";
 import history from "../hoc/Config/history";
 
 class Admin extends React.Component {
+
   componentDidUpdate(e) {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.mainContent.scrollTop = 0;
   }
+
   getRoutes = routes => {
     return routes.map((prop, key) => {
       let token = localStorage.getItem(customVariables.TOKEN);
 
       if (!token) {
-        history.push("/auth/login");
+        return history.push("/auth/login");
       } else {
         if (prop.layout === "/admin") {
           return (
@@ -35,12 +37,10 @@ class Admin extends React.Component {
         } else {
           return null;
         }
-
       }
-
-
     });
   };
+
   getBrandText = path => {
     for (let i = 0; i < routes.length; i++) {
       if (
@@ -53,6 +53,7 @@ class Admin extends React.Component {
     }
     return "Brand";
   };
+
   render() {
     return (
       <>

@@ -1,6 +1,6 @@
-export  { calendarService } from "./calendar.service";
-export {userService} from "./user.service";
-export {helperService} from "./helper.service";
+export  { calendarService } from "./calendar";
+export {userService} from "./user";
+export {helperService} from "./helper";
 
 
 

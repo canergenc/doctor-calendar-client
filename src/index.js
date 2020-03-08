@@ -20,11 +20,11 @@ import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
 import groupsReducer from "./store/reducers/groups";
-import userInfoReducer from "./store/reducers/user.info.reducer";
+import userInfoReducer from "./store/reducers/user.info";
 
 // import alertReducer from  "./store/reducers/alert.reducer";
-import authenticationReducer from "./store/reducers/auth.reducer";
-import registerReducer from "./store/reducers/register.reducer";
+import authenticationReducer from "./store/reducers/auth";
+import registerReducer from "./store/reducers/register";
 import history from "./hoc/Config/history";
 
 // Redux Chrome Devtool Extension

@@ -1,6 +1,5 @@
 import * as actionTypes from "./actionTypes";
-import Api from '../../api';
-import { calendarService } from "../../services"
+import { calendarService } from "../../services/calendar"
 
 
 export const setReminders = (reminders) => {
@@ -18,22 +17,21 @@ export const fetchRemindersFailed = (error) => {
 
 export const initReminders = () => {
   const filterData = {
-    params: {
-      filter: {
-        include: [
-          {
-            relation: "location"
-          }
-        ]
-      }
+    filter: {
+      include: [
+        {
+          relation: "location"
+        }
+      ]
     }
   }
   return dispatch => {
-    Api.get('/calendars', filterData)
+    calendarService.getReminderService(filterData)
       .then(res => {
         const reminders = []
-        if (res.data) {
-          res.data.forEach(element => {
+        if (res) {
+          console.log(res)
+          res.forEach(element => {
             if (element !== null) {
               reminders.push(element);
             }
@@ -47,14 +45,13 @@ export const initReminders = () => {
   }
 }
 
-
 export const getReminders = (filterData) => {
   return dispatch => {
-    Api.get('/calendars', filterData)
+    calendarService.getReminderService(filterData)
       .then(res => {
         const reminders = []
-        if (res.data) {
-          res.data.forEach(element => {
+        if (res) {
+          res.forEach(element => {
             if (element !== null) {
               reminders.push(element);
             }
@@ -84,25 +81,22 @@ export const createReminderFailed = (error) => {
   };
 };
 
-
 export const createReminder = (reminderData) => {
   return dispatch => {
     calendarService.createReminderService(reminderData)
       .then((response) => {
         const filterData = {
-          params: {
-            filter: {
-              where: {
-                locationId: {
-                  like: reminderData.locationId
-                }
-              },
-              include: [
-                {
-                  relation: "location"
-                }
-              ]
-            }
+          filter: {
+            where: {
+              locationId: {
+                like: reminderData.locationId
+              }
+            },
+            include: [
+              {
+                relation: "location"
+              }
+            ]
           }
         }
         dispatch(getReminders(filterData));
@@ -112,7 +106,6 @@ export const createReminder = (reminderData) => {
       });
   };
 }
-
 
 export const deleteReminderSuccess = (id) => {
   return {
@@ -129,8 +122,10 @@ export const deleteReminderFailed = (error) => {
 };
 
 export const deleteReminder = (reminderId) => {
+  console.log(reminderId);
+
   return dispatch => {
-    Api.delete('/calendars/' + reminderId)
+    calendarService.deleteReminderService(reminderId)
       .then(response => {
         dispatch(deleteReminderSuccess(reminderId));
         dispatch(initReminders());

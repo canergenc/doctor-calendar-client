@@ -1,7 +1,5 @@
 import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
-import history from "../../hoc/Config/history"
-import { customVariables } from "../../hoc/Config/customVariables";
 
 
 const getUserInfo = () => {
