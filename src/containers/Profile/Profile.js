@@ -27,7 +27,10 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-   this.props.getUserInfo();
+    if(!this.props.email || !this.props.fullName || !this.props.title  || !this.props.deviceId ){
+      this.props.getUserInfo();
+    }
+  
   }
 
 
