@@ -14,7 +14,7 @@ const userMe = () => {
         url: `/users/me`,
         method: 'GET',
         data: null
-    }, true);
+    });
 };
 
 const userInfo = (id) => {
@@ -22,7 +22,7 @@ const userInfo = (id) => {
         url: `/users/${id}`,
         method: 'GET',
         data: null
-    }, true);
+    });
 };
 
 export const userService = {

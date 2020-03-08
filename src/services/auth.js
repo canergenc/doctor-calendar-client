@@ -8,7 +8,7 @@ export const login = (email, password) => {
             'email': email,
             'password': password
         }
-    });
+    },false);
 };
 
 export const register = (email, fullName, password, title) => {
@@ -22,7 +22,7 @@ export const register = (email, fullName, password, title) => {
             "deviceId": "QWE123",
             "title": title
         }
-    });
+    },false);
 };
 
 export const authService = {

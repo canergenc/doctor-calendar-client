@@ -42,22 +42,31 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      rememberMe: false,
       submitted: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleInputChange(event) {
+
+    console.log(this.state.rememberMe);
     this.setState({ submitted: false });
     const target = event.target;
     if (target.type === 'email')
       this.setState({ email: event.target.value });
-    else
+    else 
       this.setState({ password: event.target.value });
 
+    // this.setState({ rememberMe: event.target.value });
+
   }
+
+
+  
   handleSubmit(event) {
     event.preventDefault();
+    console.log(this.state);
     if (this.state.email && this.state.password) {
       if (this.state.password.length >= 8) {
         this.setState({ submitted: true });
@@ -66,7 +75,6 @@ class Login extends React.Component {
     }
 
 
-    // event.preventDefault();
   }
   // alertExample(value) {
   //   return (
@@ -85,11 +93,11 @@ class Login extends React.Component {
       <>
         <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
-           
+
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
                 {/* <small> </small> */}
-                <h1> <Badge color="light">DC CALENDAR GİRİŞ</Badge></h1>
+                <h1> <Badge color="light">ÜYE GİRİŞİ</Badge></h1>
               </div>
               <Form role="form" onSubmit={this.handleSubmit}>
 
@@ -138,6 +146,58 @@ class Login extends React.Component {
                   }
 
                 </FormGroup>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                {/* <Row className="my-4">
+                  <Col xs="12">
+                    <div className="custom-control custom-control-alternative custom-checkbox">
+                      <input
+                        // defaultChecked={this.state.rememberMe}
+                        defaultChecked={this.state.rememberMe}
+                        className="custom-control-input"
+                       
+                        //id="customCheckLogin"
+                        type="checkbox"
+                        // onChange={this.test}
+                      // onChange={this.handleInputChange}
+
+                      />
+                      <label
+                        className="custom-control-label"
+                        //htmlFor="customCheckLogin"
+                      >
+                        <span className="text-muted">
+                          Beni hatırla
+
+                        </span>
+                      </label>
+                    </div>
+                  </Col>
+                </Row> */}
 
                 {/* <div className="custom-control custom-control-alternative custom-checkbox">
                   <input

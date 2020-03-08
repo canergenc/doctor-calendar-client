@@ -8,16 +8,17 @@ const getUserInfo = () => {
 
         userService.userMe().then((response) => {
             console.log('userMe', response);
+            dispatch(userInfoSuccess(response))
 
-            const userId=response.id
+            // const userId=response.id
 
-            userService.userInfo(userId).then((response) => {
-                console.log('info', response);
-                dispatch(userInfoSuccess(response))
-            }).catch((error) => {
-                console.log(error);
-                dispatch(userInfoFailure(error));
-            });
+            // userService.userInfo(userId).then((response) => {
+            //     console.log('info', response);
+            //     dispatch(userInfoSuccess(response))
+            // }).catch((error) => {
+            //     console.log(error);
+            //     dispatch(userInfoFailure(error));
+            // });
 
         }).catch((error) => {
             dispatch(userInfoFailure(error));
@@ -39,13 +40,13 @@ const userInfoRequest = () => {
 const userInfoSuccess = (response) => {
     return {
         type: actionTypes.USERINFO_SUCCESS,
-        id: response.id,
-        email: response.email,
-        fullName: response.fullName,
-        title: response.title,
-        deviceId: response.deviceId,
-        createdDate: response.createdDate,
-        updatedDate: response.updatedDate
+        id: response.user.id,
+        email: response.user.email,
+        fullName: response.user.fullName,
+        title: response.user.title,
+        deviceId: response.user.deviceId,
+        createdDate: response.user.createdDate,
+        updatedDate: response.user.updatedDate
 
     };
 }
