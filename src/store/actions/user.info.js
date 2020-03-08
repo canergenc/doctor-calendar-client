@@ -7,7 +7,7 @@ const getUserInfo = () => {
         dispatch(userInfoRequest());
 
         userService.userMe().then((response) => {
-            console.log('userMe', response.id);
+            console.log('userMe', response);
 
             const userId=response.id
 

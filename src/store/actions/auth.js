@@ -13,14 +13,6 @@ const login = (email, password) => {
             dispatch(loginSuccess(response.token))
             dispatch(userInfoActions.getUserInfo());
             history.push('/admin/index');
-            // userService.userMe().then((response) => {
-            //     console.log('userMe', response.id);
-            //     dispatch(userInfoActions.getUserInfo(response.id));
-            // }).catch((error) => {
-            //     dispatch(loginFailure(error));
-            // });
-
-
         }).catch((error) => {
             dispatch(loginFailure(error));
         });
