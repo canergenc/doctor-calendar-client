@@ -31,7 +31,7 @@ export const getUsers = (filterData) => {
                 dispatch(fetchUsersFailed());
             });
     }
-}
+};
 
 export const searchUser = (filterKey, defaultUsers) => {
 

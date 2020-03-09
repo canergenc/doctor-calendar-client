@@ -93,7 +93,16 @@ class Location extends Component {
     }
 
     renderTableData() {
-        this.props.initLocations();
+        const filterData = {
+            filter: {
+                where: {
+                    groupId: {
+                        like: '5e53975e62398900983c869c'//this.props.groupId
+                    }
+                }
+            }
+        }
+        this.props.onInitLocations(filterData);
     }
 
     componentDidMount() {
@@ -115,14 +124,17 @@ class Location extends Component {
             locations = this.props.locations.map((location) => (
                 <tr key={location.id}>
                     <td>{location.name}</td>
+                    <td>
+                        <label className="radioLabelList" type="radioLabel" for={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
+                    </td>
                     <td className="text-right">
                         <UncontrolledDropdown>
                             <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
-                                <i className="fas fa-ellipsis-v"/>
+                                <i className="fas fa-ellipsis-v" />
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem onClick={() => this.toggleModal("editModal", location)}>Düzenle</DropdownItem>
-                                <DropdownItem onClick={() => this.toggleModal("deleteModal", location)}>Kaldır</DropdownItem>
+                                <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.toggleModal("editModal", location)}>Düzenle</DropdownItem>
+                                <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.toggleModal("deleteModal", location)}>Kaldır</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </td>
@@ -163,7 +175,7 @@ class Location extends Component {
 
                             <FormGroup>
 
-                                <InputGroup className="input-group-alternative mb-3">
+                                <InputGroup className="input-group-alternative mb-3 pt-3">
                                     <InputGroupAddon addonType="prepend">
                                         <InputGroupText>
                                             <i className="ni ni-palette" />
@@ -301,7 +313,7 @@ class Location extends Component {
                                             <h3 className="mb-0">Lokasyon Listesi</h3>
                                         </div>
                                         <div className="col-md-1">
-                                            <Button className="btn-icon btn-3" color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
+                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
                                                 </span>
@@ -315,7 +327,8 @@ class Location extends Component {
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col">Adı</th>
-                                            <th scope="col"/>
+                                            <th scope="col">Renk</th>
+                                            <th scope="col" />
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -385,13 +398,14 @@ class Location extends Component {
 const mapStateToProps = state => {
     return {
         locations: state.locations.locations,
+        groupId: state.auth.groupId,
         error: state.locations.error
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        initLocations: () => dispatch(actions.initLocations()),
+        onInitLocations: (filterData) => dispatch(actions.initLocations(filterData)),
         createLocation: (locationData) => dispatch(actions.createLocation(locationData)),
         deleteLocation: (locationId) => dispatch(actions.deleteLocation(locationId)),
         updateLocation: (locationId, locationData) => dispatch(actions.updateLocation(locationId, locationData)),

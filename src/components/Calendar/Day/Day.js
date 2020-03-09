@@ -10,16 +10,18 @@ class Day extends Component {
 
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
       if (this.props.reminders.length > 0) {
-
         let array = this.props.reminders;
         array.forEach(element => {
-          reminders.push(<Reminder
-            key={element.id}
-            description={element.description}
-            color={element.location ? element.location.colorCode : "#fff"}
-            onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
-          />
-          );
+          if (element.user) {
+
+            reminders.push(<Reminder
+              key={element.id}
+              name={element.user.fullName}
+              color={element.location ? element.location.colorCode : "#fff"}
+              onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
+            />
+            );
+          }
         });
       }
     }
@@ -33,7 +35,7 @@ class Day extends Component {
     let cssClasses = this.props.firstDayIndex
       ? `day first-index-${this.props.firstDayIndex}`
       : "day";
-    
+
     cssClasses += this.props.weekend ? " weekend" : "";
 
     return (

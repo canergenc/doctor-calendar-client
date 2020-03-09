@@ -15,36 +15,6 @@ export const fetchRemindersFailed = (error) => {
   };
 };
 
-export const initReminders = () => {
-  const filterData = {
-    filter: {
-      include: [
-        {
-          relation: "location"
-        }
-      ]
-    }
-  }
-  return dispatch => {
-    calendarService.getReminderService(filterData)
-      .then(res => {
-        const reminders = []
-        if (res) {
-          console.log(res)
-          res.forEach(element => {
-            if (element !== null) {
-              reminders.push(element);
-            }
-          });
-          dispatch(setReminders(reminders));
-        }
-      })
-      .catch(err => {
-        dispatch(fetchRemindersFailed());
-      });
-  }
-}
-
 export const getReminders = (filterData) => {
   return dispatch => {
     calendarService.getReminderService(filterData)
@@ -90,9 +60,18 @@ export const createReminder = (reminderData) => {
             where: {
               locationId: {
                 like: reminderData.locationId
+              },
+              groupId: {
+                like: '5e53975e62398900983c869c'
               }
             },
             include: [
+              {
+                relation: "group"
+              },
+              {
+                relation: "user"
+              },
               {
                 relation: "location"
               }
@@ -100,7 +79,7 @@ export const createReminder = (reminderData) => {
           }
         }
         dispatch(getReminders(filterData));
-        dispatch(createReminderSuccess(response.data, reminderData));
+        dispatch(createReminderSuccess(response, reminderData));
       }).catch((error) => {
         dispatch(createReminderFailed(error));
       });
@@ -122,13 +101,31 @@ export const deleteReminderFailed = (error) => {
 };
 
 export const deleteReminder = (reminderId) => {
-  console.log(reminderId);
-
   return dispatch => {
     calendarService.deleteReminderService(reminderId)
       .then(response => {
+        console.log("deleteReminder");
+        console.log(response);
+
         dispatch(deleteReminderSuccess(reminderId));
-        dispatch(initReminders());
+        const filterData = {
+          filter: {
+            where: {
+              groupId: {
+                like: "5e53975e62398900983c869c"
+              }
+            },
+            include: [
+              {
+                relation: "location"
+              },
+              {
+                relation: "user"
+              }
+            ]
+          }
+        }
+        dispatch(getReminders(filterData));
       })
       .catch(error => {
         dispatch(deleteReminderFailed(error));

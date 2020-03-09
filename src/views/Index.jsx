@@ -1,4 +1,4 @@
-import React,{Component} from "react";
+import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { Container, Row, Col } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
@@ -43,8 +43,7 @@ class Index extends Component {
             groupId: "5e53975e62398900983c869c",
             userId: user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-            description: user.fullName,
-            type: { "Nöbet": 0 }
+            type: 0
           }
           this.props.createReminder(reminder);
         }
@@ -108,4 +107,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Index,api));
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(Index, api));

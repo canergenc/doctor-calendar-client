@@ -27,7 +27,27 @@ class Calendar extends Component {
 
   componentDidMount() {
     console.log('[Calendar] componentDidMount');
-    this.props.onInitReminders();
+    const filterData = {
+      filter: {
+        where: {
+          groupId: {
+            like: '5e53975e62398900983c869c'
+          }
+        },
+        include: [
+          {
+            relation: "group"
+          },
+          {
+            relation: "user"
+          },
+          {
+            relation: "location"
+          }
+        ]
+      }
+    }
+    this.props.onInitReminders(filterData);
     this.createState();
   }
 
@@ -215,7 +235,7 @@ class Calendar extends Component {
     let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
 
     if (this.props.reminders) {
-      days = this.buildDays();
+      days = this.buildDays();      
     }
 
     return (
@@ -248,7 +268,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     deleteReminder: (reminderId) => dispatch(actions.deleteReminder(reminderId)),
-    onInitReminders: () => dispatch(actions.initReminders())
+    onInitReminders: (filterData) => dispatch(actions.getReminders(filterData))
   };
 }
 

@@ -39,7 +39,29 @@ class User extends Component {
         if (this.state.checkedRadio === userId) {
             this.setState({ checkedRadio: "nouserid" });
             id.target.checked = false;
-            this.props.initReminders();
+
+            const filterData = {
+                filter: {
+                    where: {
+                        groupId: {
+                            like: '5e53975e62398900983c869c'
+                        }
+                    },
+                    include: [
+                        {
+                            relation: "group"
+                        },
+                        {
+                            relation: "user"
+                        },
+                        {
+                            relation: "location"
+                        }
+                    ]
+                }
+            }
+
+            this.props.getReminders(filterData);
         }
         else {
             this.setState({ checkedRadio: userId });
@@ -50,9 +72,18 @@ class User extends Component {
                     where: {
                         userId: {
                             like: userId
+                        },
+                        groupId: {
+                            like: '5e53975e62398900983c869c'
                         }
                     },
                     include: [
+                        {
+                            relation: "group"
+                        },
+                        {
+                            relation: "user"
+                        },
                         {
                             relation: "location"
                         }
@@ -93,7 +124,7 @@ class User extends Component {
                             </div>
                         </Container>
                         {snapshot.isDragging && (
-                            <Clone>{this.props.title} {this.props.fullName}</Clone>
+                            <Clone>{this.props.user.title} {this.props.user.fullName}</Clone>
                         )}
                     </React.Fragment>
                 )}
@@ -112,7 +143,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        initReminders: () => dispatch(actions.initReminders()),
         getReminders: (filterData) => dispatch(actions.getReminders(filterData)),
         setActiveLocationId: (locationId) => dispatch(actions.setActiveLocationId(locationId))
     }
