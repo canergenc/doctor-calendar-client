@@ -13,16 +13,16 @@ $colors: (
   pink: #E03997,
 
   primary:#5e72e4,
-secondary:#f7fafc,
-success:#2dce89,
-info:#11cdef,
-warning:#fb6340,
-danger:#f5365c,
-light:#adb5bd,
-dark:#bfc0c2,
-default:#172b4d,
-white:#fff,
-darker:black
+  secondary:#f7fafc,
+  success:#2dce89,
+  info:#11cdef,
+  warning:#fb6340,
+  danger:#f5365c,
+  light:#adb5bd,
+  dark:#bfc0c2,
+  default:#172b4d,
+  white:#fff,
+  darker:black
 );
 
 * {
@@ -58,6 +58,24 @@ darker:black
     width: 100%;
     height: 100%;
     transition: transform .2s ease-in-out;
+    @each $name, $value in $colors {
+      &.#{$name} {
+        background: $value;
+      }
+    }
+  }
+}
+
+.radioLabelList {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+
+  .radioSpanList {
+    display: block;
+    width: 100%;
+    height: 100%;
     @each $name, $value in $colors {
       &.#{$name} {
         background: $value;
