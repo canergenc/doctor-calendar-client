@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import api from '../../api';
+import {locationService} from '../../services/location';
 
 export const setLocations = (locations) => {
     return {
@@ -7,7 +7,6 @@ export const setLocations = (locations) => {
         locations: locations
     };
 };
-
 
 export const fetchLocationsFailed = (error) => {
     return {
@@ -23,12 +22,12 @@ export const setActiveLocationId = (locationId) => {
     };
 };
 
-export const initLocations = () => {
+export const initLocations = (filterData) => {
     return dispatch => {
-        api.get('/locations')
+        locationService.getLocationsService(filterData)
             .then(res => {
                 const locations = [];
-                res.data.forEach(element => {
+                res.forEach(element => {
                     locations.push({
                         ...element
                     });
@@ -43,9 +42,18 @@ export const initLocations = () => {
 
 export const deleteLocation = (locationId) => {
     return dispatch => {
-        api.delete('locations/' + locationId).then(result => {
+        locationService.deleteLocationService(locationId).then(result => {
             dispatch(deleteLocationSuccess(locationId));
-            dispatch(initLocations());
+            const filterData = {
+                filter: {
+                    where: {
+                        groupId: {
+                            like: ""
+                        }
+                    }
+                }
+            };
+            dispatch(initLocations(filterData));
         }).catch(error => {
             dispatch(deleteLocationFailed(error));
         });
@@ -68,10 +76,19 @@ export const deleteLocationFailed = (error) => {
 
 export const createLocation = (locationData) => {
     return dispatch => {
-        api.post('/locations', locationData)
+        locationService.createLocationService(locationData)
             .then(response => {
                 dispatch(createLocationSuccess(response.data.id, locationData));
-                dispatch(initLocations());
+                const filterData = {
+                    filter: {
+                        where: {
+                            groupId: {
+                                like: ""
+                            }
+                        }
+                    }
+                };
+                dispatch(initLocations(filterData));
             })
             .catch(error => {
                 dispatch(createLocationFailed(error))
@@ -96,10 +113,19 @@ export const createLocationFailed = (error) => {
 
 export const updateLocation = (locationId, locationData) => {
     return dispatch => {
-        api.post('/locations/' + locationId, locationData)
+        locationService.updateLocationService(locationId, locationData)
             .then(response => {
                 dispatch(updateLocationSuccess(response.data.id, locationData));
-                dispatch(initLocations());
+                const filterData = {
+                    filter: {
+                        where: {
+                            groupId: {
+                                like: ""
+                            }
+                        }
+                    }
+                };
+                dispatch(initLocations(filterData));
             })
             .catch(error => {
                 dispatch(updateLocationFailed(error))
@@ -121,6 +147,3 @@ export const updateLocationFailed = (error) => {
         error: error
     };
 };
-
-
-

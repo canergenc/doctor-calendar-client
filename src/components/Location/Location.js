@@ -76,12 +76,21 @@ class Location extends Component {
                 where: {
                     locationId: {
                         like: locationId
+                    },
+                    groupId:{
+                        like:"5e53975e62398900983c869c"
                     }
                 },
                 include: [
                     {
+                        relation: "group"
+                      },
+                      {
+                        relation: "user"
+                      },
+                      {
                         relation: "location"
-                    }
+                      }
                 ]
             }
         }
@@ -96,7 +105,16 @@ class Location extends Component {
 
     componentDidMount() {
         console.log("[Location] componentDidMount");
-        this.props.onInitLocations();
+        const filterData = {
+            filter: {
+                where: {
+                    groupId: {
+                        like: '5e53975e62398900983c869c'//this.props.groupId
+                    }
+                }
+            }
+        }
+        this.props.onInitLocations(filterData);
     }
 
     render() {
@@ -113,7 +131,7 @@ class Location extends Component {
             wheel
         } = this.state;
 
-        let scrollMenu = this.props.error ? "Gruplar yüklenemedi" : "Gruplar yükleniyor...";
+        let scrollMenu = this.props.error ? "Servisler yüklenemedi" : "Servisler yükleniyor...";
         if (this.props.locations) {
             let menu = this.createMenu(this.props.locations, this.state.selected);
             scrollMenu = <ScrollMenu
@@ -145,13 +163,14 @@ const mapStateToProps = state => {
     return {
         locations: state.locations.locations,
         activeLocationId: state.locations.activeLocationId,
+        groupId: state.auth.groupId,
         error: state.locations.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInitLocations: () => dispatch(actions.initLocations()),
+        onInitLocations: (filterData) => dispatch(actions.initLocations(filterData)),
         setActiveLocationId: (locationId) => dispatch(actions.setActiveLocationId(locationId)),
         getReminders: (filterData) => dispatch(actions.getReminders(filterData))
     }

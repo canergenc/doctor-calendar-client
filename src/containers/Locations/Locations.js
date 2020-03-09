@@ -93,7 +93,16 @@ class Location extends Component {
     }
 
     renderTableData() {
-        this.props.initLocations();
+        const filterData = {
+            filter: {
+                where: {
+                    groupId: {
+                        like: '5e53975e62398900983c869c'//this.props.groupId
+                    }
+                }
+            }
+        }
+        this.props.onInitLocations(filterData);
     }
 
     componentDidMount() {
@@ -118,7 +127,7 @@ class Location extends Component {
                     <td className="text-right">
                         <UncontrolledDropdown>
                             <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
-                                <i className="fas fa-ellipsis-v"/>
+                                <i className="fas fa-ellipsis-v" />
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                                 <DropdownItem onClick={() => this.toggleModal("editModal", location)}>Düzenle</DropdownItem>
@@ -315,7 +324,7 @@ class Location extends Component {
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col">Adı</th>
-                                            <th scope="col"/>
+                                            <th scope="col" />
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -385,13 +394,14 @@ class Location extends Component {
 const mapStateToProps = state => {
     return {
         locations: state.locations.locations,
+        groupId: state.auth.groupId,
         error: state.locations.error
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        initLocations: () => dispatch(actions.initLocations()),
+        onInitLocations: (filterData) => dispatch(actions.initLocations(filterData)),
         createLocation: (locationData) => dispatch(actions.createLocation(locationData)),
         deleteLocation: (locationId) => dispatch(actions.deleteLocation(locationId)),
         updateLocation: (locationId, locationData) => dispatch(actions.updateLocation(locationId, locationData)),
