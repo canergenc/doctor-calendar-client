@@ -42,7 +42,7 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      rememberMe: false,
+      rememberMe: true,
       submitted: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -63,6 +63,11 @@ class Login extends React.Component {
   }
 
 
+  handleCheckBoxInput(event) {
+    this.setState({rememberMe:!this.state.rememberMe})
+  }
+
+
   
   handleSubmit(event) {
     event.preventDefault();
@@ -70,7 +75,7 @@ class Login extends React.Component {
     if (this.state.email && this.state.password) {
       if (this.state.password.length >= 8) {
         this.setState({ submitted: true });
-        this.props.login(this.state.email, this.state.password);
+        this.props.login(this.state.email, this.state.password,this.state.rememberMe);
       }
     }
 
@@ -146,6 +151,33 @@ class Login extends React.Component {
                   }
 
                 </FormGroup>
+
+
+              
+                <Row className="my-4">
+                  <Col xs="12">
+                    <div className="custom-control custom-control-alternative custom-checkbox">
+                      <input
+                        className="custom-control-input"
+                        id="customCheckRegister"
+                        type="checkbox"
+                        checked={this.state.rememberMe?true:false}
+                        value={this.state.rememberMe}
+                        onChange={(e)=>this.handleCheckBoxInput(e)}
+                      />
+                      <label
+                        className="custom-control-label"
+                        htmlFor="customCheckRegister"
+                      >
+                        <span className="text-muted">
+                          Beni hatırla
+                          
+                        </span>
+                      </label>
+                    </div>
+                  </Col>
+                </Row>
+
 
 
 
@@ -257,7 +289,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    login: (email, password) => dispatch(actions.authActions.login(email, password)),
+    login: (email, password,isRememberMe) => dispatch(actions.authActions.login(email, password,isRememberMe)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
