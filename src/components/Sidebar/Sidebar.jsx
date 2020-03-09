@@ -234,14 +234,14 @@ class Sidebar extends React.Component {
             {/* Divider */}
             <hr className="my-3" />
             {/* Navigation */}
-            <Nav className="mb-md-3" navbar>
+            {/* <Nav className="mb-md-3" navbar>
               <NavItem>
                 <NavLink href="https://demos.creative-tim.com/argon-dashboard-react/documentation/overview?ref=adr-admin-sidebar">
                   <i className="ni ni-spaceship" />
                   Send Feedback
                 </NavLink>
               </NavItem>
-            </Nav>
+            </Nav> */}
           </Collapse>
         </Container>
       </Navbar>

@@ -7,9 +7,11 @@ import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
 import AdminFooter from "components/Footers/AdminFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
-import routes from "routes.js";
+// import routes from "routes.js";
+
 import { customVariables } from "../hoc/Config/customVariables";
 import history from "../hoc/Config/history";
+import routes from "../hoc/Config/admin.routes";
 
 class Admin extends React.Component {
 
@@ -26,6 +28,7 @@ class Admin extends React.Component {
       if (!token) {
         return history.push("/auth/login");
       } else {
+        console.log(prop);
         if (prop.layout === "/admin") {
           return (
             <Route
