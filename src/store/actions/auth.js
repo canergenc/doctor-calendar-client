@@ -5,15 +5,16 @@ import { customVariables } from "../../hoc/Config/customVariables";
 import { userInfoActions } from "./user.info"
 
 
-const login = (email, password) => {
+const login = (email, password, isRememberMe) => {
     return dispatch => {
         dispatch(loginRequest());
         authService.login(email, password).then((response) => {
             localStorage.setItem(customVariables.TOKEN, response.token);
+            localStorage.setItem(customVariables.REMEMBERME,isRememberMe);
             dispatch(loginSuccess(response.token))
             dispatch(userInfoActions.getUserInfo());
             history.push('/admin/index');
-            
+
 
         }).catch((error) => {
             dispatch(loginFailure(error));
