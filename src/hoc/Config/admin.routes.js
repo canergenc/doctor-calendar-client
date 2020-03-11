@@ -1,8 +1,6 @@
 import Index from "../../views/Index";
 import Profile from "../../containers/Profile/Profile.js";
-import Register from "../../containers/Register/Register.js";
 import Location from "../../containers/Locations/Locations.js";
-import Login from "../../containers/Login/Login.js";
 
 var routes = [
     {

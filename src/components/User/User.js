@@ -99,8 +99,8 @@ class User extends Component {
 
         return (
             <Draggable
-                key={this.props.id}
-                draggableId={this.props.id}
+                key={this.props.user.id}
+                draggableId={this.props.user.id}
                 index={this.props.index}>
                 {(provided, snapshot) => (
                     <React.Fragment>

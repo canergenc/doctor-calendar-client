@@ -219,8 +219,16 @@ class Calendar extends Component {
     if (this.props.reminders) {
       const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const fileExtension = '.xlsx';
+      let excelData = {}
+      let locations = [];
+      this.props.reminders.forEach(element => {
+        if (!locations.includes(element.location.name)) {
+          locations.push(element.location.name);
+        }
+      });
 
-      const ws = XLSX.utils.json_to_sheet(this.props.reminders);
+
+      const ws = XLSX.utils.json_to_sheet(excelData);
       const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: fileType });
@@ -235,7 +243,7 @@ class Calendar extends Component {
     let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
 
     if (this.props.reminders) {
-      days = this.buildDays();      
+      days = this.buildDays();
     }
 
     return (

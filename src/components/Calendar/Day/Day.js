@@ -12,6 +12,10 @@ class Day extends Component {
       if (this.props.reminders.length > 0) {
         let array = this.props.reminders;
         array.forEach(element => {
+          console.log("build reminder");
+          
+          console.log(element);
+          
           if (element.user) {
 
             reminders.push(<Reminder

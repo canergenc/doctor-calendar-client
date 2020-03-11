@@ -26,7 +26,6 @@ import userInfoReducer from "./store/reducers/user.info";
 import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
 import history from "./hoc/Config/history";
-import Login from "./containers/Login/Login";
 
 // Redux Chrome Devtool Extension
 const composeEnhancers =
