@@ -25,8 +25,34 @@ const userInfo = (id) => {
     });
 };
 
+const createUserService = (data) => {
+    return request({
+        url: '/users',
+        method: 'POST',
+        data: data
+    });
+};
+
+const updateUserService = (id, data) => {
+    return request({
+        url: '/users/' + id,
+        method: 'PUT',
+        data: data
+    });
+};
+
+const deleteUserService = (id) => {
+    return request({
+        url: '/users/' + id,
+        method: 'DELETE'
+    })
+}
+
 export const userService = {
     getUsers,
     userMe,
-    userInfo
+    userInfo,
+    createUserService,
+    updateUserService,
+    deleteUserService
 };

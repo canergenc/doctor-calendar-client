@@ -1,6 +1,7 @@
 import Index from "../../views/Index";
 import Profile from "../../containers/Profile/Profile.js";
 import Location from "../../containers/Locations/Locations.js";
+import Person from "../../containers/Persons/Persons.js";
 
 var routes = [
     {
@@ -22,6 +23,13 @@ var routes = [
         name: "Lokasyon Tanımla",
         icon: "ni ni-shop text-primary",
         component: Location,
+        layout: "/admin"
+    },
+    {
+        path: "/persons",
+        name: "Kullanıcı Tanımla",
+        icon: "ni ni-collection text-primary",
+        component: Person,
         layout: "/admin"
     },
     // {
