@@ -1,8 +1,8 @@
 import Index from "../../views/Index";
 import Profile from "../../containers/Profile/Profile";
 import Location from "../../containers/Locations/Locations";
-import Login from "../../containers/Login/Login";
 import Person from "../../containers/Persons/Persons.js";
+import Login from "../../components/Login/Login.js"
 import register from "../../containers/Register/Register";
 
 
