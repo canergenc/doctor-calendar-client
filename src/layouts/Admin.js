@@ -26,7 +26,7 @@ class Admin extends React.Component {
       let token = localStorage.getItem(customVariables.TOKEN);
       let isRememberMe = localStorage.getItem(customVariables.REMEMBERME);
       console.log(isRememberMe);
-      if (!token) {
+      if (!token ) {
         return history.push("/auth/login");
       } else {
         console.log(prop);

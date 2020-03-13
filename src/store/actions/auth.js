@@ -9,9 +9,10 @@ const login = (email, password, isRememberMe) => {
     return dispatch => {
         dispatch(loginRequest());
         authService.login(email, password).then((response) => {
-            localStorage.setItem(customVariables.TOKEN, response.token);
+            console.log('LOGİN',response);
+            localStorage.setItem(customVariables.TOKEN, response.tokenModel.token);
             localStorage.setItem(customVariables.REMEMBERME,isRememberMe);
-            dispatch(loginSuccess(response.token))
+            dispatch(loginSuccess(response.tokenModel))
             dispatch(userInfoActions.getUserInfo());
             history.push('/admin/index');
 
@@ -29,12 +30,16 @@ const loginRequest = () => {
     };
 };
 
-const loginSuccess = (token) => {
+const loginSuccess = (tokenModel) => {
 
 
     return {
         type: actionTypes.LOGIN_SUCCESS,
-        token: token
+        token: tokenModel.token,
+        iat:tokenModel.iat,
+        exp:tokenModel.exp,
+        userId:tokenModel.userId
+
     };
 }
 

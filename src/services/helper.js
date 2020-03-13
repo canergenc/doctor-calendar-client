@@ -18,6 +18,20 @@ const getErrorMessage = (err) => {
     }
 }
 
+
+const getGroupId = () => {
+    return localStorage.getItem("");
+}
+
+
+
+const uniqGroupName = () => {
+    return "";
+}
+
 export const helperService = {
-    getErrorMessage
+    getErrorMessage,
+    getGroupId,
+    uniqGroupName
+
 };

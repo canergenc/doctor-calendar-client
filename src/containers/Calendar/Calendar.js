@@ -11,6 +11,8 @@ import * as actions from '../../store/actions/index';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import Api from "../../api";
 
+import { helperService } from "../../services/helper";
+
 import "moment/locale/tr";
 import "./Calendar.scss";
 
@@ -269,12 +271,14 @@ const mapStateToProps = state => {
   return {
     reminders: state.reminders.reminders,
     locations: state.locations.locations,
-    error: state.reminders.error
+    error: state.reminders.error,
+
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+
     deleteReminder: (reminderId) => dispatch(actions.deleteReminder(reminderId)),
     onInitReminders: (filterData) => dispatch(actions.getReminders(filterData))
   };
