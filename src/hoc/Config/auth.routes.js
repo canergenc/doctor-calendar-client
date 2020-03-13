@@ -2,6 +2,7 @@ import Index from "../../views/Index";
 import Profile from "../../containers/Profile/Profile";
 import Location from "../../containers/Locations/Locations";
 import Login from "../../containers/Login/Login";
+import Person from "../../containers/Persons/Persons.js";
 import register from "../../containers/Register/Register";
 
 
@@ -27,6 +28,13 @@ var routes = [
         name: "Lokasyon Tanımla",
         icon: "ni ni-shop text-primary",
         component: Location,
+        layout: "/admin"
+    },
+    {
+        path: "/persons",
+        name: "Kullanıcı Tanımla",
+        icon: "ni ni-shop text-primary",
+        component: Person,
         layout: "/admin"
     },
     {

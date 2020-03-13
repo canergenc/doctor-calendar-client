@@ -10,7 +10,6 @@ import * as XLSX from 'xlsx';
 import * as actions from '../../store/actions/index';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import Api from "../../api";
-
 import "moment/locale/tr";
 import "./Calendar.scss";
 
@@ -214,18 +213,94 @@ class Calendar extends Component {
   deleteReminderHandler = (reminderId) => {
     this.props.deleteReminder(reminderId);
   }
-
+  sortExpenses() {
+    this.expenses = this.expenses.slice().sort(
+      (a, b) => {
+        if (a.date > b.date) {
+          return -1;
+        }
+        if (a.date < b.date) {
+          return 1;
+        }
+        return 0;
+      }
+    );
+  }
   downloadExcelHandler = () => {
     if (this.props.reminders) {
       const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const fileExtension = '.xlsx';
-      let excelData = {}
-      let locations = [];
+      let testData = [
+        {
+          "date": "11.11.2020",
+          "Acil": "Gökhan Kurt",
+          "Şefaltı": "Can Mercan",
+          "1. Poliklinik": "Caner Genç",
+          "": "Ali Rıza Temel"
+        },
+        {
+          "date": "12.11.2020",
+          "Acil": "Ali Rıza Temel",
+          "Şefaltı": "Caner Genç",
+          "1. Poliklinik": "Gökhan Kurt",
+          "": "Can Mercan"
+        }
+      ]
+
+      let excelData = [];
+      let dates = [];
       this.props.reminders.forEach(element => {
-        if (!locations.includes(element.location.name)) {
-          locations.push(element.location.name);
+        if (!dates.includes(moment(element.date).format("YYYY-MM-DD"))) {
+          dates.push(moment(element.date).format("YYYY-MM-DD"));
         }
       });
+
+
+      dates.sort(function compare(a, b) {
+        var dateA = new Date(a);
+        var dateB = new Date(b);
+        return dateA - dateB;
+      });
+      console.log(moment(dates[0]).format("DD.MM.YYYY"));
+
+      console.log(dates);
+      for (let i = 0; i < dates.length; i++) {
+        let firstAdd = true;
+        this.props.reminders.forEach(element => {
+          if (element.location && element.user) {
+            const locationName = element.location.name;
+            if (moment(element.date).format("DD.MM.YYYY") === moment(dates[i]).format("DD.MM.YYYY")) {
+              if (firstAdd) {
+                excelData.push({
+                  "Tarih": moment(element.date).format("DD.MM.YYYY"),
+                  [locationName]: element.user.fullName
+                });
+                firstAdd = false;
+              }
+              else {
+                if (excelData[excelData.length - 1][locationName]) {
+                  let isAddedColumn = false;
+                  let columnNameIndex = 1;
+                  while (!isAddedColumn) {
+                    if (excelData[excelData.length - 1][locationName + "_" + columnNameIndex]) {
+                      columnNameIndex += 1;
+                    }
+                    else {
+                      excelData[excelData.length - 1][locationName + "_" + columnNameIndex] = element.user.fullName;
+                      isAddedColumn = true;
+                    }
+                  }
+                }
+                else {
+                  excelData[excelData.length - 1][locationName] = element.user.fullName;
+                }
+              }
+            }
+          }
+        });
+      }
+
+      console.log(excelData);
 
 
       const ws = XLSX.utils.json_to_sheet(excelData);

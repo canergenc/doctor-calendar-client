@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import {userService} from '../../services/user';
+import { userService } from '../../services/user';
 
 export const setUsers = (users, defaultUsers) => {
     return {
@@ -21,9 +21,11 @@ export const getUsers = (filterData) => {
             .then(res => {
                 const users = [];
                 res.forEach(element => {
-                    users.push({
-                        ...element
-                    });
+                    if (element.user) {
+                        users.push({
+                            ...element
+                        });
+                    }
                 });
                 dispatch(setUsers(users, users));
             })
@@ -34,10 +36,8 @@ export const getUsers = (filterData) => {
 };
 
 export const searchUser = (filterKey, defaultUsers) => {
-
     let users = null;
     if (filterKey.length > 2) {
-
         if (filterKey && filterKey.trim() !== "") {
             users = defaultUsers
                 .filter(row => {
@@ -53,5 +53,119 @@ export const searchUser = (filterKey, defaultUsers) => {
     }
 
     return dispatch => { dispatch(setUsers(users, defaultUsers)); }
-
 }
+
+
+export const deleteUser = (userId) => {
+    return dispatch => {
+        userService.deleteUserService(userId).then(result => {
+            dispatch(deleteUserSuccess(userId));
+            const filterData = {
+                filter: {
+                    where: {
+                        groupId: {
+                            like: "5e53975e62398900983c869c"
+                        }
+                    },
+                    include: [
+                        { relation: "user" }
+                    ]
+                }
+            };
+            dispatch(getUsers(filterData));
+        }).catch(error => {
+            dispatch(deleteUserFailed(error));
+        });
+    };
+};
+
+export const deleteUserSuccess = (id) => {
+    return {
+        type: actionTypes.DELETE_USER,
+        userId: id
+    };
+};
+
+export const deleteUserFailed = (error) => {
+    return {
+        type: actionTypes.DELETE_USER_FAIL,
+        error: error
+    };
+};
+
+export const createUser = (userData) => {
+    return dispatch => {
+        userService.createUserService(userData)
+            .then(response => {
+                dispatch(createUserSuccess(response.data.id, userData));
+                const filterData = {
+                    filter: {
+                        where: {
+                            groupId: {
+                                like: "5e53975e62398900983c869c"
+                            }
+                        },
+                        include: [
+                            { relation: "user" }
+                        ]
+                    }
+                };
+                dispatch(getUsers(filterData));
+            })
+            .catch(error => {
+                dispatch(createUserFailed(error))
+            });
+    };
+};
+
+export const createUserSuccess = (id, userData) => {
+    return {
+        type: actionTypes.CREATE_USER_SUCCESS,
+        userId: id,
+        userData: userData
+    };
+};
+
+export const createUserFailed = (error) => {
+    return {
+        type: actionTypes.CREATE_USER_FAIL,
+        error: error
+    };
+};
+
+export const updateUser = (userId, userData) => {
+    return dispatch => {
+        userService.updateUserService(userId, userData)
+            .then(response => {
+                dispatch(updateUserSuccess(response.data.id, userData));
+                const filterData = {
+                    filter: {
+                        where: {
+                            groupId: {
+                                like: "5e53975e62398900983c869c"
+                            }
+                        }
+                    }
+                };
+                dispatch(getUsers(filterData));
+            })
+            .catch(error => {
+                dispatch(updateUserFailed(error))
+            });
+    };
+};
+
+export const updateUserSuccess = (id, userData) => {
+    return {
+        type: actionTypes.UPDATE_USER_SUCCESS,
+        userId: id,
+        userData: userData
+    };
+};
+
+export const updateUserFailed = (error) => {
+    return {
+        type: actionTypes.UPDATE_USER_FAIL,
+        error: error
+    };
+};
