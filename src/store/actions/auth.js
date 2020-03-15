@@ -1,6 +1,5 @@
 import { authService } from "../../services/auth"
 import * as actionTypes from "./actionTypes";
-import history from "../../hoc/Config/history"
 import { customVariables } from "../../hoc/Config/customVariables";
 import { userInfoActions } from "./user.info"
 
@@ -11,10 +10,11 @@ const login = (email, password, isRememberMe) => {
         authService.login(email, password).then((response) => {
             console.log('LOGİN',response);
             localStorage.setItem(customVariables.TOKEN, response.tokenModel.token);
+            localStorage.setItem(customVariables.USERID, response.tokenModel.userId);
             localStorage.setItem(customVariables.REMEMBERME,isRememberMe);
             dispatch(loginSuccess(response.tokenModel))
-            dispatch(userInfoActions.getUserInfo());
-            history.push('/admin/index');
+            dispatch(userInfoActions.getUserInfoByAuth());
+            
 
 
         }).catch((error) => {

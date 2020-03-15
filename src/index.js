@@ -14,12 +14,13 @@ import "assets/scss/argon-dashboard-react.scss";
 
 import AdminLayout from "layouts/Admin";
 import AuthLayout from "layouts/Auth";
+import SplashLayout from "layouts/Splash";
 
 // Reducers
 import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
-import groupsReducer from "./store/reducers/groups";
+import userGroupsReducer from "./store/reducers/user.groups";
 import userInfoReducer from "./store/reducers/user.info";
 
 // import alertReducer from  "./store/reducers/alert.reducer";
@@ -40,8 +41,8 @@ const rootReducer = combineReducers({
   // alertReducer:alertReducer,
   auth: authenticationReducer,
   register: registerReducer,
-  groups: groupsReducer,
-  userInfo:userInfoReducer
+  userGroups: userGroupsReducer,
+  userInfo: userInfoReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
@@ -50,9 +51,11 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Switch>
-        <Route path="/admin" render={props => <AdminLayout  {...props} />} /> 
+        <Route path="/admin" render={props => <AdminLayout  {...props} />} />
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
-       
+        <Route path="/splash" render={props => <SplashLayout {...props} />} />
+
+
 
 
         <Redirect from="/" to="/admin/index" />

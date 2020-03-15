@@ -7,13 +7,12 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SET_GROUPS:
+        case actionTypes.CREATEUSERGROUP_SUCCESS:
             return {
                 ...state,
-                groups: action.groups,
                 error: false
             };
-        case actionTypes.FETCH_GROUPS_FAILED:
+        case actionTypes.CREATEUSERGROUP_FAILURE:
             return {
                 ...state,
                 error: true

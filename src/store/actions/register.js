@@ -1,8 +1,7 @@
 import { authService } from "../../services/auth";
 import { groupService } from "../../services/group";
 import { userGroupService } from "../../services/user.group";
-
-
+import history from "../../hoc/Config/history"
 import * as actionTypes from "./actionTypes";
 
 
@@ -12,32 +11,10 @@ const register = (email, fullName, title, password) => {
         authService.register(email, fullName, password, title)
             .then((response) => {
                 dispatch(registerSuccess(response));
-                var userId = response.id;
-                var timestamp = new Date().getUTCMilliseconds();
-                console.log('timestamp', timestamp);
-                groupService.createGroup('GRUP_' + timestamp)
-                    .then((response) => {
-                        console.log('cg-s', response);
-                        var groupId = response.id;
-                        userGroupService.createUserGroup(userId, groupId)
-                            .then()
-                            .catch((error) => {
-                                dispatch(registerFailure(error));
-                            });
-                    })
-                    .catch((error) => {
-                        console.log('cg-e', error);
-                        dispatch(registerFailure(error));
-                    })
-
-                //Dönen modelden UserId alacağım,    ---- > Id- UserId
-
-                //CreateGroup   --> Id -> GroupId
-
-
-                // CreateuserGroup ()
-
-
+                history.push({
+                    pathname: '/auth/login',
+                    state: { email: email}
+                })
 
             }).catch((error) => {
                 dispatch(registerFailure(error));

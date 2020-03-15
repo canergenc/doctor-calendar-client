@@ -3,7 +3,7 @@ export { initLocations, setActiveLocationId, createLocation, updateLocation, del
 export { getUsers, searchUser, createUser, updateUser, deleteUser } from "./users";
 export { authActions } from "./auth";
 export { registerActions } from "./register";
-export { initGroups } from "./groups";
+export { userGroupActions } from "./user.groups";
 export { userInfoActions } from "./user.info";
 
 
