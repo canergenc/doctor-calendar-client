@@ -58,7 +58,7 @@ ReactDOM.render(
 
 
 
-        <Redirect from="/" to="/admin/index" />
+        <Redirect from="/" to="/splash/location" />
 
       </Switch>
     </Router>
