@@ -23,6 +23,8 @@ import locationsReducer from "./store/reducers/locations";
 import userGroupsReducer from "./store/reducers/user.groups";
 import userInfoReducer from "./store/reducers/user.info";
 
+import bulkLocationReducer from "./store/reducers/bulk-location";
+
 // import alertReducer from  "./store/reducers/alert.reducer";
 import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
@@ -42,7 +44,8 @@ const rootReducer = combineReducers({
   auth: authenticationReducer,
   register: registerReducer,
   userGroups: userGroupsReducer,
-  userInfo: userInfoReducer
+  userInfo: userInfoReducer,
+  bulkLocation:bulkLocationReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

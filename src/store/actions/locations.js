@@ -1,5 +1,66 @@
 import * as actionTypes from './actionTypes';
-import {locationService} from '../../services/location';
+import { locationService } from '../../services/index';
+import history from "../../hoc/Config/history"
+
+
+
+
+export const createBulkLocaition = (listOfLocaition) => {
+    return dispatch => {
+        dispatch(createBulkLocaitionRequest());
+
+        locationService.createBulkLocationService(listOfLocaition)
+            .then((response) => {
+                //Success
+                console.log(response);
+                dispatch(createBulkLocaitionSuccess(response))
+                history.push({
+                    pathname: '/admin/index'
+                })
+
+            })
+            .catch((error) => {
+                console.log('HATA',error);
+                dispatch(createBulkLocaitionFailure(error));
+            });
+    }
+}
+
+
+export const createBulkLocaitionRequest = () => {
+    return {
+        type: actionTypes.BULKLOCATION_REQUEST,
+    };
+};
+
+export const createBulkLocaitionSuccess = (response) => {
+
+
+    return {
+        type: actionTypes.BULKLOCATION_SUCCESS,
+        status: true
+    };
+}
+
+
+export const createBulkLocaitionFailure = (err) => {
+    return {
+        type: actionTypes.BULKLOCATION_FAILURE,
+        erorObj: err,
+        status: false,
+        statusCode: err.data.error.statusCode, // BadRequestError
+        statusText: err.data.error.message,  // Invalid email or password
+        statusName: err.data.error.name,   // BadRequestError
+    };
+}
+
+
+
+
+//---------------------------------
+
+
+
 
 export const setLocations = (locations) => {
     return {

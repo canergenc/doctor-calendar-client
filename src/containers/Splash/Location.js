@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { helperService } from '../../services/helper'
-import React  from "react";
+import React from "react";
 import * as actions from '../../store/actions/index';
 
 // reactstrap components
@@ -12,6 +12,14 @@ import {
     CardBody,
     FormGroup,
     Form,
+    Container,
+    Label,
+    DropdownMenu,
+    DropdownItem,
+    UncontrolledDropdown,
+    DropdownToggle,
+    ListGroup,
+    ListGroupItem,
     Input,
     InputGroupAddon,
     InputGroupText,
@@ -24,20 +32,29 @@ class LocationSplash extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            groupId: '',
             locationInput: '',
-            listOfLocaiton: [
+            listOfLocation: [
 
             ]
         };
 
+        // this.removeItem=this.removeItem.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.saveChanges = this.saveChanges.bind(this);
+
     }
 
     addItemToLocationList() {
-        let lists = this.state.listOfLocaiton;
-        lists.push({ id: lists.length + 1, context: this.state.locationInput, modifier: "list-group-item list-group-item-danger" });
-        this.setState({ listOfLocaiton: lists });
-        this.setState({ locationInput: '' });
+        let lists = this.state.listOfLocation;
+        if (this.state.locationInput && this.state.locationInput.length > 0) {
+
+            lists.push({ id: lists.length, context: this.state.locationInput, modifier: helperService.getColorName(lists.length) });
+            this.setState({ listOfLocaiton: lists });
+            this.setState({ locationInput: '' });
+            console.log(lists);
+        }
+
 
     }
 
@@ -46,8 +63,48 @@ class LocationSplash extends React.Component {
         console.log(target);
         this.setState({ locationInput: event.target.value });
 
+    }
+
+    removeItem(item) {
+        console.log(item)
+        let lists = this.state.listOfLocation;
+        const index = lists.indexOf(item);
+        if (index > -1) {
+            lists.splice(index, 1);
+            this.setState({ listOfLocation: lists });
+            this.setState({ locationInput: '' });
+        }
+    }
 
 
+
+    //function Typescirpt EC6
+    saveChanges() {
+
+        let result = [];
+        let list = this.state.listOfLocation;
+        list.forEach(loc => {
+            let locModel = {
+                name: loc.context,
+                colorCode: loc.modifier,
+                groupId: this.state.groupId
+            }
+            result.push(locModel);
+        });
+
+        console.log(result);
+        this.props.createBulkLocation(result);
+
+
+    }
+
+    componentDidMount() {
+        // this.props
+            //location
+        if (this.props.location.state && this.props.location.state.groupId) {
+            console.log('hadi bakalım',this.props.location.state.groupId);
+            this.setState({ groupId: this.props.location.state.groupId });
+        }
     }
 
 
@@ -59,105 +116,87 @@ class LocationSplash extends React.Component {
 
         return (
             <>
+                <Container style={{ marginLeft: '30%', marginRight: '30%' }}>
+                    <Row>
+                        <Col >
+                            <Label >Lütfen en az bir lokasyon giriniz</Label>
+                        </Col>
+                    </Row>
+                    <Row >
 
+                        <Col xs="9">
+                            <InputGroup className="input-group-alternative">
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText>
+                                        <i className="ni ni-lock-circle-open" />
+                                    </InputGroupText>
+                                </InputGroupAddon>
+                                <Input placeholder="Lokasyon" name='locationInput' type="text" value={this.state.locationInput} onChange={this.handleInputChange} />
 
-
-
-
-                <div style={{ width: '50%' }}  >
-
-
-                    
-                    <FormGroup>
-
-                        
-                        <InputGroup className="input-group-alternative">
-                            
-                            <InputGroupAddon addonType="prepend">
-                                <InputGroupText>
-                                    <i className="ni ni-lock-circle-open" />
-                                </InputGroupText>
-                            </InputGroupAddon>
-                            <Input placeholder="Lokasyon" name='locationInput' type="text" value={this.state.locationInput} onChange={this.handleInputChange} />
+                            </InputGroup>
+                        </Col>
+                        <Col xs="3" >
                             <Button onClick={() => this.addItemToLocationList()} style={{ marginRight: '5%' }} color="primary"> EKLE</Button>{' '}
-                        </InputGroup>
+                        </Col>
+                    </Row>
 
-                    </FormGroup>
+                    <Row style={{ marginTop: 5 }}>
 
-                    <ul className="list-group">
-                        {this.state.listOfLocaiton.length > 0 && this.state.listOfLocaiton.map(listitem => (
-                            <li key={listitem.id} className={listitem.modifier}>
+                        <Col xs="9">
+                            <ListGroup >
 
-                                <Row>
+                                {this.state.listOfLocation.length > 0 && this.state.listOfLocation.map(listitem => (
+                                    <ListGroupItem key={listitem.id} color={listitem.modifier} >   {listitem.context}
+                                        <Button onClick={() => this.removeItem(listitem)} type="button" close aria-label="Cancel">
+                                            <span aria-hidden>&ndash;</span>
+                                        </Button>
+                                    </ListGroupItem>
 
-                                    <Col xs='8'>
-                                        <span className="text-muted">
-                                            {listitem.context}
-                                        </span>
-                                    </Col>
+                                ))}
+                            </ListGroup>
+                        </Col>
+                    </Row>
 
-                                    <Col xs='4'>
-                                        <Button onClick={(listitem) => this.removeItemToLocationList(listitem)} outline color="danger">SİL</Button>{' '}
+                    <Row>
+                        <Col xs="7">
+                            {this.state.listOfLocation.length > 0 &&
+                                (<div className="text-center">
+                                    <Button
+                                        block
+                                        onClick={this.saveChanges}
+                                        className="mt-4" color="primary" type="button">
+                                        KAYDET
+                                     </Button>
+                                </div>)}
+                        </Col>
 
-
-                                    </Col>
-
-                                </Row>
-
-
-
-
-
-
-                            </li>
-
-                        ))}
-
-
-                    </ul>
-
-
-
-                    {this.state.listOfLocaiton.length > 0 &&
-
-                        <div className="modal-footer">
-                            <Button color="primary" type="submit" onClick={this.handleSubmit}> DEVAM ET</Button>
-                        </div>
-
-
-                    }
-
-
-
-                </div>
-
-
-
+                        <Col xs="5">
+                        </Col>
+                    </Row>
+                </Container>
             </>
         );
     }
 }
 
-// const mapStateToProps = state => {
-//     return {
-//         error: state.userGroups.error,
+const mapStateToProps = state => {
+    return {
+        status: state.bulkLocation.status
+    };
+}
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        createBulkLocation: (listOfLocation) => dispatch(actions.createBulkLocaition(listOfLocation)),
+    };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(LocationSplash);
 
 
 
-//     };
-// }
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         createGroup: (groupName) => dispatch(actions.userGroupActions.createUserGroup(groupName)),
-//     };
-// }
-// export default connect(mapStateToProps, mapDispatchToProps)(LocationSplash);
 
-export default LocationSplash
-
-const textAreaStyles = {
-    width: 235,
-    margin: 5
-};
 
 

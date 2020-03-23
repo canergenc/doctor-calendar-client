@@ -12,7 +12,7 @@ const createUserGroup = (groupName) => {
         if (groupName) {
             name = groupName
         } else {
-            
+
             name = helperService.generateRndStr(10);
         }
         console.log(name);
@@ -27,7 +27,12 @@ const createUserGroup = (groupName) => {
                     .then((response) => {
                         console.log("ug", response);
                         dispatch(createUserGroupSuccess(response));
-                        history.push('/admin/index');
+                        history.push({
+                            pathname: '/splash/location',
+                            state: { groupId: response.id }
+                        })
+
+                        
 
                     })
                     .catch((error) => {
