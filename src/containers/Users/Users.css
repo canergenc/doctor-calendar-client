@@ -1,5 +1,23 @@
 .sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top:0;
-  }
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+.add {
+  padding: 8px;
+  margin-bottom: 6px;
+  text-align: center;
+  align-items: flex-start;
+  align-content: flex-start;
+  border: 1px dotted lightgrey;
+  border-radius: 4px;
+  font-size: 14px;
+  user-select: none;
+  cursor: pointer;
+}
+
+.w3-light-grey, .w3-hover-light-grey:hover, .w3-light-gray, .w3-hover-light-gray:hover {
+  color: #000!important;
+  background-color: #f1f1f1!important
+}

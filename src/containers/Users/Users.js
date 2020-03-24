@@ -6,7 +6,8 @@ import {
     CardHeader,
     CardBody,
     Row,
-    Input
+    Input,
+    Button
 } from "reactstrap";
 import { Droppable } from 'react-beautiful-dnd';
 import Api from '../../api';
@@ -72,6 +73,7 @@ class Users extends Component {
                                 ref={provided.innerRef}
                             >
                                 {userList}
+                                <div className="add w3-hover-light-grey" onClick={this.props.clicked}><i class="fa fa-plus" style={{marginRight:"4px", fontSize:"12px"}}></i>Kullanıcı Ekle</div>
                             </div>)}
                     </Droppable>
                 </CardBody>

@@ -98,38 +98,37 @@ class User extends Component {
     render() {
 
         return (
-            <Draggable
-                key={this.props.user.id}
-                draggableId={this.props.user.id}
-                index={this.props.index}>
-                {(provided, snapshot) => (
-                    <React.Fragment>
-                        <Container
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            isDragging={snapshot.isDragging}
-                        >
-                            {this.props.user.title} {this.props.user.fullName}
+                <Draggable
+                    key={this.props.user.id}
+                    draggableId={this.props.user.id}
+                    index={this.props.index}>
+                    {(provided, snapshot) => (
+                        <React.Fragment>
+                            <Container
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                isDragging={snapshot.isDragging}
+                            >
+                                {this.props.user.title} {this.props.user.fullName}
 
-                            <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto" }} >
-                                <input
-                                    type="radio"
-                                    name="radio"
-                                    onClick={(e) => this.OnSelect(this.props.user.id, e)}
-                                />
-                                <div className="state p-success">
-                                    <label></label>
+                                <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto" }} >
+                                    <input
+                                        type="radio"
+                                        name="radio"
+                                        onClick={(e) => this.OnSelect(this.props.user.id, e)}
+                                    />
+                                    <div className="state p-success">
+                                        <label></label>
+                                    </div>
                                 </div>
-                            </div>
-                        </Container>
-                        {snapshot.isDragging && (
-                            <Clone>{this.props.user.title} {this.props.user.fullName}</Clone>
-                        )}
-                    </React.Fragment>
-                )}
-
-            </Draggable>
+                            </Container>
+                            {snapshot.isDragging && (
+                                <Clone>{this.props.user.title} {this.props.user.fullName}</Clone>
+                            )}
+                        </React.Fragment>
+                    )}
+                </Draggable>
         )
     }
 };

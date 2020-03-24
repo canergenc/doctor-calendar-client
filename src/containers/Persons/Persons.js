@@ -183,7 +183,7 @@ class Persons extends Component {
                         </button>
                     </div>
                     <div className="modal-body">
-                        <Form role="form">
+                        <Form role="form" autoComplete="off">
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
@@ -195,7 +195,7 @@ class Persons extends Component {
                                     <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Şifre" name="password" type="password" value={this.state.password} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <Input placeholder="Şifre" name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                             </FormGroup>
 
