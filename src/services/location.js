@@ -19,7 +19,7 @@ const createLocationService = (data) => {
 const updateLocationService = (id, data) => {
     return request({
         url: '/locations/' + id,
-        method: 'PUT',
+        method: 'POST',
         data: data
     });
 };

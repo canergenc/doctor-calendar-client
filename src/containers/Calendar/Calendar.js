@@ -230,22 +230,22 @@ class Calendar extends Component {
     if (this.props.reminders) {
       const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const fileExtension = '.xlsx';
-      let testData = [
-        {
-          "date": "11.11.2020",
-          "Acil": "Gökhan Kurt",
-          "Şefaltı": "Can Mercan",
-          "1. Poliklinik": "Caner Genç",
-          "": "Ali Rıza Temel"
-        },
-        {
-          "date": "12.11.2020",
-          "Acil": "Ali Rıza Temel",
-          "Şefaltı": "Caner Genç",
-          "1. Poliklinik": "Gökhan Kurt",
-          "": "Can Mercan"
-        }
-      ]
+      // let testData = [
+      //   {
+      //     "date": "11.11.2020",
+      //     "Acil": "Gökhan Kurt",
+      //     "Şefaltı": "Can Mercan",
+      //     "1. Poliklinik": "Caner Genç",
+      //     "": "Ali Rıza Temel"
+      //   },
+      //   {
+      //     "date": "12.11.2020",
+      //     "Acil": "Ali Rıza Temel",
+      //     "Şefaltı": "Caner Genç",
+      //     "1. Poliklinik": "Gökhan Kurt",
+      //     "": "Can Mercan"
+      //   }
+      // ]
 
       let excelData = [];
       let dates = [];

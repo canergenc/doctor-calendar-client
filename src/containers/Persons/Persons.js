@@ -21,8 +21,6 @@ import {
     DropdownToggle,
     Form,
     Input,
-    InputGroupAddon,
-    InputGroupText,
     InputGroup,
     FormGroup
 } from "reactstrap";
@@ -37,9 +35,11 @@ class Persons extends Component {
             editModal: false,
             addModal: false,
             deleteModal: false,
+            id: '',
             name: '',
             title: '',
-            email: ''
+            email: '',
+            password: ''
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
@@ -54,16 +54,20 @@ class Persons extends Component {
             this.setState({ name: event.target.value });
         if (target.name === 'email')
             this.setState({ email: event.target.value });
+        if (target.name === 'password')
+            this.setState({ password: event.target.value });
     }
 
+
     updateHandle(event) {
-        if (this.state.item && this.state.name) {
-            this.setState({ item: { name: this.state.name } });
-            if (this.state.item.name === this.state.name) {
-                this.props.updateUser(this.state.item);
-                this.toggleModal('editModal', undefined);
-            }
-        }
+        const userData = {
+            title: this.state.title,
+            fullName: this.state.name,
+            email: this.state.email
+        };
+        this.props.updateUser(this.state.id, userData);
+        this.toggleModal('editModal', undefined);
+
         event.preventDefault();
     }
 
@@ -74,8 +78,8 @@ class Persons extends Component {
                 fullName: this.state.name,
                 title: this.state.title,
                 email: this.state.email,
-                //groupId: '5e53975e62398900983c869c'/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
-                deviceId:1
+                //groupId: '5e53975e62398900983c869c',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+                deviceId: "1"
             };
 
             this.props.createUser(user);
@@ -88,8 +92,8 @@ class Persons extends Component {
     }
 
     deleteHandle() {
-        if (this.state.item && this.state.item.id) {
-            this.props.deleteUser(this.state.item.id)
+        if (this.state.id) {
+            this.props.deleteUser(this.state.id)
             this.toggleModal('deleteModal', undefined);
         }
     }
@@ -114,18 +118,31 @@ class Persons extends Component {
         this.renderTableData();
     }
 
-    toggleModal(state, item) {
-        this.setState({
-            [state]: !this.state[state],
-            name: item ? item.name : undefined,
-            item: item ? item : {}
-        });
+    toggleModal(state, user) {
+        if (user) {
+            this.setState({
+                [state]: !this.state[state],
+                id: user.id ? user.id : null,
+                name: user.fullName ? user.fullName : null,
+                title: user.title ? user.title : null,
+                email: user.email ? user.email : null
+            });
+        }
+        else {
+            this.setState({
+                [state]: !this.state[state],
+                id: null,
+                name: null,
+                title: null,
+                email: null
+            });
+        }
     };
 
     render() {
         let users = "Kullanıcılar Yükleniyor...";
         if (this.props.users) {
-            console.log(this.props.users)
+            
             users = this.props.users.map((user) => (
                 <tr key={user.user.id}>
                     <td>{user.user.title}</td>
@@ -168,18 +185,16 @@ class Persons extends Component {
                         <Form role="form">
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="ni ni-single-copy-04" />
-                                        </InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input placeholder="Ünvan" name="title" type="text" value={this.state.title}  onChange={(event)=>this.inputChangeHandle(event)} />
+                                    <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Kullanıcı Adı ve Soyadı" name="name" type="text" value={this.state.name} onChange={(event)=>this.inputChangeHandle(event)}/>
+                                    <Input placeholder="Kullanıcı Adı ve Soyadı" name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event)=>this.inputChangeHandle(event)}/>
+                                    <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="Şifre" name="password" type="password" value={this.state.password} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                             </FormGroup>
 
@@ -195,6 +210,7 @@ class Persons extends Component {
                         <Button color="primary" type="submit" onClick={this.addHandle}>Kaydet</Button>
                     </div>
                 </Modal>
+
                 {/* Edit Modal  */}
                 <Modal
                     className="modal-dialog-centered"
@@ -215,12 +231,13 @@ class Persons extends Component {
                         <Form role="form">
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="ni ni-single-copy-04" />
-                                        </InputGroupText>
-                                    </InputGroupAddon>
-                                    <Input placeholder="Lokasyon Adı" name="name" type="text" value={this.state.name} onChange={this.inputChangeHandle} />
+                                    <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="Kullanıcı Adı ve Soyadı" name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                             </FormGroup>
                         </Form>
@@ -235,13 +252,14 @@ class Persons extends Component {
                         <Button color="primary" type="submit" onClick={this.updateHandle}>Değişiklikleri Kaydet</Button>
                     </div>
                 </Modal>
+                
                 {/* Delete Modal */}
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={this.state.deleteModal}
                     toggle={() => this.toggleModal("deleteModal", undefined)}>
                     <div className="modal-header">
-                        <h5 className="modal-title" id="deleteModalLabel">Lokasyon Kaldır</h5>
+                        <h5 className="modal-title" id="deleteModalLabel">Kullanıcı Kaldır</h5>
                         <button
                             aria-label="Close"
                             className="close"
@@ -264,6 +282,7 @@ class Persons extends Component {
                         <Button color="danger" type="submit" onClick={this.deleteHandle}>Kaldır</Button>
                     </div>
                 </Modal>
+                
                 {/* Page content */}
                 <Container className="mt--7" fluid>
                     {/* Table */}
@@ -372,7 +391,7 @@ const mapDispatchToProps = dispatch => {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         createUser: (userData) => dispatch(actions.createUser(userData)),
         deleteUser: (userId) => dispatch(actions.deleteUser(userId)),
-        updateUser: (userId, userData) => dispatch(actions.updateUser(userId, userData)),
+        updateUser: (userId, userData) => dispatch(actions.updateUser(userId, userData))
     };
 };
 

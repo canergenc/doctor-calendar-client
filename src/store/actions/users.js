@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import { userService } from '../../services/user';
+import { userGroupService } from "../../services/user.group";
 
 export const setUsers = (users, defaultUsers) => {
     return {
@@ -97,7 +98,8 @@ export const createUser = (userData) => {
     return dispatch => {
         userService.createUserService(userData)
             .then(response => {
-                dispatch(createUserSuccess(response.data.id, userData));
+                dispatch(createUserSuccess(response.id, userData));
+                dispatch(userGroupService.createUserGroup(response.id));
                 const filterData = {
                     filter: {
                         where: {
@@ -144,7 +146,10 @@ export const updateUser = (userId, userData) => {
                             groupId: {
                                 like: "5e53975e62398900983c869c"
                             }
-                        }
+                        },
+                        include: [
+                            { relation: "user" }
+                        ]
                     }
                 };
                 dispatch(getUsers(filterData));

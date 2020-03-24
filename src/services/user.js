@@ -36,7 +36,7 @@ const createUserService = (data) => {
 const updateUserService = (id, data) => {
     return request({
         url: '/users/' + id,
-        method: 'PUT',
+        method: 'POST',
         data: data
     });
 };
