@@ -153,7 +153,7 @@ class Location extends Component {
         }
         return (
             <>
-                <UserHeader />
+                <UserHeader fullName={this.props.fullName} />
                 {/* Add Modal */}
                 <Modal
                     className="modal-dialog-centered"
@@ -456,6 +456,7 @@ const mapStateToProps = state => {
     return {
         locations: state.locations.locations,
         groupId: state.auth.groupId,
+        fullName: state.userInfo.fullName,
         error: state.locations.error
     };
 };

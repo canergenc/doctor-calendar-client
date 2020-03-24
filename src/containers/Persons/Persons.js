@@ -78,6 +78,7 @@ class Persons extends Component {
                 fullName: this.state.name,
                 title: this.state.title,
                 email: this.state.email,
+                password:this.state.password,
                 //groupId: '5e53975e62398900983c869c',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
                 deviceId: "1"
             };
@@ -164,7 +165,7 @@ class Persons extends Component {
         }
         return (
             <>
-                <UserHeader />
+                <UserHeader fullName={this.props.fullName} />
                 {/* Add Modal */}
                 <Modal
                     className="modal-dialog-centered"
@@ -382,6 +383,7 @@ const mapStateToProps = state => {
     return {
         users: state.users.users,
         groupId: state.auth.groupId,
+        fullName: state.userInfo.fullName,
         error: state.users.error
     };
 };

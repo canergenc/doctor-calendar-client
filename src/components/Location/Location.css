@@ -9,6 +9,7 @@
 .btn {
   display: inline-block;
   font-weight: 600;
+  margin-left: 15px;
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
