@@ -1,5 +1,18 @@
 import request from "../hoc/Config/apiCentral";
 
+
+
+const createBulkLocationService = (listOfLocaiton) => {
+    return request({
+        url: '/locations/bulk',
+        method: 'POST',
+        data: listOfLocaiton
+        
+    });
+};
+
+
+
 const getLocationsService = (filterData) => {
     return request({
         url: '/locations',
@@ -35,5 +48,6 @@ export const locationService = {
     getLocationsService,
     createLocationService,
     updateLocationService,
-    deleteLocationService
+    deleteLocationService,
+    createBulkLocationService
 }

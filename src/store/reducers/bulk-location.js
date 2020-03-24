@@ -1,23 +1,30 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    groups: null,
+    status: false,
     error: false
-}
+};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SET_GROUPS:
+        case actionTypes.BULKLOCATION_REQUEST:
             return {
                 ...state,
-                groups: action.groups,
+                status: action.status,
                 error: false
             };
-        case actionTypes.FETCH_GROUPS_FAILED:
+        case actionTypes.BULKLOCATION_SUCCESS:
             return {
                 ...state,
-                error: true
+                status: action.status,
+                error: false
             };
+        case actionTypes.BULKLOCATION_FAILURE:
+            return {
+                ...state,
+                error: true,
+                status: action.status
+            }
         default:
             return state;
     }

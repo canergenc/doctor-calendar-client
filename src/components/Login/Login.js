@@ -50,12 +50,11 @@ class Login extends React.Component {
   }
   handleInputChange(event) {
 
-    console.log(this.state.rememberMe);
     this.setState({ submitted: false });
     const target = event.target;
     if (target.type === 'email')
       this.setState({ email: event.target.value });
-    else 
+    else
       this.setState({ password: event.target.value });
 
     // this.setState({ rememberMe: event.target.value });
@@ -64,19 +63,28 @@ class Login extends React.Component {
 
 
   handleCheckBoxInput(event) {
-    this.setState({rememberMe:!this.state.rememberMe})
+    this.setState({ rememberMe: !this.state.rememberMe })
   }
 
 
-  
+
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state);
     if (this.state.email && this.state.password) {
       if (this.state.password.length >= 8) {
         this.setState({ submitted: true });
-        this.props.login(this.state.email, this.state.password,this.state.rememberMe);
+        this.props.login(this.state.email, this.state.password, this.state.rememberMe);
       }
+    }
+
+
+  }
+
+
+  componentDidMount() {
+
+    if (this.props.location.state && this.props.location.state.email) {
+      this.setState({ email: this.props.location.state.email });
     }
 
 
@@ -153,7 +161,7 @@ class Login extends React.Component {
                 </FormGroup>
 
 
-              
+
                 <Row className="my-4">
                   <Col xs="12">
                     <div className="custom-control custom-control-alternative custom-checkbox">
@@ -161,9 +169,9 @@ class Login extends React.Component {
                         className="custom-control-input"
                         id="customCheckRegister"
                         type="checkbox"
-                        checked={this.state.rememberMe?true:false}
+                        checked={this.state.rememberMe ? true : false}
                         value={this.state.rememberMe}
-                        onChange={(e)=>this.handleCheckBoxInput(e)}
+                        onChange={(e) => this.handleCheckBoxInput(e)}
                       />
                       <label
                         className="custom-control-label"
@@ -171,7 +179,7 @@ class Login extends React.Component {
                       >
                         <span className="text-muted">
                           Beni hatırla
-                          
+
                         </span>
                       </label>
                     </div>
@@ -289,7 +297,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    login: (email, password,isRememberMe) => dispatch(actions.authActions.login(email, password,isRememberMe)),
+    login: (email, password, isRememberMe) => dispatch(actions.authActions.login(email, password, isRememberMe)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

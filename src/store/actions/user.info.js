@@ -1,5 +1,6 @@
 import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
+import history from "../../hoc/Config/history"
 
 
 const getUserInfo = () => {
@@ -9,6 +10,26 @@ const getUserInfo = () => {
         userService.userMe().then((response) => {
             console.log('userMe', response);
             dispatch(userInfoSuccess(response))
+        }).catch((error) => {
+            dispatch(userInfoFailure(error));
+        });
+    }
+}
+
+const getUserInfoByAuth = () => {
+    return dispatch => {
+        dispatch(userInfoRequest());
+
+        userService.userMe().then((response) => {
+            console.log('userMe', response);
+            dispatch(userInfoSuccess(response))
+
+            if (response.groups && response.groups.length > 0) {
+                history.push('/admin/index'); // Will fix
+            } else {
+                history.push('/splash/index');
+            }
+
         }).catch((error) => {
             dispatch(userInfoFailure(error));
         });
@@ -50,5 +71,6 @@ const userInfoFailure = (err) => {
 }
 
 export const userInfoActions = {
-    getUserInfo
+    getUserInfo,
+    getUserInfoByAuth
 };
