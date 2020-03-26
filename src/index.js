@@ -59,9 +59,7 @@ ReactDOM.render(
         <Route path="/splash" render={props => <SplashLayout {...props} />} />
 
 
-
-
-        <Redirect from="/" to="/splash/location" />
+        <Redirect from="/" to="/auth/login" />
 
       </Switch>
     </Router>

@@ -35,6 +35,7 @@ import {
   Col,
   Alert
 } from "reactstrap";
+import { customVariables } from '../../hoc/Config/customVariables';
 
 class Login extends React.Component {
   constructor(props) {
@@ -86,6 +87,13 @@ class Login extends React.Component {
     if (this.props.location.state && this.props.location.state.email) {
       this.setState({ email: this.props.location.state.email });
     }
+
+    // let isRememberMe = localStorage.getItem(customVariables.REMEMBERME);
+    // if(isRememberMe=='true'){
+    //   this.setState({ rememberMe: true});
+    // }else{
+    //   this.setState({ rememberMe: false });
+    // }
 
 
   }
@@ -162,7 +170,7 @@ class Login extends React.Component {
 
 
 
-                <Row className="my-4">
+                {/* <Row className="my-4">
                   <Col xs="12">
                     <div className="custom-control custom-control-alternative custom-checkbox">
                       <input
@@ -184,74 +192,9 @@ class Login extends React.Component {
                       </label>
                     </div>
                   </Col>
-                </Row>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                {/* <Row className="my-4">
-                  <Col xs="12">
-                    <div className="custom-control custom-control-alternative custom-checkbox">
-                      <input
-                        // defaultChecked={this.state.rememberMe}
-                        defaultChecked={this.state.rememberMe}
-                        className="custom-control-input"
-                       
-                        //id="customCheckLogin"
-                        type="checkbox"
-                        // onChange={this.test}
-                      // onChange={this.handleInputChange}
-
-                      />
-                      <label
-                        className="custom-control-label"
-                        //htmlFor="customCheckLogin"
-                      >
-                        <span className="text-muted">
-                          Beni hatırla
-
-                        </span>
-                      </label>
-                    </div>
-                  </Col>
                 </Row> */}
 
-                {/* <div className="custom-control custom-control-alternative custom-checkbox">
-                  <input
-                    className="custom-control-input"
-                    id=" customCheckLogin"
-                    type="checkbox"
-                  />
-                  <label style={{display:'contents'}}
-                    className="custom-control-label"
-                    htmlFor=" customCheckLogin"
-                  >
-                    <span className="text-muted">Beni Hatırla</span>
-                  </label>
-                </div>  */}
+
                 <div className="text-center">
                   <Button block className="my-4" color="primary" type="submit" >Giriş Yap</Button>
 
@@ -291,8 +234,6 @@ const mapStateToProps = state => {
     isAuthenticating: state.auth.isAuthenticating,
     statusText: state.auth.statusText,
     isAuthenticated: state.auth.isAuthenticated
-
-
   };
 }
 const mapDispatchToProps = dispatch => {
