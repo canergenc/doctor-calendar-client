@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Container, Row, Col } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Modal,
+  Button,
+  Form,
+  Input,
+  InputGroup,
+  FormGroup
+} from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
 import moment from "moment";
 import Calender from '../containers/Calendar/Calendar';
@@ -17,6 +27,39 @@ import api from "../api";
 const MySwal = withReactContent(Swal)
 
 class Index extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      addModal: false,
+      name: '',
+      title: '',
+      email: '',
+      password: ''
+    }
+    this.addHandle = this.addHandle.bind(this);
+  }
+
+  addHandle(event) {
+
+    if (this.state.name) {
+      const user = {
+        fullName: this.state.name,
+        title: this.state.title,
+        email: this.state.email,
+        password: this.state.password,
+        //groupId: '5e53975e62398900983c869c',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+        deviceId: "1"
+      };
+
+      this.props.createUser(user);
+      this.toggleModal('addModal', undefined);
+
+    } else {
+      alert('Ad alanı zorunludur!')
+    }
+    event.preventDefault();
+  }
 
   onDragEnd = result => {
 
@@ -60,11 +103,72 @@ class Index extends Component {
         break;
     }
   };
+  inputChangeHandle(event) {
+    const target = event.target;
+    if (target.name === 'title')
+        this.setState({ title: event.target.value });
+    if (target.name === 'name')
+        this.setState({ name: event.target.value });
+    if (target.name === 'email')
+        this.setState({ email: event.target.value });
+    if (target.name === 'password')
+        this.setState({ password: event.target.value });
+}
+  toggleModal(state) {
+    this.setState({
+      [state]: !this.state[state]
+    });
+  };
 
   render() {
     return (
       <>
         <Header />
+        {/* Add Person Modal */}
+        <Modal
+          className="modal-dialog-centered"
+          isOpen={this.state.addModal}
+          toggle={() => this.toggleModal("addModal", undefined)}>
+          <div className="modal-header">
+            <h5 className="modal-title" id="addModalLabel">Kullanıcı Ekle</h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => this.toggleModal("addModal", undefined)}>
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <Form role="form" autoComplete="off">
+              <FormGroup>
+                <InputGroup className="input-group-alternative mb-3">
+                  <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
+                </InputGroup>
+                <InputGroup className="input-group-alternative mb-3">
+                  <Input placeholder="Kullanıcı Adı ve Soyadı" name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                </InputGroup>
+                <InputGroup className="input-group-alternative mb-3">
+                  <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                </InputGroup>
+                <InputGroup className="input-group-alternative mb-3">
+                  <Input placeholder="Şifre" name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
+                </InputGroup>
+              </FormGroup>
+
+            </Form>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => this.toggleModal("addModal", undefined)}>Kapat
+                        </Button>
+            <Button color="primary" type="submit" onClick={this.addHandle}>Kaydet</Button>
+          </div>
+        </Modal>
 
         <Container className="mt--7" fluid>
           <DragDropContext onDragEnd={this.onDragEnd} >
@@ -82,7 +186,7 @@ class Index extends Component {
                 </Row>
               </Col>
               <Col xl="2">
-                <Users />
+                <Users clicked={() => this.toggleModal("addModal")} />
               </Col>
             </Row>
           </DragDropContext>
