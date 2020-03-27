@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import React from "react";
 import * as actions from '../../store/actions/index';
+import 'font-awesome/css/font-awesome.min.css';
 
 // reactstrap components
 import {
@@ -58,10 +59,10 @@ class Register extends React.Component {
       <>
         <Col lg="6" md="8">
           <Card className="bg-secondary shadow border-0">
-           
+
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
-              <h1> <Badge color="light">ÜYE OL</Badge></h1>
+                <h1> <Badge color="light">ÜYE OL</Badge></h1>
               </div>
 
               {this.props.statusText ?
@@ -168,10 +169,24 @@ class Register extends React.Component {
                     </div>
                   </Col>
                 </Row>
+
+
+
                 <div className="text-center">
-                  <Button className="mt-4" color="primary" type="submit">
-                    Kayıt Ol
+
+                  <Button className="mt-4" color="primary" type="submit" disabled={this.props.isRegistiring}>
+
+                    {this.props.isRegistiring && (
+                      <i
+                        className="fa fa-refresh fa-spin"
+                        style={{ marginRight: "5px" }}
+                      />
+                    )}
+
+                    {this.props.isRegistiring && <span>Lütfen bekleyin...</span>}
+                    {!this.props.isRegistiring && <span>Kayıt Ol</span>}
                   </Button>
+
                 </div>
               </Form>
             </CardBody>
@@ -184,6 +199,7 @@ class Register extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    isRegistiring: state.register.isRegistiring,
     isRegistered: state.register.isRegistered,
     user: state.register.user,
     statusText: state.register.statusText
