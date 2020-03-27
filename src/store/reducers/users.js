@@ -2,7 +2,9 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     users: null,
-    error: false
+    globalUsers: null,
+    error: false,
+    globalUsersError:false
 };
 
 const reducer = (state = initialState, action) => {
@@ -18,6 +20,17 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: true
+            };
+        case actionTypes.SET_GLOBAL_USERS:
+            return {
+                ...state,
+                globalUsers: action.globalUsers,
+                globalUsersError: false
+            };
+        case actionTypes.FETCH_GLOBAL_USERS_FAILED:
+            return {
+                ...state,
+                globalUsersError: true
             };
         default:
             return state;

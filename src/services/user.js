@@ -8,6 +8,14 @@ const getUsers = (filterData) => {
     });
 };
 
+const getGlobalUsers = (filterData) => {
+    return request({
+        url: '/user-groups',
+        method: 'GET',
+        params: filterData
+    });
+};
+
 //return userId and name 
 const userMe = () => {
     return request({
@@ -50,6 +58,7 @@ const deleteUserService = (id) => {
 
 export const userService = {
     getUsers,
+    getGlobalUsers,
     userMe,
     userInfo,
     createUserService,

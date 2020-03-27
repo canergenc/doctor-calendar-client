@@ -6,8 +6,7 @@ import {
     CardHeader,
     CardBody,
     Row,
-    Input,
-    Button
+    Input
 } from "reactstrap";
 import { Droppable } from 'react-beautiful-dnd';
 import Api from '../../api';

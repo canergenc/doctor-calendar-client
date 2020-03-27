@@ -16,6 +16,19 @@ export const fetchUsersFailed = (error) => {
     };
 };
 
+export const setGlobalUsers = (users) => {
+    return {
+        type: actionTypes.SET_GLOBAL_USERS,
+        globalUsers: users
+    };
+};
+
+export const fetchGlobalUsersFailed = (error) => {
+    return {
+        type: actionTypes.FETCH_GLOBAL_USERS_FAILED
+    };
+};
+
 export const getUsers = (filterData) => {
     return dispatch => {
         userService.getUsers(filterData)
@@ -54,6 +67,43 @@ export const searchUser = (filterKey, defaultUsers) => {
     }
 
     return dispatch => { dispatch(setUsers(users, defaultUsers)); }
+}
+
+export const findUser = (filterKey) => {
+    return dispatch => {
+        if (filterKey.length > 2) {
+            if (filterKey && filterKey.trim() !== "") {
+                const filterData = {
+                    filter: {
+                        where: {
+                            email: {
+                                like: filterKey
+                            }
+                        },
+                        include:[
+                            {relation:"user"}
+                        ]
+                    }
+                }
+
+                userService.getGlobalUsers(filterData)
+                    .then(res => {
+                        const users = [];
+                        res.forEach(element => {
+                            if (element.user) {
+                                users.push({
+                                    ...element
+                                });
+                            }
+                        });
+                        dispatch(setGlobalUsers(users));;
+                    })
+                    .catch(err => {
+                        dispatch(fetchGlobalUsersFailed());
+                    });
+            }
+        }
+    }
 }
 
 

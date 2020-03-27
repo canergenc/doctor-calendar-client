@@ -9,7 +9,10 @@ import {
   Form,
   Input,
   InputGroup,
-  FormGroup
+  FormGroup,
+  Card,
+  CardHeader,
+  CardBody
 } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
 import moment from "moment";
@@ -18,11 +21,17 @@ import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Users from '../containers/Users/Users';
 import Location from '../components/Location/Location';
+import Spinner from '../components/UI/Spinner/Spinner';
+import User from '../components/User/User';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";
 import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
 import api from "../api";
+
+import SelectSearch from 'react-select-search';
+
+
 
 const MySwal = withReactContent(Swal)
 
@@ -103,17 +112,11 @@ class Index extends Component {
         break;
     }
   };
-  inputChangeHandle(event) {
-    const target = event.target;
-    if (target.name === 'title')
-        this.setState({ title: event.target.value });
-    if (target.name === 'name')
-        this.setState({ name: event.target.value });
-    if (target.name === 'email')
-        this.setState({ email: event.target.value });
-    if (target.name === 'password')
-        this.setState({ password: event.target.value });
-}
+
+  findUser = (filterKey) => {
+    this.props.findUser(filterKey);
+  }
+
   toggleModal(state) {
     this.setState({
       [state]: !this.state[state]
@@ -121,6 +124,29 @@ class Index extends Component {
   };
 
   render() {
+    const options = [
+      {name: 'Swedish', value: 'sv'},
+      {name: 'English', value: 'en'},
+      {
+          type: 'group',
+          name: 'Group name',
+          items: [
+              {name: 'Spanish', value: 'es'},
+          ]
+      },
+  ];
+    let globalUserList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <p>Test</p>
+
+    // if (this.props.globalUsers) {
+    //   globalUserList = this.props.globalUsers.map((user, index) => (
+    //     <User
+    //       {...user}
+    //       key={user.id}
+    //       index={index}
+    //     />
+    //   ));
+    // }
+
     return (
       <>
         <Header />
@@ -140,32 +166,32 @@ class Index extends Component {
               <span aria-hidden={true}>×</span>
             </button>
           </div>
+
           <div className="modal-body">
-            <Form role="form" autoComplete="off">
+                <SelectSearch options={options} defaultValue="sv" name="language" placeholder="Choose your language" />
+            {/* <Form role="form" >
               <FormGroup>
                 <InputGroup className="input-group-alternative mb-3">
-                  <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroup>
-                <InputGroup className="input-group-alternative mb-3">
-                  <Input placeholder="Kullanıcı Adı ve Soyadı" name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
-                </InputGroup>
-                <InputGroup className="input-group-alternative mb-3">
-                  <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
-                </InputGroup>
-                <InputGroup className="input-group-alternative mb-3">
-                  <Input placeholder="Şifre" name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
-                </InputGroup>
-              </FormGroup>
+                <Card className="shadow sticky" >
+                   <CardHeader className="bg-transparent">
+                    <Row>
+                       
 
-            </Form>
+                    </Row>
+                  </CardHeader> 
+                  <CardBody>
+                  </CardBody>
+                </Card>
+              </FormGroup>
+            </Form> */}
           </div>
           <div className="modal-footer">
             <Button
               color="secondary"
               data-dismiss="modal"
               type="button"
-              onClick={() => this.toggleModal("addModal", undefined)}>Kapat
-                        </Button>
+              onClick={() => this.toggleModal("addModal", undefined)}>Kapat</Button>
             <Button color="primary" type="submit" onClick={this.addHandle}>Kaydet</Button>
           </div>
         </Modal>
@@ -200,6 +226,7 @@ const mapStateToProps = state => {
 
   return {
     users: state.users.users,
+    globalUsers: state.users.globalUsers,
     error: state.users.error,
     activeLocationId: state.locations.activeLocationId
   };
@@ -207,7 +234,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData))
+    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
+    findUser: (filterKey) => dispatch(actions.findUser(filterKey))
   };
 };
 
