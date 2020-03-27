@@ -19,6 +19,9 @@ import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
+import 'font-awesome/css/font-awesome.min.css';
+
+import Spinner from "../../components/UI/Spinner/Spinner"
 
 import {
   Button,
@@ -110,6 +113,13 @@ class Login extends React.Component {
 
   render() {
     const { email, password, submitted } = this.state;
+
+
+    // this.props.isAuthenticating ?  <Spinner /> :<p>Lütfen bekleyiniz.</p>  
+
+
+
+
     return (
       <>
         <Col lg="5" md="7">
@@ -196,7 +206,25 @@ class Login extends React.Component {
 
 
                 <div className="text-center">
-                  <Button block className="my-4" color="primary" type="submit" >Giriş Yap</Button>
+
+
+                  <Button className="my-4" color="primary" disabled={this.props.isAuthenticating}>
+
+                    {this.props.isAuthenticating && (
+                      <i
+                        className="fa fa-refresh fa-spin"
+                        style={{ marginRight: "5px" }}
+                      />
+                    )}
+
+                    {this.props.isAuthenticating && <span>Lütfen bekleyin...</span>}
+                    {!this.props.isAuthenticating && <span>Giriş Yap</span>}
+                  </Button>
+
+
+
+
+                  {/* <Button block className="my-4" color="primary" type="submit" >Giriş Yap</Button> */}
 
 
                 </div>
@@ -223,6 +251,9 @@ class Login extends React.Component {
             </Col>
           </Row>
         </Col>
+
+
+
       </>
     );
   }
