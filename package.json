@@ -1,7 +1,7 @@
 {
-  "name": "DCCalendar",
+  "name": "dccalendar",
   "version": "1.0.0",
-  "description": "DCCalendar",
+  "description": "dccalendar",
   "main": "index.js",
   "keywords": [
     "react",
@@ -53,6 +53,8 @@
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^2.1.8",
+    "react-select": "^2.0.0-beta.7",
+    "react-select-search": "^1.0.2",
     "reactstrap": "^7.1.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
