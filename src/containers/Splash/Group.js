@@ -54,6 +54,10 @@ class GroupSplash extends React.Component {
         this.props.createGroup(null);
     }
 
+    componentDidMount() {
+       console.log(this.props);
+    }
+
     render() {
 
         return (
@@ -99,6 +103,7 @@ class GroupSplash extends React.Component {
 const mapStateToProps = state => {
     return {
         error: state.userGroups.error,
+        token:state.auth.token
 
 
 

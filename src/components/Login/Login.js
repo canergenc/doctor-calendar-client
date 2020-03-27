@@ -19,6 +19,9 @@ import * as actions from '../../store/actions/index';
 import { connect } from 'react-redux';
 import React from "react";
 import { Link } from "react-router-dom";
+import 'font-awesome/css/font-awesome.min.css';
+
+import Spinner from "../../components/UI/Spinner/Spinner"
 
 import {
   Button,
@@ -35,6 +38,7 @@ import {
   Col,
   Alert
 } from "reactstrap";
+import { customVariables } from '../../hoc/Config/customVariables';
 
 class Login extends React.Component {
   constructor(props) {
@@ -87,6 +91,13 @@ class Login extends React.Component {
       this.setState({ email: this.props.location.state.email });
     }
 
+    // let isRememberMe = localStorage.getItem(customVariables.REMEMBERME);
+    // if(isRememberMe=='true'){
+    //   this.setState({ rememberMe: true});
+    // }else{
+    //   this.setState({ rememberMe: false });
+    // }
+
 
   }
   // alertExample(value) {
@@ -102,6 +113,13 @@ class Login extends React.Component {
 
   render() {
     const { email, password, submitted } = this.state;
+
+
+    // this.props.isAuthenticating ?  <Spinner /> :<p>Lütfen bekleyiniz.</p>  
+
+
+
+
     return (
       <>
         <Col lg="5" md="7">
@@ -162,7 +180,7 @@ class Login extends React.Component {
 
 
 
-                <Row className="my-4">
+                {/* <Row className="my-4">
                   <Col xs="12">
                     <div className="custom-control custom-control-alternative custom-checkbox">
                       <input
@@ -184,76 +202,29 @@ class Login extends React.Component {
                       </label>
                     </div>
                   </Col>
-                </Row>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                {/* <Row className="my-4">
-                  <Col xs="12">
-                    <div className="custom-control custom-control-alternative custom-checkbox">
-                      <input
-                        // defaultChecked={this.state.rememberMe}
-                        defaultChecked={this.state.rememberMe}
-                        className="custom-control-input"
-                       
-                        //id="customCheckLogin"
-                        type="checkbox"
-                        // onChange={this.test}
-                      // onChange={this.handleInputChange}
-
-                      />
-                      <label
-                        className="custom-control-label"
-                        //htmlFor="customCheckLogin"
-                      >
-                        <span className="text-muted">
-                          Beni hatırla
-
-                        </span>
-                      </label>
-                    </div>
-                  </Col>
                 </Row> */}
 
-                {/* <div className="custom-control custom-control-alternative custom-checkbox">
-                  <input
-                    className="custom-control-input"
-                    id=" customCheckLogin"
-                    type="checkbox"
-                  />
-                  <label style={{display:'contents'}}
-                    className="custom-control-label"
-                    htmlFor=" customCheckLogin"
-                  >
-                    <span className="text-muted">Beni Hatırla</span>
-                  </label>
-                </div>  */}
+
                 <div className="text-center">
-                  <Button block className="my-4" color="primary" type="submit" >Giriş Yap</Button>
+
+
+                  <Button className="my-4" color="primary" disabled={this.props.isAuthenticating}>
+
+                    {this.props.isAuthenticating && (
+                      <i
+                        className="fa fa-refresh fa-spin"
+                        style={{ marginRight: "5px" }}
+                      />
+                    )}
+
+                    {this.props.isAuthenticating && <span>Lütfen bekleyin...</span>}
+                    {!this.props.isAuthenticating && <span>Giriş Yap</span>}
+                  </Button>
+
+
+
+
+                  {/* <Button block className="my-4" color="primary" type="submit" >Giriş Yap</Button> */}
 
 
                 </div>
@@ -280,6 +251,9 @@ class Login extends React.Component {
             </Col>
           </Row>
         </Col>
+
+
+
       </>
     );
   }
@@ -291,8 +265,6 @@ const mapStateToProps = state => {
     isAuthenticating: state.auth.isAuthenticating,
     statusText: state.auth.statusText,
     isAuthenticated: state.auth.isAuthenticated
-
-
   };
 }
 const mapDispatchToProps = dispatch => {
