@@ -2,6 +2,8 @@ import Index from "../../views/Index";
 import Profile from "../../containers/Profile/Profile.js";
 import Location from "../../containers/Locations/Locations.js";
 import Person from "../../containers/Persons/Persons.js";
+import PermissionApprove from "../../containers/Request-Approve/PermissionApprove.js";
+
 
 var routes = [
     {
@@ -30,6 +32,14 @@ var routes = [
         name: "Kullanıcı Tanımla",
         icon: "ni ni-collection text-primary",
         component: Person,
+        layout: "/admin"
+    },
+
+    {
+        path: "/permission-approve",
+        name: "İzin-Onay",
+        icon: "ni ni-active-40 text-primary",
+        component: PermissionApprove,
         layout: "/admin"
     },
     // {

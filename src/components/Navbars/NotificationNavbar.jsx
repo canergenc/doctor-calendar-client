@@ -18,7 +18,7 @@ import {
   Media
 } from "reactstrap";
 
-class AdminNavbar extends React.Component {
+class NotificationNavbar extends React.Component {
 
 
   logOut() {
@@ -53,44 +53,11 @@ class AdminNavbar extends React.Component {
 
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
-                  <Media  className="align-items-center">
-                    <span  style={{backgroundColor:'transparent'}}  className="avatar avatar-sm rounded-circle">
-                      <img style={{backgroundColor:'transparent', width:'80%',height:'80%' }} 
+                  <Media className="align-items-center">
+                    <span  style={{backgroundColor:'#1083ef'}} className="avatar avatar-sm rounded-circle">
+                      <img style={{width:'80%',height:'80%'}}
                         alt="..."
                         src={require("assets/img/theme/notification-ico2.png")}
-                      />
-                    </span>
-                   
-                  </Media>
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-menu-arrow" right>
-                  <DropdownItem className="noti-title" header tag="div">
-                    <h6 className="text-overflow m-0">BİLDİRİMLER</h6>
-                  </DropdownItem>
-                  <DropdownItem to="/admin/permission-approve" tag={Link}>
-                    <i className="ni ni-collection" />
-                    <span>İzin Talepleri</span>
-                  </DropdownItem>
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-calendar-grid-58" />
-                    <span>Aktivite</span>
-                  </DropdownItem> */}
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-support-16" />
-                    <span>Ayarlar</span>
-                  </DropdownItem> */}
-                  <DropdownItem divider />
-                  
-                </DropdownMenu>
-              </UncontrolledDropdown>
-
-              <UncontrolledDropdown nav>
-                <DropdownToggle className="pr-0" nav>
-                  <Media className="align-items-center">
-                    <span className="avatar avatar-sm rounded-circle">
-                      <img
-                        alt="..."
-                        src={require("assets/img/theme/team-4-800x800.jpg")}
                       />
                     </span>
                     <Media className="ml-2 d-none d-lg-block">
@@ -135,7 +102,7 @@ class AdminNavbar extends React.Component {
 const mapStateToProps = state => {
 
   console.log(state);
-
+  
   return {
     // email: state.userInfo.email,
     fullName: state.userInfo.fullName,
@@ -149,7 +116,7 @@ const mapDispatchToProps = dispatch => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminNavbar);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationNavbar);
 
 
 

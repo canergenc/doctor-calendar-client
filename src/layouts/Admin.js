@@ -12,6 +12,12 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 import { customVariables } from "../hoc/Config/customVariables";
 import history from "../hoc/Config/history";
 import routes from "../hoc/Config/admin.routes";
+import NotificationNavbar from "../components/Navbars/NotificationNavbar";
+
+import {
+  Row,
+  Col,
+} from "reactstrap";
 
 class Admin extends React.Component {
 
@@ -71,10 +77,27 @@ class Admin extends React.Component {
           }}
         />
         <div className="main-content" ref="mainContent">
-          <AdminNavbar
-            {...this.props}
-            brandText={this.getBrandText(this.props.location.pathname)}
-          />
+         
+            
+              {/* <NotificationNavbar 
+                {...this.props}
+                brandText={this.getBrandText(this.props.location.pathname)}
+              /> */}
+            
+
+           
+              <AdminNavbar 
+                {...this.props}
+                brandText={this.getBrandText(this.props.location.pathname)}
+              />
+            
+         
+
+
+
+
+
+
           <Switch>{this.getRoutes(routes)}</Switch>
           <Container fluid>
             <AdminFooter />
