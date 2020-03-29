@@ -6,7 +6,6 @@ import * as actions from '../../store/actions/index';
 // reactstrap components
 import {
     Button,
-    Alert,
     Card,
     Badge,
     CardBody,
@@ -16,7 +15,6 @@ import {
     InputGroupAddon,
     InputGroupText,
     InputGroup,
-    Row,
     Col
 } from "reactstrap";
 

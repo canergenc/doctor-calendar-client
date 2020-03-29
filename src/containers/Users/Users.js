@@ -72,7 +72,7 @@ class Users extends Component {
                                 ref={provided.innerRef}
                             >
                                 {userList}
-                                <div className="add w3-hover-light-grey" onClick={this.props.clicked}><i class="fa fa-plus" style={{marginRight:"4px", fontSize:"12px"}}></i>Kullanıcı Ekle</div>
+                                <div className="add w3-hover-light-grey" onClick={this.props.clicked}><i className="fa fa-plus" style={{marginRight:"4px", fontSize:"12px"}}></i>Kullanıcı Ekle</div>
                             </div>)}
                     </Droppable>
                 </CardBody>

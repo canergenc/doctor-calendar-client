@@ -13,7 +13,17 @@ const createUserGroup = (userId) => {
     });
 };
 
+const createUserGroupBulk = (data) => {
+    console.log("create user group");
+    
+    return request({
+        url: `/user-groups/bulk`,
+        method: 'POST',
+        data: data
+    });
+};
 
 export const userGroupService = {
-    createUserGroup
+    createUserGroup,
+    createUserGroupBulk
 };

@@ -1,4 +1,4 @@
-import { createBrowserHistory,createMemoryHistory } from 'history';
+import { createMemoryHistory } from 'history';
 
 const history = createMemoryHistory();
 

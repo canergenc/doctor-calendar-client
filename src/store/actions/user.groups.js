@@ -1,5 +1,4 @@
 import * as actionTypes from './actionTypes';
-import api from '../../api';
 import { groupService } from "../../services/group";
 import { userGroupService } from "../../services/user.group";
 import { helperService } from '../../services';
@@ -32,7 +31,7 @@ const createUserGroup = (groupName) => {
                             state: { groupId: response.id }
                         })
 
-                        
+
 
                     })
                     .catch((error) => {
@@ -73,12 +72,53 @@ const createUserGroupFailure = (err) => {
         statusText: err.data.error.message,
         statusName: err.data.error.name,
         status: false
+    };
+}
 
+
+const createUserGroupBulk = (userGroupBulk) => {
+    return dispatch => {
+        dispatch(createUserGroupBulkRequest());
+
+        userGroupService.createUserGroupBulk(userGroupBulk)
+            .then((response) => {
+                dispatch(createUserGroupBulkSuccess(response));
+            })
+            .catch((error) => {
+                dispatch((createUserGroupBulkFailure(error)));
+            });
+    }
+}
+
+
+const createUserGroupBulkRequest = () => {
+    return {
+        type: actionTypes.CREATE_USERGROUPBULK_REQUEST,
+    };
+};
+
+const createUserGroupBulkSuccess = (response) => {
+    return {
+        type: actionTypes.CREATE_USERGROUPBULK_SUCCESS,
+        status: true
+    };
+}
+
+const createUserGroupBulkFailure = (err) => {
+
+    return {
+        type: actionTypes.CREATE_USERGROUPBULK_FAILURE,
+        erorObj: err,
+        statusCode: err.data.error.statusCode,
+        statusText: err.data.error.message,
+        statusName: err.data.error.name,
+        status: false
     };
 }
 
 export const userGroupActions = {
-    createUserGroup
+    createUserGroup,
+    createUserGroupBulk
 };
 
 

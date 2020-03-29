@@ -6,18 +6,8 @@ import * as actions from '../../store/actions/index';
 // reactstrap components
 import {
     Button,
-    Alert,
-    Card,
-    Badge,
-    CardBody,
-    FormGroup,
-    Form,
     Container,
     Label,
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    DropdownToggle,
     ListGroup,
     ListGroupItem,
     Input,

@@ -79,29 +79,39 @@ export const findUser = (filterKey) => {
                             email: {
                                 like: filterKey
                             }
-                        },
-                        include:[
-                            {relation:"user"}
-                        ]
+                        }
                     }
                 }
 
                 userService.getGlobalUsers(filterData)
                     .then(res => {
                         const users = [];
+                        console.log("getGlobalUser");
+                        console.log(res);
+                        
                         res.forEach(element => {
-                            if (element.user) {
+                            console.log(element);
+                            
+                            if (element) {
                                 users.push({
-                                    ...element
+                                    value:element.id,
+                                    label:element.fullName
                                 });
                             }
                         });
+                        
+                        console.log(users);
+                        
                         dispatch(setGlobalUsers(users));;
                     })
                     .catch(err => {
                         dispatch(fetchGlobalUsersFailed());
                     });
             }
+        }
+        else{
+            const users = [];
+            dispatch(setGlobalUsers(users));;
         }
     }
 }

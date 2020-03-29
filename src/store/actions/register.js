@@ -1,6 +1,4 @@
 import { authService } from "../../services/auth";
-import { groupService } from "../../services/group";
-import { userGroupService } from "../../services/user.group";
 import history from "../../hoc/Config/history"
 import * as actionTypes from "./actionTypes";
 

@@ -12,12 +12,7 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 import { customVariables } from "../hoc/Config/customVariables";
 import history from "../hoc/Config/history";
 import routes from "../hoc/Config/admin.routes";
-import NotificationNavbar from "../components/Navbars/NotificationNavbar";
 
-import {
-  Row,
-  Col,
-} from "reactstrap";
 
 class Admin extends React.Component {
 
