@@ -114,7 +114,7 @@ class Index extends Component {
     if (user) {
       let userGroups = [];
       user.forEach(element => {
-        userGroups.push({ userId: element.value, groupId: '5e7f28d1fc0e1f00a18b3a29' });
+        userGroups.push({ userId: element.value, groupId: '5e81d18363226a009965dd4a' });
       });
 
       this.setState({ userGroups: userGroups })
