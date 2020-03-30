@@ -29,9 +29,17 @@ class PermissionApprove extends Component {
         const filterData = {
             filter: {
                 where: {
-                    groupId: {
-                        like: '5e81d18363226a009965dd49'
-                    }
+                    and: [{
+                        groupId: {
+                            like: '5e53975e62398900983c869c'
+                        }
+                    }, {
+                        type: {
+                            neq: 1
+                        }
+                    }]
+
+
                 },
                 include: [
                     {
@@ -50,6 +58,8 @@ class PermissionApprove extends Component {
 
     }
 
+
+
     getUniqGroupIds(list) {
         const uniqueTags = [];
         list.map(cal => {
@@ -62,7 +72,37 @@ class PermissionApprove extends Component {
     }
 
 
-    filter = (tag, calendar) => calendar.filter(cal => cal.calendarGroupId === tag);
+    approvePermisson(item) {
+        console.log(item);
+        const filter = {
+            where: {
+                calendarGroupId:
+                    item.calendarGroupId
+
+            }
+
+        }
+
+
+        const data = {
+
+            status: 2
+
+        }
+
+        //this.props.patchPermisson(filter, data);
+
+
+
+    }
+
+    rejectPermission(item) {
+
+    }
+
+
+
+
 
     render() {
         let result = [];
@@ -84,29 +124,29 @@ class PermissionApprove extends Component {
                 let email = "";
                 let name = "";
                 listOfFiltered.map((cal) => (
-                    cal.date = new Date(cal.date).toLocaleDateString,
+                    cal.date = new Date(cal.date).toLocaleDateString(),
                     cal.modifiedDate = new Date(cal.date)
                 ));
                 listOfFiltered.sort((a, b) => (a.modifiedDate > b.modifiedDate) ? 1 : -1);
                 startDate = listOfFiltered[0].date;
                 endDate = listOfFiltered[listOfFiltered.length - 1].date;
-                
+
                 numberOfDay = listOfFiltered.length;
                 email = listOfFiltered[0].user.email;
                 name = listOfFiltered[0].user.fullName;
 
-                result.push({ id: index, list: listOfFiltered, startDate: startDate, endDate: endDate, numberOfDay: numberOfDay, name: name, email: email });
+                result.push({ id: index, calendarGroupId: calGroupId, list: listOfFiltered, startDate: startDate, endDate: endDate, numberOfDay: numberOfDay, name: name, email: email });
 
             }
             console.log(result);
             if (result.length > 0) {
-                result = result.map((r) => (
-                    <tr key={r.id}>
-                        <td>{r.name}</td>
-                        <td>{r.email}</td>
-                        <td>{r.startDate}</td>
-                        <td>{r.endDate}</td>
-                        <td>{r.numberOfDay}</td>
+                result = result.map((item) => (
+                    <tr key={item.id}>
+                        <td>{item.name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.startDate}</td>
+                        <td>{item.endDate}</td>
+                        <td>{item.numberOfDay}</td>
 
 
                         <td className="text-right">
@@ -120,7 +160,7 @@ class PermissionApprove extends Component {
 
                             <Button
                                 color="primary"
-                                onClick={e => e.preventDefault()}
+                                onClick={() => this.approvePermisson(item)}
                                 size="sm"
                             >
                                 ONAYLA
@@ -252,7 +292,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchPermissionRequest: (filterData) => dispatch(actions.getReminders(filterData))
+        fetchPermissionRequest: (filterData) => dispatch(actions.getReminders(filterData)),
+        patchPermisson: (filter, data) => dispatch(actions.updateBulkReminder(filter, data)),
     };
 };
 

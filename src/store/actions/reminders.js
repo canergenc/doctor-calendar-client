@@ -2,6 +2,48 @@ import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
 
 
+
+
+export const  updateBulkReminder = (filter,data) => {
+  return dispatch => {
+      dispatch(updateBulkReminderRequest());
+      calendarService.reminderBulkUpdateService(filter,data)
+          .then((response) => {
+              dispatch(updateBulkReminderSuccess(response));
+          }).catch((error) => {
+              dispatch(updateBulkReminderFailure(error));
+          });
+  }
+}
+
+
+export const updateBulkReminderRequest = () => {
+  return {
+      type: actionTypes.CALENDAR_BULKUPDATE_REQUEST,
+  };
+};
+
+export const updateBulkReminderSuccess = (response) => {
+  return {
+      type: actionTypes.CALENDAR_BULKUPDATE_SUCCESS,
+      response: response
+  };
+
+}
+
+export const updateBulkReminderFailure = (err) => {
+  return {
+      erorObj: err,
+      type: actionTypes.CALENDAR_BULKUPDATE_FAILURE,
+      statusCode: err.data.error.statusCode, // BadRequestError
+      statusText: err.data.error.message,  // Invalid email or password
+      statusName: err.data.error.name,   // BadRequestError
+
+  };
+}
+
+
+
 export const setReminders = (reminders) => {
   return {
     type: actionTypes.SET_REMINDERS,

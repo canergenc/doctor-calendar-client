@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import { helperService } from "../../services/helper"
 
 const initialState = {
   reminders: null,
@@ -38,6 +39,30 @@ const reducer = (state = initialState, action) => {
       return {
         reminderId: action.reminderId
       };
+
+      
+
+      case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
+      return {
+        loading:true
+      };
+
+      case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
+      return {
+        loading:false,
+        error:false,
+        response: action.response
+      };
+
+      case actionTypes.CALENDAR_BULKUPDATE_FAILURE:
+      return {
+        loading:false,
+        error:true,
+        response:{},
+        statusText: helperService.getErrorMessage(action.erorObj)
+      };
+
+     
     default:
       return state;
   }
