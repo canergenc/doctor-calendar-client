@@ -71,7 +71,7 @@ class Index extends Component {
             groupId: "5e53975e62398900983c869c",
             userId: user.user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-            type: 0
+            type: 1
           }
           this.props.createReminder(reminder);
         }
