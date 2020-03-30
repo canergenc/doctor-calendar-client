@@ -85,12 +85,8 @@ export const findUser = (filterKey) => {
 
                 userService.getGlobalUsers(filterData)
                     .then(res => {
-                        const users = [];
-                        console.log("getGlobalUser");
-                        console.log(res);
-                        
+                        const users = [];                        
                         res.forEach(element => {
-                            console.log(element);
                             
                             if (element) {
                                 users.push({
@@ -99,8 +95,6 @@ export const findUser = (filterKey) => {
                                 });
                             }
                         });
-                        
-                        console.log(users);
                         
                         dispatch(setGlobalUsers(users));;
                     })

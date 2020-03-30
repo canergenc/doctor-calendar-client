@@ -49,9 +49,9 @@ const loginFailure = (err) => {
     return {
         type: actionTypes.LOGIN_FAILURE,
         erorObj: err,
-        statusCode: err.data.error.statusCode, // BadRequestError
-        statusText: err.data.error.message,  // Invalid email or password
-        statusName: err.data.error.name,   // BadRequestError
+        statusCode: err.error.statusCode, // BadRequestError
+        statusText: err.error.message,  // Invalid email or password
+        statusName: err.error.name,   // BadRequestError
 
     };
 }

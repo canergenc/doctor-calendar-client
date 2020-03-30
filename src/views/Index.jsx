@@ -39,7 +39,7 @@ class Index extends Component {
     super(props)
     this.state = {
       addModal: false,
-      userIds: []
+      userGroups: []
     }
     this.addHandle = this.addHandle.bind(this);
   }
@@ -104,32 +104,20 @@ class Index extends Component {
   }
 
   addHandle(event) {
-    console.log("----------- addHandle -------------");
-    console.log(this.state.userIds);
-
-
-    const userGroupBulk = {
-      userIds: this.state.userIds,
-      groupId: '5e7f28d1fc0e1f00a18b3a29',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
-    };
-
-    this.props.createUserGroupBulk(userGroupBulk);
+    this.props.createUserGroupBulk(this.state.userGroups);
     this.toggleModal('addModal', undefined);
 
     event.preventDefault();
   }
 
   addUserId(user) {
-    console.log("----------- addUserId -------------");
-
-    console.log(user);
     if (user) {
-      let userIds = [];
+      let userGroups = [];
       user.forEach(element => {
-        userIds.push(element.value);
+        userGroups.push({ userId: element.value, groupId: '5e7f28d1fc0e1f00a18b3a29' });
       });
 
-      this.setState({ userIds: userIds  })
+      this.setState({ userGroups: userGroups })
     }
 
   }
@@ -218,6 +206,7 @@ const mapStateToProps = state => {
   return {
     users: state.users.users,
     globalUsers: state.users.globalUsers,
+    defaultUsers: state.users.defaultUsers,
     error: state.users.error,
     activeLocationId: state.locations.activeLocationId
   };
