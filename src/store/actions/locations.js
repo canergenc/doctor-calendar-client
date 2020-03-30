@@ -109,7 +109,7 @@ export const deleteLocation = (locationId) => {
                 filter: {
                     where: {
                         groupId: {
-                            like: "5e53975e62398900983c869c"
+                            like: "5e81d18363226a009965dd49"
                         }
                     }
                 }
@@ -144,7 +144,7 @@ export const createLocation = (locationData) => {
                     filter: {
                         where: {
                             groupId: {
-                                like: "5e53975e62398900983c869c"
+                                like: "5e81d18363226a009965dd49"
                             }
                         }
                     }
@@ -181,7 +181,7 @@ export const updateLocation = (locationId, locationData) => {
                     filter: {
                         where: {
                             groupId: {
-                                like: "5e53975e62398900983c869c"
+                                like: "5e81d18363226a009965dd49"
                             }
                         }
                     }

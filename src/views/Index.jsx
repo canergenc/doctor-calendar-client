@@ -68,7 +68,7 @@ class Index extends Component {
           const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
-            groupId: "5e53975e62398900983c869c",
+            groupId: "5e81d18363226a009965dd49",
             userId: user.user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
             type: 1

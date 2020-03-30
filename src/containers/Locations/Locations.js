@@ -72,7 +72,7 @@ class Location extends Component {
             const location = {
                 name: this.state.name,
                 colorCode: this.state.colorCode,
-                groupId: '5e53975e62398900983c869c'/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+                groupId: '5e81d18363226a009965dd49'/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
             }
 
             this.props.createLocation(location);
@@ -96,7 +96,7 @@ class Location extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like: '5e53975e62398900983c869c'//this.props.groupId
+                        like: '5e81d18363226a009965dd49'//this.props.groupId
                     }
                 }
             }

@@ -62,7 +62,7 @@ export const createReminder = (reminderData) => {
                 like: reminderData.locationId
               },
               groupId: {
-                like: '5e53975e62398900983c869c'
+                like: '5e81d18363226a009965dd49'
               }
             },
             include: [
@@ -112,7 +112,7 @@ export const deleteReminder = (reminderId) => {
           filter: {
             where: {
               groupId: {
-                like: "5e53975e62398900983c869c"
+                like: "5e81d18363226a009965dd49"
               }
             },
             include: [

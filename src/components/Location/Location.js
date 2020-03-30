@@ -78,7 +78,7 @@ class Location extends Component {
                         like: locationId
                     },
                     groupId:{
-                        like:"5e53975e62398900983c869c"
+                        like:"5e81d18363226a009965dd49"
                     }
                 },
                 include: [
@@ -109,7 +109,7 @@ class Location extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like: '5e53975e62398900983c869c'//this.props.groupId
+                        like: '5e81d18363226a009965dd49'//this.props.groupId
                     }
                 }
             }

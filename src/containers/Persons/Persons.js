@@ -79,7 +79,7 @@ class Persons extends Component {
                 title: this.state.title,
                 email: this.state.email,
                 password:this.state.password,
-                //groupId: '5e53975e62398900983c869c',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+                //groupId: '5e81d18363226a009965dd49',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
                 deviceId: "1"
             };
 
@@ -104,7 +104,7 @@ class Persons extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like: '5e53975e62398900983c869c'//this.props.groupId
+                        like: '5e81d18363226a009965dd49'//this.props.groupId
                     }
                 },
                 include: [
