@@ -17,6 +17,16 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 error: true
             };
+        case actionTypes.CREATE_USERGROUPBULK_SUCCESS:
+            return {
+                ...state,
+                error: false
+            };
+        case actionTypes.CREATE_USERGROUPBULK_FAILURE:
+            return {
+                ...state,
+                error: true
+            };
         default:
             return state;
     }

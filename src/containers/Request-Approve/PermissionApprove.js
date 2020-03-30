@@ -2,19 +2,10 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
 // import CommentIcon from '@material-ui/icons/Comment';
 
 // reactstrap components
 import {
-    Modal,
     Button,
     Card,
     CardHeader,
@@ -24,16 +15,7 @@ import {
     PaginationLink,
     Table,
     Container,
-    Col,
     Row,
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    DropdownToggle,
-    Form,
-    Input,
-    InputGroup,
-    FormGroup
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
@@ -41,10 +23,6 @@ import "./PermissionApprove.scss";
 
 
 class PermissionApprove extends Component {
-    constructor(props) {
-        super(props)
-
-    }
 
     componentDidMount() {
 
@@ -122,30 +100,29 @@ class PermissionApprove extends Component {
         let result = [];
         if (this.props.reminders) {
             let list = this.props.reminders.filter(cal => {
-                return (cal.status && cal.status == 1 && cal.calendarGroupId)
+                return (cal.status && cal.status === 1 && cal.calendarGroupId)
             })
             let listOfCalGroupIds = this.getUniqGroupIds(list);
             for (let index = 0; index < listOfCalGroupIds.length; index++) {
                 const calGroupId = listOfCalGroupIds[index];
                 let listOfFiltered = [];
                 listOfFiltered = list.filter((i) => {
-                    return i.calendarGroupId == calGroupId;
+                    return i.calendarGroupId === calGroupId;
                 })
                 let startDate = "";
                 let endDate = "";
-                let strOfDate = "";
+
                 let numberOfDay = 0
                 let email = "";
                 let name = "";
                 listOfFiltered.map((cal) => (
-                    cal.date = new Date(cal.date).toLocaleDateString(),
+                    cal.date = new Date(cal.date).toLocaleDateString,
                     cal.modifiedDate = new Date(cal.date)
-
                 ));
                 listOfFiltered.sort((a, b) => (a.modifiedDate > b.modifiedDate) ? 1 : -1);
                 startDate = listOfFiltered[0].date;
                 endDate = listOfFiltered[listOfFiltered.length - 1].date;
-                strOfDate = startDate + '-' + endDate;
+                
                 numberOfDay = listOfFiltered.length;
                 email = listOfFiltered[0].user.email;
                 name = listOfFiltered[0].user.fullName;

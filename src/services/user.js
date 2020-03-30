@@ -10,7 +10,7 @@ const getUsers = (filterData) => {
 
 const getGlobalUsers = (filterData) => {
     return request({
-        url: '/user-groups',
+        url: '/users',
         method: 'GET',
         params: filterData
     });

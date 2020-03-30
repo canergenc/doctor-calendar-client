@@ -21,7 +21,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
 
-import Spinner from "../../components/UI/Spinner/Spinner"
 
 import {
   Button,
@@ -38,7 +37,6 @@ import {
   Col,
   Alert
 } from "reactstrap";
-import { customVariables } from '../../hoc/Config/customVariables';
 
 class Login extends React.Component {
   constructor(props) {

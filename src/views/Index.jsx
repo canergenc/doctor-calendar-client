@@ -7,12 +7,10 @@ import {
   Modal,
   Button,
   Form,
-  Input,
-  InputGroup,
   FormGroup,
+  InputGroup,
   Card,
-  CardHeader,
-  CardBody
+  CardHeader
 } from "reactstrap";
 import { DragDropContext } from 'react-beautiful-dnd';
 import moment from "moment";
@@ -21,15 +19,15 @@ import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Users from '../containers/Users/Users';
 import Location from '../components/Location/Location';
-import Spinner from '../components/UI/Spinner/Spinner';
-import User from '../components/User/User';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";
 import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
 import api from "../api";
 
-import SelectSearch from 'react-select-search';
+import Select from 'react-select';
+
+import './Index.css';
 
 
 
@@ -41,34 +39,12 @@ class Index extends Component {
     super(props)
     this.state = {
       addModal: false,
-      name: '',
-      title: '',
-      email: '',
-      password: ''
+      userGroups: []
     }
     this.addHandle = this.addHandle.bind(this);
   }
 
-  addHandle(event) {
 
-    if (this.state.name) {
-      const user = {
-        fullName: this.state.name,
-        title: this.state.title,
-        email: this.state.email,
-        password: this.state.password,
-        //groupId: '5e53975e62398900983c869c',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
-        deviceId: "1"
-      };
-
-      this.props.createUser(user);
-      this.toggleModal('addModal', undefined);
-
-    } else {
-      alert('Ad alanı zorunludur!')
-    }
-    event.preventDefault();
-  }
 
   onDragEnd = result => {
 
@@ -106,16 +82,12 @@ class Index extends Component {
             text: constants.ERROR_MESSAGE.serviceNotFound
           })
         }
-
         break;
       default:
         break;
     }
   };
 
-  findUser = (filterKey) => {
-    this.props.findUser(filterKey);
-  }
 
   toggleModal(state) {
     this.setState({
@@ -123,29 +95,39 @@ class Index extends Component {
     });
   };
 
-  render() {
-    const options = [
-      {name: 'Swedish', value: 'sv'},
-      {name: 'English', value: 'en'},
-      {
-          type: 'group',
-          name: 'Group name',
-          items: [
-              {name: 'Spanish', value: 'es'},
-          ]
-      },
-  ];
-    let globalUserList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <p>Test</p>
+  findUser = (filterKey) => {
+    console.log("-----findUser");
 
-    // if (this.props.globalUsers) {
-    //   globalUserList = this.props.globalUsers.map((user, index) => (
-    //     <User
-    //       {...user}
-    //       key={user.id}
-    //       index={index}
-    //     />
-    //   ));
-    // }
+    console.log(filterKey);
+
+    this.props.findUser(filterKey);
+  }
+
+  addHandle(event) {
+    this.props.createUserGroupBulk(this.state.userGroups);
+    this.toggleModal('addModal', undefined);
+
+    event.preventDefault();
+  }
+
+  addUserId(user) {
+    if (user) {
+      let userGroups = [];
+      user.forEach(element => {
+        userGroups.push({ userId: element.value, groupId: '5e7f28d1fc0e1f00a18b3a29' });
+      });
+
+      this.setState({ userGroups: userGroups })
+    }
+
+  }
+
+  render() {
+    let options = [];
+
+    if (this.props.globalUsers) {
+      options = this.props.globalUsers
+    }
 
     return (
       <>
@@ -168,23 +150,20 @@ class Index extends Component {
           </div>
 
           <div className="modal-body">
-                <SelectSearch options={options} defaultValue="sv" name="language" placeholder="Choose your language" />
-            {/* <Form role="form" >
+
+            <Form role="form" >
               <FormGroup>
                 <InputGroup className="input-group-alternative mb-3">
                 </InputGroup>
                 <Card className="shadow sticky" >
-                   <CardHeader className="bg-transparent">
+                  <CardHeader className="bg-transparent">
                     <Row>
-                       
-
+                      <Select options={options} className="select" isMulti onInputChange={(ev) => this.findUser(ev)} onChange={(user) => this.addUserId(user)} />
                     </Row>
-                  </CardHeader> 
-                  <CardBody>
-                  </CardBody>
+                  </CardHeader>
                 </Card>
               </FormGroup>
-            </Form> */}
+            </Form>
           </div>
           <div className="modal-footer">
             <Button
@@ -227,6 +206,7 @@ const mapStateToProps = state => {
   return {
     users: state.users.users,
     globalUsers: state.users.globalUsers,
+    defaultUsers: state.users.defaultUsers,
     error: state.users.error,
     activeLocationId: state.locations.activeLocationId
   };
@@ -235,6 +215,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
+    createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
     findUser: (filterKey) => dispatch(actions.findUser(filterKey))
   };
 };
