@@ -29,9 +29,17 @@ class PermissionApprove extends Component {
         const filterData = {
             filter: {
                 where: {
-                    groupId: {
-                        like: '5e53975e62398900983c869c'
-                    }
+                    and: [{
+                        groupId: {
+                            like: '5e53975e62398900983c869c'
+                        }
+                    }, {
+                        type: {
+                            neq: 1
+                        }
+                    }]
+
+
                 },
                 include: [
                     {
@@ -66,11 +74,11 @@ class PermissionApprove extends Component {
 
     approvePermisson(item) {
         console.log(item);
-        const filter ={
-            where : {
-                calendarGroupId: 
+        const filter = {
+            where: {
+                calendarGroupId:
                     item.calendarGroupId
-                
+
             }
 
         }
@@ -116,13 +124,13 @@ class PermissionApprove extends Component {
                 let email = "";
                 let name = "";
                 listOfFiltered.map((cal) => (
-                    cal.date = new Date(cal.date).toLocaleDateString,
+                    cal.date = new Date(cal.date).toLocaleDateString(),
                     cal.modifiedDate = new Date(cal.date)
                 ));
                 listOfFiltered.sort((a, b) => (a.modifiedDate > b.modifiedDate) ? 1 : -1);
                 startDate = listOfFiltered[0].date;
                 endDate = listOfFiltered[listOfFiltered.length - 1].date;
-                
+
                 numberOfDay = listOfFiltered.length;
                 email = listOfFiltered[0].user.email;
                 name = listOfFiltered[0].user.fullName;
