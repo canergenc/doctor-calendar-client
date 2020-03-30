@@ -72,6 +72,8 @@ class PermissionApprove extends Component {
 
     }
 
+
+
     getUniqGroupIds(list) {
         const uniqueTags = [];
         list.map(cal => {
@@ -84,7 +86,37 @@ class PermissionApprove extends Component {
     }
 
 
-    filter = (tag, calendar) => calendar.filter(cal => cal.calendarGroupId === tag);
+    approvePermisson(item) {
+        console.log(item);
+        const filter ={
+            where : {
+                calendarGroupId: 
+                    item.calendarGroupId
+                
+            }
+
+        }
+
+
+        const data = {
+
+            status: 2
+
+        }
+
+        //this.props.patchPermisson(filter, data);
+
+
+
+    }
+
+    rejectPermission(item) {
+
+    }
+
+
+
+
 
     render() {
         let result = [];
@@ -118,20 +150,20 @@ class PermissionApprove extends Component {
                 email = listOfFiltered[0].user.email;
                 name = listOfFiltered[0].user.fullName;
 
-                result.push({ id:index,list: listOfFiltered, startDate: startDate, endDate: endDate, numberOfDay: numberOfDay, name: name, email: email });
+                result.push({ id: index, calendarGroupId: calGroupId, list: listOfFiltered, startDate: startDate, endDate: endDate, numberOfDay: numberOfDay, name: name, email: email });
 
             }
             console.log(result);
             if (result.length > 0) {
-                result = result.map((r) => (
-                    <tr key={r.id}>
-                        <td>{r.name}</td>
-                        <td>{r.email}</td>
-                        <td>{r.startDate}</td>
-                        <td>{r.endDate}</td>
-                        <td>{r.numberOfDay}</td>
+                result = result.map((item) => (
+                    <tr key={item.id}>
+                        <td>{item.name}</td>
+                        <td>{item.email}</td>
+                        <td>{item.startDate}</td>
+                        <td>{item.endDate}</td>
+                        <td>{item.numberOfDay}</td>
 
-                        
+
                         <td className="text-right">
                             <Button
                                 color="warning"
@@ -143,7 +175,7 @@ class PermissionApprove extends Component {
 
                             <Button
                                 color="primary"
-                                onClick={e => e.preventDefault()}
+                                onClick={() => this.approvePermisson(item)}
                                 size="sm"
                             >
                                 ONAYLA
@@ -161,7 +193,7 @@ class PermissionApprove extends Component {
         return (
 
             <>
-                <UserHeader fullName=''/>
+                <UserHeader fullName='' />
 
                 <Container className="mt--7" fluid>
                     {/* Table */}
@@ -196,7 +228,7 @@ class PermissionApprove extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                     {result} 
+                                        {result}
                                     </tbody>
                                 </Table>
                                 <CardFooter className="py-4">
@@ -275,7 +307,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchPermissionRequest: (filterData) => dispatch(actions.getReminders(filterData))
+        fetchPermissionRequest: (filterData) => dispatch(actions.getReminders(filterData)),
+        patchPermisson: (filter, data) => dispatch(actions.updateBulkReminder(filter, data)),
     };
 };
 
