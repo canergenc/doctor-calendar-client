@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 
+import { CalendarTypes } from '../../variables/constants';
+
 // import CommentIcon from '@material-ui/icons/Comment';
 
 // reactstrap components
@@ -36,7 +38,7 @@ class PermissionApprove extends Component {
                         }
                     }, {
                         type: {
-                            neq: 1  //Variables üzerinden enum yazılacak.
+                            neq: !CalendarTypes.Nobet  //Type göre gruplandırılabilir.
                         }
                     }]
 
@@ -75,20 +77,20 @@ class PermissionApprove extends Component {
 
     approvePermisson(item) {
         console.log(item);
-        const filter = {
-            where: {
-                calendarGroupId: item.calendarGroupId
+
+        const filterData = {
+            filter: {
+                where: {
+                    calendarGroupId: item.calendarGroupId
+                }
             }
         }
-
         const data = {
             status: 2
         }
 
-        console.log(filter);
-        console.log(data);
-
-        this.props.patchPermisson(filter, data);
+       
+        this.props.patchPermisson(filterData, data);
 
 
 
