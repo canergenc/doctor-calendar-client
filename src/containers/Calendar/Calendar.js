@@ -13,6 +13,7 @@ import Api from "../../api";
 import "moment/locale/tr";
 import "./Calendar.scss";
 import { helperService } from "../../services";
+import { CalendarTypes} from "../../variables/constants";
 
 class Calendar extends Component {
 
@@ -32,7 +33,8 @@ class Calendar extends Component {
         where: {
           groupId: {
             like: helperService.getGroupId()
-          }
+          },
+          type:CalendarTypes.Nobet
         },
         include: [
           {

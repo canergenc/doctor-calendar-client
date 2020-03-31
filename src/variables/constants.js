@@ -17,14 +17,14 @@ export const constants = {
 };
 
 
-export const CalendarType = {
-    "Nöbet": 1,
-    "İzin": 2,
-    "Rapor": 3,
-    "Gebelik": 4,
-    "Resmi Tatil": 5,
-    "İdari izin": 6,
-    "Özel Durum": 7,
+export const CalendarTypes = {
+    Nobet: 1,
+    Izin: 2,
+    Rapor: 3,
+    Gebelik: 4,
+    ResmiTatil: 5,
+    IdariIzin: 6,
+    OzelDurum: 7
 }
 
 

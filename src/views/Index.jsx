@@ -23,6 +23,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";
 import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
+import { CalendarTypes} from "../variables/constants";
 import api from "../api";
 
 import Select from 'react-select';
@@ -72,7 +73,7 @@ class Index extends Component {
             groupId: helperService.getGroupId() ,
             userId: user.user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-            type: 1
+            type: CalendarTypes.Nobet
           }
           this.props.createReminder(reminder);
         }
