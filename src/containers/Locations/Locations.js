@@ -30,6 +30,7 @@ import {
 import UserHeader from "components/Headers/UserHeader.jsx";
 import "./Location.scss";
 import { RadioGroup } from "pretty-checkbox-react";
+import { helperService } from "../../services";
 
 class Location extends Component {
     constructor(props) {
@@ -72,7 +73,7 @@ class Location extends Component {
             const location = {
                 name: this.state.name,
                 colorCode: this.state.colorCode,
-                groupId: '5e53975e62398900983c869c'/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+                groupId: helperService.getGroupId() 
             }
 
             this.props.createLocation(location);
@@ -96,7 +97,7 @@ class Location extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like: '5e53975e62398900983c869c'//this.props.groupId
+                        like:  helperService.getGroupId()
                     }
                 }
             }

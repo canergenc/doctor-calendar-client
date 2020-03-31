@@ -28,6 +28,7 @@ import api from "../api";
 import Select from 'react-select';
 
 import './Index.css';
+import { helperService } from "../services";
 
 
 
@@ -68,7 +69,7 @@ class Index extends Component {
           const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
-            groupId: "5e53975e62398900983c869c",
+            groupId: helperService.getGroupId() ,
             userId: user.user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
             type: 0
@@ -114,7 +115,7 @@ class Index extends Component {
     if (user) {
       let userGroups = [];
       user.forEach(element => {
-        userGroups.push({ userId: element.value, groupId: '5e7f28d1fc0e1f00a18b3a29' });
+        userGroups.push({ userId: element.value, groupId: helperService.getGroupId() });
       });
 
       this.setState({ userGroups: userGroups })

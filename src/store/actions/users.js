@@ -1,6 +1,7 @@
 import * as actionTypes from './actionTypes';
 import { userService } from '../../services/user';
 import { userGroupService } from "../../services/user.group";
+import { helperService } from '../../services';
 
 export const setUsers = (users, defaultUsers) => {
     return {
@@ -119,7 +120,7 @@ export const deleteUser = (userId) => {
                 filter: {
                     where: {
                         groupId: {
-                            like: "5e53975e62398900983c869c"
+                            like: helperService.getGroupId()
                         }
                     },
                     include: [
@@ -158,7 +159,7 @@ export const createUser = (userData) => {
                     filter: {
                         where: {
                             groupId: {
-                                like: "5e53975e62398900983c869c"
+                                like: helperService.getGroupId()
                             }
                         },
                         include: [
@@ -198,7 +199,7 @@ export const updateUser = (userId, userData) => {
                     filter: {
                         where: {
                             groupId: {
-                                like: "5e53975e62398900983c869c"
+                                like: helperService.getGroupId()
                             }
                         },
                         include: [

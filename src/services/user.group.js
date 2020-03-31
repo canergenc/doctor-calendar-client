@@ -1,4 +1,5 @@
 import request from '../hoc/Config/apiCentral';
+import { helperService } from './helper';
 
 const createUserGroup = (userId) => {
     console.log("create user group");
@@ -8,7 +9,7 @@ const createUserGroup = (userId) => {
         method: 'POST',
         data: {
             'userId': userId,  //  Zorunlu alan olması önemli değil // Caner_Genç_Çalışan_Grup
-            'groupId': "5e53975e62398900983c869c"
+            'groupId': helperService.getGroupId() 
         }
     });
 };

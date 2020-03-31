@@ -39,9 +39,9 @@ const registerFailure = (err) => {
     return {
         erorObj: err,
         type: actionTypes.REGISTER_FAILURE,
-        statusCode: err.data.error.statusCode, // BadRequestError
-        statusText: err.data.error.message,  // Invalid email or password
-        statusName: err.data.error.name,   // BadRequestError
+        // statusCode: err.data.error.statusCode, // BadRequestError
+        // statusText: err.data.error.message,  // Invalid email or password
+        // statusName: err.data.error.name,   // BadRequestError
 
     };
 }

@@ -1,5 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
+import { helperService } from "../../services";
 
 
 
@@ -35,9 +36,9 @@ export const updateBulkReminderFailure = (err) => {
   return {
       erorObj: err,
       type: actionTypes.CALENDAR_BULKUPDATE_FAILURE,
-      statusCode: err.data.error.statusCode, // BadRequestError
-      statusText: err.data.error.message,  // Invalid email or password
-      statusName: err.data.error.name,   // BadRequestError
+      // statusCode: err.data.error.statusCode, // BadRequestError
+      // statusText: err.data.error.message,  // Invalid email or password
+      // statusName: err.data.error.name,   // BadRequestError
 
   };
 }
@@ -104,7 +105,7 @@ export const createReminder = (reminderData) => {
                 like: reminderData.locationId
               },
               groupId: {
-                like: '5e53975e62398900983c869c'
+                like: helperService.getGroupId()
               }
             },
             include: [
@@ -154,7 +155,7 @@ export const deleteReminder = (reminderId) => {
           filter: {
             where: {
               groupId: {
-                like: "5e53975e62398900983c869c"
+                like: helperService.getGroupId()
               }
             },
             include: [

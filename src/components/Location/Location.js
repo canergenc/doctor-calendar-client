@@ -7,6 +7,7 @@ import ScrollMenu from "react-horizontal-scrolling-menu";
 import './Location.css';
 
 import { Button } from "reactstrap";
+import { helperService } from '../../services';
 
 const Arrow = ({ text, className }) => {
     return <div className={className}>{text}</div>;
@@ -78,7 +79,7 @@ class Location extends Component {
                         like: locationId
                     },
                     groupId:{
-                        like:"5e53975e62398900983c869c"
+                        like: helperService.getGroupId()
                     }
                 },
                 include: [
@@ -109,7 +110,7 @@ class Location extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like: '5e53975e62398900983c869c'//this.props.groupId
+                        like: helperService.getGroupId()
                     }
                 }
             }

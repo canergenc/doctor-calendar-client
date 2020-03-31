@@ -11,5 +11,7 @@ export const constants = {
     ERROR_CODE: {
         422: "422"
     },    
-    TOKEN: "token"
+    TOKEN: "token",
+
+    GROUPID:'groupId'
 };

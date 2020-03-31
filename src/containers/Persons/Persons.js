@@ -27,6 +27,7 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
 import "./Persons.css";
+import { helperService } from "../../services";
 
 class Persons extends Component {
     constructor(props) {
@@ -79,7 +80,7 @@ class Persons extends Component {
                 title: this.state.title,
                 email: this.state.email,
                 password:this.state.password,
-                //groupId: '5e53975e62398900983c869c',/* İleri de localstorage veya servisle çekilecek. Şimdilik sabit id ile yapıldı.*/
+                //groupId: 
                 deviceId: "1"
             };
 
@@ -104,7 +105,7 @@ class Persons extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like: '5e53975e62398900983c869c'//this.props.groupId
+                        like:  helperService.getGroupId()
                     }
                 },
                 include: [

@@ -28,7 +28,7 @@ const getUserId = () => {
 
 
 const getGroupId = () => {
-    return localStorage.getItem("");
+    return localStorage.getItem(customVariables.GROUPID);
 }
 
 

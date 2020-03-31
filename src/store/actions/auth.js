@@ -45,13 +45,13 @@ const loginSuccess = (tokenModel) => {
 
 
 const loginFailure = (err) => {
-
+    console.log(err);
     return {
         type: actionTypes.LOGIN_FAILURE,
         erorObj: err,
-        statusCode: err.error.statusCode, // BadRequestError
-        statusText: err.error.message,  // Invalid email or password
-        statusName: err.error.name,   // BadRequestError
+        //statusCode: err.error.statusCode, // BadRequestError
+        //statusText: err.error.message,  // Invalid email or password
+        //statusName: err.error.name,   // BadRequestError
 
     };
 }

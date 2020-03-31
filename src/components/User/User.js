@@ -4,6 +4,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import 'pretty-checkbox';
+import { helperService } from '../../services';
 
 const Container = styled.div`
 display: flex;
@@ -44,7 +45,7 @@ class User extends Component {
                 filter: {
                     where: {
                         groupId: {
-                            like: '5e53975e62398900983c869c'
+                            like: helperService.getGroupId()
                         }
                     },
                     include: [
@@ -74,7 +75,7 @@ class User extends Component {
                             like: userId
                         },
                         groupId: {
-                            like: '5e53975e62398900983c869c'
+                            like:  helperService.getGroupId()
                         }
                     },
                     include: [

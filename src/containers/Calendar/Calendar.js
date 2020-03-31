@@ -12,6 +12,7 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import Api from "../../api";
 import "moment/locale/tr";
 import "./Calendar.scss";
+import { helperService } from "../../services";
 
 class Calendar extends Component {
 
@@ -30,7 +31,7 @@ class Calendar extends Component {
       filter: {
         where: {
           groupId: {
-            like: '5e53975e62398900983c869c'
+            like: helperService.getGroupId()
           }
         },
         include: [

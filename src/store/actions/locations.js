@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import { locationService } from '../../services/index';
+import { locationService, helperService } from '../../services/index';
 import history from "../../hoc/Config/history"
 
 
@@ -48,17 +48,11 @@ export const createBulkLocaitionFailure = (err) => {
         type: actionTypes.BULKLOCATION_FAILURE,
         erorObj: err,
         status: false,
-        statusCode: err.data.error.statusCode, // BadRequestError
-        statusText: err.data.error.message,  // Invalid email or password
-        statusName: err.data.error.name,   // BadRequestError
+        // statusCode: err.data.error.statusCode, // BadRequestError
+        // statusText: err.data.error.message,  // Invalid email or password
+        // statusName: err.data.error.name,   // BadRequestError
     };
 }
-
-
-
-
-//---------------------------------
-
 
 
 
@@ -109,7 +103,7 @@ export const deleteLocation = (locationId) => {
                 filter: {
                     where: {
                         groupId: {
-                            like: "5e53975e62398900983c869c"
+                            like: helperService.getGroupId()
                         }
                     }
                 }
@@ -144,7 +138,7 @@ export const createLocation = (locationData) => {
                     filter: {
                         where: {
                             groupId: {
-                                like: "5e53975e62398900983c869c"
+                                like: helperService.getGroupId()
                             }
                         }
                     }
@@ -181,7 +175,7 @@ export const updateLocation = (locationId, locationData) => {
                     filter: {
                         where: {
                             groupId: {
-                                like: "5e53975e62398900983c869c"
+                                like: helperService.getGroupId()
                             }
                         }
                     }

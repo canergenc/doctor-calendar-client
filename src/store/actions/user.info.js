@@ -1,6 +1,7 @@
 import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
 import history from "../../hoc/Config/history"
+import { customVariables } from "../../hoc/Config/customVariables";
 
 
 const getUserInfo = () => {
@@ -25,6 +26,7 @@ const getUserInfoByAuth = () => {
             dispatch(userInfoSuccess(response))
 
             if (response.groups && response.groups.length > 0) {
+                localStorage.setItem(customVariables.GROUPID, response.groups[0].id);
                 history.push('/admin/index'); // Will fix
             } else {
                 history.push('/splash/index');
@@ -63,9 +65,9 @@ const userInfoFailure = (err) => {
     return {
         type: actionTypes.USERINFO_FAILURE,
         erorObj: err,
-        statusCode: err.data.error.statusCode, // BadRequestError
-        statusText: err.data.error.message,  // Invalid email or password
-        statusName: err.data.error.name,   // BadRequestError
+        // statusCode: err.data.error.statusCode, // BadRequestError
+        // statusText: err.data.error.message,  // Invalid email or password
+        // statusName: err.data.error.name,   // BadRequestError
 
     };
 }

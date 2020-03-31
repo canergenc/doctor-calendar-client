@@ -16,6 +16,7 @@ import * as actions from '../../store/actions/index';
 import User from '../../components/User/User';
 
 import './Users.css';
+import { helperService } from '../../services';
 
 
 class Users extends Component {
@@ -25,7 +26,7 @@ class Users extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like: "5e53975e62398900983c869c"
+                        like: helperService.getGroupId()
                     }
                 },
                 include:[

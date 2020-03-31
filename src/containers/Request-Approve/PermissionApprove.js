@@ -20,6 +20,7 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.jsx";
 import "./PermissionApprove.scss";
+import { helperService } from "../../services";
 
 
 class PermissionApprove extends Component {
@@ -31,11 +32,11 @@ class PermissionApprove extends Component {
                 where: {
                     and: [{
                         groupId: {
-                            like: '5e53975e62398900983c869c'
+                            like: helperService.getGroupId()
                         }
                     }, {
                         type: {
-                            neq: 1
+                            neq: 1  //Variables üzerinden enum yazılacak.
                         }
                     }]
 
@@ -76,21 +77,18 @@ class PermissionApprove extends Component {
         console.log(item);
         const filter = {
             where: {
-                calendarGroupId:
-                    item.calendarGroupId
-
+                calendarGroupId: item.calendarGroupId
             }
-
         }
-
 
         const data = {
-
             status: 2
-
         }
 
-        //this.props.patchPermisson(filter, data);
+        console.log(filter);
+        console.log(data);
+
+        this.props.patchPermisson(filter, data);
 
 
 
