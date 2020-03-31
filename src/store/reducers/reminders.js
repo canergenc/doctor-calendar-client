@@ -8,6 +8,11 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.CLEAN_REMINDERERROR:
+      return {
+        ...state,
+        error: false
+      };
     case actionTypes.SET_REMINDERS:
       return {
         ...state,
@@ -17,52 +22,48 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_REMINDERS_FAILED:
       return {
         ...state,
-        error: true
+        error: true,
+        statusText: helperService.getErrorMessage(action.errorObj)
       };
     case actionTypes.CREATE_REMINDER_SUCCESS:
-      const newReminder = {
-        ...action.reminderData,
-        id: action.reminderId
-      };
       return {
         ...state,
         loading: false,
-        reminders: state.orders.concat(newReminder)
+        error: false
       };
     case actionTypes.CREATE_REMINDER_FAIL:
       return {
         ...state,
         loading: false,
-        error:true
+        error: true,
+        statusText: helperService.getErrorMessage(action.errorObj)
       };
     case actionTypes.DELETE_REMINDER_SUCCESS:
       return {
-        reminderId: action.reminderId
+        reminderId: action.reminderId,
+        error: false
+      };
+    case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
+      return {
+        loading: true
       };
 
-      
-
-      case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
+    case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
       return {
-        loading:true
-      };
-
-      case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
-      return {
-        loading:false,
-        error:false,
+        loading: false,
+        error: false,
         response: action.response
       };
 
-      case actionTypes.CALENDAR_BULKUPDATE_FAILURE:
+    case actionTypes.CALENDAR_BULKUPDATE_FAILURE:
       return {
-        loading:false,
-        error:true,
-        response:{},
-        statusText: helperService.getErrorMessage(action.erorObj)
+        loading: false,
+        error: true,
+        response: {},
+        statusText: helperService.getErrorMessage(action.errorObj)
       };
 
-     
+
     default:
       return state;
   }

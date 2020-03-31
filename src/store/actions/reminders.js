@@ -1,44 +1,49 @@
 import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
 import { helperService } from "../../services";
+import { CalendarTypes } from "../../variables/constants";
 
 
+export const cleanReminderError = () => {
+  return {
+    type: actionTypes.CLEAN_REMINDERERROR
+  };
+};
 
-
-export const  updateBulkReminder = (filter,data) => {
+export const updateBulkReminder = (filter, data) => {
   return dispatch => {
-      dispatch(updateBulkReminderRequest());
-      calendarService.reminderBulkUpdateService(filter,data)
-          .then((response) => {
-              dispatch(updateBulkReminderSuccess(response));
-          }).catch((error) => {
-              dispatch(updateBulkReminderFailure(error));
-          });
+    dispatch(updateBulkReminderRequest());
+    calendarService.reminderBulkUpdateService(filter, data)
+      .then((response) => {
+        dispatch(updateBulkReminderSuccess(response));
+      }).catch((error) => {
+        dispatch(updateBulkReminderFailure(error));
+      });
   }
 }
 
 
 export const updateBulkReminderRequest = () => {
   return {
-      type: actionTypes.CALENDAR_BULKUPDATE_REQUEST,
+    type: actionTypes.CALENDAR_BULKUPDATE_REQUEST,
   };
 };
 
 export const updateBulkReminderSuccess = (response) => {
   return {
-      type: actionTypes.CALENDAR_BULKUPDATE_SUCCESS,
-      response: response
+    type: actionTypes.CALENDAR_BULKUPDATE_SUCCESS,
+    response: response
   };
 
 }
 
 export const updateBulkReminderFailure = (err) => {
   return {
-      erorObj: err,
-      type: actionTypes.CALENDAR_BULKUPDATE_FAILURE,
-      // statusCode: err.data.error.statusCode, // BadRequestError
-      // statusText: err.data.error.message,  // Invalid email or password
-      // statusName: err.data.error.name,   // BadRequestError
+    errorObj: err,
+    type: actionTypes.CALENDAR_BULKUPDATE_FAILURE,
+    // statusCode: err.data.error.statusCode, // BadRequestError
+    // statusText: err.data.error.message,  // Invalid email or password
+    // statusName: err.data.error.name,   // BadRequestError
 
   };
 }
@@ -54,7 +59,8 @@ export const setReminders = (reminders) => {
 
 export const fetchRemindersFailed = (error) => {
   return {
-    type: actionTypes.FETCH_REMINDERS_FAILED
+    type: actionTypes.FETCH_REMINDERS_FAILED,
+    errorObj:error
   };
 };
 
@@ -90,7 +96,7 @@ export const createReminderFailed = (error) => {
 
   return {
     type: actionTypes.CREATE_REMINDER_FAIL,
-    error: error
+    errorObj: error
   };
 };
 
@@ -106,7 +112,8 @@ export const createReminder = (reminderData) => {
               },
               groupId: {
                 like: helperService.getGroupId()
-              }
+              },
+              type:CalendarTypes.Nobet
             },
             include: [
               {
@@ -121,8 +128,8 @@ export const createReminder = (reminderData) => {
             ]
           }
         }
-        dispatch(getReminders(filterData));
-        dispatch(createReminderSuccess(response, reminderData));
+        dispatch(getReminders(filterData));        
+        dispatch(createReminderSuccess(response.id, reminderData));
       }).catch((error) => {
         dispatch(createReminderFailed(error));
       });
@@ -156,14 +163,18 @@ export const deleteReminder = (reminderId) => {
             where: {
               groupId: {
                 like: helperService.getGroupId()
-              }
+              },
+              type:CalendarTypes.Nobet
             },
             include: [
               {
-                relation: "location"
+                relation: "group"
               },
               {
                 relation: "user"
+              },
+              {
+                relation: "location"
               }
             ]
           }

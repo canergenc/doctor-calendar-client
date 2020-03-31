@@ -133,9 +133,6 @@ class AdminNavbar extends React.Component {
 
 
 const mapStateToProps = state => {
-
-  console.log(state);
-
   return {
     // email: state.userInfo.email,
     fullName: state.userInfo.fullName,

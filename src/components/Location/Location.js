@@ -37,7 +37,6 @@ class Location extends Component {
     }
 
     createMenu = (list, selected) => {
-        console.log("create menu");
         let menu = list.map((el, index) => (
             <Button
                 outline
@@ -105,7 +104,6 @@ class Location extends Component {
     };
 
     componentDidMount() {
-        console.log("[Location] componentDidMount");
         const filterData = {
             filter: {
                 where: {
@@ -119,7 +117,6 @@ class Location extends Component {
     }
 
     render() {
-        console.log("Locations render");
         const {
             alignCenter,
             clickWhenDrag,
