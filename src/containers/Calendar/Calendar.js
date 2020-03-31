@@ -27,7 +27,6 @@ class Calendar extends Component {
   };
 
   componentDidMount() {
-    console.log('[Calendar] componentDidMount');
     const filterData = {
       filter: {
         where: {
@@ -54,7 +53,6 @@ class Calendar extends Component {
   }
 
   createState() {
-    console.log('createState');
 
     const now = new Date();
     const month = now.getMonth() + 1;
@@ -92,8 +90,6 @@ class Calendar extends Component {
 
 
   buildDays() {
-
-    console.log("buildDays");
 
     const days = [];
     const props = {};

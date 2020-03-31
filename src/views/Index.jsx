@@ -23,7 +23,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";
 import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
-import { CalendarTypes} from "../variables/constants";
+import { CalendarTypes } from "../variables/constants";
 import api from "../api";
 
 import Select from 'react-select';
@@ -70,7 +70,7 @@ class Index extends Component {
           const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
-            groupId: helperService.getGroupId() ,
+            groupId: helperService.getGroupId(),
             userId: user.user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
             type: CalendarTypes.Nobet
@@ -82,7 +82,7 @@ class Index extends Component {
             icon: 'error',
             title: 'Hay aksi,',
             text: constants.ERROR_MESSAGE.serviceNotFound
-          })
+          });
         }
         break;
       default:
@@ -131,9 +131,24 @@ class Index extends Component {
       options = this.props.globalUsers
     }
 
+
+    if (this.props.errorFromReminders) {
+      console.log("---------------------INDEX---------------");
+      
+      console.log(this.props.errorFromReminders);
+      
+      MySwal.fire({
+        icon: 'error',
+        title: 'Hay aksi,',
+        text: this.props.statusText
+      });
+      this.props.cleanReminderError();
+    }
+
     return (
       <>
         <Header />
+
         {/* Add Person Modal */}
         <Modal
           className="modal-dialog-centered"
@@ -209,13 +224,16 @@ const mapStateToProps = state => {
     users: state.users.users,
     globalUsers: state.users.globalUsers,
     defaultUsers: state.users.defaultUsers,
-    error: state.users.error,
+    errorFromUsers: state.users.error,
+    errorFromReminders: state.reminders.error,
+    statusText: state.reminders.statusText,
     activeLocationId: state.locations.activeLocationId
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    cleanReminderError: () => dispatch(actions.cleanReminderError()),
     createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
     findUser: (filterKey) => dispatch(actions.findUser(filterKey))
