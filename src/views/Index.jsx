@@ -72,7 +72,7 @@ class Index extends Component {
             groupId: helperService.getGroupId() ,
             userId: user.user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-            type: 0
+            type: 1
           }
           this.props.createReminder(reminder);
         }
