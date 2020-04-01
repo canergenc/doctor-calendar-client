@@ -136,7 +136,7 @@ class LocationSplash extends React.Component {
                             <ListGroup >
 
                                 {this.state.listOfLocation.length > 0 && this.state.listOfLocation.map(listitem => (
-                                    <ListGroupItem key={listitem.id} color={listitem.modifier} >   {listitem.context}
+                                    <ListGroupItem key={listitem.id} >   {listitem.context}
                                         <Button onClick={() => this.removeItem(listitem)} type="button" close aria-label="Cancel">
                                             <span aria-hidden>&ndash;</span>
                                         </Button>
