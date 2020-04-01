@@ -150,7 +150,7 @@ class Location extends Component {
         }
 
         return (
-            <div className="location">
+            <div className="location sticky">
                 {scrollMenu}
             </div>
         );

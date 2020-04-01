@@ -22,8 +22,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.FETCH_REMINDERS_FAILED:
       return {
         ...state,
-        error: true,
-        statusText: helperService.getErrorMessage(action.errorObj)
+        error: true
       };
     case actionTypes.CREATE_REMINDER_SUCCESS:
       return {
