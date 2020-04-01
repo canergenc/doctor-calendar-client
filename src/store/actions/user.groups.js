@@ -29,7 +29,7 @@ const createUserGroup = (groupName) => {
                         dispatch(createUserGroupSuccess(response));
                         history.push({
                             pathname: '/splash/location',
-                            state: { groupId: response.id }
+                            state: { groupId: groupId }
                         })
 
 
