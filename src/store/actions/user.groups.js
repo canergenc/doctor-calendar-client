@@ -31,9 +31,6 @@ const createUserGroup = (groupName) => {
                             pathname: '/splash/location',
                             state: { groupId: groupId }
                         })
-
-
-
                     })
                     .catch((error) => {
                         dispatch((createUserGroupFailure(error)));
