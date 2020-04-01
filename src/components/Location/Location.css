@@ -6,6 +6,12 @@
   border-top-right-radius: 6px;
 }
 
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
 .btn {
   display: inline-block;
   font-weight: 600;

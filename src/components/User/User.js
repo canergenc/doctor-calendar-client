@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import 'pretty-checkbox';
 import { helperService } from '../../services';
+import {CalendarTypes} from '../../variables/constants';
 
 const Container = styled.div`
 display: flex;
@@ -46,7 +47,8 @@ class User extends Component {
                     where: {
                         groupId: {
                             like: helperService.getGroupId()
-                        }
+                        },
+                        type:CalendarTypes.Nobet
                     },
                     include: [
                         {
@@ -76,7 +78,8 @@ class User extends Component {
                         },
                         groupId: {
                             like:  helperService.getGroupId()
-                        }
+                        },
+                        type:CalendarTypes.Nobet
                     },
                     include: [
                         {
