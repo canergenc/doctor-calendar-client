@@ -43,7 +43,7 @@ class PermissionApprove extends Component {
                 }, {
                     type: {
 
-                        neq: !CalendarTypes.Izin  //Type göre gruplandırılabilir.
+                        neq: CalendarTypes.Nobet  //Type göre gruplandırılabilir.
                     },
                     status: CalendarStatus.WaitingForApprove
                 }]
