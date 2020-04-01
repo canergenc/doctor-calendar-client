@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import { CalendarTypes } from '../../variables/constants';
+import { CalendarTypes, CalendarStatus } from '../../variables/constants';
 import 'font-awesome/css/font-awesome.min.css';
+import withReactContent from 'sweetalert2-react-content'
 // import CommentIcon from '@material-ui/icons/Comment';
 
 // reactstrap components
@@ -23,12 +24,16 @@ import {
 import UserHeader from "components/Headers/UserHeader.jsx";
 import "./PermissionApprove.scss";
 import { helperService } from "../../services";
+import Swal from 'sweetalert2'
 
+
+const MySwal = withReactContent(Swal)
 
 class PermissionApprove extends Component {
 
 
-    filterOfGetPermission = {
+
+    filterOfInitialLoad = {
         filter: {
             where: {
                 and: [{
@@ -37,9 +42,10 @@ class PermissionApprove extends Component {
                     }
                 }, {
                     type: {
+
                         neq: !CalendarTypes.Izin  //Type göre gruplandırılabilir.
                     },
-                    status: 1  //Enum foo yazılacak Red 3 
+                    status: CalendarStatus.WaitingForApprove
                 }]
             },
             include: [
@@ -57,11 +63,32 @@ class PermissionApprove extends Component {
     }
 
     loadPermissions() {
-        this.props.fetchPermissionRequest(this.filterOfGetPermission);
+        this.props.fetchPermissionRequest(this.filterOfInitialLoad);
     }
 
     componentDidMount() {
         this.loadPermissions();
+    }
+
+
+    showSwal(filter,data,item) {
+        MySwal.fire({
+            title: 'Lütfen red nedenini giriniz',
+            input: 'text',
+            inputAttributes: {
+                autocapitalize: 'off'
+            },
+           
+            confirmButtonText: 'Kaydet',
+            cancelButtonText:'iptal',
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.value) {
+               this.props.patchPermisson(filter,data,this.filterOfInitialLoad)
+            }
+        })
     }
 
 
@@ -85,8 +112,6 @@ class PermissionApprove extends Component {
 
 
     approvePermisson(item) {
-        console.log(item);
-
         const filter = {
             where: {
                 calendarGroupId: {
@@ -95,23 +120,27 @@ class PermissionApprove extends Component {
             }
         }
         const data = {
-            status: 2
+            status: CalendarStatus.Approve
         }
 
-        console.log(filter)
-        console.log(data);
-
-
-
-        this.props.patchPermisson(filter, data, this.filterOfGetPermission);
-
-
-
-
-
+        this.props.patchPermisson(filter, data, this.initialPageLoadFilter);
     }
 
     rejectPermission(item) {
+        const filter = {
+            where: {
+                calendarGroupId: {
+                    like: item.calendarGroupId
+                }
+            }
+        }
+        const data = {
+            status: CalendarStatus.Reject
+        }
+
+        this.showSwal(filter,data,item);
+
+        //this.props.patchPermisson(filter, data, this.filterOfGetPermission);
 
     }
 
@@ -126,7 +155,7 @@ class PermissionApprove extends Component {
 
             console.log('1', this.props);
             let list = this.props.reminders.filter(cal => {
-                return (cal.status && cal.status === 1 && cal.calendarGroupId)
+                return (cal.status &&  cal.calendarGroupId)
             })
             let listOfCalGroupIds = this.getUniqGroupIds(list);
             for (let index = 0; index < listOfCalGroupIds.length; index++) {
@@ -200,7 +229,7 @@ class PermissionApprove extends Component {
                         <td className="text-right">
                             <Button
                                 color="warning"
-                                onClick={e => e.preventDefault()}
+                                onClick={() => this.rejectPermission(item)}
                                 size="sm"
                             >
                                 İPTAL
@@ -253,14 +282,12 @@ class PermissionApprove extends Component {
                                         <div className="col-md-10">
                                             {/* <h3 className="mb-0">İzin Onay</h3> */}
                                         </div>
-                                        <div className="col-md-2">
+                                        {/* <div className="col-md-2">
                                             <Button color="primary" type="submit" >
-                                                {/* <span className="btn-inner--icon">
-                                                    <i className="ni ni-fat-add" />
-                                                </span> */}
+            
                                                 <span className="btn-inner--text">Tümünü Onayla</span>
                                             </Button>
-                                        </div>
+                                        </div> */}
                                     </div>
 
                                 </CardHeader>
@@ -277,6 +304,14 @@ class PermissionApprove extends Component {
                                     </thead>
                                     <tbody>
                                         {result}
+                                        {result.length==0 && <div style={{
+                                            margin:20,
+                                        alignSelf:'center',
+                                        justifyContent:'center'}} >
+                                            <p>
+                                            Onay bekleyen kayıt bulunmamaktadır.
+                                            </p>
+                                            </div>}
                                     </tbody>
                                 </Table>
                                 <CardFooter className="py-4">

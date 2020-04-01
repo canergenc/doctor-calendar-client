@@ -28,3 +28,10 @@ export const CalendarTypes = {
 }
 
 
+export const CalendarStatus = {
+    WaitingForApprove: 1,
+    Approve: 2,
+    Reject: 3
+}
+
+
