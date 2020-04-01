@@ -73,7 +73,7 @@ class PermissionApprove extends Component {
 
     showSwal(filter,data,item) {
         MySwal.fire({
-            title: 'Lütfen red nedenini giriniz',
+            title: 'Lütfen ret nedenini giriniz',
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
@@ -123,7 +123,7 @@ class PermissionApprove extends Component {
             status: CalendarStatus.Approve
         }
 
-        this.props.patchPermisson(filter, data, this.initialPageLoadFilter);
+        this.props.patchPermisson(filter, data, this.filterOfInitialLoad);
     }
 
     rejectPermission(item) {
