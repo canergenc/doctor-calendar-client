@@ -11,7 +11,6 @@ import routes from "../hoc/Config/splash.routes"
 class Splash extends React.Component {
   componentDidMount() {
     document.body.classList.add("bg-default");
-    console.log(this.props);
   }
   componentWillUnmount() {
     document.body.classList.remove("bg-default");
