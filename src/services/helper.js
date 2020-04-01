@@ -7,10 +7,13 @@ import { customVariables } from "../hoc/Config/customVariables";
 const getErrorMessage = (err) => {
 
     let errorMessage = "";
-    let statusCode = err.status.toString();
+    let statusCode = "";
+    if (err && err.status) {
+        statusCode = err.status.toString();
+    }
     switch (statusCode) {
         case customVariables.ERRORCODE[422]:
-            errorMessage = err.data.error.details.length>0 ? err.data.error.details[0].message:'İşlem sırasında hata oluştu'
+            errorMessage = err.data.error.details.length > 0 ? err.data.error.details[0].message : 'İşlem sırasında hata oluştu'
             return errorMessage;
 
         case customVariables.ERRORCODE[400]:
@@ -46,7 +49,7 @@ const getColorName = (index) => {
         'dark'
     ]
 
-    item=listOfColorName[Math.floor(Math.random()*listOfColorName.length)];
+    item = listOfColorName[Math.floor(Math.random() * listOfColorName.length)];
 
     // if (index > listOfColorName.length) {
     //     item = listOfColorName[Math.floor(index / listOfColorName.length)];

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-
+import Spinner from '../../components/UI/Spinner/Spinner';
 import { CalendarTypes } from '../../variables/constants';
-
+import 'font-awesome/css/font-awesome.min.css';
 // import CommentIcon from '@material-ui/icons/Comment';
 
 // reactstrap components
@@ -27,39 +27,46 @@ import { helperService } from "../../services";
 
 class PermissionApprove extends Component {
 
-    componentDidMount() {
 
-        const filterData = {
-            filter: {
-                where: {
-                    and: [{
-                        groupId: {
-                            like: helperService.getGroupId()
-                        }
-                    }, {
-                        type: {
-                            neq: !CalendarTypes.Nobet  //Type göre gruplandırılabilir.
-                        }
-                    }]
-
-
-                },
-                include: [
-                    {
-                        relation: "group"
-                    },
-                    {
-                        relation: "user"
-                    },
-                    {
-                        relation: "location"
+    filterOfGetPermission = {
+        filter: {
+            where: {
+                and: [{
+                    groupId: {
+                        like: helperService.getGroupId()
                     }
-                ]
-            }
+                }, {
+                    type: {
+                        neq: !CalendarTypes.Izin  //Type göre gruplandırılabilir.
+                    },
+                    status: 1  //Enum foo yazılacak Red 3 
+                }]
+            },
+            include: [
+                {
+                    relation: "group"
+                },
+                {
+                    relation: "user"
+                },
+                {
+                    relation: "location"
+                }
+            ]
         }
-        this.props.fetchPermissionRequest(filterData);
-
     }
+
+    loadPermissions() {
+        this.props.fetchPermissionRequest(this.filterOfGetPermission);
+    }
+
+    componentDidMount() {
+        this.loadPermissions();
+    }
+
+
+
+
 
 
 
@@ -71,6 +78,8 @@ class PermissionApprove extends Component {
             }
         });
 
+        console.log(uniqueTags);
+
         return uniqueTags;
     }
 
@@ -78,10 +87,10 @@ class PermissionApprove extends Component {
     approvePermisson(item) {
         console.log(item);
 
-        const filterData = {
-            filter: {
-                where: {
-                    calendarGroupId: item.calendarGroupId
+        const filter = {
+            where: {
+                calendarGroupId: {
+                    like: item.calendarGroupId
                 }
             }
         }
@@ -89,8 +98,14 @@ class PermissionApprove extends Component {
             status: 2
         }
 
-       
-        this.props.patchPermisson(filterData, data);
+        console.log(filter)
+        console.log(data);
+
+
+
+        this.props.patchPermisson(filter, data, this.filterOfGetPermission);
+
+
 
 
 
@@ -105,8 +120,11 @@ class PermissionApprove extends Component {
 
 
     render() {
+
         let result = [];
         if (this.props.reminders) {
+
+            console.log('1', this.props);
             let list = this.props.reminders.filter(cal => {
                 return (cal.status && cal.status === 1 && cal.calendarGroupId)
             })
@@ -148,6 +166,36 @@ class PermissionApprove extends Component {
                         <td>{item.endDate}</td>
                         <td>{item.numberOfDay}</td>
 
+                        {/* <td className="text-right"> */}
+
+                        {/* <Button onClick={() => this.rejectPermission(item)} size="sm" color="warning" disabled={this.props.loading}>
+
+                                {this.props.loading && (
+                                    <i
+                                        className="fa fa-refresh fa-spin"
+                                        style={{ marginRight: "5px" }}
+                                    />
+                                )}
+
+                                {this.props.loading && <span>...</span>}
+                                {!this.props.loading && <span>REDDET</span>}
+                            </Button>
+
+                            <Button onClick={() => this.approvePermisson(item)} size="sm" color="primary" disabled={this.props.loading}>
+
+                                {this.props.loading && (
+                                    <i
+                                        className="fa fa-refresh fa-spin"
+                                        style={{ marginRight: "5px" }}
+                                    />
+                                )}
+
+                                {this.props.loading && <span>...</span>}
+                                {!this.props.loading && <span>ONAYLA</span>}
+                            </Button>
+
+                        </td> */}
+
 
                         <td className="text-right">
                             <Button
@@ -173,11 +221,26 @@ class PermissionApprove extends Component {
 
         }
 
+        // if (this.props.errorFromPatch) {
+        //     console.log('asdasdasd', this.props.errorFromPatch);
+
+        // }
+
+
+
+
+
+
+
 
 
         return (
 
             <>
+
+                {/* {this.props.loading ?<Spinner />:null} */}
+
+
                 <UserHeader fullName='' />
 
                 <Container className="mt--7" fluid>
@@ -286,6 +349,11 @@ class PermissionApprove extends Component {
 const mapStateToProps = state => {
     return {
         reminders: state.reminders.reminders,
+        loading: state.reminders.loading,
+        errorFromFeth: state.reminders.errorObj,
+        errorFromPatch: state.reminders.errorObjBulk
+
+
 
     };
 };
@@ -293,7 +361,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchPermissionRequest: (filterData) => dispatch(actions.getReminders(filterData)),
-        patchPermisson: (filter, data) => dispatch(actions.updateBulkReminder(filter, data)),
+        patchPermisson: (filter, data, filterOfGetPermission) => dispatch(actions.updateBulkReminder(filter, data, filterOfGetPermission)),
     };
 };
 

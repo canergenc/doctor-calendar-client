@@ -10,12 +10,13 @@ export const cleanReminderError = () => {
   };
 };
 
-export const updateBulkReminder = (filter, data) => {
+export const updateBulkReminder = (filter, data,fiterOfGetPermission) => {
   return dispatch => {
     dispatch(updateBulkReminderRequest());
     calendarService.reminderBulkUpdateService(filter, data)
       .then((response) => {
         dispatch(updateBulkReminderSuccess(response));
+        dispatch(getReminders(fiterOfGetPermission));
       }).catch((error) => {
         dispatch(updateBulkReminderFailure(error));
       });
@@ -38,9 +39,11 @@ export const updateBulkReminderSuccess = (response) => {
 }
 
 export const updateBulkReminderFailure = (err) => {
+  console.log(err)
   return {
-    errorObj: err,
     type: actionTypes.CALENDAR_BULKUPDATE_FAILURE,
+    errorObj: err,
+   
     // statusCode: err.data.error.statusCode, // BadRequestError
     // statusText: err.data.error.message,  // Invalid email or password
     // statusName: err.data.error.name,   // BadRequestError
