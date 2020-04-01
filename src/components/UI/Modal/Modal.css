@@ -1,6 +1,6 @@
 .Modal {
     position: fixed;
-    z-index: 500;
+    z-index: 110;
     background-color: white;
     width: 70%;
     border: 1px solid #ccc;
@@ -9,7 +9,8 @@
     left: 15%;
     top: 30%;
     box-sizing: border-box;
-    transition: all 0.3s ease-out;
+    transition: all 0.5s ease-out;
+    border-radius: 5px;
 }
 
 

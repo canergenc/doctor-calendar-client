@@ -5,7 +5,9 @@ import { Droppable } from 'react-beautiful-dnd';
 import Reminder from "./Reminder/Reminder";
 
 import "./Day.scss";
-import { Modal, Button } from "reactstrap";
+import { Button } from "reactstrap";
+import Modal from '../../UI/Modal/Modal';
+import moment from "moment";
 
 class Day extends Component {
 
@@ -13,7 +15,6 @@ class Day extends Component {
     super(props);
     this.state = {
       showFullReminder: false,
-      remindersPlusCount: 0,
       showFooter: false
     }
     this.showFullReminderHandle = this.showFullReminderHandle.bind(this);
@@ -24,7 +25,7 @@ class Day extends Component {
   componentDidMount() {
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
       if (this.props.reminders.length > 4) {
-        this.setState({ showFooter: true, remindersPlusCount: this.props.reminders.length - 4 });
+        this.setState({ showFooter: true });
       }
     }
   }
@@ -35,12 +36,11 @@ class Day extends Component {
 
   buildPreReminder = () => {
     const preReminders = [];
-    const fullReminders = [];
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
       if (this.props.reminders.length > 0) {
         let array = this.props.reminders;
         let remindersCount = 0;
-        array.forEach(element => {
+        array.slice().reverse().forEach(element => {
           if (element.user) {
             if (remindersCount <= 3) {
               preReminders.push(<Reminder
@@ -52,12 +52,6 @@ class Day extends Component {
               remindersCount += 1;
             }
 
-            fullReminders.push(<Reminder
-              key={element.id}
-              name={element.user.fullName}
-              color={element.location ? element.location.colorCode : "#fff"}
-              onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
-            />);
           }
         });
       }
@@ -71,9 +65,9 @@ class Day extends Component {
 
     const fullReminders = [];
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
-      if (this.props.reminders.length > 4) {
+      if (this.props.reminders.length > 0) {
         let array = this.props.reminders;
-        array.forEach(element => {
+        array.slice().reverse().forEach(element => {
           if (element.user) {
             fullReminders.push(<Reminder
               key={element.id}
@@ -100,13 +94,13 @@ class Day extends Component {
     day += this.props.weekend ? " weekend" : "";
 
     const footer = this.state.showFooter ? <footer className="morefooter"><a className="more" onClick={this.showFullReminderHandle}  >Tümü</a></footer> : null;
-
+    const dateString = moment(this.props.date).format("DD MMMM YYYY");
 
     return (
       <Aux>
-        <Modal isOpen={this.state.showFullReminder} >
+        <Modal show={this.state.showFullReminder} >
           <div className="modal-header">
-            <h5 className="modal-title" id="addModalLabel">{this.props.date}</h5>
+            <h5 className="modal-title" id="addModalLabel">{dateString}</h5>
             <button
               aria-label="Close"
               className="close"
@@ -116,9 +110,17 @@ class Day extends Component {
               <span aria-hidden={true}>×</span>
             </button>
           </div>
-          <div className="modal-body popever">
-            {fullReminders}
-          </div>
+          <Droppable droppableId={this.props.date}>
+            {provided => (
+              <div className="modal-body popever"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                <React.Fragment>
+                  {fullReminders}
+                </React.Fragment>
+              </div>)}
+          </Droppable>
           <div className="modal-footer">
             <Button
               color="secondary"
