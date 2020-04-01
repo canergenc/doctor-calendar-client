@@ -4,6 +4,7 @@
   padding-left: 20px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
+  z-index: 110;
 }
 
 .sticky {

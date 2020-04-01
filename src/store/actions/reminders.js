@@ -158,10 +158,8 @@ export const deleteReminder = (reminderId) => {
   return dispatch => {
     calendarService.deleteReminderService(reminderId)
       .then(response => {
-        console.log("deleteReminder");
-        console.log(response);
 
-        dispatch(deleteReminderSuccess(reminderId));
+        
         const filterData = {
           filter: {
             where: {
@@ -185,6 +183,7 @@ export const deleteReminder = (reminderId) => {
           }
         }
         dispatch(getReminders(filterData));
+        dispatch(deleteReminderSuccess(reminderId));
       })
       .catch(error => {
         dispatch(deleteReminderFailed(error));

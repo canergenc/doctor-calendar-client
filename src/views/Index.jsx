@@ -187,6 +187,7 @@ class Index extends Component {
               color="secondary"
               data-dismiss="modal"
               type="button"
+              className=".btnZ"
               onClick={() => this.toggleModal("addModal", undefined)}>Kapat</Button>
             <Button color="primary" type="submit" onClick={this.addHandle}>Kaydet</Button>
           </div>

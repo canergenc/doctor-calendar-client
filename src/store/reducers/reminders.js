@@ -39,7 +39,9 @@ const reducer = (state = initialState, action) => {
       };
     case actionTypes.DELETE_REMINDER_SUCCESS:
       return {
+        ...state,
         reminderId: action.reminderId,
+        loading: false,
         error: false
       };
     case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
