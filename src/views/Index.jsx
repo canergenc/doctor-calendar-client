@@ -66,7 +66,7 @@ class Index extends Component {
     switch (source.droppableId) {
       case 'UserList_1':
         if (this.props.activeLocationId !== "" && this.props.activeLocationId !== null) {
-
+          
           const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
@@ -134,9 +134,9 @@ class Index extends Component {
 
     if (this.props.errorFromReminders) {
       console.log("---------------------INDEX---------------");
-      
+
       console.log(this.props.errorFromReminders);
-      
+
       MySwal.fire({
         icon: 'error',
         title: 'Hay aksi,',

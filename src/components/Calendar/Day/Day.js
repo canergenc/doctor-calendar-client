@@ -68,7 +68,6 @@ class Day extends Component {
 
   buildFullReminder = () => {
 
-    console.log("Full Reminder");
 
     const fullReminders = [];
     if (this.props.reminders !== null && this.props.reminders !== undefined) {

@@ -115,8 +115,9 @@ export const createReminder = (reminderData) => {
               },
               groupId: {
                 like: helperService.getGroupId()
-              },
-              type:CalendarTypes.Nobet
+              }
+              // ,
+              // type:CalendarTypes.Nobet
             },
             include: [
               {
@@ -166,8 +167,9 @@ export const deleteReminder = (reminderId) => {
             where: {
               groupId: {
                 like: helperService.getGroupId()
-              },
-              type:CalendarTypes.Nobet
+              }
+              // ,
+              // type:CalendarTypes.Nobet
             },
             include: [
               {
