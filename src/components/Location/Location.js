@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
+import moment from "moment";
 
 import './Location.css';
 
@@ -70,27 +71,35 @@ class Location extends Component {
                 selected: ""
             });
         }
+        const startOfMonth = moment(this.props.curMonth).startOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
+        const endOfMonth = moment(this.props.curMonth).endOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
 
         const filterData = {
             filter: {
                 where: {
+                    date: {
+                        between: [
+                            startOfMonth,
+                            endOfMonth
+                        ]
+                    },
                     locationId: {
                         like: locationId
                     },
-                    groupId:{
+                    groupId: {
                         like: helperService.getGroupId()
                     }
                 },
                 include: [
                     {
                         relation: "group"
-                      },
-                      {
+                    },
+                    {
                         relation: "user"
-                      },
-                      {
+                    },
+                    {
                         relation: "location"
-                      }
+                    }
                 ]
             }
         }
@@ -161,6 +170,7 @@ const mapStateToProps = state => {
     return {
         locations: state.locations.locations,
         activeLocationId: state.locations.activeLocationId,
+        curMonth: state.calendar.curMonth,
         groupId: state.auth.groupId,
         error: state.locations.error
     }

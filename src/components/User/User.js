@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
-import * as actions from '../../store/actions/index';
+import moment from "moment";
 import 'pretty-checkbox';
+
+import * as actions from '../../store/actions/index';
 import { helperService } from '../../services';
-import {CalendarTypes} from '../../variables/constants';
+import { CalendarTypes } from '../../variables/constants';
 
 const Container = styled.div`
 display: flex;
@@ -38,6 +40,9 @@ class User extends Component {
             this.props.setActiveLocationId("");
         }
 
+        const startOfMonth = moment(this.props.curMonth).startOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
+        const endOfMonth = moment(this.props.curMonth).endOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
+
         if (this.state.checkedRadio === userId) {
             this.setState({ checkedRadio: "nouserid" });
             id.target.checked = false;
@@ -45,6 +50,12 @@ class User extends Component {
             const filterData = {
                 filter: {
                     where: {
+                        date: {
+                            between: [
+                                startOfMonth,
+                                endOfMonth
+                            ]
+                        },
                         groupId: {
                             like: helperService.getGroupId()
                         }
@@ -74,11 +85,17 @@ class User extends Component {
             const filterData = {
                 filter: {
                     where: {
+                        date: {
+                            between: [
+                                startOfMonth,
+                                endOfMonth
+                            ]
+                        },
                         userId: {
                             like: userId
                         },
                         groupId: {
-                            like:  helperService.getGroupId()
+                            like: helperService.getGroupId()
                         }
                         // ,
                         // type:CalendarTypes.Nobet
@@ -104,37 +121,37 @@ class User extends Component {
     render() {
 
         return (
-                <Draggable
-                    key={this.props.user.id}
-                    draggableId={this.props.user.id}
-                    index={this.props.index}>
-                    {(provided, snapshot) => (
-                        <React.Fragment>
-                            <Container
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                isDragging={snapshot.isDragging}
-                            >
-                                {this.props.user.title} {this.props.user.fullName}
+            <Draggable
+                key={this.props.user.id}
+                draggableId={this.props.user.id}
+                index={this.props.index}>
+                {(provided, snapshot) => (
+                    <React.Fragment>
+                        <Container
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            isDragging={snapshot.isDragging}
+                        >
+                            {this.props.user.title} {this.props.user.fullName}
 
-                                <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto" }} >
-                                    <input
-                                        type="radio"
-                                        name="radio"
-                                        onClick={(e) => this.OnSelect(this.props.user.id, e)}
-                                    />
-                                    <div className="state p-success">
-                                        <label></label>
-                                    </div>
+                            <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto" }} >
+                                <input
+                                    type="radio"
+                                    name="radio"
+                                    onClick={(e) => this.OnSelect(this.props.user.id, e)}
+                                />
+                                <div className="state p-success">
+                                    <label></label>
                                 </div>
-                            </Container>
-                            {snapshot.isDragging && (
-                                <Clone>{this.props.user.title} {this.props.user.fullName}</Clone>
-                            )}
-                        </React.Fragment>
-                    )}
-                </Draggable>
+                            </div>
+                        </Container>
+                        {snapshot.isDragging && (
+                            <Clone>{this.props.user.title} {this.props.user.fullName}</Clone>
+                        )}
+                    </React.Fragment>
+                )}
+            </Draggable>
         )
     }
 };
@@ -142,6 +159,7 @@ class User extends Component {
 const mapStateToProps = state => {
     return {
         activeLocationId: state.locations.activeLocationId,
+        curMonth: state.calendar.curMonth,
         error: state.reminders.error
     }
 }

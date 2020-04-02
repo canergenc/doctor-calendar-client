@@ -1,19 +1,23 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+import moment from "moment";
+import { extendMoment } from 'moment-range';
+import "moment/locale/tr";
+import { helperService } from "../../services";
+import { CalendarTypes } from "../../variables/constants";
+
 import HeaderMonth from "../../components/Calendar/HeaderMonth/HeaderMonth";
 import HeaderWeekDays from "../../components/Calendar/HeaderWeekDays/HeaderWeekDays";
 import Day from "../../components/Calendar/Day/Day";
 import Spinner from '../../components/UI/Spinner/Spinner';
-import moment from "moment";
-import { connect } from "react-redux";
-import * as FileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
-import * as actions from '../../store/actions/index';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import * as actions from '../../store/actions/index';
 import Api from "../../api";
-import "moment/locale/tr";
+
 import "./Calendar.scss";
-import { helperService } from "../../services";
-import { CalendarTypes} from "../../variables/constants";
+import { object } from "prop-types";
 
 class Calendar extends Component {
 
@@ -27,29 +31,6 @@ class Calendar extends Component {
   };
 
   componentDidMount() {
-    const filterData = {
-      filter: {
-        where: {
-          groupId: {
-            like: helperService.getGroupId()
-          }
-          // ,
-          // type:CalendarTypes.Nobet
-        },
-        include: [
-          {
-            relation: "group"
-          },
-          {
-            relation: "user"
-          },
-          {
-            relation: "location"
-          }
-        ]
-      }
-    }
-    this.props.onInitReminders(filterData);
     this.createState();
   }
 
@@ -63,6 +44,9 @@ class Calendar extends Component {
       year && month
         ? `${year}-${month}`
         : moment().format("YYYY-MM");
+
+    this.initReminders(curMonth);
+    this.props.setCurMonth(curMonth);
 
     const nextMonth = moment(curMonth)
       .add(1, "M")
@@ -89,6 +73,41 @@ class Calendar extends Component {
     );
   }
 
+  initReminders = (curMonth) => {
+    const startOfMonth = moment(curMonth).startOf('month').format('YYYY-MM-DD');
+    const endOfMonth = moment(curMonth).endOf('month').format('YYYY-MM-DD');
+    this.props.setCurMonth(curMonth);
+    const filterData = {
+      filter: {
+        where: {
+          date: {
+            between: [
+              startOfMonth,
+              endOfMonth
+            ]
+          },
+          groupId: {
+            like: helperService.getGroupId()
+          },
+          type: CalendarTypes.Nobet
+        },
+        include: [
+          {
+            relation: "group"
+          },
+          {
+            relation: "user"
+          },
+          {
+            relation: "location"
+          }
+        ]
+      }
+    }
+
+    this.props.onInitReminders(filterData);
+
+  }
 
   buildDays() {
 
@@ -151,6 +170,8 @@ class Calendar extends Component {
         ? `${year}-${month}`
         : moment().format("YYYY-MM");
 
+    this.initReminders(curMonth);
+
     const nextMonth = moment(curMonth)
       .add(1, "M")
       .format("YYYY-MM");
@@ -185,6 +206,8 @@ class Calendar extends Component {
         ? `${year}-${month}`
         : moment().format("YYYY-MM");
 
+    this.initReminders(curMonth);
+
     const nextMonth = moment(curMonth)
       .add(1, "M")
       .format("YYYY-MM");
@@ -213,101 +236,144 @@ class Calendar extends Component {
   deleteReminderHandler = (reminderId) => {
     this.props.deleteReminder(reminderId);
   }
-  sortExpenses() {
-    this.expenses = this.expenses.slice().sort(
-      (a, b) => {
-        if (a.date > b.date) {
-          return -1;
-        }
-        if (a.date < b.date) {
-          return 1;
-        }
-        return 0;
-      }
-    );
+
+  ec = (r, c) => {
+    return XLSX.utils.encode_cell({ r: r, c: c })
   }
+
+  delete_row = (ws, row_index) => {
+    let range = XLSX.utils.decode_range(ws["!ref"])
+    for (var R = row_index; R < range.e.r; ++R) {
+      for (var C = range.s.c; C <= range.e.c; ++C) {
+        ws[this.ec(R, C)] = ws[this.ec(R + 1, C)]
+      }
+    }
+    range.e.r--
+    ws['!ref'] = XLSX.utils.encode_range(range.s, range.e)
+  }
+
   downloadExcelHandler = () => {
     if (this.props.reminders) {
+      console.log("downloadExcelHandler");
+
       const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const fileExtension = '.xlsx';
-      // let testData = [
-      //   {
-      //     "date": "11.11.2020",
-      //     "Acil": "Gökhan Kurt",
-      //     "Şefaltı": "Can Mercan",
-      //     "1. Poliklinik": "Caner Genç",
-      //     "": "Ali Rıza Temel"
-      //   },
-      //   {
-      //     "date": "12.11.2020",
-      //     "Acil": "Ali Rıza Temel",
-      //     "Şefaltı": "Caner Genç",
-      //     "1. Poliklinik": "Gökhan Kurt",
-      //     "": "Can Mercan"
-      //   }
-      // ]
 
+      const momentRange = extendMoment(moment);
       let excelData = [];
-      let dates = [];
+
+      const startOfMonth = moment(this.props.curMonth).startOf('month').format('YYYY-MM-DD');
+      const endOfMonth = moment(this.props.curMonth).endOf('month').format('YYYY-MM-DD');
+      const range = momentRange.range(startOfMonth, endOfMonth);
+
+      let locations = [];
+
       this.props.reminders.forEach(element => {
-        if (!dates.includes(moment(element.date).format("YYYY-MM-DD"))) {
-          dates.push(moment(element.date).format("YYYY-MM-DD"));
+        if (element.location && element.user) {
+          if (locations.length === 0) {
+            const locationName = element.location.name;
+            locations.push(locationName, 0);
+          }
+          else {
+            let isExistColumn = false
+            for (let index = 0; index < locations.length; index += 2) {
+              if (locations[index] === element.location.name) {
+                isExistColumn = true;
+              }
+            }
+            if (!isExistColumn) {
+              const locationName = element.location.name;
+              locations.push(locationName, 0);
+            }
+          }
         }
       });
 
+      for (let index = 0; index < locations.length; index += 2) {
+        for (let date of range.by("day")) {
+          let locationSum = 0;
+          // eslint-disable-next-line no-loop-func
+          this.props.reminders.forEach(element => {
+            if (element.location && element.user) {
+              if (moment(element.date).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
+                if (locations[index] === element.location.name) {
+                  locationSum = locationSum + 1;
+                }
+              }
+            }
+          });
+          if (locationSum > locations[index + 1]) {
+            locations[index + 1] = locationSum;
+          }
+        }
+      }
 
-      dates.sort(function compare(a, b) {
-        var dateA = new Date(a);
-        var dateB = new Date(b);
-        return dateA - dateB;
+
+      excelData.push({
+        "Tarih": moment(startOfMonth).format("DD.MM.YYYY")
       });
-      console.log(moment(dates[0]).format("DD.MM.YYYY"));
 
-      console.log(dates);
-      for (let i = 0; i < dates.length; i++) {
+      for (let index = 0; index < locations.length; index += 2) {
+
+        for (let j = 1; j <= locations[index + 1]; j++) {
+
+          excelData[excelData.length - 1][locations[index] + "-" + j] = "Test";
+
+        }
+
+      }
+
+
+
+      for (let date of range.by("day")) {
+
+        let dateAdded = false;
         let firstAdd = true;
         this.props.reminders.forEach(element => {
           if (element.location && element.user) {
             const locationName = element.location.name;
-            if (moment(element.date).format("DD.MM.YYYY") === moment(dates[i]).format("DD.MM.YYYY")) {
+            if (moment(element.date).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
+              let columnNameIndex = 1;
               if (firstAdd) {
                 excelData.push({
                   "Tarih": moment(element.date).format("DD.MM.YYYY"),
-                  [locationName]: element.user.fullName
+                  [locationName + "-" + columnNameIndex]: element.user.fullName
                 });
+                dateAdded = true;
                 firstAdd = false;
               }
               else {
-                if (excelData[excelData.length - 1][locationName]) {
-                  let isAddedColumn = false;
-                  let columnNameIndex = 1;
-                  while (!isAddedColumn) {
-                    if (excelData[excelData.length - 1][locationName + "_" + columnNameIndex]) {
-                      columnNameIndex += 1;
-                    }
-                    else {
-                      excelData[excelData.length - 1][locationName + "_" + columnNameIndex] = element.user.fullName;
-                      isAddedColumn = true;
-                    }
+                let isAddedColumn = false;
+                while (!isAddedColumn) {
+                  if (excelData[excelData.length - 1][locationName + "-" + columnNameIndex]) {
+                    columnNameIndex += 1;
                   }
-                }
-                else {
-                  excelData[excelData.length - 1][locationName] = element.user.fullName;
+                  else {
+                    excelData[excelData.length - 1][locationName + "-" + columnNameIndex] = element.user.fullName;
+                    dateAdded = true;
+                    isAddedColumn = true;
+                  }
                 }
               }
             }
           }
         });
+        if (!dateAdded) {
+          excelData.push({
+            "Tarih": date.format("DD.MM.YYYY")
+          });
+        }
       }
 
-      console.log(excelData);
+      // console.log(excelData);
 
 
       const ws = XLSX.utils.json_to_sheet(excelData);
+      this.delete_row(ws, 1)
       const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: fileType });
-      FileSaver.saveAs(data, "test" + fileExtension);
+      FileSaver.saveAs(data, moment(startOfMonth).format("MMMM YYYY")+" NÖBET LİSTESİ" + fileExtension);
     }
   }
 
@@ -345,13 +411,13 @@ const mapStateToProps = state => {
     reminders: state.reminders.reminders,
     locations: state.locations.locations,
     error: state.reminders.error,
-
+    curMonth: state.calendar.curMonth
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-
+    setCurMonth: (curMonth) => dispatch(actions.setCurMonth(curMonth)),
     deleteReminder: (reminderId) => dispatch(actions.deleteReminder(reminderId)),
     onInitReminders: (filterData) => dispatch(actions.getReminders(filterData))
   };

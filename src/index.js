@@ -20,6 +20,7 @@ import SplashLayout from "layouts/Splash";
 import usersReducer from "./store/reducers/users";
 import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
+import calendarReducer from "./store/reducers/calendar"
 import userGroupsReducer from "./store/reducers/user.groups";
 import userInfoReducer from "./store/reducers/user.info";
 
@@ -45,7 +46,8 @@ const rootReducer = combineReducers({
   register: registerReducer,
   userGroups: userGroupsReducer,
   userInfo: userInfoReducer,
-  bulkLocation:bulkLocationReducer
+  bulkLocation: bulkLocationReducer,
+  calendar: calendarReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
