@@ -51,6 +51,7 @@ const reducer = (state = initialState, action) => {
 
     case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
       return {
+        ...state,
         loading: false,
         error: false,
         response: action.response
@@ -58,6 +59,7 @@ const reducer = (state = initialState, action) => {
 
     case actionTypes.CALENDAR_BULKUPDATE_FAILURE:
       return {
+        ...state,
         loading: false,
         error: true,
         response: {},

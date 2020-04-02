@@ -387,10 +387,20 @@ class Calendar extends Component {
       days = this.buildDays();
     }
 
+
+    if(this.props.reminders){
+      var  countOfReminder=0;
+      countOfReminder=this.props.reminders.length;
+      
+  }
+
+    
+
     return (
       <div className="month">
         <HeaderMonth
           curMonth={this.state.curMonth}
+          countOfReminder={countOfReminder}
           nextMonth={this.state.nextMonth}
           nextMonthClick={this.nextMonthClickHandler}
           prevMonth={this.state.prevMonth}
