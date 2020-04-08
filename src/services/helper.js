@@ -39,27 +39,32 @@ const getColorName = (index) => {
     var item = "";
     console.log(index);
     let listOfColorName = [
-        '#DB2828',
-        '#F2711C',
-        '#FBBD08',
-        '#B5CC18',
-        '#21BA45',
-        '#00B5AD',
-        '#2185D0',
-        '#6435C9',
-        '#A333C8',
-        '#E03997',
-        '#5e72e4',
-        '#f7fafc',
-        '#2dce89',
-        '#11cdef',
-        '#fb6340',
-        '#f5365c',
-        '#adb5bd',
-        '#bfc0c2',
-        '#fff',
-        
-
+        "red",
+        "orange",
+        "yellow",
+        "olive",
+        "green",
+        "teal",
+        "blue",
+        "violet",
+        "purple",
+        "pink",
+        "primary",
+        "secondary",
+        "success",
+        "info",
+        "warning",
+        "danger",
+        "light",
+        "dark",
+        "default",
+        "white",
+        "darker",
+        "indigo",
+        "cyan",
+        "gray",
+        "gray-dark",
+        "lighter"
     ]
 
     if(index<listOfColorName.length){
