@@ -49,13 +49,13 @@ class AdminNavbar extends React.Component {
               {this.props.brandText}
             </Link>
 
-            <Nav className="align-items-center d-none d-md-flex" navbar>
+            <Nav className="align-items-center d-none d-md-flex" navbar >
 
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media  className="align-items-center">
                     <span  style={{backgroundColor:'transparent'}}  className="avatar avatar-sm rounded-circle">
-                      <img style={{backgroundColor:'transparent', width:'80%',height:'80%' }} 
+                      <img style={{backgroundColor:'transparent', width:'75%',height:'75%' }} 
                         alt="..."
                         src={require("assets/img/theme/notification-ico2.png")}
                       />
@@ -87,12 +87,6 @@ class AdminNavbar extends React.Component {
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
-                    <span className="avatar avatar-sm rounded-circle">
-                      <img
-                        alt="..."
-                        src={require("assets/img/theme/bootstrap.jpg")}
-                      />
-                    </span>
                     <Media className="ml-2 d-none d-lg-block">
                       <span className="mb-0 text-sm font-weight-bold">
                         {this.props.fullName}

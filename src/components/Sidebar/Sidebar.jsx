@@ -106,7 +106,7 @@ class Sidebar extends React.Component {
       <Navbar
         className="navbar-vertical fixed-left navbar-light bg-white"
         expand="md"
-        id="sidenav-main"
+        id="sidenav-main" style={{paddingTop:"5px"}}
       >
         <Container fluid>
           {/* Toggler */}
@@ -119,7 +119,7 @@ class Sidebar extends React.Component {
           </button>
           {/* Brand */}
           {logo ? (
-            <NavbarBrand className="pt-0" {...navbarBrandProps}>
+            <NavbarBrand className="pt-0" {...navbarBrandProps} >
               <img
                 alt={logo.imgAlt}
                 className="navbar-brand-img"

@@ -193,7 +193,7 @@ class Index extends Component {
           </div>
         </Modal>
 
-        <Container className="mt--7" fluid>
+        <Container className="mt--8" fluid>
           <DragDropContext onDragEnd={this.onDragEnd} >
             <Row>
               <Col className="mb-5 mb-xl-0" xl="10">
