@@ -49,6 +49,7 @@ class Users extends Component {
 
         if (this.props.users) {
             userList = this.props.users.map((user, index) => (
+               
                 <User
                     {...user}
                     key={user.id}
@@ -66,16 +67,17 @@ class Users extends Component {
                         </div>
                     </Row>
                 </CardHeader>
-                <CardBody style={{ height: '500px', overflowY: 'scroll' }} >
+                <CardBody >
                     <Droppable droppableId="UserList_1" isDropDisabled={true}>
                         {(provided) => (
-                            <div
+                            <div style={{ maxHeight: '1000px', overflowY: 'scroll' }}
                                 ref={provided.innerRef}
                             >
                                 {userList}
-                                <div className="add w3-hover-light-grey" onClick={this.props.clicked}><i className="fa fa-plus" style={{marginRight:"4px", fontSize:"12px"}}></i>Kullanıcı Ekle</div>
                             </div>)}
                     </Droppable>
+                    <div  style={{marginTop:'5%'}} className="add w3-hover-light-grey" onClick={this.props.clicked}><i className="fa fa-plus" style={{marginRight:"4px", fontSize:"12px"}}></i>Kullanıcı Ekle</div>
+                    
                 </CardBody>
             </Card>
         );
