@@ -42,12 +42,11 @@ class AdminNavbar extends React.Component {
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
 
           <Container fluid>
-            <Link
+            <div
               className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
-              to="/"
             >
               {this.props.brandText}
-            </Link>
+            </div>
 
             <Nav className="align-items-center d-none d-md-flex" navbar >
 
@@ -87,8 +86,8 @@ class AdminNavbar extends React.Component {
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
-                    <Media className="ml-2 d-none d-lg-block">
-                      <span className="mb-0 text-sm font-weight-bold">
+                    <Media className="ml-1 d-none d-lg-block">
+                      <span style={{marginRight:"30px"}} className="mb-0 text-sm font-weight-bold">
                         {this.props.fullName}
                       </span>
                     </Media>

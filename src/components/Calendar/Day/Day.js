@@ -17,6 +17,7 @@ class Day extends Component {
     super(props);
     this.state = {
       showFullReminder: false,
+      dayCount: 0,
       showFooter: false
     }
     this.showFullReminderHandle = this.showFullReminderHandle.bind(this);
@@ -27,7 +28,7 @@ class Day extends Component {
   componentDidMount() {
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
       if (this.props.reminders.length > 4) {
-        this.setState({ showFooter: true });
+        this.setState({ showFooter: true, dayCount: this.props.reminders.length - 4 });
       }
     }
   }
@@ -55,6 +56,12 @@ class Day extends Component {
             }
           }
         });
+
+        if(remindersCount===4){
+          if(this.props.reminders.length > 4){
+            preReminders.push(<footer className="morefooter" key={5}><a className="more" onClick={this.showFullReminderHandle}  >+{this.props.reminders.length-4} kayıt</a></footer>)
+          }
+        }
       }
     }
     return preReminders;
@@ -68,7 +75,7 @@ class Day extends Component {
       if (this.props.reminders.length > 0) {
         let array = this.props.reminders;
         array.slice().reverse().forEach(element => {
-          if (element.user) {
+          if (element.user && element.location) {
             // this.props.setUserCount(element.id);
             fullReminders.push(<Reminder
               key={element.id}
@@ -79,6 +86,8 @@ class Day extends Component {
           }
         });
       }
+
+      
     }
     return fullReminders;
   }
@@ -94,7 +103,6 @@ class Day extends Component {
 
     day += this.props.weekend ? " weekend" : "";
 
-    const footer = this.state.showFooter ? <footer className="morefooter"><a className="more" onClick={this.showFullReminderHandle}  >Tümü</a></footer> : null;
     const dateString = moment(this.props.date).format("DD MMMM YYYY");
 
     return (
@@ -140,7 +148,6 @@ class Day extends Component {
               <React.Fragment>
                 <header>{this.props.day}</header>
                 {preReminders}
-                {footer}
               </React.Fragment>
             </article>)}
         </Droppable>
@@ -157,4 +164,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(null,mapDispatchToProps)(Day);
+export default connect(null, mapDispatchToProps)(Day);

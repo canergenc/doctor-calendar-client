@@ -132,11 +132,12 @@ class Calendar extends Component {
 
         if (i === 1) {
           let startOfMonth = parseInt(moment(date).startOf("month").format("d"));
+          console.log("startOfMonth");
+          
+          console.log(startOfMonth);
+          
           if (startOfMonth === 0) {
             startOfMonth = 6;
-          }
-          else if (startOfMonth === 6) {
-            startOfMonth = 0;
           }
           else {
             startOfMonth -= 1;
@@ -148,8 +149,8 @@ class Calendar extends Component {
         }
 
         let isWeekend = false;
-
-        if (moment(date).weekday() === 6 || moment(date).weekday() === 5) {
+        
+        if (moment(date).isoWeekday() === 6 || moment(date).isoWeekday() === 7) {  
           isWeekend = true;
         }
 
@@ -373,7 +374,7 @@ class Calendar extends Component {
       const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: fileType });
-      FileSaver.saveAs(data, moment(startOfMonth).format("MMMM YYYY")+" NÖBET LİSTESİ" + fileExtension);
+      FileSaver.saveAs(data, moment(startOfMonth).format("MMMM YYYY") + " NÖBET LİSTESİ" + fileExtension);
     }
   }
 
@@ -388,13 +389,13 @@ class Calendar extends Component {
     }
 
 
-    if(this.props.reminders){
-      var  countOfReminder=0;
-      countOfReminder=this.props.reminders.length;
-      
-  }
+    if (this.props.reminders) {
+      var countOfReminder = 0;
+      countOfReminder = this.props.reminders.length;
 
-    
+    }
+
+
 
     return (
       <div className="month">

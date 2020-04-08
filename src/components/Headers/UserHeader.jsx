@@ -25,7 +25,7 @@ class UserHeader extends React.Component {
 
     const { fullName } = this.props;
 
-    const headerTitle= `Merhaba ${fullName}`;
+    const headerTitle = `Merhaba ${fullName}`;
 
     return (
 
@@ -46,18 +46,9 @@ class UserHeader extends React.Component {
           {/* Header container */}
           <Container className="d-flex align-items-center" fluid>
             <Row>
-              <Col  md="12">
-        <h1  style={{fontSize:25}} className="display-2 text-white">{headerTitle}</h1>
-                {/* <p className="text-white mt-0 mb-5">
-                  Bu senin profil sayfandır. Buradan tüm iş yönetimini görüntüleyebilirsin.
-                </p> */}
-                {/* <Button
-                  color="info"
-                  href="#pablo"
-                  onClick={e => e.preventDefault()}
-                >
-                  Profili Düzenle
-                </Button> */}
+              <Col md="12">
+                <h1 style={{ fontSize: 25 }} className="display-2 text-white">{headerTitle}</h1>
+
               </Col>
             </Row>
           </Container>
