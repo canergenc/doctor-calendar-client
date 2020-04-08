@@ -32,7 +32,7 @@ class Location extends Component {
         hideArrows: true,
         hideSingleArrow: true,
         scrollToSelected: false,
-        translate: 200,
+        translate: 0,
         transition: 0.6,
         wheel: true
     }
