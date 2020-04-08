@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import Aux from '../../../hoc/Auxiliary/Auxiliary';
 import { Droppable } from 'react-beautiful-dnd';
 
@@ -8,6 +9,7 @@ import "./Day.scss";
 import { Button } from "reactstrap";
 import Modal from '../../UI/Modal/Modal';
 import moment from "moment";
+import * as actions from "../../../store/actions/index";
 
 class Day extends Component {
 
@@ -51,7 +53,6 @@ class Day extends Component {
               />);
               remindersCount += 1;
             }
-
           }
         });
       }
@@ -62,13 +63,13 @@ class Day extends Component {
 
   buildFullReminder = () => {
 
-
     const fullReminders = [];
     if (this.props.reminders !== null && this.props.reminders !== undefined) {
       if (this.props.reminders.length > 0) {
         let array = this.props.reminders;
         array.slice().reverse().forEach(element => {
           if (element.user) {
+            // this.props.setUserCount(element.id);
             fullReminders.push(<Reminder
               key={element.id}
               name={element.user.fullName}
@@ -149,4 +150,11 @@ class Day extends Component {
   }
 }
 
-export default Day;
+const mapDispatchToProps = dispatch => {
+  return {
+    setUserCount: (userId) => dispatch(actions.setUserCount(userId))
+  }
+}
+
+
+export default connect(null,mapDispatchToProps)(Day);

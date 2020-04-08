@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
+import { Badge } from 'reactstrap'
 import moment from "moment";
 import 'pretty-checkbox';
 
@@ -133,8 +134,8 @@ class User extends Component {
                             {...provided.dragHandleProps}
                             isDragging={snapshot.isDragging}
                         >
-                            {this.props.user.title} {this.props.user.fullName}
-
+                            {this.props.user.fullName}
+                            {/* <Badge color="success">{this.props.count}</Badge> */}
                             <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto" }} >
                                 <input
                                     type="radio"
@@ -147,7 +148,7 @@ class User extends Component {
                             </div>
                         </Container>
                         {snapshot.isDragging && (
-                            <Clone>{this.props.user.title} {this.props.user.fullName}</Clone>
+                            <Clone> {this.props.user.fullName}</Clone>
                         )}
                     </React.Fragment>
                 )}
