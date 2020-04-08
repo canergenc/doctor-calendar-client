@@ -72,7 +72,7 @@ export const getUsers = (filterData) => {
 
 export const searchUser = (filterKey, defaultUsers) => {
     let users = null;
-    if (filterKey.length > 2) {
+    if (filterKey.length > 1) {
         if (filterKey && filterKey.trim() !== "") {
             users = defaultUsers
                 .filter(row => {

@@ -26,15 +26,15 @@ class Location extends Component {
 
     state = {
         locationId: null,
-        alignCenter: false,
+        alignCenter: true,
         clickWhenDrag: false,
         dragging: true,
-        hideArrows: false,
+        hideArrows: true,
         hideSingleArrow: true,
         scrollToSelected: false,
         translate: 0,
-        transition: 0.3,
-        wheel: false
+        transition: 0.6,
+        wheel: true
     }
 
     createMenu = (list, selected) => {
@@ -47,8 +47,16 @@ class Location extends Component {
             > {el.name}
             </Button>
         ));
+        
         return menu;
     }
+
+
+    onUpdate = ({ translate }) => {
+        
+        this.setState({ translate });
+      };
+
 
     onSelect = key => {
 
@@ -151,6 +159,7 @@ class Location extends Component {
                 hideArrows={hideArrows}
                 hideSingleArrow={hideSingleArrow}
                 onSelect={this.onSelect}
+                onUpdate={this.onUpdate}
                 scrollToSelected={scrollToSelected}
                 transition={+transition}
                 translate={translate}
