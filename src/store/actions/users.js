@@ -11,6 +11,22 @@ export const setUsers = (users, defaultUsers) => {
     };
 };
 
+
+export const setUserCount = (userId) => {
+    console.log("set User Count:" + userId);
+
+    return dispatch => {
+        dispatch(setUserCountSuccess(userId))
+    };
+};
+
+export const setUserCountSuccess = (userId) => {
+    return {
+        type: actionTypes.SET_USER_COUNT,
+        userId: userId
+    }
+}
+
 export const fetchUsersFailed = (error) => {
     return {
         type: actionTypes.FETCH_USERS_FAILED
@@ -35,13 +51,17 @@ export const getUsers = (filterData) => {
         userService.getUsers(filterData)
             .then(res => {
                 const users = [];
+
                 res.forEach(element => {
                     if (element.user) {
                         users.push({
-                            ...element
+                            ...element,
+                            count: 0
                         });
                     }
                 });
+                console.log(users);
+
                 dispatch(setUsers(users, users));
             })
             .catch(err => {
@@ -86,17 +106,17 @@ export const findUser = (filterKey) => {
 
                 userService.getGlobalUsers(filterData)
                     .then(res => {
-                        const users = [];                        
+                        const users = [];
                         res.forEach(element => {
-                            
+
                             if (element) {
                                 users.push({
-                                    value:element.id,
-                                    label:element.fullName
+                                    value: element.id,
+                                    label: element.fullName
                                 });
                             }
                         });
-                        
+
                         dispatch(setGlobalUsers(users));;
                     })
                     .catch(err => {
@@ -104,7 +124,7 @@ export const findUser = (filterKey) => {
                     });
             }
         }
-        else{
+        else {
             const users = [];
             dispatch(setGlobalUsers(users));;
         }

@@ -4,7 +4,7 @@ const initialState = {
     users: null,
     globalUsers: null,
     error: false,
-    globalUsersError:false
+    globalUsersError: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -15,6 +15,14 @@ const reducer = (state = initialState, action) => {
                 users: action.users,
                 defaultUsers: action.defaultUsers,
                 error: false
+            };
+        case actionTypes.SET_USER_COUNT:
+            return {
+                ...state,
+                users: {
+                    ...state.users.userId[action.userId],
+                    count: state.usersuserId[action.userId].count + 1
+                }
             };
         case actionTypes.FETCH_USERS_FAILED:
             return {
