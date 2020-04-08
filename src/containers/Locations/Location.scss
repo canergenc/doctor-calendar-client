@@ -11,7 +11,6 @@ $colors: (
   violet: #6435C9,
   purple: #A333C8,
   pink: #E03997,
-
   primary:#5e72e4,
   secondary:#f7fafc,
   success:#2dce89,
@@ -22,7 +21,13 @@ $colors: (
   dark:#bfc0c2,
   default:#172b4d,
   white:#fff,
-  darker:black
+  darker:black,
+  indigo: #5603ad,
+  cyan: #2bffc6,
+  gray: #8898aa,
+  gray-dark: #32325d,
+  lighter: #e9ecef,
+ 
 );
 
 * {

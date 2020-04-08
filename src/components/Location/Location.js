@@ -38,6 +38,7 @@ class Location extends Component {
     }
 
     createMenu = (list, selected) => {
+        console.log('list',list);
         let menu = list.map((el, index) => (
             <Button
                 outline

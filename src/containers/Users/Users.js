@@ -58,7 +58,7 @@ class Users extends Component {
         }
         return (
 
-            <Card className="shadow sticky" >
+            <Card className="shadow sticky"    >
                 <CardHeader className="bg-transparent">
                     <Row>
                         <div className="col">
@@ -66,7 +66,7 @@ class Users extends Component {
                         </div>
                     </Row>
                 </CardHeader>
-                <CardBody>
+                <CardBody style={{ height: '500px', overflowY: 'scroll' }} >
                     <Droppable droppableId="UserList_1" isDropDisabled={true}>
                         {(provided) => (
                             <div
