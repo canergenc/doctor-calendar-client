@@ -26,19 +26,18 @@ class Location extends Component {
 
     state = {
         locationId: null,
-        alignCenter: true,
+        alignCenter: false,
         clickWhenDrag: false,
         dragging: true,
         hideArrows: true,
         hideSingleArrow: true,
         scrollToSelected: false,
-        translate: 0,
+        translate: 200,
         transition: 0.6,
         wheel: true
     }
 
     createMenu = (list, selected) => {
-        console.log('list',list);
         let menu = list.map((el, index) => (
             <Button
                 outline
@@ -48,15 +47,14 @@ class Location extends Component {
             > {el.name}
             </Button>
         ));
-        
+
         return menu;
     }
 
 
     onUpdate = ({ translate }) => {
-        
         this.setState({ translate });
-      };
+    };
 
 
     onSelect = key => {
@@ -162,14 +160,14 @@ class Location extends Component {
                 onSelect={this.onSelect}
                 onUpdate={this.onUpdate}
                 scrollToSelected={scrollToSelected}
-                transition={+transition}
+                transition={transition}
                 translate={translate}
                 wheel={wheel}
             />
         }
 
         return (
-            <div className="location sticky">
+            <div className="location">
                 {scrollMenu}
             </div>
         );

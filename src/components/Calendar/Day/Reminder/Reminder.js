@@ -11,7 +11,7 @@ class Reminder extends Component {
             <i className="fas fa-trash-alt" />
           </button>
         </div>
-        <strong>{this.props.name}</strong>
+        {this.props.name}
       </article>
     );
   }

@@ -63,14 +63,14 @@ class Users extends Component {
                 <CardHeader className="bg-transparent">
                     <Row>
                         <div className="col">
-                            <Input id="userSearch" placeholder="Doktorlar" onChange={(ev) => this.searchUser(ev.target.value)}></Input>
+                            <Input id="userSearch" placeholder="Ara" onChange={(ev) => this.searchUser(ev.target.value)}></Input>
                         </div>
                     </Row>
                 </CardHeader>
                 <CardBody >
                     <Droppable droppableId="UserList_1" isDropDisabled={true}>
                         {(provided) => (
-                            <div style={{ maxHeight: '1000px', overflowY: 'scroll' }}
+                            <div style={{ maxHeight: '700px', overflowY: 'scroll' }}
                                 ref={provided.innerRef}
                             >
                                 {userList}

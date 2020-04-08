@@ -1,6 +1,6 @@
 .reminder {
   position: relative;
-  font-size: 16px;
+  font-size: 12px;
   padding: 3px 5px;
   margin-bottom: 5px;
   border-radius: 4px;
@@ -20,7 +20,10 @@
     right: 0;
     visibility: hidden;
     background: #42dee1;
-    padding: 2px 3px;
+    padding-top: 2px;
+    padding-right: 1px;
+    padding-bottom: 2px;
+    padding-left: 3px;
     display: flex;
     justify-content: flex-end;
     z-index: 1;
