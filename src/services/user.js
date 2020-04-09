@@ -44,7 +44,7 @@ const createUserService = (data) => {
 const updateUserService = (id, data) => {
     return request({
         url: '/users/' + id,
-        method: 'POST',
+        method: 'PATCH',
         data: data
     });
 };

@@ -17,7 +17,6 @@ import * as actions from '../../store/actions/index';
 import Api from "../../api";
 
 import "./Calendar.scss";
-import { object } from "prop-types";
 
 class Calendar extends Component {
 

@@ -3,9 +3,11 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     users: null,
     globalUsers: null,
+    usersCount: null,
     error: false,
     globalUsersError: false
 };
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -15,14 +17,6 @@ const reducer = (state = initialState, action) => {
                 users: action.users,
                 defaultUsers: action.defaultUsers,
                 error: false
-            };
-        case actionTypes.SET_USER_COUNT:
-            return {
-                ...state,
-                users: {
-                    ...state.users.userId[action.userId],
-                    count: state.usersuserId[action.userId].count + 1
-                }
             };
         case actionTypes.FETCH_USERS_FAILED:
             return {

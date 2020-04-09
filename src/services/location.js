@@ -32,7 +32,7 @@ const createLocationService = (data) => {
 const updateLocationService = (id, data) => {
     return request({
         url: '/locations/' + id,
-        method: 'POST',
+        method: 'PATCH',
         data: data
     });
 };

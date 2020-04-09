@@ -11,22 +11,6 @@ export const setUsers = (users, defaultUsers) => {
     };
 };
 
-
-export const setUserCount = (userId) => {
-    console.log("set User Count:" + userId);
-
-    return dispatch => {
-        dispatch(setUserCountSuccess(userId))
-    };
-};
-
-export const setUserCountSuccess = (userId) => {
-    return {
-        type: actionTypes.SET_USER_COUNT,
-        userId: userId
-    }
-}
-
 export const fetchUsersFailed = (error) => {
     return {
         type: actionTypes.FETCH_USERS_FAILED
@@ -60,8 +44,6 @@ export const getUsers = (filterData) => {
                         });
                     }
                 });
-                console.log(users);
-
                 dispatch(setUsers(users, users));
             })
             .catch(err => {

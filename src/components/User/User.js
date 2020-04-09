@@ -59,9 +59,8 @@ class User extends Component {
                         },
                         groupId: {
                             like: helperService.getGroupId()
-                        }
-                        // ,
-                        // type:CalendarTypes.Nobet
+                        },
+                        type:CalendarTypes.Nobet
                     },
                     include: [
                         {
@@ -97,9 +96,8 @@ class User extends Component {
                         },
                         groupId: {
                             like: helperService.getGroupId()
-                        }
-                        // ,
-                        // type:CalendarTypes.Nobet
+                        },
+                        type: CalendarTypes.Nobet
                     },
                     include: [
                         {

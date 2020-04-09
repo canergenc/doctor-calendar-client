@@ -61,12 +61,18 @@ class Persons extends Component {
 
 
     updateHandle(event) {
-        const userData = {
-            title: this.state.title,
-            fullName: this.state.name,
-            email: this.state.email
+        let userData = {
+            // title: this.state.title,
+            // fullName: this.state.name,
+            // email: this.state.email
         };
-        this.props.updateUser(this.state.id, userData);
+        if(this.state.title){
+            userData.title=this.state.title;
+        }
+
+        console.log(userData);
+        
+        // this.props.updateUser(this.state.id, userData);
         this.toggleModal('editModal', undefined);
 
         event.preventDefault();

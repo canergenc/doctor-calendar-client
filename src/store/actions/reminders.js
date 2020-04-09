@@ -1,7 +1,6 @@
 import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
 import { helperService } from "../../services";
-import { CalendarTypes } from "../../variables/constants";
 
 
 export const cleanReminderError = () => {

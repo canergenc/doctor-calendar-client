@@ -9,6 +9,7 @@ import './Location.css';
 
 import { Button } from "reactstrap";
 import { helperService } from '../../services';
+import { CalendarTypes } from "../../variables/constants";
 
 const Arrow = ({ text, className }) => {
     return <div className={className}>{text}</div>;
@@ -95,7 +96,8 @@ class Location extends Component {
                     },
                     groupId: {
                         like: helperService.getGroupId()
-                    }
+                    },
+                    type: CalendarTypes.Nobet
                 },
                 include: [
                     {
