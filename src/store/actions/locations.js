@@ -2,9 +2,6 @@ import * as actionTypes from './actionTypes';
 import { locationService, helperService } from '../../services/index';
 import history from "../../hoc/Config/history"
 
-
-
-
 export const createBulkLocaition = (listOfLocaition) => {
     return dispatch => {
         dispatch(createBulkLocaitionRequest());
@@ -26,7 +23,6 @@ export const createBulkLocaition = (listOfLocaition) => {
     }
 }
 
-
 export const createBulkLocaitionRequest = () => {
     return {
         type: actionTypes.BULKLOCATION_REQUEST,
@@ -34,14 +30,11 @@ export const createBulkLocaitionRequest = () => {
 };
 
 export const createBulkLocaitionSuccess = (response) => {
-
-
     return {
         type: actionTypes.BULKLOCATION_SUCCESS,
         status: true
     };
 }
-
 
 export const createBulkLocaitionFailure = (err) => {
     return {
@@ -53,8 +46,6 @@ export const createBulkLocaitionFailure = (err) => {
         // statusName: err.data.error.name,   // BadRequestError
     };
 }
-
-
 
 export const setLocations = (locations) => {
     return {
@@ -68,7 +59,6 @@ export const fetchLocationsFailed = (error) => {
         type: actionTypes.FETCH_LOCATIONS_FAILED
     };
 };
-
 
 export const setActiveLocationId = (locationId) => {
     return {
@@ -98,7 +88,6 @@ export const initLocations = (filterData) => {
 export const deleteLocation = (locationId) => {
     return dispatch => {
         locationService.deleteLocationService(locationId).then(result => {
-            dispatch(deleteLocationSuccess(locationId));
             const filterData = {
                 filter: {
                     where: {
@@ -133,7 +122,6 @@ export const createLocation = (locationData) => {
     return dispatch => {
         locationService.createLocationService(locationData)
             .then(response => {
-                dispatch(createLocationSuccess(response.data.id, locationData));
                 const filterData = {
                     filter: {
                         where: {
@@ -170,7 +158,6 @@ export const updateLocation = (locationId, locationData) => {
     return dispatch => {
         locationService.updateLocationService(locationId, locationData)
             .then(response => {
-                dispatch(updateLocationSuccess(response.data.id, locationData));
                 const filterData = {
                     filter: {
                         where: {

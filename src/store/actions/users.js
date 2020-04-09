@@ -113,11 +113,9 @@ export const findUser = (filterKey) => {
     }
 }
 
-
 export const deleteUser = (userId) => {
     return dispatch => {
         userService.deleteUserService(userId).then(result => {
-            dispatch(deleteUserSuccess(userId));
             const filterData = {
                 filter: {
                     where: {
@@ -155,8 +153,7 @@ export const createUser = (userData) => {
     return dispatch => {
         userService.createUserService(userData)
             .then(response => {
-                dispatch(createUserSuccess(response.id, userData));
-                dispatch(userGroupService.createUserGroup(response.id));
+                userGroupService.createUserGroup(response.id);
                 const filterData = {
                     filter: {
                         where: {
@@ -196,7 +193,6 @@ export const updateUser = (userId, userData) => {
     return dispatch => {
         userService.updateUserService(userId, userData)
             .then(response => {
-                dispatch(updateUserSuccess(response.data.id, userData));
                 const filterData = {
                     filter: {
                         where: {

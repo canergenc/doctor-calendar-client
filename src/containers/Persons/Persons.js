@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import withReactContent from 'sweetalert2-react-content'
+import Swal from 'sweetalert2'
 import * as actions from '../../store/actions';
 
 // reactstrap components
@@ -28,6 +30,10 @@ import {
 import UserHeader from "components/Headers/UserHeader.jsx";
 import "./Persons.css";
 import { helperService } from "../../services";
+
+
+const MySwal = withReactContent(Swal)
+
 
 class Persons extends Component {
     constructor(props) {
@@ -62,39 +68,37 @@ class Persons extends Component {
 
     updateHandle(event) {
         let userData = {
-            // title: this.state.title,
-            // fullName: this.state.name,
-            // email: this.state.email
+            title: this.state.title,
+            fullName: this.state.name,
+            email: this.state.email
         };
-        if(this.state.title){
-            userData.title=this.state.title;
-        }
-
-        console.log(userData);
         
-        // this.props.updateUser(this.state.id, userData);
-        this.toggleModal('editModal', undefined);
+        this.props.updateUser(this.state.id, userData);
+        this.toggleModal('editModal', null);
 
         event.preventDefault();
     }
 
     addHandle(event) {
 
-        if (this.state.name) {
+        if (this.state.title && this.state.name && this.state.email && this.state.password) {
             const user = {
                 fullName: this.state.name,
                 title: this.state.title,
                 email: this.state.email,
                 password:this.state.password,
-                //groupId: 
                 deviceId: "1"
             };
 
             this.props.createUser(user);
-            this.toggleModal('addModal', undefined);
+            this.toggleModal('addModal', null);
 
         } else {
-            alert('Ad alanı zorunludur!')
+            MySwal.fire({
+                icon: 'warning',
+                title: 'Lütfen',
+                text: 'zorunlu alanları doldurunuz'
+              });
         }
         event.preventDefault();
     }
@@ -128,21 +132,27 @@ class Persons extends Component {
 
     toggleModal(state, user) {
         if (user) {
+            console.log("toggle modal");
+            
+            console.log(user);
+            
             this.setState({
                 [state]: !this.state[state],
-                id: user.id ? user.id : null,
-                name: user.fullName ? user.fullName : null,
-                title: user.title ? user.title : null,
-                email: user.email ? user.email : null
+                id: user.id ? user.id : '',
+                name: user.fullName ? user.fullName : '',
+                title: user.title ? user.title : '',
+                email: user.email ? user.email : ''
             });
         }
         else {
+            console.log("else");
+            
             this.setState({
                 [state]: !this.state[state],
-                id: null,
-                name: null,
-                title: null,
-                email: null
+                id: '',
+                name: '',
+                title: '',
+                email: ''
             });
         }
     };
