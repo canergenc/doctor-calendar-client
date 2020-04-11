@@ -16,7 +16,35 @@ class Approved extends Component {
 
     }
 
-    filterOfInitialLoad = {
+    waitingForApproveFilter = {
+        filter: {
+            where: {
+                and: [{
+                    groupId: {
+                        like: helperService.getGroupId()
+                    }
+                }, {
+                    type: {
+                        neq: CalendarTypes.Nobet  
+                    },
+                    status: CalendarStatus.WaitingForApprove
+                }]
+            },
+            include: [
+                {
+                    relation: "group"
+                },
+                {
+                    relation: "user"
+                },
+                {
+                    relation: "location"
+                }
+            ]
+        }
+    }
+
+    approvedFilter = {
         filter: {
             where: {
                 and: [{
@@ -45,7 +73,7 @@ class Approved extends Component {
     }
 
     loadPermissions() {
-        this.props.fetchPermissionRequest(this.filterOfInitialLoad);
+        this.props.fetchPermissionRequest(this.approvedFilter);
     }
 
     componentDidMount() {
@@ -65,41 +93,9 @@ class Approved extends Component {
         return uniqueTags;
     }
 
-    showSwal(filter, data, item) {
-        MySwal.fire({
-            title: 'Lütfen ret nedenini giriniz',
-            input: 'text',
-            inputAttributes: {
-                autocapitalize: 'off'
-            },
+ 
 
-            confirmButtonText: 'Kaydet',
-            cancelButtonText: 'iptal',
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
-            if (result.value) {
-                this.props.patchPermisson(filter, data, this.filterOfInitialLoad)
-            }
-        })
-    }
-
-    approvePermisson(item) {
-        const filter = {
-            where: {
-                calendarGroupId: {
-                    like: item.calendarGroupId
-                }
-            }
-        }
-        const data = {
-            status: CalendarStatus.Approve
-        }
-
-        this.props.patchPermisson(filter, data, this.filterOfInitialLoad);
-    }
-
+    
     rejectPermission(item) {
         const filter = {
             where: {
@@ -109,13 +105,12 @@ class Approved extends Component {
             }
         }
         const data = {
-            status: CalendarStatus.Reject
+            status: CalendarStatus.WaitingForApprove
         }
 
-        this.showSwal(filter, data, item);
-
+        this.props.patchPermisson(filter, data, this.waitingForApproveFilter,this.approvedFilter);
+        //this.showSwal(filter, data, item);
         //this.props.patchPermisson(filter, data, this.filterOfGetPermission);
-
     }
 
 
@@ -175,7 +170,7 @@ class Approved extends Component {
                                 onClick={() => this.rejectPermission(item)}
                                 size="sm"
                             >
-                                İPTAL
+                                ONAY İPTAL
                       </Button>
 
                          
@@ -289,7 +284,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchPermissionRequest: (filterData) => dispatch(actions.fetchApprovedReminders(filterData)),
-        patchPermisson: (filter, data, filterOfGetPermission) => dispatch(actions.updateBulkReminder(filter, data, filterOfGetPermission)),
+        patchPermisson: (filter, data, waitingForApproveFilter,approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter,approvedFilter)),
     };
 };
 

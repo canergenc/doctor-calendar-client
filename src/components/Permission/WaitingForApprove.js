@@ -18,7 +18,7 @@ class WaitingForApproved extends Component {
 
     }
 
-    filterOfInitialLoad = {
+    waitingForApproveFilter = {
         filter: {
             where: {
                 and: [{
@@ -46,8 +46,36 @@ class WaitingForApproved extends Component {
         }
     }
 
+    approvedFilter = {
+        filter: {
+            where: {
+                and: [{
+                    groupId: {
+                        like: helperService.getGroupId()
+                    }
+                }, {
+                    type: {
+                        neq: CalendarTypes.Nobet  
+                    },
+                    status: CalendarStatus.Approve
+                }]
+            },
+            include: [
+                {
+                    relation: "group"
+                },
+                {
+                    relation: "user"
+                },
+                {
+                    relation: "location"
+                }
+            ]
+        }
+    }
+
     loadPermissions() {
-    this.props.fetchPermissionRequest(this.filterOfInitialLoad);
+    this.props.fetchPermissionRequest(this.waitingForApproveFilter);
     }
 
     componentDidMount() {
@@ -83,7 +111,7 @@ class WaitingForApproved extends Component {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.value) {
-                this.props.patchPermisson(filter, data, this.filterOfInitialLoad)
+                this.props.patchPermisson(filter, data, this.waitingForApproveFilter,this.approvedFilter)
             }
         })
     }
@@ -100,7 +128,7 @@ class WaitingForApproved extends Component {
             status: CalendarStatus.Approve
         }
 
-        this.props.patchPermisson(filter, data, this.filterOfInitialLoad);
+        this.props.patchPermisson(filter, data, this.waitingForApproveFilter,this.approvedFilter);
     }
 
     rejectPermission(item) {
@@ -249,7 +277,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchPermissionRequest: (filterData) => dispatch(actions.fetchWaitingForApproveReminders(filterData)),
-        patchPermisson: (filter, data, filterOfGetPermission) => dispatch(actions.updateBulkReminder(filter, data, filterOfGetPermission)),
+        patchPermisson: (filter, data, waitingForApproveFilter,approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter,approvedFilter)),
     };
 };
 

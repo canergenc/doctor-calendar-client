@@ -9,19 +9,20 @@ export const cleanReminderError = () => {
   };
 };
 
-export const updateBulkReminder = (filter, data,fiterOfGetPermission) => {
+export const updateBulkReminder = (filter, data,waitingForApprovedFilter,approvedFilter) => {
   return dispatch => {
     dispatch(updateBulkReminderRequest());
     calendarService.reminderBulkUpdateService(filter, data)
       .then((response) => {
         dispatch(updateBulkReminderSuccess(response));
-        dispatch(getReminders(fiterOfGetPermission));
+        dispatch(fetchWaitingForApproveReminders(waitingForApprovedFilter));
+        dispatch(fetchApprovedReminders(approvedFilter));
+
       }).catch((error) => {
         dispatch(updateBulkReminderFailure(error));
       });
   }
 }
-
 
 export const updateBulkReminderRequest = () => {
   return {
