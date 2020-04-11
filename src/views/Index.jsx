@@ -63,10 +63,14 @@ class Index extends Component {
       return;
     }
 
+    if (destination.droppableId === source.droppableId) {
+      return;
+    }
+
     switch (source.droppableId) {
       case 'UserList_1':
         if (this.props.activeLocationId !== "" && this.props.activeLocationId !== null) {
-          
+
           const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
@@ -86,6 +90,14 @@ class Index extends Component {
         }
         break;
       default:
+        console.log("test");
+        result.index=this.props.reminder[]
+        console.log(result);
+        const reminderId = result.draggableId;
+        const reminder = {
+          date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]")
+        }
+        this.props.updateReminder(reminderId, reminder);
         break;
     }
   };
@@ -236,6 +248,7 @@ const mapDispatchToProps = dispatch => {
   return {
     cleanReminderError: () => dispatch(actions.cleanReminderError()),
     createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
+    updateReminder: (reminderId, reminderData) => dispatch(actions.updateReminder(reminderId, reminderData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
     findUser: (filterKey) => dispatch(actions.findUser(filterKey))
   };
