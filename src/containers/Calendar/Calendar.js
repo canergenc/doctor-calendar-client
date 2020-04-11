@@ -120,8 +120,9 @@ class Calendar extends Component {
         props["day"] = i;
         const calendar = [];
 
-        this.props.reminders.forEach(dateRow => {
+        this.props.reminders.forEach((dateRow, index) => {
           if (moment(dateRow.date).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
+            // dateRow.index = index;
             calendar.push(dateRow);
           }
         });
@@ -131,7 +132,7 @@ class Calendar extends Component {
 
         if (i === 1) {
           let startOfMonth = parseInt(moment(date).startOf("month").format("d"));
-          
+
           if (startOfMonth === 0) {
             startOfMonth = 6;
           }
@@ -145,8 +146,8 @@ class Calendar extends Component {
         }
 
         let isWeekend = false;
-        
-        if (moment(date).isoWeekday() === 6 || moment(date).isoWeekday() === 7) {  
+
+        if (moment(date).isoWeekday() === 6 || moment(date).isoWeekday() === 7) {
           isWeekend = true;
         }
 

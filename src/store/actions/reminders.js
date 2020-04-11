@@ -6,11 +6,11 @@ import { CalendarTypes } from "../../variables/constants";
 
 export const cleanReminderError = () => {
   return {
-    type: actionTypes.CLEAN_REMINDERERROR
+    type: actionTypes.CLEAN_REMINDER_ERROR
   };
 };
 
-export const updateBulkReminder = (filter, data,waitingForApprovedFilter,approvedFilter) => {
+export const updateBulkReminder = (filter, data, waitingForApprovedFilter, approvedFilter) => {
   return dispatch => {
     dispatch(updateBulkReminderRequest());
     calendarService.reminderBulkUpdateService(filter, data)
@@ -51,7 +51,6 @@ export const updateBulkReminderFailure = (err) => {
 
   };
 }
-
 
 export const setReminders = (reminders) => {
   return {
@@ -208,13 +207,13 @@ export const updateReminderSuccess = (id) => {
 export const updateReminderFail = (error) => {
   return {
     type: actionTypes.UPDATE_REMINDER_FAIL,
-    error: error
+    errorObj: error
   };
 };
 
-export const updateReminder = (id, reminderData) => {
+export const updateReminder = (id, index, reminderData) => {
   return dispatch => {
-    dispatch(updateReminderStart(0));
+    dispatch(updateReminderStart(index));
     calendarService.updateReminderService(id, reminderData)
       .then(response => {
         const filterData = {
@@ -222,8 +221,7 @@ export const updateReminder = (id, reminderData) => {
             where: {
               groupId: {
                 like: helperService.getGroupId()
-              }
-              ,
+              },
               type: CalendarTypes.Nobet
             },
             include: [
@@ -239,17 +237,16 @@ export const updateReminder = (id, reminderData) => {
             ]
           }
         }
-        dispatch(getReminders(filterData));
         dispatch(updateReminderSuccess(response.id));
+        dispatch(getReminders(filterData));
       })
       .catch(error => {
-        dispatch(updateReminderFail(error))
+        dispatch(updateReminderFail(error, index))
       });
   }
 }
 
-
-export const  fetchWaitingForApproveReminders = (filter) => {
+export const fetchWaitingForApproveReminders = (filter) => {
   return dispatch => {
     dispatch(fetchWaitingForApproveRemindersRequest());
     calendarService.getReminderService(filter)
@@ -274,29 +271,29 @@ export const  fetchWaitingForApproveReminders = (filter) => {
 
 export const fetchWaitingForApproveRemindersRequest = () => {
   return {
-      type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_REQUEST,
+    type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_REQUEST,
   };
 };
 
 export const fetchWaitingForApproveRemindersSuccess = (reminders) => {
   return {
-      type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_SUCCESS,
-      status: true,
-      waitingForApproveReminders:reminders
+    type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_SUCCESS,
+    status: true,
+    waitingForApproveReminders: reminders
   };
 }
 
 export const fetchWaitingForApproveRemindersFailure = (err) => {
   return {
-      type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_FAILURE,
-      erorObj: err,
-      status: false,
+    type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_FAILURE,
+    erorObj: err,
+    status: false,
   };
 }
 
 
 
-export const  fetchApprovedReminders = (filter) => {
+export const fetchApprovedReminders = (filter) => {
   return dispatch => {
     dispatch(fetchApprovedRemindersRequest());
     calendarService.getReminderService(filter)
@@ -321,23 +318,23 @@ export const  fetchApprovedReminders = (filter) => {
 
 export const fetchApprovedRemindersRequest = () => {
   return {
-      type: actionTypes.APPROVED_REMINDERS_REQUEST,
+    type: actionTypes.APPROVED_REMINDERS_REQUEST,
   };
 };
 
 export const fetchApprovedRemindersSuccess = (reminders) => {
   return {
-      type: actionTypes.APPROVED_REMINDERS_SUCCESS,
-      status: true,
-      approvedReminders:reminders
+    type: actionTypes.APPROVED_REMINDERS_SUCCESS,
+    status: true,
+    approvedReminders: reminders
   };
 }
 
 export const fetchApprovedRemindersFailure = (err) => {
   return {
-      type: actionTypes.APPROVED_REMINDERS_FAILURE,
-      erorObj: err,
-      status: false,
+    type: actionTypes.APPROVED_REMINDERS_FAILURE,
+    erorObj: err,
+    status: false,
   };
 }
 

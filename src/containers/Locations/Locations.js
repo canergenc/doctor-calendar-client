@@ -138,25 +138,43 @@ class Location extends Component {
         }
 
         if (destination.droppableId === source.droppableId) {
-            // console.log(source.index);
-            // console.log(destination.index);
+            console.log("source:" + source.index);
+            console.log("destination:" + destination.index);
 
             const locationsData = [];
-                        
+
             //hareket ettirilen kayıt
+            const movedId = this.props.locations[source.index].id;
+            const newSortOrder = destination.index;
             locationsData.push({
                 id: this.props.locations[source.index].id,
-                sortOrder: destination.index+1
+                sortOrder: newSortOrder
             });
 
-
-            for (let index = destination.index + 1; index < this.props.locations.length; index++) {
-                const id = this.props.locations[index].id;
-                locationsData.push({
-                    id: id,
-                    sortOrder: index+1
-                });
+            if (destination.index > source.index) {
+                for (let i = source.index; i <= destination.index; i++) {
+                    const id = this.props.locations[i].id;
+                    if (id !== movedId) {
+                        locationsData.push({
+                            id: id,
+                            sortOrder: this.props.locations[i].sortOrder - 1
+                        });
+                    }
+                }
             }
+            else if (destination.index < source.index) {
+                for (let i = destination.index; i < source.index; i++) {
+                    const id = this.props.locations[i].id;
+                    if (id !== movedId) {
+                        locationsData.push({
+                            id: id,
+                            sortOrder: this.props.locations[i].sortOrder + 1
+                        });
+                    }
+                }
+            }
+
+
             console.log(locationsData);
 
             this.props.reorderLocation(locationsData, source.index, destination.index);
@@ -443,7 +461,7 @@ class Location extends Component {
                                         </div>
 
                                     </CardHeader>
-                                    <Table className="align-items-center table-flush" responsive>
+                                    <Table className="align-items-center table-flush">
                                         <thead className="thead-light">
                                             <tr>
                                                 <th scope="col">Adı</th>

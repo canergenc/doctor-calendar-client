@@ -60,7 +60,7 @@ class Day extends Component {
 
         if (remindersCount === 4) {
           if (this.props.reminders.length > 4) {
-            preReminders.push(<footer className="morefooter" key={5}><a className="more" onClick={this.showFullReminderHandle}  >+{this.props.reminders.length - 4} kayıt</a></footer>)
+            preReminders.push(<footer className="morefooter" key={5}><div className="more" onClick={()=>this.showFullReminderHandle()} >+{this.props.reminders.length - 4} kayıt</div></footer>)
           }
         }
       }
