@@ -91,7 +91,7 @@ class Index extends Component {
         break;
       default:
         console.log("test");
-        result.index=this.props.reminder[]
+        result.index=this.props.reminder[source.index];
         console.log(result);
         const reminderId = result.draggableId;
         const reminder = {

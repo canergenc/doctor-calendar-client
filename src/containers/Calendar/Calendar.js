@@ -131,9 +131,6 @@ class Calendar extends Component {
 
         if (i === 1) {
           let startOfMonth = parseInt(moment(date).startOf("month").format("d"));
-          console.log("startOfMonth");
-          
-          console.log(startOfMonth);
           
           if (startOfMonth === 0) {
             startOfMonth = 6;

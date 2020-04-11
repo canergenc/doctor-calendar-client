@@ -41,12 +41,15 @@ class Day extends Component {
       if (this.props.reminders.length > 0) {
         let array = this.props.reminders;
         let remindersCount = 0;
-        array.slice().reverse().forEach(element => {
+        array.slice().reverse().forEach((element,index) => {
           if (element.user) {
             if (remindersCount <= 3) {
               preReminders.push(<Reminder
+                isDrag={true}
+                id={element.id}
                 key={element.id}
                 name={element.user.fullName}
+                index={index}
                 color={element.location ? element.location.colorCode : "#fff"}
                 onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
               />);
@@ -55,9 +58,9 @@ class Day extends Component {
           }
         });
 
-        if(remindersCount===4){
-          if(this.props.reminders.length > 4){
-            preReminders.push(<footer className="morefooter" key={5}><a className="more" onClick={this.showFullReminderHandle}  >+{this.props.reminders.length-4} kayıt</a></footer>)
+        if (remindersCount === 4) {
+          if (this.props.reminders.length > 4) {
+            preReminders.push(<footer className="morefooter" key={5}><a className="more" onClick={this.showFullReminderHandle}  >+{this.props.reminders.length - 4} kayıt</a></footer>)
           }
         }
       }
@@ -74,8 +77,9 @@ class Day extends Component {
         let array = this.props.reminders;
         array.slice().reverse().forEach(element => {
           if (element.user && element.location) {
-            
+
             fullReminders.push(<Reminder
+              isDrag={false}
               key={element.id}
               name={element.user.fullName}
               color={element.location ? element.location.colorCode : "#fff"}
@@ -85,7 +89,7 @@ class Day extends Component {
         });
       }
 
-      
+
     }
     return fullReminders;
   }

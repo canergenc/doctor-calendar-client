@@ -8,7 +8,7 @@ const getReminderService = (filterData) => {
     });
 };
 
-const reminderBulkUpdateService = (filterData,data) => {
+const reminderBulkUpdateService = (filterData, data) => {
     return request({
         url: '/calendars',
         method: 'PATCH',
@@ -25,6 +25,14 @@ const createReminderService = (data) => {
     });
 };
 
+const updateReminderService = (id, data) => {
+    return request({
+        url: '/calendars/' + id,
+        method: 'PATCH',
+        data: data
+    });
+};
+
 const deleteReminderService = (id) => {
     return request({
         url: '/calendars/' + id,
@@ -36,6 +44,7 @@ export const calendarService = {
     getReminderService,
     createReminderService,
     deleteReminderService,
+    updateReminderService,
     reminderBulkUpdateService
 };
 

@@ -1,6 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
 import { helperService } from "../../services";
+import { CalendarTypes } from "../../variables/constants";
 
 
 export const cleanReminderError = () => {
@@ -9,7 +10,7 @@ export const cleanReminderError = () => {
   };
 };
 
-export const updateBulkReminder = (filter, data,fiterOfGetPermission) => {
+export const updateBulkReminder = (filter, data, fiterOfGetPermission) => {
   return dispatch => {
     dispatch(updateBulkReminderRequest());
     calendarService.reminderBulkUpdateService(filter, data)
@@ -42,14 +43,13 @@ export const updateBulkReminderFailure = (err) => {
   return {
     type: actionTypes.CALENDAR_BULKUPDATE_FAILURE,
     errorObj: err,
-   
+
     // statusCode: err.data.error.statusCode, // BadRequestError
     // statusText: err.data.error.message,  // Invalid email or password
     // statusName: err.data.error.name,   // BadRequestError
 
   };
 }
-
 
 
 export const setReminders = (reminders) => {
@@ -62,7 +62,7 @@ export const setReminders = (reminders) => {
 export const fetchRemindersFailed = (error) => {
   return {
     type: actionTypes.FETCH_REMINDERS_FAILED,
-    errorObj:error
+    errorObj: error
   };
 };
 
@@ -115,8 +115,8 @@ export const createReminder = (reminderData) => {
               groupId: {
                 like: helperService.getGroupId()
               }
-              // ,
-              // type:CalendarTypes.Nobet
+              ,
+              type: CalendarTypes.Nobet
             },
             include: [
               {
@@ -131,7 +131,7 @@ export const createReminder = (reminderData) => {
             ]
           }
         }
-        dispatch(getReminders(filterData));        
+        dispatch(getReminders(filterData));
         dispatch(createReminderSuccess(response.id, reminderData));
       }).catch((error) => {
         dispatch(createReminderFailed(error));
@@ -158,15 +158,15 @@ export const deleteReminder = (reminderId) => {
     calendarService.deleteReminderService(reminderId)
       .then(response => {
 
-        
+
         const filterData = {
           filter: {
             where: {
               groupId: {
                 like: helperService.getGroupId()
               }
-              // ,
-              // type:CalendarTypes.Nobet
+              ,
+              type: CalendarTypes.Nobet
             },
             include: [
               {
@@ -188,4 +188,61 @@ export const deleteReminder = (reminderId) => {
         dispatch(deleteReminderFailed(error));
       });
   };
+}
+
+export const updateReminderStart = (index) => {
+  return {
+    type: actionTypes.UPDATE_REMINDER_START,
+    index: index
+  };
+};
+
+export const updateReminderSuccess = (id) => {
+  return {
+    type: actionTypes.UPDATE_REMINDER_SUCCESS,
+    reminderId: id
+  };
+};
+
+export const updateReminderFail = (error) => {
+  return {
+    type: actionTypes.UPDATE_REMINDER_FAIL,
+    error: error
+  };
+};
+
+export const updateReminder = (id, reminderData) => {
+  return dispatch => {
+    dispatch(updateReminderStart(0));
+    calendarService.updateReminderService(id, reminderData)
+      .then(response => {
+        const filterData = {
+          filter: {
+            where: {
+              groupId: {
+                like: helperService.getGroupId()
+              }
+              ,
+              type: CalendarTypes.Nobet
+            },
+            include: [
+              {
+                relation: "group"
+              },
+              {
+                relation: "user"
+              },
+              {
+                relation: "location"
+              }
+            ]
+          }
+        }
+        dispatch(getReminders(filterData));
+        dispatch(updateReminderSuccess(response.id));
+      })
+      .catch(error => {
+        dispatch(updateReminderFail(error))
+      });
+  }
 }
