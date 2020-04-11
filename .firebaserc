@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "drcalendar-4369b"
+  },
+  "targets": {
+    "drcalendar-4369b": {
+      "hosting": {
+        "demo": [
+          "easycal-demo"
+        ],
+        "dev": [
+          "drcalendar-4369b"
+        ]
+      }
+    }
   }
 }
