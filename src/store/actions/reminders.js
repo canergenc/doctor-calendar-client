@@ -10,19 +10,20 @@ export const cleanReminderError = () => {
   };
 };
 
-export const updateBulkReminder = (filter, data, fiterOfGetPermission) => {
+export const updateBulkReminder = (filter, data,waitingForApprovedFilter,approvedFilter) => {
   return dispatch => {
     dispatch(updateBulkReminderRequest());
     calendarService.reminderBulkUpdateService(filter, data)
       .then((response) => {
         dispatch(updateBulkReminderSuccess(response));
-        dispatch(getReminders(fiterOfGetPermission));
+        dispatch(fetchWaitingForApproveReminders(waitingForApprovedFilter));
+        dispatch(fetchApprovedReminders(approvedFilter));
+
       }).catch((error) => {
         dispatch(updateBulkReminderFailure(error));
       });
   }
 }
-
 
 export const updateBulkReminderRequest = () => {
   return {
@@ -246,3 +247,105 @@ export const updateReminder = (id, reminderData) => {
       });
   }
 }
+
+
+export const  fetchWaitingForApproveReminders = (filter) => {
+  return dispatch => {
+    dispatch(fetchWaitingForApproveRemindersRequest());
+    calendarService.getReminderService(filter)
+      .then(res => {
+        const reminders = []
+        if (res) {
+          res.forEach(element => {
+            if (element !== null) {
+              reminders.push(element);
+            }
+          });
+          dispatch(fetchWaitingForApproveRemindersSuccess(reminders));
+        }
+      })
+      .catch(err => {
+        dispatch(fetchWaitingForApproveRemindersFailure(err));
+      });
+  }
+}
+
+
+
+export const fetchWaitingForApproveRemindersRequest = () => {
+  return {
+      type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_REQUEST,
+  };
+};
+
+export const fetchWaitingForApproveRemindersSuccess = (reminders) => {
+  return {
+      type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_SUCCESS,
+      status: true,
+      waitingForApproveReminders:reminders
+  };
+}
+
+export const fetchWaitingForApproveRemindersFailure = (err) => {
+  return {
+      type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_FAILURE,
+      erorObj: err,
+      status: false,
+  };
+}
+
+
+
+export const  fetchApprovedReminders = (filter) => {
+  return dispatch => {
+    dispatch(fetchApprovedRemindersRequest());
+    calendarService.getReminderService(filter)
+      .then(res => {
+        const reminders = []
+        if (res) {
+          res.forEach(element => {
+            if (element !== null) {
+              reminders.push(element);
+            }
+          });
+          dispatch(fetchApprovedRemindersSuccess(reminders));
+        }
+      })
+      .catch(err => {
+        dispatch(fetchApprovedRemindersFailure(err));
+      });
+  }
+}
+
+
+
+export const fetchApprovedRemindersRequest = () => {
+  return {
+      type: actionTypes.APPROVED_REMINDERS_REQUEST,
+  };
+};
+
+export const fetchApprovedRemindersSuccess = (reminders) => {
+  return {
+      type: actionTypes.APPROVED_REMINDERS_SUCCESS,
+      status: true,
+      approvedReminders:reminders
+  };
+}
+
+export const fetchApprovedRemindersFailure = (err) => {
+  return {
+      type: actionTypes.APPROVED_REMINDERS_FAILURE,
+      erorObj: err,
+      status: false,
+  };
+}
+
+
+
+
+
+
+
+
+
