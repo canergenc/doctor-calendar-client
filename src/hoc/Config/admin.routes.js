@@ -2,7 +2,7 @@ import Index from "../../views/Index";
 import Profile from "../../containers/Profile/Profile.js";
 import Location from "../../containers/Locations/Locations.js";
 import Person from "../../containers/Persons/Persons.js";
-import PermissionApprove from "../../containers/Request-Approve/PermissionApprove.js";
+import Permission from "../../containers/Request-Approve/Permission.js";
 
 
 var routes = [
@@ -36,10 +36,10 @@ var routes = [
     },
 
     {
-        path: "/permission-approve",
-        name: "İzin-Onay",
+        path: "/permission",
+        name: "İzin Yönetimi",
         icon: "ni ni-active-40 text-primary",
-        component: PermissionApprove,
+        component: Permission,
         layout: "/admin"
     },
     // {

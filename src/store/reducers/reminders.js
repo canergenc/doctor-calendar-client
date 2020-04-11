@@ -8,6 +8,76 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+
+
+    case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
+      return {
+        bulkUpdateReqloading: true
+      };
+
+    case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
+      return {
+        ...state,
+        bulkUpdateReqloading: false,
+        error: false,
+        response: action.response
+      };
+
+    case actionTypes.CALENDAR_BULKUPDATE_FAILURE:
+      return {
+        ...state,
+        bulkUpdateReqloading: false,
+        error: true,
+        response: {},
+        statusTextAtBulkUpdate: helperService.getErrorMessage(action.errorObj)
+      };
+
+
+
+    case actionTypes.APPROVED_REMINDERS_REQUEST:
+      return {
+        approveReqLoading: true
+      };
+    case actionTypes.APPROVED_REMINDERS_SUCCESS:
+      return {
+        ...state,
+        approveReqLoading: false,
+        approvedReminders: action.approvedReminders,
+        error: false
+      };
+    case actionTypes.APPROVED_REMINDERS_FAILURE:
+      return {
+        ...state,
+        approveReqLoading: false,
+        error: true,
+        statusTextAtApproved: helperService.getErrorMessage(action.erorObj)
+      };
+
+
+    case actionTypes.WAITING_FOR_APPROVE_REMINDERS_REQUEST:
+      return {
+        waitingForApproveReqLoading: true
+      };
+
+    case actionTypes.WAITING_FOR_APPROVE_REMINDERS_SUCCESS:
+      return {
+        ...state,
+        waitingForApproveReqLoading: false,
+        waitingForApproveReminders: action.waitingForApproveReminders,
+        error: false
+      };
+
+    case actionTypes.WAITING_FOR_APPROVE_REMINDERS_FAILURE:
+      return {
+        ...state,
+        waitingForApproveReqLoading: false,
+        error: true,
+        statusTextAtWaitingForApprove: helperService.getErrorMessage(action.erorObj)
+      };
+
+
+
+
     case actionTypes.CLEAN_REMINDERERROR:
       return {
         ...state,
@@ -44,28 +114,7 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: false
       };
-    case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
-      return {
-        loading: true
-      };
-
-    case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        error: false,
-        response: action.response
-      };
-
-    case actionTypes.CALENDAR_BULKUPDATE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        response: {},
-        statusText: helperService.getErrorMessage(action.errorObj)
-      };
-
+   
 
     default:
       return state;
