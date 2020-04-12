@@ -11,7 +11,13 @@ const createBulkLocationService = (listOfLocaiton) => {
     });
 };
 
-
+const updateBulkLocationService = (listOfLocation) => {
+    return request({
+        url: '/locations/bulk',
+        method: 'PATCH',
+        data: listOfLocation
+    });
+};
 
 const getLocationsService = (filterData) => {
     return request({
@@ -49,5 +55,6 @@ export const locationService = {
     createLocationService,
     updateLocationService,
     deleteLocationService,
-    createBulkLocationService
+    createBulkLocationService,
+    updateBulkLocationService
 }

@@ -17,7 +17,7 @@ export const createBulkLocaition = (listOfLocaition) => {
 
             })
             .catch((error) => {
-                console.log('HATA',error);
+                console.log('HATA', error);
                 dispatch(createBulkLocaitionFailure(error));
             });
     }
@@ -77,7 +77,20 @@ export const initLocations = (filterData) => {
                         ...element
                     });
                 });
-                dispatch(setLocations(locations));
+
+                var sortList = locations.map(function (location, index) {
+                    return { index: index, value: location.sortOrder ? parseInt(location.sortOrder) : 0 };
+                });
+
+                sortList.sort(function (a, b) {
+                    return +(a.value > b.value) || +(a.value === b.value) - 1;
+                });
+
+                var sortedLocations = sortList.map(function (e) {
+                    return locations[e.index];
+                });
+
+                dispatch(setLocations(sortedLocations));
             })
             .catch(err => {
                 dispatch(fetchLocationsFailed());
@@ -187,5 +200,24 @@ export const updateLocationFailed = (error) => {
     return {
         type: actionTypes.UPDATE_LOCATION_FAIL,
         error: error
+    };
+};
+
+export const reorderLocation = (locationsData, startIndex, endIndex) => {
+    return dispatch => {
+        
+        dispatch(reorderLocationStart(startIndex, endIndex))
+        locationService.updateBulkLocationService(locationsData)
+            .catch(error => {
+                dispatch(updateLocationFailed(error))
+            });;
+    };
+};
+
+export const reorderLocationStart = (startIndex, endIndex) => {
+    return {
+        type: actionTypes.REORDER_LOCATION,
+        startIndex: startIndex,
+        endIndex: endIndex
     };
 };

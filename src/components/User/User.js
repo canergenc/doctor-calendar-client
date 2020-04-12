@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
-import { Badge } from 'reactstrap'
 import moment from "moment";
 import 'pretty-checkbox';
 
@@ -13,13 +12,14 @@ import { CalendarTypes } from '../../variables/constants';
 const Container = styled.div`
 display: flex;
 user-select: none;
-padding: 8px;
+padding: 6px;
 margin-bottom: 6px;
+margin-right: 6px;
 align-items: flex-start;
 align-content: flex-start;
 border: 1px solid lightgrey;
 border-radius: 4px;
-font-size: 14px;
+font-size: 13px;
 background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
 `;
 const Clone = styled(Container)`
@@ -134,7 +134,7 @@ class User extends Component {
                         >
                             {this.props.user.fullName}
                             {/* <Badge color="success">{this.props.count}</Badge> */}
-                            <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto" }} >
+                            <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto",marginRight:"4px" }} >
                                 <input
                                     type="radio"
                                     name="radio"

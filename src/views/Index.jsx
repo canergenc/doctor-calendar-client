@@ -31,8 +31,6 @@ import Select from 'react-select';
 import './Index.css';
 import { helperService } from "../services";
 
-
-
 const MySwal = withReactContent(Swal)
 
 class Index extends Component {
@@ -45,8 +43,6 @@ class Index extends Component {
     }
     this.addHandle = this.addHandle.bind(this);
   }
-
-
 
   onDragEnd = result => {
 
@@ -63,10 +59,15 @@ class Index extends Component {
       return;
     }
 
+    if (destination.droppableId === source.droppableId) {
+      return;
+    }
+
     switch (source.droppableId) {
       case 'UserList_1':
-        if (this.props.activeLocationId !== "" && this.props.activeLocationId !== null) {
-          
+        if (this.props.activeLocationId) {
+          console.log(this.props.activeLocationId);
+
           const user = this.props.users[source.index];
           const reminder = {
             locationId: this.props.activeLocationId,
@@ -86,10 +87,22 @@ class Index extends Component {
         }
         break;
       default:
+        const reminderId = result.draggableId;
+
+        const reminderIndex = this.props.reminders.map(function (x) { return x.id; }).indexOf(reminderId);
+
+        console.log(reminderIndex);
+
+        const reminder = {
+          date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+          userId: this.props.reminders[reminderIndex].userId
+        }
+        console.log(reminder);
+
+        this.props.updateReminder(reminderId, reminderIndex, reminder);
         break;
     }
   };
-
 
   toggleModal(state) {
     this.setState({
@@ -98,17 +111,12 @@ class Index extends Component {
   };
 
   findUser = (filterKey) => {
-    console.log("-----findUser");
-
-    console.log(filterKey);
-
     this.props.findUser(filterKey);
   }
 
   addHandle(event) {
     this.props.createUserGroupBulk(this.state.userGroups);
     this.toggleModal('addModal', undefined);
-
     event.preventDefault();
   }
 
@@ -118,7 +126,6 @@ class Index extends Component {
       user.forEach(element => {
         userGroups.push({ userId: element.value, groupId: helperService.getGroupId() });
       });
-
       this.setState({ userGroups: userGroups })
     }
 
@@ -130,7 +137,6 @@ class Index extends Component {
     if (this.props.globalUsers) {
       options = this.props.globalUsers
     }
-
 
     if (this.props.errorFromReminders) {
       console.log("---------------------INDEX---------------");
@@ -223,6 +229,7 @@ const mapStateToProps = state => {
 
   return {
     users: state.users.users,
+    reminders: state.reminders.reminders,
     globalUsers: state.users.globalUsers,
     defaultUsers: state.users.defaultUsers,
     errorFromUsers: state.users.error,
@@ -236,6 +243,7 @@ const mapDispatchToProps = dispatch => {
   return {
     cleanReminderError: () => dispatch(actions.cleanReminderError()),
     createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
+    updateReminder: (reminderId, reminderIndex, reminderData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
     findUser: (filterKey) => dispatch(actions.findUser(filterKey))
   };
