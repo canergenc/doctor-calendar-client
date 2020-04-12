@@ -1,20 +1,45 @@
-import React, { Component } from "react";
-import { Button, Card, Table } from "reactstrap";
+import React, { Component, useState } from "react";
+import { Button, Card, Table, CardHeader, Input, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus } from '../../variables/constants';
+
+import moment from "moment";
+import { extendMoment } from 'moment-range';
+
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
 import { helperService } from "../../services/helper";
 import Swal from 'sweetalert2'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import tr from "date-fns/locale/tr";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+registerLocale("tr", tr);
+
+
+
 
 
 const MySwal = withReactContent(Swal)
+
+
+
 class WaitingForApproved extends Component {
 
-  
+
     constructor(props) {
         super(props);
+        this.state = {
+            isOpenCreateModal: false,
+            startDate: new Date(),
+            permissionType: CalendarTypes.OzelDurum,
+            endDate: new Date(),
+            description: ''
+        }
+
+        this.inputChangeHandle = this.inputChangeHandle.bind(this);
+        this.createPermission = this.createPermission.bind(this);
 
     }
 
@@ -27,7 +52,7 @@ class WaitingForApproved extends Component {
                     }
                 }, {
                     type: {
-                        neq: CalendarTypes.Nobet  
+                        neq: CalendarTypes.Nobet
                     },
                     status: CalendarStatus.WaitingForApprove
                 }]
@@ -55,7 +80,7 @@ class WaitingForApproved extends Component {
                     }
                 }, {
                     type: {
-                        neq: CalendarTypes.Nobet  
+                        neq: CalendarTypes.Nobet
                     },
                     status: CalendarStatus.Approve
                 }]
@@ -75,12 +100,12 @@ class WaitingForApproved extends Component {
     }
 
     loadPermissions() {
-    this.props.fetchPermissionRequest(this.waitingForApproveFilter);
+        this.props.fetchPermissionRequest(this.waitingForApproveFilter);
     }
 
     componentDidMount() {
         this.loadPermissions();
-        
+
     }
 
     getUniqGroupIds(list) {
@@ -111,7 +136,7 @@ class WaitingForApproved extends Component {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.value) {
-                this.props.patchPermisson(filter, data, this.waitingForApproveFilter,this.approvedFilter)
+                this.props.patchPermisson(filter, data, this.waitingForApproveFilter, this.approvedFilter)
             }
         })
     }
@@ -128,7 +153,7 @@ class WaitingForApproved extends Component {
             status: CalendarStatus.Approve
         }
 
-        this.props.patchPermisson(filter, data, this.waitingForApproveFilter,this.approvedFilter);
+        this.props.patchPermisson(filter, data, this.waitingForApproveFilter, this.approvedFilter);
     }
 
     rejectPermission(item) {
@@ -149,13 +174,99 @@ class WaitingForApproved extends Component {
 
     }
 
+    openCreateModal() {
+
+        this.setState({
+            isOpenCreateModal: true
+        });
+
+    }
+
+    closeCreateModal() {
+
+        this.setState({
+            isOpenCreateModal: false
+        });
+
+    }
+
+    createPermission() {
+
+        console.log(this.state);
+
+        const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
+        const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
+        const userId = this.props.userId;
+        const groupId = this.props.groupId;
+        const type = this.state.permissionType;
+        const description=this.state.description;
+        const status = CalendarStatus.WaitingForApprove;
+
+        const guid = (
+            helperService.GUID4() +
+            helperService.GUID4() +
+            helperService.GUID4() +
+            helperService.GUID4() +
+            helperService.GUID4() +
+            helperService.GUID4()
+        ).toLowerCase();
+
+        
+        const momentRange = extendMoment(moment);
+        const range = momentRange.range(start, end);
+
+     
+
+        console.log(range);
+        
+        const leaveDays = [];
+        for (let date of range.by("day")) {
+            leaveDays.push({
+                userId,
+                groupId,
+                status,
+                date: date.format("YYYY-MM-DD[T]12:00:00.000[Z]"),
+                description:description,
+                type: type,
+                calendarGroupId: guid,
+            });
+
+            console.log(leaveDays);
+
+        }
+    }
+
+
+    inputChangeHandle(event) {
+        const target = event.target;
+        console.log(target.value);
+        if (target.name === 'permissionType') {
+            this.setState({ permissionType: event.target.value });
+        } else if (target.name === "description") {
+            this.setState({ description: event.target.value });
+        }
+    }
+
+    setEndDate(date) {
+        console.log(date);
+        this.setState({ endDate: date })
+    }
+
+    setStartDate(date) {
+        console.log(date);
+        this.setState({ startDate: date })
+    }
+
+
+
+
 
 
 
     render() {
 
-        
-        
+
+
         let result = [];
         if (this.props.reminders) {
 
@@ -227,49 +338,184 @@ class WaitingForApproved extends Component {
         }
 
         return (
-            <Card className="shadow">
-                {/* <CardHeader className="border-0">
-                <div className="row">
-                    <div className="col-md-10">
-                    </div>
-                    
-                </div>
 
-            </CardHeader> */}
-                <Table className="align-items-center table-flush" responsive>
-                    <thead className="thead-light">
-                        <tr>
-                            <th scope="col">İsim Soyisim</th>
-                            <th scope="col">E-Mail</th>
-                            <th scope="col">Başlangıç Tarihi</th>
-                            <th scope="col">Bitiş Tarihi</th>
-                            <th scope="col">Gün Sayısı</th>
-                            <th scope="col" />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {result}
-                        {result.length == 0 && <div style={{
-                            margin: 20,
-                            alignSelf: 'center',
-                            justifyContent: 'center'
-                        }} >
-                            <p>
-                                Onay bekleyen kayıt bulunmamaktadır.
+            <>
+
+                <Modal
+                    className="modal-dialog-centered"
+                    isOpen={this.state.isOpenCreateModal}
+                    toggle={() => this.toggleModal()}>
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="addModalLabel">Yeni İzin Girişi</h5>
+                        <button
+                            aria-label="Close"
+                            className="close"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.closeCreateModal()}>
+                            <span aria-hidden={true}>×</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <Form role="form" autoComplete="off">
+                            <FormGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+
+                                    <Label for="exampleEmail" sm={4}>Başalngıç Tarihi</Label>
+
+
+                                    <Col sm={8}>
+                                        <DatePicker
+                                            showPopperArrow={false}
+                                            name="startDate"
+                                            dateFormat="dd/MM/yyyy"
+                                            minDate={new Date()}
+                                            selected={this.state.startDate}
+                                            locale="tr"
+                                            onChange={date => this.setStartDate(date)}
+
+                                        />
+                                    </Col>
+
+
+
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+
+                                    <Label for="exampleEmail" sm={4}>Bitiş Tarihi</Label>
+
+                                    <Col sm={8}>
+                                        <DatePicker
+                                            showPopperArrow={false}
+                                            dateFormat="dd/MM/yyyy"
+                                            name="endDate"
+                                            minDate={new Date()}
+                                            selected={this.state.endDate}
+                                            locale="tr"
+                                            onChange={date => this.setEndDate(date)}
+
+                                        />
+                                    </Col>
+
+
+
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+
+
+                                    <Label for="exampleEmail" sm={4}>İzin Tipi</Label>
+
+                                    <Col sm={8}>
+                                        <Input type="select" name="permissionType" value={this.state.permissionType} onChange={this.inputChangeHandle} >
+                                            <option value={CalendarTypes.OzelDurum}>Özel Durum</option>
+                                            <option value={CalendarTypes.Gebelik}>Gebelik</option>
+                                            <option value={CalendarTypes.IdariIzin}>İdari İzin</option>
+                                            <option value={CalendarTypes.Rapor}>Rapor</option>
+
+                                        </Input>
+                                    </Col>
+
+
+
+
+                                </InputGroup>
+
+                                <InputGroup className="input-group-alternative mb-3">
+
+
+                                    <Label for="exampleEmail" sm={4}>Açıklama</Label>
+
+                                    <Col sm={8}>
+                                        <Input type="text" name="description" value={this.state.description} onChange={this.inputChangeHandle} >
+
+                                        </Input>
+                                    </Col>
+
+
+                                </InputGroup>
+
+                            </FormGroup>
+
+                        </Form>
+                    </div>
+                    <div className="modal-footer">
+                        <Button
+                            color="secondary"
+                            data-dismiss="modal"
+                            type="button"
+                            onClick={() => this.closeCreateModal()}>Kapat
+                        </Button>
+                        <Button color="primary" type="button" onClick={this.createPermission} >Kaydet</Button>
+                    </div>
+                </Modal>
+
+                <Card className="shadow">
+                    <CardHeader className="bg-white border-0">
+                        <Row className="align-items-center">
+                            <Col xs="9">
+                                <Input id="userSearch" placeholder="Ara" onChange={(ev) => this.searchUser(ev.target.value)}></Input>
+
+                            </Col>
+
+
+                            <Col className="text-right" xs="3">
+                                <Button
+                                    color="primary"
+                                    href="#pablo"
+                                    onClick={e => this.openCreateModal()}
+                                    size="sm"
+                                >
+                                    YENİ İZİN OLUŞTUR
+                      </Button>
+                            </Col>
+
+
+
+
+                        </Row>
+
+
+                    </CardHeader>
+
+                    <Table className="align-items-center table-flush" responsive>
+
+                        <thead className="thead-light">
+                            <tr>
+                                <th scope="col">İsim Soyisim</th>
+                                <th scope="col">E-Mail</th>
+                                <th scope="col">Başlangıç Tarihi</th>
+                                <th scope="col">Bitiş Tarihi</th>
+                                <th scope="col">Gün Sayısı</th>
+                                <th scope="col" />
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {result}
+                            {result.length == 0 && <div style={{
+                                margin: 20,
+                                alignSelf: 'center',
+                                justifyContent: 'center'
+                            }} >
+                                <p>
+                                    Onay bekleyen kayıt bulunmamaktadır.
                         </p>
-                        </div>}
-                    </tbody>
-                </Table>
-            </Card>
+                            </div>}
+                        </tbody>
+                    </Table>
+                </Card>
+            </>
+
         )
     }
 };
 
 const mapStateToProps = state => {
     return {
+        userId: state.auth.userId,
+        groupId: state.userInfo.groupId,
         reminders: state.reminders.waitingForApproveReminders,
         loading: state.reminders.waitingForApproveReqLoading,
-         errorTextAtFetch: state.reminders.statusTextAtWaitingForApprove,
+        errorTextAtFetch: state.reminders.statusTextAtWaitingForApprove,
         errorTextAtPatch: state.reminders.statusTextAtBulkUpdate
     }
 }
@@ -277,7 +523,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchPermissionRequest: (filterData) => dispatch(actions.fetchWaitingForApproveReminders(filterData)),
-        patchPermisson: (filter, data, waitingForApproveFilter,approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter,approvedFilter)),
+        patchPermisson: (filter, data, waitingForApproveFilter, approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter, approvedFilter)),
     };
 };
 

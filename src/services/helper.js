@@ -67,10 +67,10 @@ const getColorName = (index) => {
         "lighter"
     ]
 
-    if(index<listOfColorName.length){
+    if (index < listOfColorName.length) {
         item = listOfColorName[index];
-    }else{
-        item = listOfColorName[index%listOfColorName.length];
+    } else {
+        item = listOfColorName[index % listOfColorName.length];
     }
 
     return item;
@@ -88,6 +88,11 @@ const generateRndStr = (length) => {
 }
 
 
+const GUID4 = () => {
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+};
+
+
 
 
 
@@ -101,6 +106,7 @@ export const helperService = {
     uniqGroupName,
     getUserId,
     generateRndStr,
-    getColorName
+    getColorName,
+    GUID4
 
 };
