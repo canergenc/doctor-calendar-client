@@ -138,8 +138,6 @@ class Location extends Component {
         }
 
         if (destination.droppableId === source.droppableId) {
-            console.log("source:" + source.index);
-            console.log("destination:" + destination.index);
 
             const locationsData = [];
 
@@ -173,9 +171,6 @@ class Location extends Component {
                     }
                 }
             }
-
-
-            console.log(locationsData);
 
             this.props.reorderLocation(locationsData, source.index, destination.index);
         }

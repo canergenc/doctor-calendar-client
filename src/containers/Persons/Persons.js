@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
+import DatePicker from "react-datepicker";
 import withReactContent from 'sweetalert2-react-content'
 import Swal from 'sweetalert2'
 import * as actions from '../../store/actions';
@@ -46,6 +47,9 @@ class Persons extends Component {
             name: '',
             title: '',
             email: '',
+            workStartDate:'',
+            weekendCount:'',
+            weekdayCount:'',
             password: ''
         }
         this.updateHandle = this.updateHandle.bind(this);
@@ -214,6 +218,16 @@ class Persons extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Input placeholder="Şifre" name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+
+                                    <Input placeholder="İşe Başlangıç Tarihi" name="workStartDate" type="date" value={this.state.workStartDate} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCount" type="number" value={this.state.weekdayCount} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCount" type="number" value={this.state.weekendCount} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
                             </FormGroup>
 
                         </Form>
@@ -256,6 +270,15 @@ class Persons extends Component {
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="İşe Başlangıç Tarihi" name="workStartDate" type="date" value={this.state.workStartDate} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCount" type="number" value={this.state.weekdayCount} onChange={(event) => this.inputChangeHandle(event)} />
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCount" type="number" value={this.state.weekendCount} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                             </FormGroup>
                         </Form>
