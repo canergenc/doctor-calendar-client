@@ -40,12 +40,21 @@ const deleteReminderService = (id) => {
     });
 };
 
+const createReminderBulk = (data) => {
+    return request({
+      url: "/calendars/bulk",
+      method: "POST",
+      data: data,
+    });
+  };
+
 export const calendarService = {
     getReminderService,
     createReminderService,
     deleteReminderService,
     updateReminderService,
-    reminderBulkUpdateService
+    reminderBulkUpdateService,
+    createReminderBulk
 };
 
 

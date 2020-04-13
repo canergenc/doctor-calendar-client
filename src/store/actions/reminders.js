@@ -340,6 +340,45 @@ export const fetchApprovedRemindersFailure = (err) => {
 
 
 
+export const createReminderBulk = (data) => {
+  return dispatch => {
+    dispatch(createReminderBulkRequest());
+    calendarService.createReminderBulk(data)
+      .then(response => {
+          dispatch(createReminderBulkSuccess(response));
+      })
+      .catch(err => {
+        dispatch(createReminderBulkFailure(err));
+      });
+  }
+}
+
+
+
+export const createReminderBulkRequest = () => {
+  return {
+    type: actionTypes.CREATE_CALENDARBULK_REQUEST,
+  };
+};
+
+export const createReminderBulkSuccess = (response) => {
+  return {
+    type: actionTypes.CREATE_CALENDARBULK_SUCCESS,
+    status: true,
+    response:response
+  };
+}
+
+export const createReminderBulkFailure = (err) => {
+  return {
+    type: actionTypes.CREATE_CALENDARBULK_FAILURE,
+    erorObj: err,
+    status: false,
+  };
+}
+
+
+
 
 
 

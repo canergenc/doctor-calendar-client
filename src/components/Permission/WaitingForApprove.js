@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus } from '../../variables/constants';
 
-import moment from "moment";
-import { extendMoment } from 'moment-range';
+import moment from 'moment';
+//import { extendMoment } from 'moment-range';
 
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
@@ -212,28 +212,29 @@ class WaitingForApproved extends Component {
         ).toLowerCase();
 
         
-        const momentRange = extendMoment(moment);
-        const range = momentRange.range(start, end);
+        // const momentRange = extendMoment(moment);
+        // const range = momentRange.range(start, end);
 
      
 
-        console.log(range);
+        // console.log(range);
         
-        const leaveDays = [];
-        for (let date of range.by("day")) {
-            leaveDays.push({
-                userId,
-                groupId,
-                status,
-                date: date.format("YYYY-MM-DD[T]12:00:00.000[Z]"),
-                description:description,
-                type: type,
-                calendarGroupId: guid,
-            });
+        // const leaveDays = [];
+        // for (let date of range.by("day")) {
+        //     leaveDays.push({
+        //         userId,
+        //         groupId,
+        //         status,
+        //         date: date.format("YYYY-MM-DD[T]12:00:00.000[Z]"),
+        //         description:description,
+        //         type: type,
+        //         calendarGroupId: guid,
+        //         isWeekend: date.isoWeekday() === 6 || date.isoWeekday() === 7,
+        //     });
 
-            console.log(leaveDays);
+        //     console.log(leaveDays);
 
-        }
+        // }
     }
 
 
@@ -522,6 +523,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        createReminderBulk:(data)=>dispatch(actions.createReminderBulk(data)),
         fetchPermissionRequest: (filterData) => dispatch(actions.fetchWaitingForApproveReminders(filterData)),
         patchPermisson: (filter, data, waitingForApproveFilter, approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter, approvedFilter)),
     };
