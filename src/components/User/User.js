@@ -24,11 +24,7 @@ border-radius: 4px;
 font-size: 12px;
 background-color: ${props => (props.isDragging ? 'lightgreen' : 'white')};
 `;
-const Clone = styled(Container)`
-  ~div {
-    transform: none!important;
-  }
-`;
+
 const Seniority = styled.div`
 top: 0;
 left: 0;
@@ -51,6 +47,23 @@ padding-right: 2px;
 display: flex;
 justify-content: flex-end;
 `;
+
+const Clone = styled(Container)`
+  ~div {
+    transform: none!important;
+  }
+`;
+const CloneSeniority = styled(Seniority)`
+  ~div {
+    transform: none!important;
+  }
+`;
+const CloneName = styled(Name)`
+  ~div {
+    transform: none!important;
+  }
+`;
+
 
 class User extends Component {
     constructor(props) {
@@ -187,7 +200,14 @@ class User extends Component {
                             </div>
                         </Container>
                         {snapshot.isDragging && (
-                            <Clone> {this.props.user.fullName}</Clone>
+                            <Clone>
+                                <CloneSeniority>
+                                    {seniority}
+                                </CloneSeniority>
+                                <CloneName>
+                                    {this.props.user.fullName}
+                                </CloneName>
+                            </Clone>
                         )}
                     </React.Fragment>
                 )}
