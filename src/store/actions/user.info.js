@@ -72,7 +72,46 @@ const userInfoFailure = (err) => {
     };
 }
 
+
+
+
+
+const updateUserInfo = (id,data) => {
+    return dispatch => {
+        dispatch(updateUserInfoRequest());
+        userService.updateUserService(id,data).then((response) => {
+            dispatch(updateSserInfoSuccess(response));
+            dispatch(getUserInfo());
+
+        }).catch((error) => {
+            dispatch(updateSserInfoFailure(error));
+        });
+    }
+}
+
+
+const updateUserInfoRequest = () => {
+    return {
+        type: actionTypes.USERINFO_REQUEST,
+    };
+};
+
+const updateSserInfoSuccess = (response) => {
+    return {
+        type: actionTypes.USERINFO_SUCCESS,
+    };
+}
+
+
+const updateSserInfoFailure = (err) => {
+    return {
+        type: actionTypes.USERINFO_FAILURE,
+        erorObj: err,
+    };
+}
+
 export const userInfoActions = {
+    updateUserInfo,
     getUserInfo,
     getUserInfoByAuth
 };

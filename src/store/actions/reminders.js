@@ -381,6 +381,47 @@ export const createReminderBulkFailure = (err) => {
 
 
 
+export const getRemindersCount = (data) => {
+  return dispatch => {
+    dispatch(getRemindersCountRequest());
+    calendarService.getCalendarsCount(data)
+      .then(response => {
+          dispatch(getRemindersCountSuccess(response));
+      })
+      .catch(err => {
+        dispatch(getRemindersCountFailure(err));
+      });
+  }
+}
+
+
+
+export const getRemindersCountRequest = () => {
+  return {
+    type: actionTypes.GET_CALENDARSCOUNT_REQUEST,
+  };
+};
+
+export const getRemindersCountSuccess = (response) => {
+  return {
+    type: actionTypes.GET_CALENDARSCOUNT_SUCCESS,
+    status: true,
+    response:response.count
+  };
+}
+
+export const getRemindersCountFailure = (err) => {
+  return {
+    type: actionTypes.GET_CALENDARSCOUNT_FAILURE,
+    erorObj: err,
+    status: false,
+  };
+}
+
+
+
+
+
 
 
 

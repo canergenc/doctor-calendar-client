@@ -5,7 +5,7 @@ import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus } from '../../variables/constants';
 
 import moment from 'moment';
-//import { extendMoment } from 'moment-range';
+import { extendMoment } from 'moment-range';
 
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
@@ -196,10 +196,10 @@ class WaitingForApproved extends Component {
 
         const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
         const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
-        const userId = this.props.userId;
-        const groupId = this.props.groupId;
+        const userId = helperService.getUserId();
+        const groupId = helperService.getGroupId();
         const type = this.state.permissionType;
-        const description=this.state.description;
+        const description = this.state.description;
         const status = CalendarStatus.WaitingForApprove;
 
         const guid = (
@@ -211,30 +211,29 @@ class WaitingForApproved extends Component {
             helperService.GUID4()
         ).toLowerCase();
 
-        
-        // const momentRange = extendMoment(moment);
-        // const range = momentRange.range(start, end);
 
-     
+        const momentRange = extendMoment(moment);
+        const range = momentRange.range(start, end);
 
-        // console.log(range);
-        
-        // const leaveDays = [];
-        // for (let date of range.by("day")) {
-        //     leaveDays.push({
-        //         userId,
-        //         groupId,
-        //         status,
-        //         date: date.format("YYYY-MM-DD[T]12:00:00.000[Z]"),
-        //         description:description,
-        //         type: type,
-        //         calendarGroupId: guid,
-        //         isWeekend: date.isoWeekday() === 6 || date.isoWeekday() === 7,
-        //     });
 
-        //     console.log(leaveDays);
 
-        // }
+        console.log(range);
+
+        const leaveDays = [];
+        for (let date of range.by("day")) {
+            leaveDays.push({
+                userId,
+                groupId,
+                status,
+                date: date.format("YYYY-MM-DD[T]12:00:00.000[Z]"),
+                description: description,
+                type: type,
+                calendarGroupId: guid,
+                isWeekend: date.isoWeekday() === 6 || date.isoWeekday() === 7,
+            });
+        }
+
+        this.props.createReminderBulk(leaveDays);
     }
 
 
@@ -293,8 +292,8 @@ class WaitingForApproved extends Component {
                     cal.modifiedDate = new Date(cal.date)
                 ));
                 listOfFiltered.sort((a, b) => (a.modifiedDate > b.modifiedDate) ? 1 : -1);
-                startDate = listOfFiltered[0].date;
-                endDate = listOfFiltered[listOfFiltered.length - 1].date;
+                startDate = moment(listOfFiltered[0].date).format('DD/MM/YYYY');
+                endDate = moment(listOfFiltered[listOfFiltered.length - 1].date).format('DD/MM/YYYY');
 
                 numberOfDay = listOfFiltered.length;
                 email = listOfFiltered[0].user.email;
@@ -347,7 +346,7 @@ class WaitingForApproved extends Component {
                     isOpen={this.state.isOpenCreateModal}
                     toggle={() => this.toggleModal()}>
                     <div className="modal-header">
-                        <h5 className="modal-title" id="addModalLabel">Yeni İzin Girişi</h5>
+                        <h3 className="modal-title" id="addModalLabel">Yeni İzin Girişi</h3>
                         <button
                             aria-label="Close"
                             className="close"
@@ -362,10 +361,13 @@ class WaitingForApproved extends Component {
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
 
-                                    <Label for="exampleEmail" sm={4}>Başalngıç Tarihi</Label>
+                                    <Label for="exampleEmail" sm={5}>Başalngıç Tarihi:</Label>
 
 
-                                    <Col sm={8}>
+                                    <Col sm={7}>
+
+
+                            
                                         <DatePicker
                                             showPopperArrow={false}
                                             name="startDate"
@@ -374,6 +376,7 @@ class WaitingForApproved extends Component {
                                             selected={this.state.startDate}
                                             locale="tr"
                                             onChange={date => this.setStartDate(date)}
+                                            
 
                                         />
                                     </Col>
@@ -383,9 +386,9 @@ class WaitingForApproved extends Component {
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
 
-                                    <Label for="exampleEmail" sm={4}>Bitiş Tarihi</Label>
+                                    <Label for="exampleEmail" sm={5}>Bitiş Tarihi:</Label>
 
-                                    <Col sm={8}>
+                                    <Col sm={7}>
                                         <DatePicker
                                             showPopperArrow={false}
                                             dateFormat="dd/MM/yyyy"
@@ -404,9 +407,9 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
 
 
-                                    <Label for="exampleEmail" sm={4}>İzin Tipi</Label>
+                                    <Label for="exampleEmail" sm={5}>İzin Tipi:</Label>
 
-                                    <Col sm={8}>
+                                    <Col sm={7}>
                                         <Input type="select" name="permissionType" value={this.state.permissionType} onChange={this.inputChangeHandle} >
                                             <option value={CalendarTypes.OzelDurum}>Özel Durum</option>
                                             <option value={CalendarTypes.Gebelik}>Gebelik</option>
@@ -424,10 +427,10 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
 
 
-                                    <Label for="exampleEmail" sm={4}>Açıklama</Label>
+                                    <Label for="exampleEmail" sm={5}>Açıklama:</Label>
 
-                                    <Col sm={8}>
-                                        <Input type="text" name="description" value={this.state.description} onChange={this.inputChangeHandle} >
+                                    <Col sm={7}>
+                                        <Input type="textarea" name="description" value={this.state.description} onChange={this.inputChangeHandle} >
 
                                         </Input>
                                     </Col>
@@ -512,8 +515,6 @@ class WaitingForApproved extends Component {
 
 const mapStateToProps = state => {
     return {
-        userId: state.auth.userId,
-        groupId: state.userInfo.groupId,
         reminders: state.reminders.waitingForApproveReminders,
         loading: state.reminders.waitingForApproveReqLoading,
         errorTextAtFetch: state.reminders.statusTextAtWaitingForApprove,
@@ -523,7 +524,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        createReminderBulk:(data)=>dispatch(actions.createReminderBulk(data)),
+        createReminderBulk: (data) => dispatch(actions.createReminderBulk(data)),
         fetchPermissionRequest: (filterData) => dispatch(actions.fetchWaitingForApproveReminders(filterData)),
         patchPermisson: (filter, data, waitingForApproveFilter, approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter, approvedFilter)),
     };

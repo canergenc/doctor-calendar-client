@@ -387,8 +387,20 @@ class Calendar extends Component {
 
 
     if (this.props.reminders) {
-      var countOfReminder = 0;
-      countOfReminder = this.props.reminders.length;
+
+      var countOfOnWeekend = 0;
+      var countOfInWeek = 0;
+      var countOfReminderInWeek = 0;
+      var countOfReminderOnWeekend = 0;
+
+      var reminders = this.props.reminders;
+
+      var result = helperService.countOfInWeekOrWeekend(reminders);
+
+      countOfOnWeekend = result.countOfOnWeekend;
+      countOfInWeek = result.countOfInWeek;
+
+      //this.props.reminders.length;
 
     }
 
@@ -398,7 +410,8 @@ class Calendar extends Component {
       <div className="month">
         <HeaderMonth
           curMonth={this.state.curMonth}
-          countOfReminder={countOfReminder}
+          countOfOnWeekend={countOfOnWeekend}
+          countOfInWeek={countOfInWeek}
           nextMonth={this.state.nextMonth}
           nextMonthClick={this.nextMonthClickHandler}
           prevMonth={this.state.prevMonth}

@@ -1,5 +1,14 @@
 import request from "../hoc/Config/apiCentral";
 
+
+const getCalendarsCount = (filterData) => {
+    return request({
+        url: '/calendars/count',
+        method: 'GET',
+        params: filterData
+    });
+};
+
 const getReminderService = (filterData) => {
     return request({
         url: '/calendars',
@@ -54,7 +63,8 @@ export const calendarService = {
     deleteReminderService,
     updateReminderService,
     reminderBulkUpdateService,
-    createReminderBulk
+    createReminderBulk,
+    getCalendarsCount
 };
 
 

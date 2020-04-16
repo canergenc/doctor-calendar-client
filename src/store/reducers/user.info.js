@@ -18,7 +18,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.USERINFO_REQUEST:
             return {
                 isReq: true,
-                statusText: ""
+                statusText: "",
+                statusOfGetUser:false,
             };
         case actionTypes.USERINFO_SUCCESS:
             return {
@@ -30,13 +31,32 @@ const reducer = (state = initialState, action) => {
                 createdDate: action.createdDate,
                 updatedDate: action.updatedDate,
                 statusText: constants.SUCCESS_MESSAGE.loginSuccess,
-                isReqStatus: true
+                statusOfGetUser: true
             };
         case actionTypes.USERINFO_FAILURE:
             return {
-                isReqStatus: false,
-                statusText: helperService.getErrorMessage(action.erorObj)
+                statusOfGetUser: false,
+                statusTextInGet: helperService.getErrorMessage(action.erorObj)
             };
+
+
+
+        case actionTypes.UPDATE_USERINFO_REQUEST:
+            return {
+                isReq: true,
+            };
+        case actionTypes.UPDATE_USERINFO_SUCCESS:
+            return {
+                isReq:false,
+               responseInUpdate:action.response
+            };
+        case actionTypes.USERINFO_FAILURE:
+            return {
+                isReq: false,
+                statusTextInUpdates: helperService.getErrorMessage(action.erorObj)
+            };
+
+
         default:
             return state;
     }

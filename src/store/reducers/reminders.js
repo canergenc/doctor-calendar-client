@@ -90,6 +90,31 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
 
 
+
+    case actionTypes.GET_CALENDARSCOUNT_REQUEST:
+      return {
+        getCalendarReqloading: true
+      };
+    case actionTypes.GET_CALENDARSCOUNT_SUCCESS:
+      return {
+        ...state,
+        getCalendarReqloading: false,
+        getCalendarsCountError: false,
+        calendarsCount: action.response
+      };
+    case actionTypes.GET_CALENDARSCOUNT_FAILURE:
+      return {
+        ...state,
+        getCalendarReqloading: false,
+        getCalendarsCountError: true,
+        calendarsCount: {},
+        statusTextAtCalendarsCount: helperService.getErrorMessage(action.errorObj)
+      };
+
+
+
+
+
     case actionTypes.CREATE_CALENDARBULK_REQUEST:
       return {
         bulkCreateReqloading: true
