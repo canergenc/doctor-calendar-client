@@ -93,11 +93,31 @@ const GUID4 = () => {
 };
 
 
+const countOfInWeekOrWeekend = (reminders) => {
+    const result = { countOfOnWeekend: 0, countOfInWeek:0 }
+    for (let index = 0; index < reminders.length; index++) {
+        const reminder = reminders[index];
+        if (reminder.isWeekend) {
+            result.countOfOnWeekend += 1;
+        } else {
+            result.countOfInWeek += 1;
+        }
+    }
+    return result;
+}
+
+
 
 
 
 const uniqGroupName = () => {
     return "";
+}
+
+
+const getPaginationItemCount=(totalListCount,pageSize)=>{
+    let result= Math.ceil(totalListCount/pageSize)
+    return  result;
 }
 
 export const helperService = {
@@ -107,6 +127,8 @@ export const helperService = {
     getUserId,
     generateRndStr,
     getColorName,
-    GUID4
+    countOfInWeekOrWeekend,
+    GUID4,
+    getPaginationItemCount
 
 };

@@ -1,5 +1,14 @@
 import request from "../hoc/Config/apiCentral";
 
+
+const getCalendarsCount = (filterData) => {
+    return request({
+        url: '/calendars/count',
+        method: 'GET',
+        params: filterData
+    });
+};
+
 const getReminderService = (filterData) => {
     return request({
         url: '/calendars',
@@ -40,12 +49,22 @@ const deleteReminderService = (id) => {
     });
 };
 
+const createReminderBulk = (data) => {
+    return request({
+      url: "/calendars/bulk",
+      method: "POST",
+      data: data,
+    });
+  };
+
 export const calendarService = {
     getReminderService,
     createReminderService,
     deleteReminderService,
     updateReminderService,
-    reminderBulkUpdateService
+    reminderBulkUpdateService,
+    createReminderBulk,
+    getCalendarsCount
 };
 
 

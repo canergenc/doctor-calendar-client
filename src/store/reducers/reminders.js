@@ -88,6 +88,55 @@ const setReminders = (state, action) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+
+
+
+    case actionTypes.GET_CALENDARSCOUNT_REQUEST:
+      return {
+        getCalendarReqloading: true
+      };
+    case actionTypes.GET_CALENDARSCOUNT_SUCCESS:
+      return {
+        ...state,
+        getCalendarReqloading: false,
+        getCalendarsCountError: false,
+        calendarsCount: action.response
+      };
+    case actionTypes.GET_CALENDARSCOUNT_FAILURE:
+      return {
+        ...state,
+        getCalendarReqloading: false,
+        getCalendarsCountError: true,
+        calendarsCount: {},
+        statusTextAtCalendarsCount: helperService.getErrorMessage(action.errorObj)
+      };
+
+
+
+
+
+    case actionTypes.CREATE_CALENDARBULK_REQUEST:
+      return {
+        bulkCreateReqloading: true
+      };
+    case actionTypes.CREATE_CALENDARBULK_SUCCESS:
+      return {
+        ...state,
+        bulkCreateReqloading: false,
+        error: false,
+        response: action.response
+      };
+    case actionTypes.CREATE_CALENDARBULK_FAILURE:
+      return {
+        ...state,
+        bulkCreateReqloading: false,
+        error: true,
+        response: {},
+        statusTextAtBulkUpdate: helperService.getErrorMessage(action.errorObj)
+      };
+
+
+
     case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
       return {
         bulkUpdateReqloading: true

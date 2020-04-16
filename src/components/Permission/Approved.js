@@ -1,130 +1,59 @@
 import React, { Component } from "react";
-import {Button,Card,Table,CardFooter,PaginationLink,PaginationItem,Pagination } from "reactstrap";
+import { Button, Card, Table, CardFooter, PaginationLink, PaginationItem, Pagination } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
-import { CalendarTypes, CalendarStatus } from '../../variables/constants';
+import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
 import { helperService } from "../../services/helper";
 import Swal from 'sweetalert2'
+import moment from 'moment';
+import { permissionHelper } from "./PermissionHelper";
+import CustomPagination from "../Paginations/CustomPagination";
 
 
 const MySwal = withReactContent(Swal)
 class Approved extends Component {
     constructor(props) {
         super(props);
-
-    }
-
-    waitingForApproveFilter = {
-        filter: {
-            where: {
-                and: [{
-                    groupId: {
-                        like: helperService.getGroupId()
-                    }
-                }, {
-                    type: {
-                        neq: CalendarTypes.Nobet  
-                    },
-                    status: CalendarStatus.WaitingForApprove
-                }]
-            },
-            include: [
-                {
-                    relation: "group"
-                },
-                {
-                    relation: "user"
-                },
-                {
-                    relation: "location"
-                }
-            ]
+        this.state = {
+            currentIndex: 0
         }
-    }
-
-    approvedFilter = {
-        filter: {
-            where: {
-                and: [{
-                    groupId: {
-                        like: helperService.getGroupId()
-                    }
-                }, {
-                    type: {
-                        neq: CalendarTypes.Nobet  
-                    },
-                    status: CalendarStatus.Approve
-                }]
-            },
-            include: [
-                {
-                    relation: "group"
-                },
-                {
-                    relation: "user"
-                },
-                {
-                    relation: "location"
-                }
-            ]
-        }
+        permissionHelper.getApproveFilter = permissionHelper.getApproveFilter.bind(this);
+        this.onChangePaginationItem = this.onChangePaginationItem.bind(this);
     }
 
     loadPermissions() {
-        this.props.fetchPermissionRequest(this.approvedFilter);
+        this.props.fetchPermissionRequest(permissionHelper.getApproveFilter(this.state.currentIndex));
+        this.props.getCalendarsCount(permissionHelper.getApproveFilter())
     }
 
     componentDidMount() {
         this.loadPermissions();
     }
 
-    getUniqGroupIds(list) {
-        const uniqueTags = [];
-        list.map(cal => {
-            if (uniqueTags.indexOf(cal.calendarGroupId) === -1) {
-                uniqueTags.push(cal.calendarGroupId)
-            }
-        });
-
-        console.log(uniqueTags);
-
-        return uniqueTags;
+    onChangePaginationItem(index) {
+        console.log(index);
+        this.setState({ currentIndex: index });
+        this.props.getCalendarsCount(permissionHelper.getApproveFilter(index));
+        this.props.fetchPermissionRequest(permissionHelper.getApproveFilter(index));
     }
 
- 
-
-    
     rejectPermission(item) {
-        const filter = {
-            where: {
-                calendarGroupId: {
-                    like: item.calendarGroupId
-                }
-            }
-        }
-        const data = {
-            status: CalendarStatus.WaitingForApprove
-        }
-
-        this.props.patchPermisson(filter, data, this.waitingForApproveFilter,this.approvedFilter);
-        //this.showSwal(filter, data, item);
-        //this.props.patchPermisson(filter, data, this.filterOfGetPermission);
+        this.props.patchPermisson(permissionHelper.getPermissionRejectFilter(item), permissionHelper.getPermissionRejectData(), permissionHelper.getWaitingForApproveFilter(), permissionHelper.getApproveFilter(this.state.currentIndex));
     }
-
-
 
     render() {
 
         let result = [];
         if (this.props.reminders) {
+            console.log('reminders', this.props.reminders.length);
 
             console.log('1', this.props);
             let list = this.props.reminders.filter(cal => {
                 return (cal.status && cal.calendarGroupId)
             })
-            let listOfCalGroupIds = this.getUniqGroupIds(list);
+            let listOfCalGroupIds = permissionHelper.getUniqGroupIds(list);
             for (let index = 0; index < listOfCalGroupIds.length; index++) {
                 const calGroupId = listOfCalGroupIds[index];
                 let listOfFiltered = [];
@@ -142,8 +71,8 @@ class Approved extends Component {
                     cal.modifiedDate = new Date(cal.date)
                 ));
                 listOfFiltered.sort((a, b) => (a.modifiedDate > b.modifiedDate) ? 1 : -1);
-                startDate = listOfFiltered[0].date;
-                endDate = listOfFiltered[listOfFiltered.length - 1].date;
+                startDate = moment(listOfFiltered[0].date).format('DD/MM/YYYY');
+                endDate = moment(listOfFiltered[listOfFiltered.length - 1].date).format('DD/MM/YYYY');
 
                 numberOfDay = listOfFiltered.length;
                 email = listOfFiltered[0].user.email;
@@ -161,9 +90,6 @@ class Approved extends Component {
                         <td>{item.startDate}</td>
                         <td>{item.endDate}</td>
                         <td>{item.numberOfDay}</td>
-
-                       
-
                         <td className="text-right">
                             <Button
                                 color="warning"
@@ -173,7 +99,7 @@ class Approved extends Component {
                                 ONAY İPTAL
                       </Button>
 
-                         
+
                         </td>
                     </tr>
                 ));
@@ -181,9 +107,12 @@ class Approved extends Component {
 
         }
 
+
+
+
         return (
             <Card className="shadow">
-            {/* <CardHeader className="border-0">
+                {/* <CardHeader className="border-0">
                 <div className="row">
                     <div className="col-md-10">
                     </div>
@@ -191,82 +120,42 @@ class Approved extends Component {
                 </div>
 
             </CardHeader> */}
-            <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                    <tr>
-                        <th scope="col">İsim Soyisim</th>
-                        <th scope="col">E-Mail</th>
-                        <th scope="col">Başlangıç Tarihi</th>
-                        <th scope="col">Bitiş Tarihi</th>
-                        <th scope="col">Gün Sayısı</th>
-                        <th scope="col" />
-                    </tr>
-                </thead>
-                <tbody>
-                    {result}
-                    {result.length == 0 && <div style={{
-                        margin: 20,
-                        alignSelf: 'center',
-                        justifyContent: 'center'
-                    }} >
-                        <p>
-                            Onay bekleyen kayıt bulunmamaktadır.
+                <Table className="align-items-center table-flush" responsive>
+                    <thead className="thead-light">
+                        <tr>
+                            <th scope="col">İsim Soyisim</th>
+                            <th scope="col">E-Mail</th>
+                            <th scope="col">Başlangıç Tarihi</th>
+                            <th scope="col">Bitiş Tarihi</th>
+                            <th scope="col">Gün Sayısı</th>
+                            <th scope="col" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {result}
+                        {result.length == 0 && <div style={{
+                            margin: 20,
+                            alignSelf: 'center',
+                            justifyContent: 'center'
+                        }} >
+                            <p>
+                                Onay bekleyen kayıt bulunmamaktadır.
                         </p>
-                    </div>}
-                </tbody>
-            </Table>
-            <CardFooter className="py-4">
-                <nav aria-label="...">
-                    <Pagination
-                        className="pagination justify-content-end mb-0"
-                        listClassName="justify-content-end mb-0"
-                    >
-                        <PaginationItem className="disabled">
-                            <PaginationLink
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}
-                                tabIndex="-1"
-                            >
-                                <i className="fas fa-angle-left" />
-                                <span className="sr-only">Previous</span>
-                            </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem className="active">
-                            <PaginationLink
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}>
-                                1
-                            </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}
-                            >
-                                2 <span className="sr-only">(current)</span>
-                            </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}
-                            >
-                                3
-                        </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink
-                                href="#pablo"
-                                onClick={e => e.preventDefault()}
-                            >
-                                <i className="fas fa-angle-right" />
-                                <span className="sr-only">Next</span>
-                            </PaginationLink>
-                        </PaginationItem>
-                    </Pagination>
-                </nav>
-            </CardFooter>
-        </Card>
+                        </div>}
+                    </tbody>
+                </Table>
+                <CardFooter className="py-4">
+                    <nav aria-label="...">
+
+                        { this.props.calendarsCount > 0 ?
+                                <CustomPagination
+                                    paginationItemCount={helperService.getPaginationItemCount(4, constants.PAGESIZE_INPERMISSION_PAGE)}
+                                    paginationItemClick={(index) => this.onChangePaginationItem(index)}
+                                    currentIndex={this.state.currentIndex}
+                                /> : null }
+                    </nav>
+                </CardFooter>
+            </Card>
 
         )
     }
@@ -277,14 +166,16 @@ const mapStateToProps = state => {
         reminders: state.reminders.approvedReminders,
         loading: state.reminders.bulkUpdateloading,
         errorFromFeth: state.reminders.errorObj,
-        errorFromPatch: state.reminders.errorObjBulk
+        errorFromPatch: state.reminders.errorObjBulk,
+        calendarsCount: state.reminders.calendarsCount
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        getCalendarsCount: (filterData) => dispatch(actions.getRemindersCount(filterData)),
         fetchPermissionRequest: (filterData) => dispatch(actions.fetchApprovedReminders(filterData)),
-        patchPermisson: (filter, data, waitingForApproveFilter,approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter,approvedFilter)),
+        patchPermisson: (filter, data, waitingForApproveFilter, approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter, approvedFilter)),
     };
 };
 

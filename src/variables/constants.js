@@ -13,7 +13,9 @@ export const constants = {
     },
     TOKEN: "token",
 
-    GROUPID: 'groupId'
+    GROUPID: 'groupId',
+
+    PAGESIZE_INPERMISSION_PAGE:2
 };
 
 
