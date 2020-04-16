@@ -34,7 +34,29 @@ $colors: (
   box-sizing: border-box;
 }
 
+#menuToggle {
+  overflow: hidden;
+  margin-top: 6px;
+  width: 45%;
+  height: 45%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
+#menuToggle span{
+  width: 35px;
+  height: 5px;
+  margin-bottom: 5px;
+  background: #b0bdcf;
+  border-radius: 3px;
+  -webkit-transition: all .5s cubic-bezier(.08,.81,.87,.71);
+  -moz-transition: all .5s cubic-bezier(.08,.81,.87,.71);
+  -ms-transition: all .5s cubic-bezier(.08,.81,.87,.71);
+  -o-transition: all .5s cubic-bezier(.08,.81,.87,.71);
+  transition: all .5s cubic-bezier(.08,.81,.87,.71);
+}
 
 .radioInput[type="radio"] {
   display: none;

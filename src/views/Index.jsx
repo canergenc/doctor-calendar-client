@@ -63,10 +63,14 @@ class Index extends Component {
       return;
     }
 
+    let isWeekend = false;
+    if (moment(destination.droppableId).isoWeekday() === 6 || moment(destination.droppableId).isoWeekday() === 7) {
+      isWeekend = true;
+    }
+
     switch (source.droppableId) {
       case 'UserList_1':
         if (this.props.activeLocationId) {
-          console.log(this.props.activeLocationId);
 
           const user = this.props.users[source.index];
           const reminder = {
@@ -74,7 +78,8 @@ class Index extends Component {
             groupId: helperService.getGroupId(),
             userId: user.user.id,
             date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-            type: CalendarTypes.Nobet
+            type: CalendarTypes.Nobet,
+            isWeekend: isWeekend
           }
           this.props.createReminder(reminder);
         }
@@ -95,7 +100,8 @@ class Index extends Component {
 
         const reminder = {
           date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-          userId: this.props.reminders[reminderIndex].userId
+          userId: this.props.reminders[reminderIndex].userId,
+          isWeekend: isWeekend
         }
         console.log(reminder);
 

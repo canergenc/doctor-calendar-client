@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import DatePicker from "react-datepicker";
-import withReactContent from 'sweetalert2-react-content'
-import Swal from 'sweetalert2'
+import UserHeader from "components/Headers/UserHeader.jsx";
+import { helperService } from "../../services";
 import * as actions from '../../store/actions';
 
 // reactstrap components
@@ -27,14 +26,14 @@ import {
     InputGroup,
     FormGroup
 } from "reactstrap";
-// core components
-import UserHeader from "components/Headers/UserHeader.jsx";
 import "./Persons.css";
-import { helperService } from "../../services";
-
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import moment from "moment";
 
 const MySwal = withReactContent(Swal)
-
 
 class Persons extends Component {
     constructor(props) {
@@ -47,9 +46,9 @@ class Persons extends Component {
             name: '',
             title: '',
             email: '',
-            workStartDate:'',
-            weekendCount:'',
-            weekdayCount:'',
+            workStartDate: '',
+            weekendCountLimit: 0,
+            weekdayCountLimit: 0,
             password: ''
         }
         this.updateHandle = this.updateHandle.bind(this);
@@ -58,6 +57,7 @@ class Persons extends Component {
     }
 
     inputChangeHandle(event) {
+
         const target = event.target;
         if (target.name === 'title')
             this.setState({ title: event.target.value });
@@ -67,16 +67,26 @@ class Persons extends Component {
             this.setState({ email: event.target.value });
         if (target.name === 'password')
             this.setState({ password: event.target.value });
+        if (target.name === 'weekendCountLimit')
+            this.setState({ weekendCountLimit: event.target.value });
+        if (target.name === 'weekdayCountLimit')
+            this.setState({ weekdayCountLimit: event.target.value });
     }
 
+    inputChangeHandleDate(date) {
+        this.setState({ workStartDate: date });
+    }
 
     updateHandle(event) {
         let userData = {
             title: this.state.title,
             fullName: this.state.name,
-            email: this.state.email
+            email: this.state.email,
+            workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+            weekdayCountLimit: parseInt(this.state.weekdayCountLimit),
+            weekendCountLimit: parseInt(this.state.weekendCountLimit)
         };
-        
+
         this.props.updateUser(this.state.id, userData);
         this.toggleModal('editModal', null);
 
@@ -85,12 +95,15 @@ class Persons extends Component {
 
     addHandle(event) {
 
-        if (this.state.title && this.state.name && this.state.email && this.state.password) {
+        if (this.state.title && this.state.name && this.state.email && this.state.password  && this.state.workStartDate && this.state.weekdayCountLimit && this.state.weekendCountLimit) {
             const user = {
                 fullName: this.state.name,
                 title: this.state.title,
                 email: this.state.email,
-                password:this.state.password,
+                password: this.state.password,
+                workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+                weekdayCountLimit: parseInt(this.state.weekdayCountLimit),
+                weekendCountLimit: parseInt(this.state.weekendCountLimit),
                 deviceId: "1"
             };
 
@@ -102,7 +115,7 @@ class Persons extends Component {
                 icon: 'warning',
                 title: 'Lütfen',
                 text: 'zorunlu alanları doldurunuz'
-              });
+            });
         }
         event.preventDefault();
     }
@@ -119,7 +132,7 @@ class Persons extends Component {
             filter: {
                 where: {
                     groupId: {
-                        like:  helperService.getGroupId()
+                        like: helperService.getGroupId()
                     }
                 },
                 include: [
@@ -136,27 +149,27 @@ class Persons extends Component {
 
     toggleModal(state, user) {
         if (user) {
-            console.log("toggle modal");
-            
-            console.log(user);
-            
             this.setState({
                 [state]: !this.state[state],
                 id: user.id ? user.id : '',
                 name: user.fullName ? user.fullName : '',
                 title: user.title ? user.title : '',
-                email: user.email ? user.email : ''
+                email: user.email ? user.email : '',
+                workStartDate: user.workStartDate ? user.workStartDate : '',
+                weekdayCountLimit: user.weekdayCountLimit ? user.weekdayCountLimit : '',
+                weekendCountLimit: user.weekendCountLimit ? user.weekendCountLimit : ''
             });
         }
         else {
-            console.log("else");
-            
             this.setState({
                 [state]: !this.state[state],
                 id: '',
                 name: '',
                 title: '',
-                email: ''
+                email: '',
+                workStartDate: '',
+                weekdayCountLimit: '',
+                weekendCountLimit: ''
             });
         }
     };
@@ -164,7 +177,7 @@ class Persons extends Component {
     render() {
         let users = "Kullanıcılar Yükleniyor...";
         if (this.props.users) {
-            
+
             users = this.props.users.map((user) => (
                 <tr key={user.user.id}>
                     <td>{user.user.title}</td>
@@ -184,6 +197,7 @@ class Persons extends Component {
                 </tr>
             ));
         }
+
         return (
             <>
                 <UserHeader fullName={this.props.fullName} />
@@ -219,14 +233,18 @@ class Persons extends Component {
                                     <Input placeholder="Şifre" name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-
-                                    <Input placeholder="İşe Başlangıç Tarihi" name="workStartDate" type="date" value={this.state.workStartDate} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <DatePicker
+                                        placeholderText="iş Başlangıç Tarihi"
+                                        dateFormat="dd-MM-yyyy"
+                                        selected={Date.parse(this.state.workStartDate)}
+                                        onChange={(event) => this.inputChangeHandleDate(event)}
+                                    />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCount" type="number" value={this.state.weekdayCount} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCountLimit" type="number" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCount" type="number" value={this.state.weekendCount} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCountLimit" type="number" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                             </FormGroup>
 
@@ -272,13 +290,18 @@ class Persons extends Component {
                                     <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="İşe Başlangıç Tarihi" name="workStartDate" type="date" value={this.state.workStartDate} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <DatePicker
+                                        placeholderText="iş Başlangıç Tarihi"
+                                        dateFormat="dd-MM-yyyy"
+                                        selected={Date.parse(this.state.workStartDate)}
+                                        onChange={(event) => this.inputChangeHandleDate(event)}
+                                    />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCount" type="number" value={this.state.weekdayCount} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCountLimit" type="number" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCount" type="number" value={this.state.weekendCount} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCountLimit" type="number" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                 </InputGroup>
                             </FormGroup>
                         </Form>
@@ -293,7 +316,7 @@ class Persons extends Component {
                         <Button color="primary" type="submit" onClick={this.updateHandle}>Değişiklikleri Kaydet</Button>
                     </div>
                 </Modal>
-                
+
                 {/* Delete Modal */}
                 <Modal
                     className="modal-dialog-centered"
@@ -323,7 +346,7 @@ class Persons extends Component {
                         <Button color="danger" type="submit" onClick={this.deleteHandle}>Kaldır</Button>
                     </div>
                 </Modal>
-                
+
                 {/* Page content */}
                 <Container className="mt--7" fluid>
                     {/* Table */}

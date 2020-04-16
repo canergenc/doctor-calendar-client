@@ -182,7 +182,7 @@ class Location extends Component {
 
         // change background colour if dragging
         background: isDragging ? "lightgray" : "",
-
+        width: isDragging?"1000px":"",
         // styles we need to apply on draggables
         ...draggableStyle
     });
@@ -206,6 +206,13 @@ class Location extends Component {
                                 provided.draggableProps.style
                             )}
                         >
+                            <td>
+                                <div id="menuToggle">
+                                    <span className="span"></span>
+                                    <span className="span"></span>
+                                    <span className="span"></span>
+                                </div>
+                            </td>
                             <td>{location.name}</td>
                             <td>
                                 <label className="radioLabelList" type="radioLabel" htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
@@ -459,6 +466,7 @@ class Location extends Component {
                                     <Table className="align-items-center table-flush">
                                         <thead className="thead-light">
                                             <tr>
+                                                <th scope="col"></th>
                                                 <th scope="col">Adı</th>
                                                 <th scope="col">Renk</th>
                                                 <th scope="col" />
