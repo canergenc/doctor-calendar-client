@@ -5,7 +5,7 @@ import { CalendarTypes, CalendarStatus, constants } from '../../variables/consta
 const getApproveFilter = (index) => {
     let approvedFilter = {
         filter: {
-            skip: index,
+            skip: index*constants.PAGESIZE_INPERMISSION_PAGE,
             limit: constants.PAGESIZE_INPERMISSION_PAGE,
 
             where: {
