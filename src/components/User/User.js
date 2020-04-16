@@ -156,17 +156,15 @@ class User extends Component {
     render() {
         const momentRange = extendMoment(moment);
 
-
         const workStartDate = moment(this.props.user.workStartDate).format('YYYY-MM-DD');
         const today = moment(new Date()).format('YYYY-MM-DD');
         const range = momentRange.range(workStartDate, today);
 
         const year = range.diff('years');
         const month = range.diff('months');
-        const monthText = (month > 12 ? month % 12 : month) + "ay";
+        const monthText = (month > 12 ? month % 12 : month) + "ay - ";
         const seniority = year + "y" + monthText;
-        // const seniority="11y11ay";
-
+        
         return (
             <Draggable
                 key={this.props.user.id}

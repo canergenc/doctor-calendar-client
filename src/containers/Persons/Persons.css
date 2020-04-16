@@ -1,0 +1,14 @@
+.react-datepicker-wrapper input{
+    border: none;
+    margin-top: 10px;
+}
+
+.input-group-alternative input {
+    color: black;
+    caret-color: black;
+}
+
+.input-group-alternative input:focus {
+    color: black;
+    caret-color: black;
+}

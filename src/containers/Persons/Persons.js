@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import UserHeader from "components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
+import "./Persons.css"
 import * as actions from '../../store/actions';
 
 // reactstrap components
@@ -24,6 +25,8 @@ import {
     Form,
     Input,
     InputGroup,
+    InputGroupAddon,
+    InputGroupText,
     FormGroup
 } from "reactstrap";
 import "./Persons.css";
@@ -78,24 +81,40 @@ class Persons extends Component {
     }
 
     updateHandle(event) {
-        let userData = {
-            title: this.state.title,
-            fullName: this.state.name,
-            email: this.state.email,
-            workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-            weekdayCountLimit: parseInt(this.state.weekdayCountLimit),
-            weekendCountLimit: parseInt(this.state.weekendCountLimit)
-        };
-
-        this.props.updateUser(this.state.id, userData);
-        this.toggleModal('editModal', null);
-
-        event.preventDefault();
+        const weekdayCountLimit=parseInt(this.state.weekdayCountLimit);
+        const weekendCountLimit=parseInt(this.state.weekendCountLimit);
+        if(weekdayCountLimit>=0 && weekendCountLimit>=0){
+            let userData = {
+                title: this.state.title,
+                fullName: this.state.name,
+                email: this.state.email,
+                workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+                weekdayCountLimit: weekdayCountLimit,
+                weekendCountLimit: weekendCountLimit
+            };
+    
+            this.props.updateUser(this.state.id, userData);
+            this.toggleModal('editModal', null);
+            event.preventDefault();
+            MySwal.fire({
+                icon: 'success',
+                title: 'Başarılı',
+                text: 'Kullanıcı güncellemesi tamamlandı'
+              });
+        }
+        else{
+            MySwal.fire({
+                icon: 'info',
+                title: 'Hay aksi,',
+                text: 'Nöbet sayıları sıfırdan az olmamalı'
+              });
+        }
+        
     }
 
     addHandle(event) {
 
-        if (this.state.title && this.state.name && this.state.email && this.state.password  && this.state.workStartDate && this.state.weekdayCountLimit && this.state.weekendCountLimit) {
+        if (this.state.title && this.state.name && this.state.email && this.state.password && this.state.workStartDate && this.state.weekdayCountLimit && this.state.weekendCountLimit) {
             const user = {
                 fullName: this.state.name,
                 title: this.state.title,
@@ -109,6 +128,12 @@ class Persons extends Component {
 
             this.props.createUser(user);
             this.toggleModal('addModal', null);
+            event.preventDefault();
+            MySwal.fire({
+                icon: 'success',
+                title: 'Başarılı',
+                text: 'Kullanıcı kaydedildi'
+              });
 
         } else {
             MySwal.fire({
@@ -117,13 +142,18 @@ class Persons extends Component {
                 text: 'zorunlu alanları doldurunuz'
             });
         }
-        event.preventDefault();
+        
     }
 
     deleteHandle() {
         if (this.state.id) {
             this.props.deleteUser(this.state.id)
             this.toggleModal('deleteModal', undefined);
+            MySwal.fire({
+                icon: 'success',
+                title: 'Başarılı',
+                text: 'Kullanıcı silindi'
+              });
         }
     }
 
@@ -220,31 +250,57 @@ class Persons extends Component {
                     <div className="modal-body">
                         <Form role="form" autoComplete="off">
                             <FormGroup>
+
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Ünvan:</InputGroupText>
+                                        <Input name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
+                                </InputGroup>
+
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Ad - Soyad:</InputGroupText>
+                                        <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Kullanıcı Adı ve Soyadı" name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>E-Mail Adresi:</InputGroupText>
+                                        <Input name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Şifre:</InputGroupText>
+                                        <Input name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Şifre" name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
-                                </InputGroup>
-                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>
+                                            <i className="ni ni-calendar-grid-58" style={{ marginRight: "5px" }} />
+                                            İş Başlangıç Tarihi:
+                                        </InputGroupText>
+                                    </InputGroupAddon>
                                     <DatePicker
-                                        placeholderText="iş Başlangıç Tarihi"
+                                        timeFormat={false}
                                         dateFormat="dd-MM-yyyy"
                                         selected={Date.parse(this.state.workStartDate)}
                                         onChange={(event) => this.inputChangeHandleDate(event)}
                                     />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCountLimit" type="number" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
+                                        <Input name="weekdayCountLimit" type="number" min="0" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCountLimit" type="number" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
+                                        <Input name="weekendCountLimit" type="number" min="0" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                             </FormGroup>
 
@@ -281,15 +337,30 @@ class Persons extends Component {
                         <Form role="form">
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Ünvan:</InputGroupText>
+                                        <Input name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Kullanıcı Adı ve Soyadı" name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Ad - Soyad:</InputGroupText>
+                                        <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="E-Mail Adresi" name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Ünvan:</InputGroupText>
+                                        <Input name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>
+                                            <i className="ni ni-calendar-grid-58" style={{ marginRight: "5px" }} />
+                                            İş Başlangıç Tarihi:
+                                        </InputGroupText>
+                                    </InputGroupAddon>
                                     <DatePicker
                                         placeholderText="iş Başlangıç Tarihi"
                                         dateFormat="dd-MM-yyyy"
@@ -298,10 +369,16 @@ class Persons extends Component {
                                     />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftaiçi Nöbet Sayısı" name="weekdayCountLimit" type="number" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
+                                        <Input name="weekdayCountLimit" type="number" min="0" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Input placeholder="Haftasonu Nöbet Sayısı" name="weekendCountLimit" type="number" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    <InputGroupAddon addonType="prepend">
+                                        <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
+                                        <Input name="weekendCountLimit" type="number" min="0" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
                                 </InputGroup>
                             </FormGroup>
                         </Form>
