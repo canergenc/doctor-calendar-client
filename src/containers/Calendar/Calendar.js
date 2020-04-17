@@ -121,7 +121,7 @@ class Calendar extends Component {
         const calendar = [];
 
         this.props.reminders.forEach((dateRow, index) => {
-          if (moment(dateRow.date).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
+          if (moment(dateRow.startDate).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             // dateRow.index = index;
             calendar.push(dateRow);
           }
