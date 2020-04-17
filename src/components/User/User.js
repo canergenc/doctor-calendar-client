@@ -87,7 +87,7 @@ class User extends Component {
             const filterData = {
                 filter: {
                     where: {
-                        date: {
+                        startDate: {
                             between: [
                                 startOfMonth,
                                 endOfMonth
@@ -121,7 +121,7 @@ class User extends Component {
             const filterData = {
                 filter: {
                     where: {
-                        date: {
+                        startDate: {
                             between: [
                                 startOfMonth,
                                 endOfMonth

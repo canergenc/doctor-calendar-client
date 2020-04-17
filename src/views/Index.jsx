@@ -77,7 +77,8 @@ class Index extends Component {
             locationId: this.props.activeLocationId,
             groupId: helperService.getGroupId(),
             userId: user.user.id,
-            date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+            startDate: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+            endDate: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
             type: CalendarTypes.Nobet,
             isWeekend: isWeekend
           }
@@ -99,7 +100,8 @@ class Index extends Component {
         console.log(reminderIndex);
 
         const reminder = {
-          date: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+          startDate: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+          endDate: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
           userId: this.props.reminders[reminderIndex].userId,
           isWeekend: isWeekend
         }

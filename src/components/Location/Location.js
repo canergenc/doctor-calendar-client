@@ -85,7 +85,7 @@ class Location extends Component {
         const filterData = {
             filter: {
                 where: {
-                    date: {
+                    startDate: {
                         between: [
                             startOfMonth,
                             endOfMonth
