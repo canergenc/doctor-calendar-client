@@ -4,6 +4,7 @@ import { helperService } from "../../services/helper";
 const initialState = {
   reminders: null,
   removedReminder: null,
+  filterData: null,
   error: false
 };
 
@@ -81,6 +82,7 @@ const cleanReminderError = (state, action) => {
 const setReminders = (state, action) => {
   const updatedState = {
     reminders: action.reminders,
+    filterData: action.filterData,
     error: false
   };
   return updateObject(state, updatedState);

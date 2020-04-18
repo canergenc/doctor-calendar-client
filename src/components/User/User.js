@@ -79,12 +79,15 @@ class User extends Component {
 
         const startOfMonth = moment(this.props.curMonth).startOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
         const endOfMonth = moment(this.props.curMonth).endOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
+        
+        let filterData = {};
 
         if (this.state.checkedRadio === userId) {
             this.setState({ checkedRadio: "nouserid" });
             id.target.checked = false;
+        
 
-            const filterData = {
+            filterData = {
                 filter: {
                     where: {
                         startDate: {
@@ -111,14 +114,12 @@ class User extends Component {
                     ]
                 }
             }
-
-            this.props.getReminders(filterData);
         }
         else {
             this.setState({ checkedRadio: userId });
             id.target.checked = true;
 
-            const filterData = {
+            filterData = {
                 filter: {
                     where: {
                         startDate: {
@@ -148,8 +149,10 @@ class User extends Component {
                     ]
                 }
             }
-            this.props.getReminders(filterData);
         }
+
+        this.props.getReminders(filterData);
+
     }
 
 
@@ -164,7 +167,7 @@ class User extends Component {
         const month = range.diff('months');
         const monthText = (month > 12 ? month % 12 : month) + "ay - ";
         const seniority = year + "y" + monthText;
-        
+
         return (
             <Draggable
                 key={this.props.user.id}

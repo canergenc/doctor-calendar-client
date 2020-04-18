@@ -8,9 +8,9 @@ import "moment/locale/tr";
 import { helperService } from "../../services";
 import { CalendarTypes } from "../../variables/constants";
 
-import HeaderMonth from "../../components/Calendar/HeaderMonth/HeaderMonth";
-import HeaderWeekDays from "../../components/Calendar/HeaderWeekDays/HeaderWeekDays";
-import Day from "../../components/Calendar/Day/Day";
+import HeaderMonth from "./HeaderMonth/HeaderMonth";
+import HeaderWeekDays from "./HeaderWeekDays/HeaderWeekDays";
+import Day from "./Day/Day";
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from '../../store/actions/index';
@@ -104,7 +104,7 @@ class Calendar extends Component {
       }
     }
 
-    this.props.onInitReminders(filterData);
+    this.props.getReminders(filterData);
 
   }
 
@@ -232,7 +232,7 @@ class Calendar extends Component {
   }
 
   deleteReminderHandler = (reminderId) => {
-    this.props.deleteReminder(reminderId);
+    this.props.deleteReminder(reminderId, this.props.filterData);
   }
 
   ec = (r, c) => {
@@ -390,8 +390,6 @@ class Calendar extends Component {
 
       var countOfOnWeekend = 0;
       var countOfInWeek = 0;
-      var countOfReminderInWeek = 0;
-      var countOfReminderOnWeekend = 0;
 
       var reminders = this.props.reminders;
 
@@ -400,11 +398,7 @@ class Calendar extends Component {
       countOfOnWeekend = result.countOfOnWeekend;
       countOfInWeek = result.countOfInWeek;
 
-      //this.props.reminders.length;
-
     }
-
-
 
     return (
       <div className="month">
@@ -430,6 +424,7 @@ class Calendar extends Component {
 const mapStateToProps = state => {
   return {
     reminders: state.reminders.reminders,
+    filterData: state.reminders.filterData,
     locations: state.locations.locations,
     error: state.reminders.error,
     curMonth: state.calendar.curMonth
@@ -439,8 +434,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setCurMonth: (curMonth) => dispatch(actions.setCurMonth(curMonth)),
-    deleteReminder: (reminderId) => dispatch(actions.deleteReminder(reminderId)),
-    onInitReminders: (filterData) => dispatch(actions.getReminders(filterData))
+    deleteReminder: (reminderId, filterData) => dispatch(actions.deleteReminder(reminderId, filterData)),
+    getReminders: (filterData) => dispatch(actions.getReminders(filterData))
   };
 }
 
