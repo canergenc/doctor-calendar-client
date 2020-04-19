@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../store/actions/index';
+import * as actions from '../../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 import moment from "moment";
@@ -8,8 +8,8 @@ import moment from "moment";
 import './Location.css';
 
 import { Button } from "reactstrap";
-import { helperService } from '../../services';
-import { CalendarTypes } from "../../variables/constants";
+import { helperService } from '../../../services';
+import { CalendarTypes } from "../../../variables/constants";
 
 const Arrow = ({ text, className }) => {
     return <div className={className}>{text}</div>;

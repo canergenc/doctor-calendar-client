@@ -19,6 +19,10 @@ import {
   Row,
   Col
 } from "reactstrap";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const MySwal = withReactContent(Swal)
 
 class Register extends React.Component {
   constructor(props) {
@@ -28,7 +32,8 @@ class Register extends React.Component {
       fullName: '',
       email: '',
       password: '',
-      submitted: false
+      submitted: false,
+      privacyPolicy: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -43,14 +48,23 @@ class Register extends React.Component {
       this.setState({ fullName: event.target.value });
     else if (target.name === 'title')
       this.setState({ title: event.target.value })
+    else if (target.name === 'privacyPolicy')
+      this.setState({ privacyPolicy: !this.state.privacyPolicy })
   }
   handleSubmit(event) {
 
     event.preventDefault();
     this.setState({ submitted: true });
-    const { title, fullName, email, password } = this.state;
-    if (title && fullName && email && password) {
+    const { title, fullName, email, password, privacyPolicy } = this.state;
+    if (title && fullName && email && password && privacyPolicy) {
       this.props.register(email, fullName, title, password);
+    }
+    else {
+      MySwal.fire({
+        icon: 'warning',
+        title: 'Zorunlu alanlar var',
+        text: "Lütfen zorunlu alanları doldurunuz"
+      });
     }
   }
   render() {
@@ -107,8 +121,6 @@ class Register extends React.Component {
                     // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
                   }
 
-
-
                 </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
@@ -153,7 +165,10 @@ class Register extends React.Component {
                       <input
                         className="custom-control-input"
                         id="customCheckRegister"
+                        name="privacyPolicy"
                         type="checkbox"
+                        onChange={(e) => this.handleInputChange(e)}
+
                       />
                       <label
                         className="custom-control-label"

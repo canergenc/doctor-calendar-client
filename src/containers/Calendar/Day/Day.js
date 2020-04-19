@@ -6,7 +6,7 @@ import Reminder from "./Reminder/Reminder";
 
 import "./Day.scss";
 import { Button } from "reactstrap";
-import Modal from '../../UI/Modal/Modal';
+import Modal from '../../../components/UI/Modal/Modal';
 import moment from "moment";
 
 class Day extends Component {

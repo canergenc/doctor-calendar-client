@@ -18,7 +18,7 @@ import Calender from '../containers/Calendar/Calendar';
 import * as actions from '../store/actions/index';
 import Header from "components/Headers/Header.jsx";
 import Users from '../containers/Users/Users';
-import Location from '../components/Location/Location';
+import Location from '../containers/Locations/Location/Location';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";

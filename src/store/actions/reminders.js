@@ -52,10 +52,11 @@ export const updateBulkReminderFailure = (err) => {
   };
 }
 
-export const setReminders = (reminders) => {
+export const setReminders = (reminders, filterData) => {
   return {
     type: actionTypes.SET_REMINDERS,
-    reminders: reminders
+    reminders: reminders,
+    filterData: filterData
   };
 };
 
@@ -77,7 +78,7 @@ export const getReminders = (filterData) => {
               reminders.push(element);
             }
           });
-          dispatch(setReminders(reminders));
+          dispatch(setReminders(reminders, filterData));
         }
       })
       .catch(err => {
@@ -131,6 +132,7 @@ export const createReminder = (reminderData) => {
             ]
           }
         }
+
         dispatch(getReminders(filterData));
         dispatch(createReminderSuccess(response.id, reminderData));
       }).catch((error) => {
@@ -153,34 +155,11 @@ export const deleteReminderFailed = (error) => {
   };
 };
 
-export const deleteReminder = (reminderId) => {
+export const deleteReminder = (reminderId, filterData) => {
   return dispatch => {
     calendarService.deleteReminderService(reminderId)
       .then(response => {
 
-
-        const filterData = {
-          filter: {
-            where: {
-              groupId: {
-                like: helperService.getGroupId()
-              }
-              ,
-              type: CalendarTypes.Nobet
-            },
-            include: [
-              {
-                relation: "group"
-              },
-              {
-                relation: "user"
-              },
-              {
-                relation: "location"
-              }
-            ]
-          }
-        }
         dispatch(getReminders(filterData));
         dispatch(deleteReminderSuccess(reminderId));
       })
@@ -261,7 +240,7 @@ export const getRemindersCount = (data) => {
     dispatch(getRemindersCountRequest());
     calendarService.getCalendarsCount(data)
       .then(response => {
-          dispatch(getRemindersCountSuccess(response));
+        dispatch(getRemindersCountSuccess(response));
       })
       .catch(err => {
         dispatch(getRemindersCountFailure(err));
@@ -281,7 +260,7 @@ export const getRemindersCountSuccess = (response) => {
   return {
     type: actionTypes.GET_CALENDARSCOUNT_SUCCESS,
     status: true,
-    response:response.count
+    response: response.count
   };
 }
 

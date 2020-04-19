@@ -1,26 +1,8 @@
-/*!
-
-* Argon Dashboard React - v1.0.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/argon-dashboard-react
-* Copyright 2019 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/argon-dashboard-react/blob/master/LICENSE.md)
-
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-*/
-
-import * as actions from '../../store/actions/index';
-import { connect } from 'react-redux';
 import React from "react";
+import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
+import * as actions from '../../store/actions/index';
 import 'font-awesome/css/font-awesome.min.css';
-
 
 import {
   Button,
@@ -43,32 +25,40 @@ class Login extends React.Component {
     super(props);
     this.state = {
       email: '',
+      emailValid: true,
       password: '',
-      rememberMe: true,
-      submitted: false
+      passwordValid: true,
+      formErrors: { email: '', password: '' },
+      rememberMe: false,
+      submitted: false,
+      formValid: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.emailRef = React.createRef();
   }
-  handleInputChange(event) {
 
+  handleInputChange(event) {
     this.setState({ submitted: false });
     const target = event.target;
-    if (target.type === 'email')
-      this.setState({ email: event.target.value });
-    else
-      this.setState({ password: event.target.value });
-
-    // this.setState({ rememberMe: event.target.value });
-
+    let emailValid = this.state.emailValid;
+    let passwordValid = this.state.passwordValid;
+    if (target.name === 'email') {
+      emailValid = event.target.value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+      this.setState({ email: event.target.value, emailValid: emailValid });
+    }
+    else if (target.name === 'password') {
+      passwordValid = event.target.value !== "" ? true : false;
+      this.setState({ password: event.target.value, passwordValid: passwordValid });
+    }
+    else if (target.name === 'remimberMe') {
+      this.setState({ rememberMe: this.state.rememberMe })
+    }
   }
-
 
   handleCheckBoxInput(event) {
     this.setState({ rememberMe: !this.state.rememberMe })
   }
-
-
 
   handleSubmit(event) {
     event.preventDefault();
@@ -78,47 +68,13 @@ class Login extends React.Component {
         this.props.login(this.state.email, this.state.password, this.state.rememberMe);
       }
     }
-
-
   }
 
-
-  componentDidMount() {
-
-    if (this.props.location.state && this.props.location.state.email) {
-      this.setState({ email: this.props.location.state.email });
-    }
-
-    // let isRememberMe = localStorage.getItem(customVariables.REMEMBERME);
-    // if(isRememberMe=='true'){
-    //   this.setState({ rememberMe: true});
-    // }else{
-    //   this.setState({ rememberMe: false });
-    // }
-
-
-  }
-  // alertExample(value) {
-  //   return (
-  //     <div>
-  //       <Alert color="primary">
-  //         This is a primary alert — check it out!
-  //     </Alert>
-  //     </div>
-
-  //   );
-  // }
 
   render() {
-    const { email, password, submitted } = this.state;
-
-    
-
+    const { password, submitted, emailValid, passwordValid } = this.state;
 
     // this.props.isAuthenticating ?  <Spinner /> :<p>Lütfen bekleyiniz.</p>  
-
-
-
 
     return (
       <>
@@ -146,14 +102,12 @@ class Login extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange} />
+                    <Input placeholder="Email" type="email" name="email"  ref={this.emailRef} onChange={this.handleInputChange} />
 
                   </InputGroup>
-                  {!email &&
-
+                  {!emailValid ?
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Email gerekli.</p>
-                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
-                  }
+                    : null}
 
                 </FormGroup>
                 <FormGroup>
@@ -163,33 +117,29 @@ class Login extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Şifre" type="password" value={this.state.password} onChange={this.handleInputChange} />
+                    <Input placeholder="Şifre" type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
 
-                  {!password &&
-                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p>
-                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }} >Şifre gerekli.</div>
+                  {!passwordValid ?
+                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p> : null
                   }
 
-                  {password.length < 8 && password &&
-                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre 8 karakter olmalı.</p>
-                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }} >Şifre gerekli.</div>
+                  {password.length < 8 && password.length > 0 ?
+                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre 8 karakter olmalı.</p> : null
                   }
 
                 </FormGroup>
 
-
-
-                {/* <Row className="my-4">
+                <Row className="my-4">
                   <Col xs="12">
                     <div className="custom-control custom-control-alternative custom-checkbox">
                       <input
                         className="custom-control-input"
                         id="customCheckRegister"
+                        name="remimberMe"
                         type="checkbox"
-                        checked={this.state.rememberMe ? true : false}
-                        value={this.state.rememberMe}
-                        onChange={(e) => this.handleCheckBoxInput(e)}
+                        onChange={(e) => this.handleInputChange(e)}
+
                       />
                       <label
                         className="custom-control-label"
@@ -197,12 +147,11 @@ class Login extends React.Component {
                       >
                         <span className="text-muted">
                           Beni hatırla
-
                         </span>
                       </label>
                     </div>
                   </Col>
-                </Row> */}
+                </Row>
 
 
                 <div className="text-center">
@@ -220,12 +169,6 @@ class Login extends React.Component {
                     {this.props.isAuthenticating && <span>Lütfen bekleyin...</span>}
                     {!this.props.isAuthenticating && <span>Giriş Yap</span>}
                   </Button>
-
-
-
-
-                  {/* <Button block className="my-4" color="primary" type="submit" >Giriş Yap</Button> */}
-
 
                 </div>
               </Form>
@@ -251,8 +194,6 @@ class Login extends React.Component {
             </Col>
           </Row>
         </Col>
-
-
 
       </>
     );
