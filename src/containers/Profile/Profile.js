@@ -4,6 +4,7 @@ import * as actions from '../../store/actions/index';
 
 // reactstrap components
 import {
+  Modal,
   Button,
   Card,
   CardHeader,
@@ -11,13 +12,20 @@ import {
   FormGroup,
   Form,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
   Container,
   Row,
   Col
 } from "reactstrap";
-// core components
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+
 import UserHeader from "components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
+
+const MySwal = withReactContent(Swal)
 
 class Profile extends React.Component {
 
@@ -27,14 +35,19 @@ class Profile extends React.Component {
     console.log(props);
 
     this.state = {
+      editModal: false,
       email: this.props.email,
       fullName: "",
       title: "",
       deviceId: "",
+      password: "",
+      newPassword: "",
+      newPasswordAgain: ""
     }
     this.inputChangeHandle = this.inputChangeHandle.bind(this);
-    this.updateUserInfo = this.updUserInfo.bind(this);
-    this.setInputDefaultValue = this.updUserInfo.bind(this);
+    this.updateUserInfo = this.updateUserInfo.bind(this);
+    this.updatePassword = this.updatePassword.bind(this);
+    this.setInputDefaultValue = this.updateUserInfo.bind(this);
 
   }
 
@@ -48,6 +61,12 @@ class Profile extends React.Component {
       this.setState({ title: event.target.value });
     if (target.name === 'deviceId')
       this.setState({ deviceId: event.target.value });
+    if (target.name === 'password')
+      this.setState({ password: event.target.value });
+    if (target.name === 'newPassword')
+      this.setState({ newPassword: event.target.value });
+    if (target.name === 'newPasswordAgain')
+      this.setState({ newPasswordAgain: event.target.value });
   }
 
   setInputDefaultValue() {
@@ -78,14 +97,46 @@ class Profile extends React.Component {
 
   }
 
-  updUserInfo(event) {
+  updatePassword(event) {
+
+    if (this.state.password && this.state.newPassword) {
+      if (this.state.newPassword === this.state.newPasswordAgain) {
+        var data = {
+          oldPassword: this.state.password,
+          currentPassword: this.state.newPassword
+        }
+
+        var userId = helperService.getUserId();
+        this.props.updateUserInfo(userId, data);
+        this.toggleModal('editModal');
+        event.preventDefault();
+      }
+      else {
+        MySwal.fire({
+          icon: 'warning',
+          title: 'Lütfen',
+          text: 'Yeni şifre alanları aynı olmalıdır.'
+        });
+      }
+    }
+    else {
+      MySwal.fire({
+        icon: 'warning',
+        title: 'Lütfen',
+        text: 'zorunlu alanları doldurunuz'
+      });
+    }
+  }
+
+
+  updateUserInfo(event) {
     console.log(this.props.title);
-    
+
     var data = {
-      title: this.state.title ? this.state.title :this.props.title,
-      fullName: this.state.title ? this.state.fullName :this.props.fullName,
-      email: this.state.email ? this.state.email :this.props.email,
-      deviceId: this.state.deviceId ? this.state.deviceId :this.props.deviceId,
+      title: this.state.title ? this.state.title : this.props.title,
+      fullName: this.state.title ? this.state.fullName : this.props.fullName,
+      email: this.state.email ? this.state.email : this.props.email,
+      deviceId: this.state.deviceId ? this.state.deviceId : this.props.deviceId,
     }
     console.log(data);
     var userId = helperService.getUserId();
@@ -93,7 +144,11 @@ class Profile extends React.Component {
 
   }
 
-
+  toggleModal(state) {
+    this.setState({
+      [state]: !this.state[state]
+    });
+  };
 
 
   render() {
@@ -103,6 +158,60 @@ class Profile extends React.Component {
     return (
       <>
         <UserHeader fullName={this.props.fullName} />
+
+        {/* Edit Modal  */}
+        <Modal
+          className="modal-dialog-centered"
+          isOpen={this.state.editModal}
+          toggle={() => this.toggleModal("editModal", undefined)}>
+          <div className="modal-header">
+            <h5 className="modal-title" id="editModalLabel">Şifre Değiştir</h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => this.toggleModal("editModal", undefined)}>
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <Form role="form">
+              <FormGroup>
+                <InputGroup className="input-group-alternative mb-3">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>Şifre:</InputGroupText>
+                    <Input name="password" type="password" value={this.state.password} onChange={(event) => this.inputChangeHandle(event)} />
+                  </InputGroupAddon>
+                </InputGroup>
+                <InputGroup className="input-group-alternative mb-3">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>Yeni Şifre:</InputGroupText>
+                    <Input name="newPassword" type="password" value={this.state.newPassword} onChange={(event) => this.inputChangeHandle(event)} />
+                  </InputGroupAddon>
+                </InputGroup>
+                <InputGroup className="input-group-alternative mb-3">
+                  <InputGroupAddon addonType="prepend">
+                    <InputGroupText>Yeni Şifre (Tekrar):</InputGroupText>
+                    <Input name="newPasswordAgain" type="password" value={this.state.newPasswordAgain} onChange={(event) => this.inputChangeHandle(event)} />
+                  </InputGroupAddon>
+                </InputGroup>
+              </FormGroup>
+            </Form>
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => this.toggleModal("editModal")}>Kapat
+                        </Button>
+            <Button color="primary" type="submit" onClick={this.updatePassword}>Şifreyi Güncelle</Button>
+          </div>
+        </Modal>
+
+
+
         {/* Page content */}
         <Container className="mt--7" fluid>
           <Row>
@@ -111,10 +220,10 @@ class Profile extends React.Component {
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
-                    <Col xs="8">
+                    <Col xs="9">
                       <h3 className="mb-0">Hesabım</h3>
                     </Col>
-                    <Col className="text-right" xs="4">
+                    <Col className="text-right" xs="1">
                       <Button
                         type="button"
                         color="primary"
@@ -122,6 +231,16 @@ class Profile extends React.Component {
                         size="sm"
                       >
                         GÜNCELLE
+                      </Button>
+                    </Col>
+                    <Col className="text-right" xs="1">
+                      <Button
+                        type="button"
+                        color="success"
+                        onClick={() => this.toggleModal("editModal")}
+                        size="sm"
+                      >
+                        Şifre Değiştir
                       </Button>
                     </Col>
                   </Row>

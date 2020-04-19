@@ -80,7 +80,7 @@ const updateUserInfo = (id,data) => {
     return dispatch => {
         dispatch(updateUserInfoRequest());
         userService.updateUserService(id,data).then((response) => {
-            dispatch(updateSserInfoSuccess(response));
+            dispatch(updateUserInfoSuccess(response));
             dispatch(getUserInfo());
 
         }).catch((error) => {
@@ -96,7 +96,7 @@ const updateUserInfoRequest = () => {
     };
 };
 
-const updateSserInfoSuccess = (response) => {
+const updateUserInfoSuccess = (response) => {
     return {
         type: actionTypes.USERINFO_SUCCESS,
     };
