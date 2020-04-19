@@ -25,25 +25,21 @@ export const createBulkLocaition = (listOfLocaition) => {
 
 export const createBulkLocaitionRequest = () => {
     return {
-        type: actionTypes.BULKLOCATION_REQUEST,
+        type: actionTypes.CREATE_BULK_LOCATION_REQUEST,
     };
 };
 
 export const createBulkLocaitionSuccess = (response) => {
     return {
-        type: actionTypes.BULKLOCATION_SUCCESS,
-        status: true
+        type: actionTypes.CREATE_BULK_LOCATION_SUCCESS,
+        response:response
     };
 }
 
 export const createBulkLocaitionFailure = (err) => {
     return {
-        type: actionTypes.BULKLOCATION_FAILURE,
+        type: actionTypes.CREATE_BULK_LOCATION_FAILURE,
         erorObj: err,
-        status: false,
-        // statusCode: err.data.error.statusCode, // BadRequestError
-        // statusText: err.data.error.message,  // Invalid email or password
-        // statusName: err.data.error.name,   // BadRequestError
     };
 }
 

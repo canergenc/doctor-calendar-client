@@ -157,7 +157,7 @@ class Login extends React.Component {
                 <div className="text-center">
 
 
-                  <Button className="my-4" color="primary" disabled={this.props.isAuthenticating}>
+                  <Button className="my-4" color="primary" >
 
                     {this.props.isAuthenticating && (
                       <i

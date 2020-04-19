@@ -113,32 +113,6 @@ const reducer = (state = initialState, action) => {
         statusTextAtCalendarsCount: helperService.getErrorMessage(action.errorObj)
       };
 
-
-
-
-
-    case actionTypes.CREATE_CALENDARBULK_REQUEST:
-      return {
-        bulkCreateReqloading: true
-      };
-    case actionTypes.CREATE_CALENDARBULK_SUCCESS:
-      return {
-        ...state,
-        bulkCreateReqloading: false,
-        error: false,
-        response: action.response
-      };
-    case actionTypes.CREATE_CALENDARBULK_FAILURE:
-      return {
-        ...state,
-        bulkCreateReqloading: false,
-        error: true,
-        response: {},
-        statusTextAtBulkUpdate: helperService.getErrorMessage(action.errorObj)
-      };
-
-
-
     case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
       return {
         bulkUpdateReqloading: true
@@ -158,44 +132,7 @@ const reducer = (state = initialState, action) => {
         response: {},
         statusTextAtBulkUpdate: helperService.getErrorMessage(action.errorObj)
       };
-    case actionTypes.APPROVED_REMINDERS_REQUEST:
-      return {
-        approveReqLoading: true
-      };
-    case actionTypes.APPROVED_REMINDERS_SUCCESS:
-      return {
-        ...state,
-        approveReqLoading: false,
-        approvedReminders: action.approvedReminders,
-        error: false
-      };
-    case actionTypes.APPROVED_REMINDERS_FAILURE:
-      return {
-        ...state,
-        approveReqLoading: false,
-        error: true,
-        statusTextAtApproved: helperService.getErrorMessage(action.erorObj)
-      };
-    case actionTypes.WAITING_FOR_APPROVE_REMINDERS_REQUEST:
-      return {
-        waitingForApproveReqLoading: true
-      };
-
-    case actionTypes.WAITING_FOR_APPROVE_REMINDERS_SUCCESS:
-      return {
-        ...state,
-        waitingForApproveReqLoading: false,
-        waitingForApproveReminders: action.waitingForApproveReminders,
-        error: false
-      };
-
-    case actionTypes.WAITING_FOR_APPROVE_REMINDERS_FAILURE:
-      return {
-        ...state,
-        waitingForApproveReqLoading: false,
-        error: true,
-        statusTextAtWaitingForApprove: helperService.getErrorMessage(action.erorObj)
-      };
+   
     case actionTypes.CLEAN_REMINDER_ERROR: return cleanReminderError(state, action);
     case actionTypes.SET_REMINDERS: return setReminders(state, action);
     case actionTypes.FETCH_REMINDERS_FAILED: return fetchRemindersFailed(state, action);

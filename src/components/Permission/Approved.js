@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Table, CardFooter, PaginationLink, PaginationItem, Pagination } from "reactstrap";
+import { Button, Card, Table, CardHeader, Input, Alert, CardFooter, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
@@ -17,109 +17,146 @@ class Approved extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currentIndex: 0
+            currentIndex: 0,
+            listOfPermission: [],
+            searchParam: "",
         }
-        permissionHelper.getApproveFilter = permissionHelper.getApproveFilter.bind(this);
+        permissionHelper.getApprovedFilter = permissionHelper.getApprovedFilter.bind(this);
         this.onChangePaginationItem = this.onChangePaginationItem.bind(this);
+        this.getPermissionsBySearch = this.getPermissionsBySearch.bind(this);
+        this.inputChangeHandle = this.inputChangeHandle.bind(this);
+        this.refreshPermissions = this.refreshPermissions.bind(this);
+
+
+    }
+
+
+    inputChangeHandle(event) {
+        const target = event.target;
+        if (target.name === "searchPermission") {
+            this.setState({ searchParam: event.target.value });
+        }
     }
 
     loadPermissions() {
-        this.props.fetchPermissionRequest(permissionHelper.getApproveFilter(this.state.currentIndex));
-        this.props.getCalendarsCount(permissionHelper.getApproveFilter())
+        this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(this.state.currentIndex));
+        this.props.getCalendarsCount(permissionHelper.getApprovedCountFilter())
     }
 
     componentDidMount() {
         this.loadPermissions();
     }
 
+
     onChangePaginationItem(index) {
-        console.log(index);
         this.setState({ currentIndex: index });
-        this.props.getCalendarsCount(permissionHelper.getApproveFilter(index));
-        this.props.fetchPermissionRequest(permissionHelper.getApproveFilter(index));
+        this.props.getCalendarsCount(permissionHelper.getApprovedCountFilter());
+        this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(index));
     }
 
-    rejectPermission(item) {
-        this.props.patchPermisson(permissionHelper.getPermissionRejectFilter(item), permissionHelper.getPermissionRejectData(), permissionHelper.getWaitingForApproveFilter(), permissionHelper.getApproveFilter(this.state.currentIndex));
+
+    revokePermission(item) {
+        const filterOfWaitingFor = permissionHelper.getApprovedFilter(this.state.currentIndex)
+        const filterOfApproved = permissionHelper.getApprovedFilter(0);
+        const data = {
+            status: CalendarStatus.WaitingForApprove
+        }
+
+        this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
+    }
+
+
+    getPermissionsBySearch() {
+        console.log(this.state.searchParam);
+        this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, this.state.searchParam));
+    }
+
+    refreshPermissions() {
+        this.setState({searchParam:""});
+        this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0));
+        
+
     }
 
     render() {
 
-        let result = [];
-        if (this.props.reminders) {
-            console.log('reminders', this.props.reminders.length);
-
-            console.log('1', this.props);
-            let list = this.props.reminders.filter(cal => {
-                return (cal.status && cal.calendarGroupId)
-            })
-            let listOfCalGroupIds = permissionHelper.getUniqGroupIds(list);
-            for (let index = 0; index < listOfCalGroupIds.length; index++) {
-                const calGroupId = listOfCalGroupIds[index];
-                let listOfFiltered = [];
-                listOfFiltered = list.filter((i) => {
-                    return i.calendarGroupId === calGroupId;
-                })
-                let startDate = "";
-                let endDate = "";
-
-                let numberOfDay = 0
-                let email = "";
-                let name = "";
-                listOfFiltered.map((cal) => (
-                    cal.date = new Date(cal.date).toLocaleDateString(),
-                    cal.modifiedDate = new Date(cal.date)
-                ));
-                listOfFiltered.sort((a, b) => (a.modifiedDate > b.modifiedDate) ? 1 : -1);
-                startDate = moment(listOfFiltered[0].date).format('DD/MM/YYYY');
-                endDate = moment(listOfFiltered[listOfFiltered.length - 1].date).format('DD/MM/YYYY');
-
-                numberOfDay = listOfFiltered.length;
-                email = listOfFiltered[0].user.email;
-                name = listOfFiltered[0].user.fullName;
-
-                result.push({ id: index, calendarGroupId: calGroupId, list: listOfFiltered, startDate: startDate, endDate: endDate, numberOfDay: numberOfDay, name: name, email: email });
-
-            }
-            console.log(result);
-            if (result.length > 0) {
-                result = result.map((item) => (
-                    <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>{item.email}</td>
-                        <td>{item.startDate}</td>
-                        <td>{item.endDate}</td>
-                        <td>{item.numberOfDay}</td>
-                        <td className="text-right">
-                            <Button
-                                color="warning"
-                                onClick={() => this.rejectPermission(item)}
-                                size="sm"
-                            >
-                                ONAY İPTAL
-                      </Button>
 
 
-                        </td>
-                    </tr>
-                ));
-            }
 
+        if (this.props.approvedPermissions) {
+            this.state.listOfPermission = this.props.approvedPermissions;
+            this.state.listOfPermission = this.state.listOfPermission.map((p) => (
+                <tr key={p.id}>
+                    <td>{p.user.fullName}</td>
+                    <td>{p.user.email}</td>
+                    <td>{moment(p.startDate).format('DD/MM/YYYY')}</td>
+                    <td>{moment(p.endDate).format('DD/MM/YYYY')}</td>
+                    <td>{p.description ? p.description : "Açıklama girilmedi."}</td>
+                    <td className="text-right">
+                        <Button
+                            color="warning"
+                            onClick={() => this.revokePermission(p)}
+                            size="sm"
+                        >
+                            ONAYI İPTAL ET
+                            </Button>
+
+                    </td>
+                </tr>
+            ));
         }
-
 
 
 
         return (
             <Card className="shadow">
-                {/* <CardHeader className="border-0">
-                <div className="row">
-                    <div className="col-md-10">
-                    </div>
-                    
-                </div>
+                <CardHeader className="border-0">
+                    <Row className="align-items-center">
+                        <Col xs="8">
+                            <Input name="searchPermission"  value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
-            </CardHeader> */}
+                        </Col>
+
+                        <Col xs="2">
+
+                            <Button
+                                color="secondary"
+
+                                onClick={e => this.getPermissionsBySearch()}
+                                size="lg"
+                               
+
+                            >
+                                <i class="fas fa-search fa-lg"></i>
+                      </Button>
+
+
+                            <Button
+                                color="secondary"
+
+                                onClick={e => this.refreshPermissions()}
+                                size="lg"
+                                
+                            >
+                                <i class="fas fa-sync-alt fa-lg"></i>
+                            </Button>
+
+                        </Col>
+
+
+
+                       
+
+
+                     
+
+
+                        <Col className="text-right" xs="2">
+
+                        </Col>
+                    </Row>
+
+                </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
                         <tr>
@@ -132,14 +169,14 @@ class Approved extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {result}
-                        {result.length == 0 && <div style={{
+                        {this.state.listOfPermission}
+                        {this.state.listOfPermission.length == 0 && <div style={{
                             margin: 20,
                             alignSelf: 'center',
                             justifyContent: 'center'
                         }} >
                             <p>
-                                Onay bekleyen kayıt bulunmamaktadır.
+                                Onaylanan kayıt bulunmamaktadır.
                         </p>
                         </div>}
                     </tbody>
@@ -147,12 +184,12 @@ class Approved extends Component {
                 <CardFooter className="py-4">
                     <nav aria-label="...">
 
-                        { this.props.calendarsCount > 0 ?
-                                <CustomPagination
-                                    paginationItemCount={helperService.getPaginationItemCount(4, constants.PAGESIZE_INPERMISSION_PAGE)}
-                                    paginationItemClick={(index) => this.onChangePaginationItem(index)}
-                                    currentIndex={this.state.currentIndex}
-                                /> : null }
+                        {this.props.permissionCount > 0 ?
+                            <CustomPagination
+                                paginationItemCount={helperService.getPaginationItemCount(this.props.permissionCount, constants.PAGESIZE_INPERMISSION_PAGE)}
+                                paginationItemClick={(index) => this.onChangePaginationItem(index)}
+                                currentIndex={this.state.currentIndex}
+                            /> : null}
                     </nav>
                 </CardFooter>
             </Card>
@@ -161,20 +198,23 @@ class Approved extends Component {
     }
 };
 
+
+
 const mapStateToProps = state => {
     return {
-        reminders: state.reminders.approvedReminders,
-        loading: state.reminders.bulkUpdateloading,
-        errorFromFeth: state.reminders.errorObj,
-        errorFromPatch: state.reminders.errorObjBulk,
-        calendarsCount: state.reminders.calendarsCount
+        getApprovedPermissionReqLoading: state.permission.getApprovedPermissionReqLoading,
+        approvedPermissions: state.permission.responseOnGetApprovedPermission,
+        errorMessageAtGet: state.permission.statusTexAtGet,
+        permissionCount: state.reminders.calendarsCount,
+        statusTexAtGetApproved: state.permission.statusTexAtGetApproved,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        updatePermission: (id, data, filterOfWaitingFor, filterOfApproved) => dispatch(actions.permission.updatePermission(id, data, filterOfWaitingFor, filterOfApproved)),
         getCalendarsCount: (filterData) => dispatch(actions.getRemindersCount(filterData)),
-        fetchPermissionRequest: (filterData) => dispatch(actions.fetchApprovedReminders(filterData)),
+        getApprovedPermissions: (params) => dispatch(actions.permission.getApprovedPermissions(params)),
         patchPermisson: (filter, data, waitingForApproveFilter, approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter, approvedFilter)),
     };
 };

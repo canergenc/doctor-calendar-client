@@ -26,7 +26,8 @@ import userInfoReducer from "./store/reducers/user.info";
 
 import bulkLocationReducer from "./store/reducers/bulk-location";
 
-// import alertReducer from  "./store/reducers/alert.reducer";
+import permissionReducer from "./store/reducers/permission";
+
 import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
 import history from "./hoc/Config/history";
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   locations: locationsReducer,
   // alertReducer:alertReducer,
   auth: authenticationReducer,
+  permission: permissionReducer,
   register: registerReducer,
   userGroups: userGroupsReducer,
   userInfo: userInfoReducer,

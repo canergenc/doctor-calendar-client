@@ -5,18 +5,20 @@ import { customVariables } from "../hoc/Config/customVariables";
 
 
 const getErrorMessage = (err) => {
-
+    debugger;
     let errorMessage = "";
     let statusCode = "";
     if (err && err.status) {
         statusCode = err.status.toString();
     }
     switch (statusCode) {
+       
         case customVariables.ERRORCODE[422]:
             errorMessage = err.data.error.details.length > 0 ? err.data.error.details[0].message : 'İşlem sırasında hata oluştu'
             return errorMessage;
 
         case customVariables.ERRORCODE[400]:
+            console.log(err);
             errorMessage = err.data.error.message;
             return errorMessage;
         default:
@@ -36,19 +38,9 @@ const getGroupId = () => {
 
 
 const getColorName = (index) => {
-    var item = "";
     console.log(index);
+    
     let listOfColorName = [
-        "red",
-        "orange",
-        "yellow",
-        "olive",
-        "green",
-        "teal",
-        "blue",
-        "violet",
-        "purple",
-        "pink",
         "primary",
         "secondary",
         "success",
@@ -64,16 +56,21 @@ const getColorName = (index) => {
         "cyan",
         "gray",
         "gray-dark",
-        "lighter"
+        "lighter",
+        "red",
+        "orange",
+        "yellow",
+        "olive",
+        "green",
+        "teal",
+        "blue",
+        "violet",
+        "purple",
+        "pink",
+       
     ]
 
-    if (index < listOfColorName.length) {
-        item = listOfColorName[index];
-    } else {
-        item = listOfColorName[index % listOfColorName.length];
-    }
-
-    return item;
+    return listOfColorName[index];;
 }
 
 const generateRndStr = (length) => {
