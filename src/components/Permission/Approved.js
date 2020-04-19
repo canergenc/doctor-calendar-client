@@ -10,7 +10,13 @@ import Swal from 'sweetalert2'
 import moment from 'moment';
 import { permissionHelper } from "./PermissionHelper";
 import CustomPagination from "../Paginations/CustomPagination";
+import ToastServive from 'react-material-toast';
 
+const toast = ToastServive.new({
+    place: 'topRight',
+    duration: 4,
+    maxCount: 10
+})
 
 const MySwal = withReactContent(Swal)
 class Approved extends Component {
@@ -26,8 +32,21 @@ class Approved extends Component {
         this.getPermissionsBySearch = this.getPermissionsBySearch.bind(this);
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
         this.refreshPermissions = this.refreshPermissions.bind(this);
+        this.keyPress = this.keyPress.bind(this);
 
 
+    }
+
+    keyPress(e) {
+        console.log(e.keyCode);
+        if (e.keyCode == 13) {
+            if (e.target.value) {
+                this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, e.target.value));
+            } else {
+                const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+
+            }
+        }
     }
 
 
@@ -113,7 +132,7 @@ class Approved extends Component {
                 <CardHeader className="border-0">
                     <Row className="align-items-center">
                         <Col xs="8">
-                            <Input name="searchPermission"  value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
+                            <Input name="searchPermission" onKeyDown={this.keyPress}   value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
                         </Col>
 
