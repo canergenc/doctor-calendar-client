@@ -5,7 +5,8 @@ export const constants = {
 
     SUCCESS_MESSAGE: {
 
-        loginSuccess: "Giriş başarılı"
+        loginSuccess: "Giriş başarılı",
+        commonMessage:"İşlem başarılı"
     },
 
     ERROR_CODE: {

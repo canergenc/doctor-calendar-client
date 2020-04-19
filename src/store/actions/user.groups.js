@@ -15,22 +15,22 @@ const createUserGroup = (groupName) => {
 
             name = helperService.generateRndStr(10);
         }
-        console.log(name);
-        debugger;
         groupService.createGroup(name)
             .then((response) => {
-                console.log('cg-s', response);
                 var groupId = response.id;
-                localStorage.setItem(customVariables.GROUPID,groupId)
+                localStorage.setItem(customVariables.GROUPID, groupId)
                 var userId = helperService.getUserId();
                 userGroupService.createUserGroup(userId, groupId)
                     .then((response) => {
-                        console.log("ug", response);
-                        dispatch(createUserGroupSuccess(response));
-                        history.push({
-                            pathname: '/splash/location',
-                            state: { groupId: groupId }
-                        })
+                        debugger;
+                        dispatch(createUserGroupSuccess(response,groupId));
+                        if (response) {
+                            history.push({
+                                pathname: '/splash/location',
+                                state: { groupId: groupId }
+                            })
+                        }
+
                     })
                     .catch((error) => {
                         dispatch((createUserGroupFailure(error)));
@@ -38,7 +38,6 @@ const createUserGroup = (groupName) => {
                     });
             })
             .catch((error) => {
-                console.log('cg-e', error);
                 dispatch((createUserGroupFailure));
             })
     }
@@ -47,16 +46,17 @@ const createUserGroup = (groupName) => {
 
 const createUserGroupRequest = () => {
     return {
-        type: actionTypes.CREATEUSERGROUP_REQUEST,
+        type: actionTypes.CREATE_USER_GROUP_REQUEST,
     };
 };
 
-const createUserGroupSuccess = (response) => {
+const createUserGroupSuccess = (response,groupId) => {
     return {
-        type: actionTypes.CREATEUSERGROUP_SUCCESS,
-        id: response.id,
-        groupId: response.groupId,
-        status: true
+        type: actionTypes.CREATE_USER_GROUP_SUCCESS,
+        response: response,
+        groupId:groupId
+        // id: response.id,
+        // groupId: response.groupId,
     };
 }
 
@@ -64,12 +64,8 @@ const createUserGroupSuccess = (response) => {
 const createUserGroupFailure = (err) => {
 
     return {
-        type: actionTypes.CREATEUSERGROUP_FAILURE,
+        type: actionTypes.CREATE_USER_GROUP_FAILURE,
         erorObj: err,
-        statusCode: err.data.error.statusCode,
-        statusText: err.data.error.message,
-        statusName: err.data.error.name,
-        status: false
     };
 }
 
@@ -98,7 +94,7 @@ const createUserGroupBulkRequest = () => {
 const createUserGroupBulkSuccess = (response) => {
     return {
         type: actionTypes.CREATE_USERGROUPBULK_SUCCESS,
-        status: true
+        response: response
     };
 }
 
@@ -107,10 +103,7 @@ const createUserGroupBulkFailure = (err) => {
     return {
         type: actionTypes.CREATE_USERGROUPBULK_FAILURE,
         erorObj: err,
-        statusCode: err.data.error.statusCode,
-        statusText: err.data.error.message,
-        statusName: err.data.error.name,
-        status: false
+
     };
 }
 

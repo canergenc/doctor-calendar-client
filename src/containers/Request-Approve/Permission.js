@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import {
-    TabContent, TabPane, Nav, NavItem, NavLink
+    TabContent, TabPane, Nav, NavItem, NavLink, Col
 } from "reactstrap";
 import UserHeader from "components/Headers/UserHeader.jsx";
 import "./Permission.scss";
@@ -24,11 +24,14 @@ class Permission extends Component {
         return (
             <>
                 <UserHeader fullName='' />
-                <Nav tabs>
+
+                 <Nav tabs>
                     <NavItem style={{ fontSize: 18 }} >
                         <NavLink className={this.state.activeTab == '1' ? 'active' : ''} onClick={() => { this.toggle('1'); }} >
                             Yeni Talepler
-                            </NavLink>
+
+                           
+                        </NavLink>
                     </NavItem>
                     <NavItem style={{ fontSize: 18 }} >
                         <NavLink className={this.state.activeTab == '2' ? 'active' : ''} onClick={() => { this.toggle('2'); }}>
@@ -39,12 +42,12 @@ class Permission extends Component {
 
                 <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="1">
-                        <WaitingForApprove/>
+                        <WaitingForApprove />
                     </TabPane>
                     <TabPane tabId="2">
                         <Approved />
                     </TabPane>
-                </TabContent>
+                </TabContent>  
             </>
         )
     }

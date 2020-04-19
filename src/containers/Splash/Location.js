@@ -66,9 +66,6 @@ class LocationSplash extends React.Component {
         }
     }
 
-
-
-    //function Typescirpt EC6
     saveChanges() {
 
         let result = [];
@@ -89,17 +86,10 @@ class LocationSplash extends React.Component {
     }
 
     componentDidMount() {
-        // this.props
-            //location
         if (this.props.location.state && this.props.location.state.groupId) {
-            console.log('hadi bakalım',this.props.location.state.groupId);
             this.setState({ groupId: this.props.location.state.groupId });
         }
     }
-
-
-
-
 
 
     render() {
@@ -136,7 +126,7 @@ class LocationSplash extends React.Component {
                             <ListGroup >
 
                                 {this.state.listOfLocation.length > 0 && this.state.listOfLocation.map(listitem => (
-                                    <ListGroupItem key={listitem.id} >   {listitem.context}
+                                    <ListGroupItem   color= {listitem.modifier}  key={listitem.id} >   {listitem.context}
                                         <Button onClick={() => this.removeItem(listitem)} type="button" close aria-label="Cancel">
                                             <span aria-hidden>&ndash;</span>
                                         </Button>
@@ -149,15 +139,28 @@ class LocationSplash extends React.Component {
 
                     <Row>
                         <Col xs="7">
+
                             {this.state.listOfLocation.length > 0 &&
-                                (<div className="text-center">
-                                    <Button
-                                        block
+
+                                <div className="text-center">
+                                    <Button disabled={this.props.isRegistiring} className="mt-4"  onClick={this.saveChanges} type='button'
+
                                         onClick={this.saveChanges}
-                                        className="mt-4" color="primary" type="button">
-                                        KAYDET
-                                     </Button>
-                                </div>)}
+                                        color="primary" >
+
+                                        {this.props.createBulkLocationReqLoading && (
+                                            <i
+                                                className="fa fa-refresh fa-spin"
+                                                style={{ marginRight: "5px" }}
+                                            />
+                                        )}
+
+                                        {this.props.createBulkLocationReqLoading && <span>Lütfen bekleyin...</span>}
+                                        {!this.props.createBulkLocationReqLoading && <span> KAYDET</span>}
+                                    </Button>
+                                </div>
+                            }
+
                         </Col>
 
                         <Col xs="5">
@@ -171,8 +174,10 @@ class LocationSplash extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        status: state.bulkLocation.status
-        
+        createBulkLocationReqLoading: state.bulkLocation.createBulkLocationReqLoading,
+        statusTextAtCreateBulkLocation: state.bulkLocation.statusTextAtCreateBulkLocation,
+        responseOnCreateBulkLocation: state.bulkLocation.responseOnCreateBulkLocation,
+
     };
 }
 

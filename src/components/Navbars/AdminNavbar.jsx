@@ -101,6 +101,8 @@ class AdminNavbar extends React.Component {
                     <i className="ni ni-single-02" />
                     <span>Profilim</span>
                   </DropdownItem>
+
+                  
                   {/* <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-calendar-grid-58" />
                     <span>Aktivite</span>

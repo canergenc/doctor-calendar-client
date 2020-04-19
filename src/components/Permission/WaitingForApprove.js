@@ -1,12 +1,12 @@
 import React, { Component, useState } from "react";
-import { Button, Card, Table, CardHeader, Input, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
+import { Button, Card, Table, CardHeader, Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
-import { CalendarTypes, CalendarStatus } from '../../variables/constants';
+import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
 
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
-
+import { permissionHelper } from "./PermissionHelper";
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
 import { helperService } from "../../services/helper";
@@ -16,17 +16,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import tr from "date-fns/locale/tr";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 registerLocale("tr", tr);
-
-
-
-
-
 const MySwal = withReactContent(Swal)
-
-
-
 class WaitingForApproved extends Component {
-
 
     constructor(props) {
         super(props);
@@ -35,93 +26,48 @@ class WaitingForApproved extends Component {
             startDate: new Date(),
             permissionType: CalendarTypes.OzelDurum,
             endDate: new Date(),
-            description: ''
-        }
+            description: '',
+            currentIndex: 0,
+            submitted: false,
+            listOfPermission: [],
+            copyOfListOfPermission: []
 
+        }
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
         this.createPermission = this.createPermission.bind(this);
+        this.getPermissionsBySearch = this.getPermissionsBySearch.bind(this);
+        this.refreshPermissions = this.refreshPermissions.bind(this);
+        // this.searchPermission = this.searchPermission.bind(this);
 
-    }
-
-    waitingForApproveFilter = {
-        filter: {
-            where: {
-                and: [{
-                    groupId: {
-                        like: helperService.getGroupId()
-                    }
-                }, {
-                    type: {
-                        neq: CalendarTypes.Nobet
-                    },
-                    status: CalendarStatus.WaitingForApprove
-                }]
-            },
-            include: [
-                {
-                    relation: "group"
-                },
-                {
-                    relation: "user"
-                },
-                {
-                    relation: "location"
-                }
-            ]
-        }
-    }
-
-    approvedFilter = {
-        filter: {
-            where: {
-                and: [{
-                    groupId: {
-                        like: helperService.getGroupId()
-                    }
-                }, {
-                    type: {
-                        neq: CalendarTypes.Nobet
-                    },
-                    status: CalendarStatus.Approve
-                }]
-            },
-            include: [
-                {
-                    relation: "group"
-                },
-                {
-                    relation: "user"
-                },
-                {
-                    relation: "location"
-                }
-            ]
-        }
     }
 
     loadPermissions() {
-        this.props.fetchPermissionRequest(this.waitingForApproveFilter);
+        this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.currentIndex));
+        this.props.getCalendarsCount(permissionHelper.getWaitingForApproveCountFilter())
     }
 
     componentDidMount() {
         this.loadPermissions();
-
     }
 
-    getUniqGroupIds(list) {
-        const uniqueTags = [];
-        list.map(cal => {
-            if (uniqueTags.indexOf(cal.calendarGroupId) === -1) {
-                uniqueTags.push(cal.calendarGroupId)
-            }
-        });
 
-        console.log(uniqueTags);
+    approvePermisson(item) {
+        console.log('item', item);
 
-        return uniqueTags;
+        const data = {
+            status: CalendarStatus.Approve
+        }
+
+        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex)
+        const filterOfApproved = permissionHelper.getApprovedFilter(0);
+
+        this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
+        //this.props.patchPermisson(filter, data, this.waitingForApproveFilter, this.approvedFilter);
     }
 
-    showSwal(filter, data, item) {
+    rejectPermission(item) {
+        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex)
+        const filterOfApproved = permissionHelper.getApprovedFilter(0);
         MySwal.fire({
             title: 'Lütfen ret nedenini giriniz',
             input: 'text',
@@ -136,50 +82,22 @@ class WaitingForApproved extends Component {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.value) {
-                this.props.patchPermisson(filter, data, this.waitingForApproveFilter, this.approvedFilter)
+                const data = {
+                    status: CalendarStatus.Reject,
+                    description: result.value
+                }
+                this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
             }
         })
     }
 
-    approvePermisson(item) {
-        const filter = {
-            where: {
-                calendarGroupId: {
-                    like: item.calendarGroupId
-                }
-            }
-        }
-        const data = {
-            status: CalendarStatus.Approve
-        }
-
-        this.props.patchPermisson(filter, data, this.waitingForApproveFilter, this.approvedFilter);
-    }
-
-    rejectPermission(item) {
-        const filter = {
-            where: {
-                calendarGroupId: {
-                    like: item.calendarGroupId
-                }
-            }
-        }
-        const data = {
-            status: CalendarStatus.Reject
-        }
-
-        this.showSwal(filter, data, item);
-
-        //this.props.patchPermisson(filter, data, this.filterOfGetPermission);
-
-    }
-
     openCreateModal() {
-
         this.setState({
             isOpenCreateModal: true
         });
-
+        this.setState({
+            submitted: false
+        });
     }
 
     closeCreateModal() {
@@ -187,160 +105,123 @@ class WaitingForApproved extends Component {
         this.setState({
             isOpenCreateModal: false
         });
+        //TODO: Will create redux updated for list.
+        this.loadPermissions();
+
+
+
 
     }
 
     createPermission() {
 
-        console.log(this.state);
-
+        const getApprovedFilter = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex);
         const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
         const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
         const userId = helperService.getUserId();
         const groupId = helperService.getGroupId();
-        const type = this.state.permissionType;
+        const type = Number(this.state.permissionType);
         const description = this.state.description;
         const status = CalendarStatus.WaitingForApprove;
-
-        const guid = (
-            helperService.GUID4() +
-            helperService.GUID4() +
-            helperService.GUID4() +
-            helperService.GUID4() +
-            helperService.GUID4() +
-            helperService.GUID4()
-        ).toLowerCase();
-
-
         const momentRange = extendMoment(moment);
         const range = momentRange.range(start, end);
-
-
-
-        console.log(range);
-
-        const leaveDays = [];
-        for (let date of range.by("day")) {
-            leaveDays.push({
-                userId,
-                groupId,
-                status,
-                date: date.format("YYYY-MM-DD[T]12:00:00.000[Z]"),
-                description: description,
-                type: type,
-                calendarGroupId: guid,
-                isWeekend: date.isoWeekday() === 6 || date.isoWeekday() === 7,
-            });
+        console.log('TEST', range);
+        const data = {
+            startDate: start,
+            endDate: end,
+            userId: userId,
+            groupId: groupId,
+            status: status,
+            type: type,
+            description: description,
+            isWeekend: false,
+            searchParam: "",
         }
+        this.props.createPermissions(data);
+        this.setState({ submitted: true })
+    }
 
-        this.props.createReminderBulk(leaveDays);
+    getPermissionsBySearch() {
+        console.log(this.state.searchParam);
+        this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.searchParam));
+    }
+
+    refreshPermissions() {
+        this.setState({searchParam:""});
+        this.props.getPermissions(permissionHelper.getWaitingForApproveFilter());
     }
 
 
+
+
+
     inputChangeHandle(event) {
+        this.setState({ submitted: false })
         const target = event.target;
-        console.log(target.value);
+        console.log('target-value', target.value);
         if (target.name === 'permissionType') {
             this.setState({ permissionType: event.target.value });
         } else if (target.name === "description") {
             this.setState({ description: event.target.value });
+        } else if (target.name === "searchPermission") {
+            this.setState({ searchParam: event.target.value });
         }
     }
 
     setEndDate(date) {
+        this.setState({ submitted: false })
         console.log(date);
         this.setState({ endDate: date })
     }
 
     setStartDate(date) {
+        this.setState({ submitted: false })
         console.log(date);
         this.setState({ startDate: date })
     }
 
-
-
-
-
-
-
     render() {
 
 
+        if (this.props.permissions) {
+            this.state.listOfPermission = this.props.permissions;
 
-        let result = [];
-        if (this.props.reminders) {
-
-            console.log('1', this.props);
-            let list = this.props.reminders.filter(cal => {
-                return (cal.status && cal.calendarGroupId)
-            })
-            let listOfCalGroupIds = this.getUniqGroupIds(list);
-            for (let index = 0; index < listOfCalGroupIds.length; index++) {
-                const calGroupId = listOfCalGroupIds[index];
-                let listOfFiltered = [];
-                listOfFiltered = list.filter((i) => {
-                    return i.calendarGroupId === calGroupId;
-                })
-                let startDate = "";
-                let endDate = "";
-
-                let numberOfDay = 0
-                let email = "";
-                let name = "";
-                listOfFiltered.map((cal) => (
-                    cal.date = new Date(cal.date).toLocaleDateString(),
-                    cal.modifiedDate = new Date(cal.date)
-                ));
-                listOfFiltered.sort((a, b) => (a.modifiedDate > b.modifiedDate) ? 1 : -1);
-                startDate = moment(listOfFiltered[0].date).format('DD/MM/YYYY');
-                endDate = moment(listOfFiltered[listOfFiltered.length - 1].date).format('DD/MM/YYYY');
-
-                numberOfDay = listOfFiltered.length;
-                email = listOfFiltered[0].user.email;
-                name = listOfFiltered[0].user.fullName;
-
-                result.push({ id: index, calendarGroupId: calGroupId, list: listOfFiltered, startDate: startDate, endDate: endDate, numberOfDay: numberOfDay, name: name, email: email });
-
-            }
-            console.log(result);
-            if (result.length > 0) {
-                result = result.map((item) => (
-                    <tr key={item.id}>
-                        <td>{item.name}</td>
-                        <td>{item.email}</td>
-                        <td>{item.startDate}</td>
-                        <td>{item.endDate}</td>
-                        <td>{item.numberOfDay}</td>
-
-
-
-                        <td className="text-right">
-                            <Button
-                                color="warning"
-                                onClick={() => this.rejectPermission(item)}
-                                size="sm"
-                            >
-                                İPTAL
+            this.state.listOfPermission = this.state.listOfPermission.map((p) => (
+                <tr key={p.id}>
+                    <td>{p.user.fullName}</td>
+                    <td>{p.user.email}</td>
+                    <td>{moment(p.startDate).format('DD/MM/YYYY')}</td>
+                    <td>{moment(p.endDate).format('DD/MM/YYYY')}</td>
+                    <td>{p.description ? p.description : "Açıklama girilmedi."}</td>
+                    <td className="text-right">
+                        <Button
+                            color="warning"
+                            onClick={() => this.rejectPermission(p)}
+                            size="sm"
+                        >
+                            İPTAL
                             </Button>
-                            <Button
-                                color="primary"
-                                onClick={() => this.approvePermisson(item)}
-                                size="sm"
-                            >
-                                AKTAR
+                        <Button
+                            color="primary"
+                            onClick={() => this.approvePermisson(p)}
+                            size="sm"
+                        >
+                            AKTAR
                       </Button>
 
-                        </td>
-                    </tr>
-                ));
-            }
+                    </td>
+                </tr>
+            ));
+            this.state.copyOfListOfPermission = this.state.listOfPermission;
+
 
         }
 
+
+
+
         return (
-
             <>
-
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={this.state.isOpenCreateModal}
@@ -358,26 +239,36 @@ class WaitingForApproved extends Component {
                     </div>
                     <div className="modal-body">
                         <Form role="form" autoComplete="off">
+
+                            {this.state.submitted && this.props.statusTextAtCreatePermission ?
+
+                                <Alert color="warning">
+                                    {this.props.statusTextAtCreatePermission}
+                                </Alert>
+                                : ''}
+
+                            {this.state.submitted && !this.props.statusTextAtCreatePermission && this.props.responseOnCreatePermission ?
+
+                                <Alert color="success">
+
+                                    {constants.SUCCESS_MESSAGE.commonMessage}
+                                </Alert>
+                                : ''}
+
+
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-
                                     <Label for="exampleEmail" sm={5}>Başalngıç Tarihi:</Label>
-
-
                                     <Col sm={7}>
-
-
-                            
                                         <DatePicker
                                             showPopperArrow={false}
                                             name="startDate"
                                             dateFormat="dd/MM/yyyy"
                                             minDate={new Date()}
                                             selected={this.state.startDate}
+
                                             locale="tr"
                                             onChange={date => this.setStartDate(date)}
-                                            
-
                                         />
                                     </Col>
 
@@ -385,19 +276,16 @@ class WaitingForApproved extends Component {
 
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-
                                     <Label for="exampleEmail" sm={5}>Bitiş Tarihi:</Label>
-
                                     <Col sm={7}>
                                         <DatePicker
                                             showPopperArrow={false}
                                             dateFormat="dd/MM/yyyy"
                                             name="endDate"
-                                            minDate={new Date()}
+                                            minDate={this.state.startDate}
                                             selected={this.state.endDate}
                                             locale="tr"
                                             onChange={date => this.setEndDate(date)}
-
                                         />
                                     </Col>
 
@@ -405,10 +293,7 @@ class WaitingForApproved extends Component {
 
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-
-
                                     <Label for="exampleEmail" sm={5}>İzin Tipi:</Label>
-
                                     <Col sm={7}>
                                         <Input type="select" name="permissionType" value={this.state.permissionType} onChange={this.inputChangeHandle} >
                                             <option value={CalendarTypes.OzelDurum}>Özel Durum</option>
@@ -418,28 +303,15 @@ class WaitingForApproved extends Component {
 
                                         </Input>
                                     </Col>
-
-
-
-
                                 </InputGroup>
-
                                 <InputGroup className="input-group-alternative mb-3">
-
-
                                     <Label for="exampleEmail" sm={5}>Açıklama:</Label>
-
                                     <Col sm={7}>
                                         <Input type="textarea" name="description" value={this.state.description} onChange={this.inputChangeHandle} >
-
                                         </Input>
                                     </Col>
-
-
                                 </InputGroup>
-
                             </FormGroup>
-
                         </Form>
                     </div>
                     <div className="modal-footer">
@@ -456,13 +328,41 @@ class WaitingForApproved extends Component {
                 <Card className="shadow">
                     <CardHeader className="bg-white border-0">
                         <Row className="align-items-center">
-                            <Col xs="9">
-                                <Input id="userSearch" placeholder="Ara" onChange={(ev) => this.searchUser(ev.target.value)}></Input>
+                            <Col xs="8">
+                                <Input name="searchPermission" value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
                             </Col>
 
+                            <Col xs="2">
 
-                            <Col className="text-right" xs="3">
+                                <Button
+                                    color="secondary"
+
+                                    onClick={e => this.getPermissionsBySearch()}
+                                    size="lg"
+
+
+                                >
+                                    <i class="fas fa-search fa-lg"></i>
+                                </Button>
+
+
+                                <Button
+                                    color="secondary"
+
+                                    onClick={e => this.refreshPermissions()}
+                                    size="lg"
+
+                                >
+                                    <i class="fas fa-sync-alt fa-lg"></i>
+                                </Button>
+
+                            </Col>
+
+                           
+
+
+                            <Col className="text-right" xs="2">
                                 <Button
                                     color="primary"
                                     href="#pablo"
@@ -472,13 +372,7 @@ class WaitingForApproved extends Component {
                                     YENİ İZİN OLUŞTUR
                       </Button>
                             </Col>
-
-
-
-
                         </Row>
-
-
                     </CardHeader>
 
                     <Table className="align-items-center table-flush" responsive>
@@ -489,13 +383,13 @@ class WaitingForApproved extends Component {
                                 <th scope="col">E-Mail</th>
                                 <th scope="col">Başlangıç Tarihi</th>
                                 <th scope="col">Bitiş Tarihi</th>
-                                <th scope="col">Gün Sayısı</th>
+                                <th scope="col">Açıklama</th>
                                 <th scope="col" />
                             </tr>
                         </thead>
                         <tbody>
-                            {result}
-                            {result.length == 0 && <div style={{
+                            {this.state.listOfPermission}
+                            {this.state.listOfPermission.length == 0 && <div style={{
                                 margin: 20,
                                 alignSelf: 'center',
                                 justifyContent: 'center'
@@ -515,19 +409,26 @@ class WaitingForApproved extends Component {
 
 const mapStateToProps = state => {
     return {
-        reminders: state.reminders.waitingForApproveReminders,
-        loading: state.reminders.waitingForApproveReqLoading,
-        errorTextAtFetch: state.reminders.statusTextAtWaitingForApprove,
-        errorTextAtPatch: state.reminders.statusTextAtBulkUpdate
+        permissions: state.permission.responseOnGetPermission,
+        errorMessageAtGet: state.permission.statusTexAtGet,
+        calendarsCount: state.reminders.calendarsCount,
+        statusTextAtCreatePermission: state.permission.statusTextAtCreatePermission,
+        createPermissionReqLoading: state.permission.createPermissionReqLoading,
+        responseOnCreatePermission: state.permission.responseOnCreatePermission,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        createReminderBulk: (data) => dispatch(actions.createReminderBulk(data)),
-        fetchPermissionRequest: (filterData) => dispatch(actions.fetchWaitingForApproveReminders(filterData)),
-        patchPermisson: (filter, data, waitingForApproveFilter, approvedFilter) => dispatch(actions.updateBulkReminder(filter, data, waitingForApproveFilter, approvedFilter)),
+        getCalendarsCount: (filterData) => dispatch(actions.getRemindersCount(filterData)),
+        getPermissions: (filterData) => dispatch(actions.permission.getPermissions(filterData)),
+        createPermissions: (data) => dispatch(actions.permission.createPermission(data)),
+        updatePermission: (id, data, filterOfWaitingFor, filterOfApproved) => dispatch(actions.permission.updatePermission(id, data, filterOfWaitingFor, filterOfApproved)),
     };
 };
 
+
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(WaitingForApproved);
+

@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { helperService } from "../../services/helper";
 
 const initialState = {
     groups: null,
@@ -7,15 +8,26 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.CREATEUSERGROUP_SUCCESS:
+        case actionTypes.CREATE_USER_GROUP_REQUEST:
             return {
                 ...state,
-                error: false
+                createUserGroupReqLoading: true
             };
-        case actionTypes.CREATEUSERGROUP_FAILURE:
+        case actionTypes.CREATE_USER_GROUP_SUCCESS:
             return {
                 ...state,
-                error: true
+                createUserGroupReqLoading: false,
+                responseOnCreateUserGroup: action.response,
+                groupId:action.groupId
+            
+            };
+
+        case actionTypes.CREATE_USER_GROUP_FAILURE:
+            return {
+                ...state,
+                createUserGroupReqLoading: false,
+                responseOnCreateUserGroup: {},
+                statusTextAtCreateUserGroup: helperService.getErrorMessage(action.errorObj)
             };
         case actionTypes.CREATE_USERGROUPBULK_SUCCESS:
             return {

@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { helperService } from "../../services/helper";
 
 const initialState = {
     status: false,
@@ -7,23 +8,26 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.BULKLOCATION_REQUEST:
+        case actionTypes.CREATE_BULK_LOCATION_REQUEST:
             return {
                 ...state,
-                status: action.status,
-                error: false
+                createBulkLocationReqLoading: true,
             };
-        case actionTypes.BULKLOCATION_SUCCESS:
+        case actionTypes.CREATE_BULK_LOCATION_SUCCESS:
             return {
+                createBulkLocationReqLoading: false,
                 ...state,
-                status: action.status,
-                error: false
+                responseOnCreateBulkLocation:action.response,
+                
+                
             };
-        case actionTypes.BULKLOCATION_FAILURE:
+        case actionTypes.CREATE_BULK_LOCATION_FAILURE:
             return {
+                responseOnCreateBulkLocation:{},
+                createBulkLocationReqLoading: false,
+                statusTextAtCreateBulkLocation: helperService.getErrorMessage(action.errorObj),
                 ...state,
-                error: true,
-                status: action.status
+               
             }
         default:
             return state;

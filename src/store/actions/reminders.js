@@ -16,8 +16,8 @@ export const updateBulkReminder = (filter, data, waitingForApprovedFilter, appro
     calendarService.reminderBulkUpdateService(filter, data)
       .then((response) => {
         dispatch(updateBulkReminderSuccess(response));
-        dispatch(fetchWaitingForApproveReminders(waitingForApprovedFilter));
-        dispatch(fetchApprovedReminders(approvedFilter));
+        // dispatch(fetchWaitingForApproveReminders(waitingForApprovedFilter));
+        // dispatch(fetchApprovedReminders(approvedFilter));
 
       }).catch((error) => {
         dispatch(updateBulkReminderFailure(error));
@@ -246,136 +246,11 @@ export const updateReminder = (id, index, reminderData) => {
   }
 }
 
-export const fetchWaitingForApproveReminders = (filter) => {
-  return dispatch => {
-    dispatch(fetchWaitingForApproveRemindersRequest());
-    calendarService.getReminderService(filter)
-      .then(res => {
-        const reminders = []
-        if (res) {
-          res.forEach(element => {
-            if (element !== null) {
-              reminders.push(element);
-            }
-          });
-          dispatch(fetchWaitingForApproveRemindersSuccess(reminders));
-        }
-      })
-      .catch(err => {
-        dispatch(fetchWaitingForApproveRemindersFailure(err));
-      });
-  }
-}
 
 
 
-export const fetchWaitingForApproveRemindersRequest = () => {
-  return {
-    type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_REQUEST,
-  };
-};
-
-export const fetchWaitingForApproveRemindersSuccess = (reminders) => {
-  return {
-    type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_SUCCESS,
-    status: true,
-    waitingForApproveReminders: reminders
-  };
-}
-
-export const fetchWaitingForApproveRemindersFailure = (err) => {
-  return {
-    type: actionTypes.WAITING_FOR_APPROVE_REMINDERS_FAILURE,
-    erorObj: err,
-    status: false,
-  };
-}
 
 
-
-export const fetchApprovedReminders = (filter) => {
-  return dispatch => {
-    dispatch(fetchApprovedRemindersRequest());
-    calendarService.getReminderService(filter)
-      .then(res => {
-        const reminders = []
-        if (res) {
-          res.forEach(element => {
-            if (element !== null) {
-              reminders.push(element);
-            }
-          });
-          dispatch(fetchApprovedRemindersSuccess(reminders));
-        }
-      })
-      .catch(err => {
-        dispatch(fetchApprovedRemindersFailure(err));
-      });
-  }
-}
-
-
-
-export const fetchApprovedRemindersRequest = () => {
-  return {
-    type: actionTypes.APPROVED_REMINDERS_REQUEST,
-  };
-};
-
-export const fetchApprovedRemindersSuccess = (reminders) => {
-  return {
-    type: actionTypes.APPROVED_REMINDERS_SUCCESS,
-    status: true,
-    approvedReminders: reminders
-  };
-}
-
-export const fetchApprovedRemindersFailure = (err) => {
-  return {
-    type: actionTypes.APPROVED_REMINDERS_FAILURE,
-    erorObj: err,
-    status: false,
-  };
-}
-
-
-
-export const createReminderBulk = (data) => {
-  return dispatch => {
-    dispatch(createReminderBulkRequest());
-    calendarService.createReminderBulk(data)
-      .then(response => {
-          dispatch(createReminderBulkSuccess(response));
-      })
-      .catch(err => {
-        dispatch(createReminderBulkFailure(err));
-      });
-  }
-}
-
-
-
-export const createReminderBulkRequest = () => {
-  return {
-    type: actionTypes.CREATE_CALENDARBULK_REQUEST,
-  };
-};
-
-export const createReminderBulkSuccess = (response) => {
-  return {
-    type: actionTypes.CREATE_CALENDARBULK_SUCCESS,
-    status: true,
-    response:response
-  };
-}
-
-export const createReminderBulkFailure = (err) => {
-  return {
-    type: actionTypes.CREATE_CALENDARBULK_FAILURE,
-    erorObj: err,
-    status: false,
-  };
-}
 
 
 

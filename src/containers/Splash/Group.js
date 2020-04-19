@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
-import {helperService} from '../../services/helper'
+import { helperService } from '../../services/helper'
 import React from "react";
-import * as actions from '../../store/actions/index';
-
+import history from "../../hoc/Config/history";
 // reactstrap components
 import {
     Button,
@@ -17,12 +16,19 @@ import {
     InputGroup,
     Col
 } from "reactstrap";
+import * as actions from '../../store/actions/index';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+const MySwal = withReactContent(Swal);
+
+
 
 class GroupSplash extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            groupName: helperService.generateRndStr(10)
+            groupName: helperService.generateRndStr(10),
+            
         };
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +41,7 @@ class GroupSplash extends React.Component {
     }
     handleSubmit(event) {
 
-
+       
         const { groupName } = this.state;
         if (groupName) {
             this.props.createGroup(groupName);
@@ -53,10 +59,32 @@ class GroupSplash extends React.Component {
     }
 
     componentDidMount() {
-       console.log(this.props);
+        console.log(this.props);
     }
 
+
+    showSwal() {
+        MySwal.fire({
+            icon: 'error',
+            title: 'Hay aksi,',
+            text: this.props.statusTextAtCreateUserGroup,
+
+            confirmButtonText: 'Tamam',
+            showLoaderOnConfirm: true,
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            console.log(result);
+            this.setState({ submitted: false });
+
+        })
+    }
+
+
+
     render() {
+
+       
+
 
         return (
             <>
@@ -82,12 +110,22 @@ class GroupSplash extends React.Component {
 
                                 </FormGroup>
                                 <div className="modal-footer">
-                                    {/* <Button
-                                        color="secondary"
-                                        type="button"
-                                        onClick={this.handleCanceled}>Atla
-                                    </Button> */}
-                                    <Button color="primary" type="submit" onClick={this.handleSubmit}> DEVAM ET</Button>
+
+
+                                    <Button disabled={this.props.isRegistiring} onClick={this.handleSubmit} type='button' color="primary" >
+
+                                        {this.props.createUserGroupReqLoading && (
+                                            <i
+                                                className="fa fa-refresh fa-spin"
+                                                style={{ marginRight: "5px" }}
+                                            />
+                                        )}
+
+                                        {this.props.createUserGroupReqLoading && <span>Lütfen bekleyin...</span>}
+                                        {!this.props.createUserGroupReqLoading && <span>DEVAM ET</span>}
+                                    </Button>
+
+                                    {/* <Button color="primary" type="submit" onClick={this.handleSubmit}> DEVAM ET</Button> */}
                                 </div>
                             </Form>
                         </CardBody>
@@ -100,11 +138,11 @@ class GroupSplash extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        error: state.userGroups.error,
-        token:state.auth.token
-
-
-
+        responseOnCreateUserGroup: state.userGroups.responseOnCreateUserGroup,
+        statusTextAtCreateUserGroup: state.userGroups.statusTextAtCreateUserGroup,
+        createUserGroupReqLoading: state.userGroups.createUserGroupReqLoading,
+        token: state.auth.token,
+        groupId: state.userGroups.groupId
     };
 }
 const mapDispatchToProps = dispatch => {

@@ -112,6 +112,8 @@ class Login extends React.Component {
   render() {
     const { email, password, submitted } = this.state;
 
+    
+
 
     // this.props.isAuthenticating ?  <Spinner /> :<p>Lütfen bekleyiniz.</p>  
 
@@ -206,7 +208,7 @@ class Login extends React.Component {
                 <div className="text-center">
 
 
-                  <Button className="my-4" color="primary" disabled={this.props.isAuthenticating}>
+                  <Button className="my-4" color="primary" >
 
                     {this.props.isAuthenticating && (
                       <i
