@@ -135,7 +135,6 @@ class WaitingForApproved extends Component {
             type: type,
             description: description,
             isWeekend: false,
-            searchParam: "",
         }
         this.props.createPermissions(data);
         this.setState({ submitted: true })
