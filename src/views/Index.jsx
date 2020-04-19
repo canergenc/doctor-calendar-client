@@ -107,7 +107,7 @@ class Index extends Component {
         }
         console.log(reminder);
 
-        this.props.updateReminder(reminderId, reminderIndex, reminder);
+        this.props.updateReminder(reminderId, reminderIndex, reminder, this.props.filterData);
         break;
     }
   };
@@ -238,6 +238,7 @@ const mapStateToProps = state => {
   return {
     users: state.users.users,
     reminders: state.reminders.reminders,
+    filterData: state.reminders.filterData,
     globalUsers: state.users.globalUsers,
     defaultUsers: state.users.defaultUsers,
     errorFromUsers: state.users.error,
@@ -251,7 +252,7 @@ const mapDispatchToProps = dispatch => {
   return {
     cleanReminderError: () => dispatch(actions.cleanReminderError()),
     createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
-    updateReminder: (reminderId, reminderIndex, reminderData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData)),
+    updateReminder: (reminderId, reminderIndex, reminderData, filterData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData, filterData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
     findUser: (filterKey) => dispatch(actions.findUser(filterKey))
   };

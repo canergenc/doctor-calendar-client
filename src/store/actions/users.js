@@ -11,6 +11,15 @@ export const setUsers = (users, defaultUsers) => {
     };
 };
 
+export const setGroupUsersCount = (count) => {
+    return {
+        type: actionTypes.SET_GROUP_USERS_COUNT,
+        groupUsersCount: count
+    };
+};
+
+
+
 export const fetchUsersFailed = (error) => {
     return {
         type: actionTypes.FETCH_USERS_FAILED
@@ -30,6 +39,28 @@ export const fetchGlobalUsersFailed = (error) => {
     };
 };
 
+export const getGroupUsersCount = () => {
+    return dispatch => {
+        const filterData = {
+
+            where: {
+                groupId: {
+                    like: helperService.getGroupId()
+                }
+            },
+            include: [
+                { relation: "user" }
+            ]
+
+        }
+        userService.getGroupUsersCount(filterData)
+            .then(res => {
+                
+                dispatch(setGroupUsersCount(res.count));
+            })
+    }
+}
+
 export const getUsers = (filterData) => {
     return dispatch => {
         userService.getUsers(filterData)
@@ -46,7 +77,7 @@ export const getUsers = (filterData) => {
                 });
 
 
-                users.sort(function(a, b) {
+                users.sort(function (a, b) {
                     var dateA = new Date(a.user.workStartDate), dateB = new Date(b.user.workStartDate);
                     return dateB - dateA;
                 });

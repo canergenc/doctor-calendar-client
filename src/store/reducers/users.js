@@ -3,7 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     users: null,
     globalUsers: null,
-    usersCount: null,
+    groupUsersCount: null,
     error: false,
     globalUsersError: false
 };
@@ -28,6 +28,12 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 globalUsers: action.globalUsers,
                 globalUsersError: false
+            };
+        case actionTypes.SET_GROUP_USERS_COUNT:
+            return {
+                ...state,
+                groupUsersCount: action.groupUsersCount,
+                error: false
             };
         case actionTypes.FETCH_GLOBAL_USERS_FAILED:
             return {

@@ -190,32 +190,11 @@ export const updateReminderFail = (error) => {
   };
 };
 
-export const updateReminder = (id, index, reminderData) => {
+export const updateReminder = (id, index, reminderData, filterData) => {
   return dispatch => {
     dispatch(updateReminderStart(index));
     calendarService.updateReminderService(id, reminderData)
       .then(response => {
-        const filterData = {
-          filter: {
-            where: {
-              groupId: {
-                like: helperService.getGroupId()
-              },
-              type: CalendarTypes.Nobet
-            },
-            include: [
-              {
-                relation: "group"
-              },
-              {
-                relation: "user"
-              },
-              {
-                relation: "location"
-              }
-            ]
-          }
-        }
         dispatch(updateReminderSuccess(response.id));
         dispatch(getReminders(filterData));
       })
