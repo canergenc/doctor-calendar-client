@@ -3,6 +3,7 @@ import { Button, Card, Table, CardHeader, Input, Alert, Row, Col, Modal, Form, L
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
+import ToastServive from 'react-material-toast';
 
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -17,6 +18,12 @@ import tr from "date-fns/locale/tr";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 registerLocale("tr", tr);
 const MySwal = withReactContent(Swal)
+
+const toast = ToastServive.new({
+    place: 'topRight',
+    duration: 4,
+    maxCount: 10
+})
 class WaitingForApproved extends Component {
 
     constructor(props) {
@@ -37,6 +44,7 @@ class WaitingForApproved extends Component {
         this.createPermission = this.createPermission.bind(this);
         this.getPermissionsBySearch = this.getPermissionsBySearch.bind(this);
         this.refreshPermissions = this.refreshPermissions.bind(this);
+        this.keyPress = this.keyPress.bind(this);
         // this.searchPermission = this.searchPermission.bind(this);
 
     }
@@ -142,11 +150,15 @@ class WaitingForApproved extends Component {
 
     getPermissionsBySearch() {
         console.log(this.state.searchParam);
-        this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.searchParam));
+        if (this.state.searchParam) {
+            this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.searchParam));
+        } else {
+            const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+        }
     }
 
     refreshPermissions() {
-        this.setState({searchParam:""});
+        this.setState({ searchParam: "" });
         this.props.getPermissions(permissionHelper.getWaitingForApproveFilter());
     }
 
@@ -177,6 +189,19 @@ class WaitingForApproved extends Component {
         this.setState({ submitted: false })
         console.log(date);
         this.setState({ startDate: date })
+    }
+
+    keyPress(e) {
+        console.log(e.keyCode);
+        if (e.keyCode == 13) {
+            console.log('value', e.target.value);
+            if (e.target.value) {
+                this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(e.target.value));
+            } else {
+                const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+
+            }
+        }
     }
 
     render() {
@@ -295,10 +320,19 @@ class WaitingForApproved extends Component {
                                     <Label for="exampleEmail" sm={5}>İzin Tipi:</Label>
                                     <Col sm={7}>
                                         <Input type="select" name="permissionType" value={this.state.permissionType} onChange={this.inputChangeHandle} >
-                                            <option value={CalendarTypes.OzelDurum}>Özel Durum</option>
-                                            <option value={CalendarTypes.Gebelik}>Gebelik</option>
-                                            <option value={CalendarTypes.IdariIzin}>İdari İzin</option>
+                                            <option value={CalendarTypes.Izin}>İzin</option>
                                             <option value={CalendarTypes.Rapor}>Rapor</option>
+                                            <option value={CalendarTypes.Gebelik}>Gebelik</option>
+                                            <option value={CalendarTypes.ResmiTatil}> Resmi Tatil</option>
+                                            <option value={CalendarTypes.IdariIzin}>İdari İzin</option>
+                                            <option value={CalendarTypes.OzelDurum}>Özel Durum</option>
+                                            <option value={CalendarTypes.Rotasyon}>Rotasyon</option>
+
+
+
+
+
+
 
                                         </Input>
                                     </Col>
@@ -328,7 +362,7 @@ class WaitingForApproved extends Component {
                     <CardHeader className="bg-white border-0">
                         <Row className="align-items-center">
                             <Col xs="8">
-                                <Input name="searchPermission" value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
+                                <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
                             </Col>
 
@@ -358,7 +392,7 @@ class WaitingForApproved extends Component {
 
                             </Col>
 
-                           
+
 
 
                             <Col className="text-right" xs="2">

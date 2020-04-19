@@ -25,20 +25,26 @@ class Permission extends Component {
             <>
                 <UserHeader fullName='' />
 
-                 <Nav tabs>
-                    <NavItem style={{ fontSize: 18 }} >
-                        <NavLink className={this.state.activeTab == '1' ? 'active' : ''} onClick={() => { this.toggle('1'); }} >
+                <div>
+
+
+                 <Nav  style={{margin:3}} pills>
+                    <NavItem  style={{ fontSize: 16,margin:2 }}  >
+                        <NavLink  style={{ color:this.state.activeTab=='1'?'white':'' }} className={this.state.activeTab == '1' ? 'active' : ''} onClick={() => { this.toggle('1'); }} >
                             Yeni Talepler
 
                            
                         </NavLink>
                     </NavItem>
-                    <NavItem style={{ fontSize: 18 }} >
-                        <NavLink className={this.state.activeTab == '2' ? 'active' : ''} onClick={() => { this.toggle('2'); }}>
+                    <NavItem style={{ fontSize: 16 ,margin:2 }} >
+                        <NavLink style={{color:this.state.activeTab=='2'?'white':'' }}  className={this.state.activeTab == '2' ? 'active' : ''} onClick={() => { this.toggle('2'); }}>
                             Onaylananlar
                             </NavLink>
                     </NavItem>
                 </Nav>
+
+                </div>
+
 
                 <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="1">
