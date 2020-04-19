@@ -7,7 +7,7 @@ const CustomPagination = props => {
     let listOfPaginationItem = []
     for (let index = 0; index < props.paginationItemCount; index++) {
         listOfPaginationItem.push(
-            <PaginationItem onClick={() => props.paginationItemClick(index)} className={index == props.currentIndex ? 'active' : 'disabled'} key={index}>
+            <PaginationItem onClick={() => props.paginationItemClick(index)} className={index === props.currentIndex ? 'active' : 'disabled'} key={index}>
                 <PaginationLink
                     href="#pablo"
                 >

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import UserHeader from "components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
+import CustomPagination from "../../components/Paginations/CustomPagination";
+import { constants } from '../../variables/constants';
 import "./Persons.css"
 import * as actions from '../../store/actions';
 
@@ -52,7 +54,8 @@ class Persons extends Component {
             workStartDate: '',
             weekendCountLimit: 0,
             weekdayCountLimit: 0,
-            password: ''
+            password: '',
+            currentIndex: 0
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
@@ -81,9 +84,9 @@ class Persons extends Component {
     }
 
     updateHandle(event) {
-        const weekdayCountLimit=parseInt(this.state.weekdayCountLimit);
-        const weekendCountLimit=parseInt(this.state.weekendCountLimit);
-        if(weekdayCountLimit>=0 && weekendCountLimit>=0){
+        const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
+        const weekendCountLimit = parseInt(this.state.weekendCountLimit);
+        if (weekdayCountLimit >= 0 && weekendCountLimit >= 0) {
             let userData = {
                 title: this.state.title,
                 fullName: this.state.name,
@@ -92,7 +95,7 @@ class Persons extends Component {
                 weekdayCountLimit: weekdayCountLimit,
                 weekendCountLimit: weekendCountLimit
             };
-    
+
             this.props.updateUser(this.state.id, userData);
             this.toggleModal('editModal', null);
             event.preventDefault();
@@ -100,16 +103,16 @@ class Persons extends Component {
                 icon: 'success',
                 title: 'Başarılı',
                 text: 'Kullanıcı güncellemesi tamamlandı'
-              });
+            });
         }
-        else{
+        else {
             MySwal.fire({
                 icon: 'info',
                 title: 'Hay aksi,',
                 text: 'Nöbet sayıları sıfırdan az olmamalı'
-              });
+            });
         }
-        
+
     }
 
     addHandle(event) {
@@ -133,7 +136,7 @@ class Persons extends Component {
                 icon: 'success',
                 title: 'Başarılı',
                 text: 'Kullanıcı kaydedildi'
-              });
+            });
 
         } else {
             MySwal.fire({
@@ -142,7 +145,7 @@ class Persons extends Component {
                 text: 'zorunlu alanları doldurunuz'
             });
         }
-        
+
     }
 
     deleteHandle() {
@@ -153,13 +156,15 @@ class Persons extends Component {
                 icon: 'success',
                 title: 'Başarılı',
                 text: 'Kullanıcı silindi'
-              });
+            });
         }
     }
 
-    renderTableData() {
+    renderTableData(index) {
         const filterData = {
             filter: {
+                skip: index * constants.PAGESIZE_INPERMISSION_PAGE,
+                limit: constants.PAGESIZE_INPERMISSION_PAGE,
                 where: {
                     groupId: {
                         like: helperService.getGroupId()
@@ -174,7 +179,8 @@ class Persons extends Component {
     }
 
     componentDidMount() {
-        this.renderTableData();
+        this.renderTableData(this.state.currentIndex);
+        this.props.getGroupUsersCount();
     }
 
     toggleModal(state, user) {
@@ -204,10 +210,14 @@ class Persons extends Component {
         }
     };
 
+    onChangePaginationItem(index) {
+        this.setState({ currentIndex: index });
+        this.renderTableData(index);
+    }
     render() {
         let users = "Kullanıcılar Yükleniyor...";
+        let usersCount = 0;
         if (this.props.users) {
-
             users = this.props.users.map((user) => (
                 <tr key={user.user.id}>
                     <td>{user.user.title}</td>
@@ -226,6 +236,9 @@ class Persons extends Component {
                     </td>
                 </tr>
             ));
+        }
+        if (this.props.usersCount) {
+            usersCount = this.props.usersCount;
         }
 
         return (
@@ -461,53 +474,12 @@ class Persons extends Component {
                                 </Table>
                                 <CardFooter className="py-4">
                                     <nav aria-label="...">
-                                        <Pagination
-                                            className="pagination justify-content-end mb-0"
-                                            listClassName="justify-content-end mb-0"
-                                        >
-                                            <PaginationItem className="disabled">
-                                                <PaginationLink
-                                                    href="#pablo"
-                                                    onClick={e => e.preventDefault()}
-                                                    tabIndex="-1"
-                                                >
-                                                    <i className="fas fa-angle-left" />
-                                                    <span className="sr-only">Previous</span>
-                                                </PaginationLink>
-                                            </PaginationItem>
-                                            <PaginationItem className="active">
-                                                <PaginationLink
-                                                    href="#pablo"
-                                                    onClick={e => e.preventDefault()}>
-                                                    1
-                                                </PaginationLink>
-                                            </PaginationItem>
-                                            <PaginationItem>
-                                                <PaginationLink
-                                                    href="#pablo"
-                                                    onClick={e => e.preventDefault()}
-                                                >
-                                                    2 <span className="sr-only">(current)</span>
-                                                </PaginationLink>
-                                            </PaginationItem>
-                                            <PaginationItem>
-                                                <PaginationLink
-                                                    href="#pablo"
-                                                    onClick={e => e.preventDefault()}
-                                                >
-                                                    3
-                                            </PaginationLink>
-                                            </PaginationItem>
-                                            <PaginationItem>
-                                                <PaginationLink
-                                                    href="#pablo"
-                                                    onClick={e => e.preventDefault()}
-                                                >
-                                                    <i className="fas fa-angle-right" />
-                                                    <span className="sr-only">Next</span>
-                                                </PaginationLink>
-                                            </PaginationItem>
-                                        </Pagination>
+                                        {usersCount > 0 ?
+                                            <CustomPagination
+                                                paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}
+                                                paginationItemClick={(index) => this.onChangePaginationItem(index)}
+                                                currentIndex={this.state.currentIndex}
+                                            /> : null}
                                     </nav>
                                 </CardFooter>
                             </Card>
@@ -522,6 +494,7 @@ class Persons extends Component {
 const mapStateToProps = state => {
     return {
         users: state.users.users,
+        usersCount: state.users.groupUsersCount,
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
         error: state.users.error
@@ -533,7 +506,8 @@ const mapDispatchToProps = dispatch => {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         createUser: (userData) => dispatch(actions.createUser(userData)),
         deleteUser: (userId) => dispatch(actions.deleteUser(userId)),
-        updateUser: (userId, userData) => dispatch(actions.updateUser(userId, userData))
+        updateUser: (userId, userData) => dispatch(actions.updateUser(userId, userData)),
+        getGroupUsersCount: () => dispatch(actions.getGroupUsersCount())
     };
 };
 

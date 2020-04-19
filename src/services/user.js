@@ -1,5 +1,13 @@
 import request from "../hoc/Config/apiCentral";
 
+const getGroupUsersCount = (filterData) => {
+    return request({
+        url: '/user-groups/count',
+        method: 'GET',
+        params: filterData
+    });
+};
+
 const getUsers = (filterData) => {
     return request({
         url: '/user-groups',
@@ -59,6 +67,7 @@ const deleteUserService = (id) => {
 export const userService = {
     getUsers,
     getGlobalUsers,
+    getGroupUsersCount,
     userMe,
     userInfo,
     createUserService,
