@@ -24,37 +24,42 @@ class Permission extends Component {
     render() {
         return (
             <>
-                <UserHeader fullName='' />
+                <UserHeader />
+                <Container className="mt--7" fluid>
+                    {/* Table */}
+                    <Row>
+                        <div className="col">
+                            <Card className="shadow">
+                            <div>
 
-                <div>
+                                <Nav  style={{margin:3}} pills>
+                                    <NavItem  style={{ fontSize: 16,margin:2 }}  >
+                                        <NavLink  style={{ color:this.state.activeTab=='1'?'white':'' }} className={this.state.activeTab == '1' ? 'active' : ''} onClick={() => { this.toggle('1'); }} >
+                                            Yeni Talepler
 
-
-                 <Nav  style={{margin:3}} pills>
-                    <NavItem  style={{ fontSize: 16,margin:2 }}  >
-                        <NavLink  style={{ color:this.state.activeTab=='1'?'white':'' }} className={this.state.activeTab == '1' ? 'active' : ''} onClick={() => { this.toggle('1'); }} >
-                            Yeni Talepler
-
-                           
-                        </NavLink>
-                    </NavItem>
-                    <NavItem style={{ fontSize: 16 ,margin:2 }} >
-                        <NavLink style={{color:this.state.activeTab=='2'?'white':'' }}  className={this.state.activeTab == '2' ? 'active' : ''} onClick={() => { this.toggle('2'); }}>
-                            Onaylananlar
-                            </NavLink>
-                    </NavItem>
-                </Nav>
-
-                </div>
-
-
-                <TabContent activeTab={this.state.activeTab}>
-                    <TabPane tabId="1">
-                        <WaitingForApprove />
-                    </TabPane>
-                    <TabPane tabId="2">
-                        <Approved />
-                    </TabPane>
-                </TabContent>  
+                                        
+                                        </NavLink>
+                                    </NavItem>
+                                    <NavItem style={{ fontSize: 16 ,margin:2 }} >
+                                        <NavLink style={{color:this.state.activeTab=='2'?'white':'' }}  className={this.state.activeTab == '2' ? 'active' : ''} onClick={() => { this.toggle('2'); }}>
+                                            Onaylananlar
+                                            </NavLink>
+                                    </NavItem>
+                                </Nav>
+                            </div>
+            
+                            <TabContent activeTab={this.state.activeTab}>
+                                <TabPane tabId="1">
+                                    <WaitingForApprove />
+                                </TabPane>
+                                <TabPane tabId="2">
+                                    <Approved />
+                                </TabPane>
+                            </TabContent>  
+                            </Card>
+                        </div>
+                    </Row>
+                </Container>
             </>
         )
     }
