@@ -21,8 +21,11 @@ const MySwal = withReactContent(Swal)
 
 const toast = ToastServive.new({
     place: 'topRight',
-    duration: 4,
-    maxCount: 10
+    closable: false,
+    duration: 3,
+    maxCount: 10,
+
+
 })
 class WaitingForApproved extends Component {
 
@@ -402,7 +405,10 @@ class WaitingForApproved extends Component {
                                     onClick={e => this.openCreateModal()}
                                     size="sm"
                                 >
-                                    YENİ İZİN OLUŞTUR
+                                    <span className="btn-inner--icon">
+                                        <i className="ni ni-fat-add" />
+                                    </span>
+                                    Yeni
                       </Button>
                             </Col>
                         </Row>

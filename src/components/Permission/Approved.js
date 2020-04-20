@@ -14,8 +14,9 @@ import ToastServive from 'react-material-toast';
 
 const toast = ToastServive.new({
     place: 'topRight',
-    duration: 4,
-    maxCount: 10
+    duration: 3,
+    maxCount: 10,
+    closable:false
 })
 
 const MySwal = withReactContent(Swal)
