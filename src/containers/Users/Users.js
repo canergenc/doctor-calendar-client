@@ -13,7 +13,7 @@ import Api from '../../api';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
-import User from '../../components/User/User';
+import User from './User/User';
 
 import './Users.css';
 import { helperService } from '../../services';

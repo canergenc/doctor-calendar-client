@@ -4,6 +4,7 @@ import UserHeader from "components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
 import CustomPagination from "../../components/Paginations/CustomPagination";
 import { constants } from '../../variables/constants';
+import Person from './Person/Person';
 import "./Persons.css"
 import * as actions from '../../store/actions';
 
@@ -214,24 +215,22 @@ class Persons extends Component {
     render() {
         let users = "Kullanıcılar Yükleniyor...";
         let usersCount = 0;
+
         if (this.props.users) {
             users = this.props.users.map((user) => (
-                <tr key={user.user.id}>
-                    <td>{user.user.title}</td>
-                    <td>{user.user.fullName}</td>
-                    <td>{user.user.email}</td>
-                    <td className="text-right">
-                        <UncontrolledDropdown>
-                            <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
-                                <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.toggleModal("editModal", user.user)}>Düzenle</DropdownItem>
-                                <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.toggleModal("deleteModal", user.user)}>Kaldır</DropdownItem>
-                            </DropdownMenu>
-                        </UncontrolledDropdown>
-                    </td>
-                </tr>
+                <Person
+                key={user.user.id}
+                    id={user.user.id}
+                    title={user.user.title}
+                    fullName={user.user.fullName}
+                    workStartDate={user.user.workStartDate}
+                    email={user.user.email}
+                    weekdayCountLimit={user.user.weekdayCountLimit}
+                    weekendCountLimit={user.user.weekendCountLimit}
+                    editClick={() => this.toggleModal("editModal", user.user)}
+                    deleteClick={() => this.toggleModal("deleteModal", user.user)}
+                />
+
             ));
         }
         if (this.props.usersCount) {
@@ -461,7 +460,10 @@ class Persons extends Component {
                                         <tr>
                                             <th scope="col">Ünvan</th>
                                             <th scope="col">Ad Soyad</th>
+                                            <th scope="col">Kıdem</th>
                                             <th scope="col">E-Mail</th>
+                                            <th scope="col">Haftaiçi Nöbet Sayısı</th>
+                                            <th scope="col">Haftasonu Nöbet Sayısı</th>
                                             <th scope="col" />
                                         </tr>
                                     </thead>

@@ -7,9 +7,9 @@ import { extendMoment } from 'moment-range';
 import "moment/locale/tr";
 import 'pretty-checkbox';
 
-import * as actions from '../../store/actions/index';
-import { helperService } from '../../services';
-import { CalendarTypes } from '../../variables/constants';
+import * as actions from '../../../store/actions/index';
+import { helperService } from '../../../services';
+import { CalendarTypes } from '../../../variables/constants';
 
 const Container = styled.div`
 display: flex;
