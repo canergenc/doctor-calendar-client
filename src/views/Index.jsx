@@ -188,7 +188,7 @@ class Index extends Component {
                 </InputGroup>
                 <Card className="shadow sticky" >
                   <CardHeader className="bg-transparent">
-                    <Row>
+                    <Row style={{zIndex:"100"}}>
                       <Select options={options} className="select" isMulti onInputChange={(ev) => this.findUser(ev)} onChange={(user) => this.addUserId(user)} />
                     </Row>
                   </CardHeader>
@@ -196,14 +196,11 @@ class Index extends Component {
               </FormGroup>
             </Form>
           </div>
-          <div className="modal-footer">
-            <Button
-              color="secondary"
-              data-dismiss="modal"
-              type="button"
-              className=".btnZ"
-              onClick={() => this.toggleModal("addModal", undefined)}>Kapat</Button>
-            <Button color="primary" type="submit" onClick={this.addHandle}>Kaydet</Button>
+          <div className="modal-footer" >
+            <button
+              className="bttn bttn-secondary"
+              onClick={() => this.toggleModal("addModal", undefined)}>Kapat</button>
+            <button className="bttn bttn-primary" onClick={this.addHandle}>Kaydet</button>
           </div>
         </Modal>
 

@@ -130,15 +130,14 @@ class Profile extends React.Component {
 
 
   updateUserInfo(event) {
-    console.log(this.props.title);
-
+    
     var data = {
       title: this.state.title ? this.state.title : this.props.title,
-      fullName: this.state.title ? this.state.fullName : this.props.fullName,
+      fullName: this.state.fullName ? this.state.fullName : this.props.fullName,
       email: this.state.email ? this.state.email : this.props.email,
       deviceId: this.state.deviceId ? this.state.deviceId : this.props.deviceId,
     }
-    console.log(data);
+    
     var userId = helperService.getUserId();
     this.props.updateUserInfo(userId, data);
 
