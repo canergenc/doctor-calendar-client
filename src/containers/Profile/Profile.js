@@ -115,7 +115,7 @@ class Profile extends React.Component {
         MySwal.fire({
           icon: 'warning',
           title: 'Lütfen',
-          text: 'Yeni şifre alanları aynı olmalıdır.'
+          text: 'Yeni Parola alanları aynı olmalıdır.'
         });
       }
     }
@@ -164,7 +164,7 @@ class Profile extends React.Component {
           isOpen={this.state.editModal}
           toggle={() => this.toggleModal("editModal", undefined)}>
           <div className="modal-header">
-            <h5 className="modal-title" id="editModalLabel">Şifre Değiştir</h5>
+            <h5 className="modal-title" id="editModalLabel">Parola Değiştir</h5>
             <button
               aria-label="Close"
               className="close"
@@ -179,19 +179,19 @@ class Profile extends React.Component {
               <FormGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>Şifre:</InputGroupText>
+                    <InputGroupText>Parola:</InputGroupText>
                     <Input name="password" type="password" value={this.state.password} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>Yeni Şifre:</InputGroupText>
+                    <InputGroupText>Yeni Parola:</InputGroupText>
                     <Input name="newPassword" type="password" value={this.state.newPassword} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>Yeni Şifre (Tekrar):</InputGroupText>
+                    <InputGroupText>Yeni Parola (Tekrar):</InputGroupText>
                     <Input name="newPasswordAgain" type="password" value={this.state.newPasswordAgain} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
@@ -205,7 +205,7 @@ class Profile extends React.Component {
               type="button"
               onClick={() => this.toggleModal("editModal")}>Kapat
                         </Button>
-            <Button color="primary" type="submit" onClick={this.updatePassword}>Şifreyi Güncelle</Button>
+            <Button color="primary" type="submit" onClick={this.updatePassword}>Parola Güncelle</Button>
           </div>
         </Modal>
 
@@ -239,7 +239,7 @@ class Profile extends React.Component {
                         onClick={() => this.toggleModal("editModal")}
                         size="sm"
                       >
-                        Şifre Değiştir
+                        Parola Değiştir
                       </Button>
                     </Col>
                   </Row>
