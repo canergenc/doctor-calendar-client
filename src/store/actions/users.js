@@ -55,7 +55,7 @@ export const getGroupUsersCount = () => {
         }
         userService.getGroupUsersCount(filterData)
             .then(res => {
-                
+
                 dispatch(setGroupUsersCount(res.count));
             })
     }
@@ -134,7 +134,7 @@ export const findUser = (filterKey) => {
                             if (element) {
                                 users.push({
                                     value: element.id,
-                                    label: element.fullName
+                                    label: element.fullName + " - " + element.email
                                 });
                             }
                         });
