@@ -85,7 +85,6 @@ class User extends Component {
         if (this.state.checkedRadio === userId) {
             this.setState({ checkedRadio: "nouserid" });
             id.target.checked = false;
-        
 
             filterData = {
                 filter: {

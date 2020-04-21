@@ -15,7 +15,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from '../../store/actions/index';
 import Api from "../../api";
-
+import { Badge } from "reactstrap";
 import "./Calendar.scss";
 
 class Calendar extends Component {
@@ -415,6 +415,9 @@ class Calendar extends Component {
 
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>
+        <h2><span>Haftaiçi Nöbet: {countOfInWeek}</span><span>Haftasonu Nöbet: {countOfOnWeekend}</span></h2>
+        
+        
       </div>
     );
   }

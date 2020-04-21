@@ -12,16 +12,7 @@ const headerMonth = props => {
       </div>
       <div className="row">
         <h1>{props.curMonth.name}<Button onClick={props.downloadExcelClick}>Excel<i className="fa fa-download" style={{ marginLeft: "5px" }}></i></Button></h1>
-
-
-        <p> <Badge style={{ textTransform: 'capitalize', fontSize: 16 }} color="warning">Hafta İçi Nöbet Sayısı: {props.countOfInWeek} - Hafta Sonu Nöbet Sayısı: {props.countOfOnWeekend} </Badge></p>
-
-
-
       </div>
-
-
-
 
       <div className="row" >
         <button onClick={props.nextMonthClick}>
