@@ -79,7 +79,7 @@ export const getUsers = (filterData) => {
 
                 users.sort(function (a, b) {
                     var dateA = new Date(a.user.workStartDate), dateB = new Date(b.user.workStartDate);
-                    return dateB - dateA;
+                    return dateA - dateB;
                 });
 
 

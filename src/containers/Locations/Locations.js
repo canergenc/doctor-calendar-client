@@ -441,7 +441,7 @@ class Location extends Component {
                     </div>
                 </Modal>
                 {/* Page content */}
-                <Container className="mt--7" fluid>
+                <Container style={{marginTop:"-12rem"}} fluid>
                     {/* Table */}
                     <DragDropContext onDragEnd={this.onDragEnd}>
                         <Row>

@@ -14,7 +14,7 @@ html {
 
 .month {
   font: normal 16px "Montserrat", sans-serif;
-  
+  min-height: 200px;
   padding-right: 15px;
   padding-bottom: 15px;
   padding-left: 15px;
@@ -30,7 +30,7 @@ html {
 }
 
 
-h2 {
+.h2toplam {
   color: black;
   width: 100%; 
   text-align: center; 
@@ -39,7 +39,7 @@ h2 {
   margin: 10px 0 20px; 
 } 
 
-h2 span { 
+.h2toplam span { 
    background:#fff; 
    padding:0 10px; 
 }

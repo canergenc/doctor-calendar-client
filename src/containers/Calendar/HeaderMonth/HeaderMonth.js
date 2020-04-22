@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Badge } from "reactstrap";
+import { Button } from "reactstrap";
 import "./HeaderMonth.scss";
 
 const headerMonth = props => {

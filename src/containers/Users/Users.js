@@ -70,7 +70,7 @@ class Users extends Component {
                 <CardBody >
                     <Droppable droppableId="UserList_1" isDropDisabled={true}>
                         {(provided) => (
-                            <div id="style-6" style={{ maxHeight: '650px', overflowY: 'scroll' }}
+                            <div id="style-6" style={{ maxHeight: '650px',minHeight:'200px', overflowY: 'scroll' }}
                                 ref={provided.innerRef}
                             >
                                 {userList}

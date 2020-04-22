@@ -205,14 +205,14 @@ class Profile extends React.Component {
               type="button"
               onClick={() => this.toggleModal("editModal")}>Kapat
                         </Button>
-            <Button color="primary" type="submit" onClick={this.updatePassword}>Şifreyi Güncelle</Button>
+            <Button color="primary" type="submit" onClick={this.updatePassword}>Şifre Güncelle</Button>
           </div>
         </Modal>
 
 
 
         {/* Page content */}
-        <Container className="mt--7" fluid>
+        <Container style={{marginTop:"-12rem"}} fluid>
           <Row>
 
             <Col className="order-xl-1" xl="12">
@@ -312,25 +312,7 @@ class Profile extends React.Component {
                           </FormGroup>
                         </Col>
                         <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Cihaz Id
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue={this.props.deviceId}
-
-
-
-                              onChange={(event) => this.inputChangeHandle(event)}
-                              name="deviceId"
-                              // placeholder="Last name"
-                              type="text"
-                            />
-                          </FormGroup>
+                          
                         </Col>
                       </Row>
                     </div>

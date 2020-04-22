@@ -5,7 +5,6 @@ import {
   Row,
   Col,
   Modal,
-  Button,
   Form,
   FormGroup,
   InputGroup,
@@ -138,6 +137,10 @@ class Index extends Component {
     }
 
   }
+  
+  noMessageHandle = () => {
+    return "Eşleşme Yok"
+  }
 
   render() {
     let options = [];
@@ -188,8 +191,8 @@ class Index extends Component {
                 </InputGroup>
                 <Card className="shadow sticky" >
                   <CardHeader className="bg-transparent">
-                    <Row style={{zIndex:"100"}}>
-                      <Select options={options} className="select" isMulti onInputChange={(ev) => this.findUser(ev)} onChange={(user) => this.addUserId(user)} />
+                    <Row style={{ zIndex: "100" }}>
+                      <Select placeholder="Ara ve Seç..." noOptionsMessage={() => this.noMessageHandle()} options={options} className="select" isMulti onInputChange={(ev) => this.findUser(ev)} onChange={(user) => this.addUserId(user)} />
                     </Row>
                   </CardHeader>
                 </Card>
