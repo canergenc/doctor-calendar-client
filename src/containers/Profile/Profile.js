@@ -115,7 +115,7 @@ class Profile extends React.Component {
         MySwal.fire({
           icon: 'warning',
           title: 'Lütfen',
-          text: 'Yeni Parola alanları aynı olmalıdır.'
+          text: 'Yeni şifre alanları aynı olmalıdır.'
         });
       }
     }
@@ -164,7 +164,7 @@ class Profile extends React.Component {
           isOpen={this.state.editModal}
           toggle={() => this.toggleModal("editModal", undefined)}>
           <div className="modal-header">
-            <h5 className="modal-title" id="editModalLabel">Parola Değiştir</h5>
+            <h5 className="modal-title" id="editModalLabel">Şifre Değiştir</h5>
             <button
               aria-label="Close"
               className="close"
@@ -179,19 +179,19 @@ class Profile extends React.Component {
               <FormGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>Parola:</InputGroupText>
+                    <InputGroupText>Şifre:</InputGroupText>
                     <Input name="password" type="password" value={this.state.password} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>Yeni Parola:</InputGroupText>
+                    <InputGroupText>Yeni Şifre:</InputGroupText>
                     <Input name="newPassword" type="password" value={this.state.newPassword} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>Yeni Parola (Tekrar):</InputGroupText>
+                    <InputGroupText>Yeni Şifre (Tekrar):</InputGroupText>
                     <Input name="newPasswordAgain" type="password" value={this.state.newPasswordAgain} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
@@ -205,14 +205,14 @@ class Profile extends React.Component {
               type="button"
               onClick={() => this.toggleModal("editModal")}>Kapat
                         </Button>
-            <Button color="primary" type="submit" onClick={this.updatePassword}>Parola Güncelle</Button>
+            <Button color="primary" type="submit" onClick={this.updatePassword}>Şifre Güncelle</Button>
           </div>
         </Modal>
 
 
 
         {/* Page content */}
-        <Container className="mt--7" fluid>
+        <Container style={{marginTop:"-12rem"}} fluid>
           <Row>
 
             <Col className="order-xl-1" xl="12">
@@ -239,7 +239,7 @@ class Profile extends React.Component {
                         onClick={() => this.toggleModal("editModal")}
                         size="sm"
                       >
-                        Parola Değiştir
+                        Şifre Değiştir
                       </Button>
                     </Col>
                   </Row>
@@ -312,25 +312,7 @@ class Profile extends React.Component {
                           </FormGroup>
                         </Col>
                         <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-last-name"
-                            >
-                              Cihaz Id
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue={this.props.deviceId}
-
-
-
-                              onChange={(event) => this.inputChangeHandle(event)}
-                              name="deviceId"
-                              // placeholder="Last name"
-                              type="text"
-                            />
-                          </FormGroup>
+                          
                         </Col>
                       </Row>
                     </div>

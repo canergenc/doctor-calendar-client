@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from "moment";
 import { extendMoment } from 'moment-range';
+import { constants } from '../../../variables/constants';
 import {
     DropdownMenu,
     DropdownItem,

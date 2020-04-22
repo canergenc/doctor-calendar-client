@@ -25,7 +25,7 @@ class Permission extends Component {
         return (
             <>
                 <UserHeader />
-                <Container className="mt--7" fluid>
+                <Container style={{marginTop:"-12rem"}} fluid>
                     {/* Table */}
                     <Row>
                         <div className="col">

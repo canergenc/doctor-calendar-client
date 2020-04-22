@@ -18,10 +18,6 @@ import {
     Table,
     Container,
     Row,
-    DropdownMenu,
-    DropdownItem,
-    UncontrolledDropdown,
-    DropdownToggle,
     Form,
     Input,
     InputGroup,
@@ -219,7 +215,7 @@ class Persons extends Component {
         if (this.props.users) {
             users = this.props.users.map((user) => (
                 <Person
-                key={user.user.id}
+                    key={user.user.id}
                     id={user.user.id}
                     title={user.user.title}
                     fullName={user.user.fullName}
@@ -434,7 +430,7 @@ class Persons extends Component {
                 </Modal>
 
                 {/* Page content */}
-                <Container className="mt--7" fluid>
+                <Container style={{marginTop:"-12rem"}} fluid>
                     {/* Table */}
                     <Row>
                         <div className="col">
