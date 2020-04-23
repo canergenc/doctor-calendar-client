@@ -66,9 +66,9 @@ class AdminNavbar extends React.Component {
                   <DropdownItem className="noti-title" header tag="div">
                     <h6 className="text-overflow m-0">BİLDİRİMLER</h6>
                   </DropdownItem>
-                  <DropdownItem to="/admin/permission-approve" tag={Link}>
+                  <DropdownItem to="/admin/permission" tag={Link}>
                     <i className="ni ni-collection" />
-                    <span>İzin Talepleri</span>
+                    <span>İzin Yönetimi</span>
                   </DropdownItem>
                   {/* <DropdownItem to="/admin/user-profile" tag={Link}>
                     <i className="ni ni-calendar-grid-58" />
