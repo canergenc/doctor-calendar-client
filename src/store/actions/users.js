@@ -121,7 +121,8 @@ export const findUser = (filterKey, users) => {
                         where: {
                             email: {
                                 like: filterKey
-                            }
+                            },
+                            isActive: true
                         }
                     }
                 }
