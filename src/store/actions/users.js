@@ -112,7 +112,7 @@ export const searchUser = (filterKey, defaultUsers) => {
     return dispatch => { dispatch(setUsers(users, defaultUsers)); }
 }
 
-export const findUser = (filterKey) => {
+export const findUser = (filterKey, users) => {
     return dispatch => {
         if (filterKey.length > 2) {
             if (filterKey && filterKey.trim() !== "") {
@@ -128,18 +128,27 @@ export const findUser = (filterKey) => {
 
                 userService.getGlobalUsers(filterData)
                     .then(res => {
-                        const users = [];
+                        const globalUsers = [];
                         res.forEach(element => {
-
                             if (element) {
-                                users.push({
-                                    value: element.id,
-                                    label: element.fullName + " - " + element.email
-                                });
+                                let isExist = false;
+                                users.forEach(localUser => {
+                                    if (localUser.user) {
+                                        if (localUser.user.id === element.id) {
+                                            isExist = true;
+                                        }
+                                    }
+                                })
+                                if (!isExist) {
+                                    globalUsers.push({
+                                        value: element.id,
+                                        label: element.fullName + " - " + element.email
+                                    });
+                                }
                             }
                         });
 
-                        dispatch(setGlobalUsers(users));;
+                        dispatch(setGlobalUsers(globalUsers));;
                     })
                     .catch(err => {
                         dispatch(fetchGlobalUsersFailed());
@@ -264,6 +273,7 @@ export const updateUserSuccess = (id, userData) => {
 export const updateUserFailed = (error) => {
     return {
         type: actionTypes.UPDATE_USER_FAIL,
-        error: error
+        errorObj: error,
+        error: true
     };
 };

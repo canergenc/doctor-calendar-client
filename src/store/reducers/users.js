@@ -1,11 +1,13 @@
 import * as actionTypes from '../actions/actionTypes';
+import { helperService } from "../../services/helper";
 
 const initialState = {
     users: null,
     globalUsers: null,
     groupUsersCount: null,
     error: false,
-    globalUsersError: false
+    globalUsersError: false,
+
 };
 
 
@@ -39,6 +41,12 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 globalUsersError: true
+            };
+        case actionTypes.UPDATE_USER_FAIL:
+            return {
+                ...state,
+                error: true,
+                statusText: helperService.getErrorMessage(action.errorObj)
             };
         default:
             return state;

@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 import { constants } from '../../variables/constants';
 import { helperService } from "../../services/helper";
+
 const initialState = {
     id: null,
     email: "",
@@ -9,9 +10,8 @@ const initialState = {
     deviceId: "",
     createdDate: "",
     updatedDate: "",
+    error: false
 };
-
-
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -19,7 +19,7 @@ const reducer = (state = initialState, action) => {
             return {
                 isReq: true,
                 statusText: "",
-                statusOfGetUser:false,
+                statusOfGetUser: false,
             };
         case actionTypes.USERINFO_SUCCESS:
             return {
@@ -36,27 +36,26 @@ const reducer = (state = initialState, action) => {
         case actionTypes.USERINFO_FAILURE:
             return {
                 statusOfGetUser: false,
-                statusTextInGet: helperService.getErrorMessage(action.erorObj)
+                statusTextInGet: helperService.getErrorMessage(action.errorObj)
             };
-
-
-
         case actionTypes.UPDATE_USERINFO_REQUEST:
             return {
-                isReq: true,
+                ...state,
+                isReq: true
             };
         case actionTypes.UPDATE_USERINFO_SUCCESS:
             return {
-                isReq:false,
-               responseInUpdate:action.response
-            };
-        case actionTypes.USERINFO_FAILURE:
-            return {
+                ...state,
                 isReq: false,
-                statusTextInUpdates: helperService.getErrorMessage(action.erorObj)
+                responseInUpdate: action.response
             };
-
-
+        case actionTypes.UPDATE_USERINFO_FAILURE:
+            return {
+                ...state,
+                statusTextInUpdates: helperService.getErrorMessage(action.errorObj),
+                isReq: false,
+                error: true
+            };
         default:
             return state;
     }

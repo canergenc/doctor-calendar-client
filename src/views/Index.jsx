@@ -118,7 +118,7 @@ class Index extends Component {
   };
 
   findUser = (filterKey) => {
-    this.props.findUser(filterKey);
+    this.props.findUser(filterKey, this.props.users);
   }
 
   addHandle(event) {
@@ -137,7 +137,7 @@ class Index extends Component {
     }
 
   }
-  
+
   noMessageHandle = () => {
     return "Eşleşme Yok"
   }
@@ -254,7 +254,7 @@ const mapDispatchToProps = dispatch => {
     createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
     updateReminder: (reminderId, reminderIndex, reminderData, filterData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData, filterData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
-    findUser: (filterKey) => dispatch(actions.findUser(filterKey))
+    findUser: (filterKey, users) => dispatch(actions.findUser(filterKey, users))
   };
 };
 

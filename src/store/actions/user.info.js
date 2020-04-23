@@ -60,11 +60,10 @@ const userInfoSuccess = (response) => {
     };
 }
 
-
-const userInfoFailure = (err) => {
+const userInfoFailure = (error) => {
     return {
         type: actionTypes.USERINFO_FAILURE,
-        erorObj: err,
+        errorObj: error,
         // statusCode: err.data.error.statusCode, // BadRequestError
         // statusText: err.data.error.message,  // Invalid email or password
         // statusName: err.data.error.name,   // BadRequestError
@@ -72,19 +71,18 @@ const userInfoFailure = (err) => {
     };
 }
 
-
-
-
-
-const updateUserInfo = (id,data) => {
+const updateUserInfo = (id, data) => {
     return dispatch => {
         dispatch(updateUserInfoRequest());
-        userService.updateUserService(id,data).then((response) => {
+        userService.updateUserService(id, data).then((response) => {
             dispatch(updateUserInfoSuccess(response));
             dispatch(getUserInfo());
 
         }).catch((error) => {
-            dispatch(updateSserInfoFailure(error));
+            console.log('update user info fail');
+            console.log(error);
+
+            dispatch(updateUserInfoFailure(error));
         });
     }
 }
@@ -92,21 +90,21 @@ const updateUserInfo = (id,data) => {
 
 const updateUserInfoRequest = () => {
     return {
-        type: actionTypes.USERINFO_REQUEST,
+        type: actionTypes.UPDATE_USERINFO_REQUEST
     };
 };
 
 const updateUserInfoSuccess = (response) => {
     return {
-        type: actionTypes.USERINFO_SUCCESS,
+        type: actionTypes.UPDATE_USERINFO_SUCCESS
     };
 }
 
 
-const updateSserInfoFailure = (err) => {
+const updateUserInfoFailure = (error) => {
     return {
-        type: actionTypes.USERINFO_FAILURE,
-        erorObj: err,
+        type: actionTypes.UPDATE_USERINFO_FAILURE,
+        errorObj: error
     };
 }
 

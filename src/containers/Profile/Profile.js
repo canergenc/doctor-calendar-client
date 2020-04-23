@@ -51,6 +51,29 @@ class Profile extends React.Component {
 
   }
 
+
+  componentDidMount() {
+    console.log('PROFILE component did mount');
+
+    if (!this.props.email || !this.props.fullName || !this.props.title) {
+      this.props.getUserInfo();
+    }
+    console.log(this.props.error);
+
+
+  }
+
+  componentWillMount() {
+    if (this.props.error) {
+      MySwal.fire({
+        icon: 'error',
+        title: 'Uyarı',
+        text: this.props.statusTextInUpdates
+      });
+    }
+  }
+
+
   inputChangeHandle(event) {
     const target = event.target;
     if (target.name === 'email')
@@ -87,15 +110,7 @@ class Profile extends React.Component {
   }
 
 
-  componentDidMount() {
 
-    if (!this.props.email || !this.props.fullName || !this.props.title || !this.props.deviceId) {
-      this.props.getUserInfo();
-    }
-
-    // this.setInputDefaultValue();
-
-  }
 
   updatePassword(event) {
 
@@ -130,14 +145,14 @@ class Profile extends React.Component {
 
 
   updateUserInfo(event) {
-    
+
     var data = {
       title: this.state.title ? this.state.title : this.props.title,
       fullName: this.state.fullName ? this.state.fullName : this.props.fullName,
       email: this.state.email ? this.state.email : this.props.email,
       deviceId: this.state.deviceId ? this.state.deviceId : this.props.deviceId,
     }
-    
+
     var userId = helperService.getUserId();
     this.props.updateUserInfo(userId, data);
 
@@ -151,8 +166,6 @@ class Profile extends React.Component {
 
 
   render() {
-
-
 
     return (
       <>
@@ -212,7 +225,7 @@ class Profile extends React.Component {
 
 
         {/* Page content */}
-        <Container style={{marginTop:"-12rem"}} fluid>
+        <Container style={{ marginTop: "-12rem" }} fluid>
           <Row>
 
             <Col className="order-xl-1" xl="12">
@@ -312,7 +325,7 @@ class Profile extends React.Component {
                           </FormGroup>
                         </Col>
                         <Col lg="6">
-                          
+
                         </Col>
                       </Row>
                     </div>
@@ -332,8 +345,6 @@ class Profile extends React.Component {
 
 
 const mapStateToProps = state => {
-
-
   return {
     email: state.userInfo.email,
     fullName: state.userInfo.fullName,
@@ -342,6 +353,7 @@ const mapStateToProps = state => {
     statusTextInGet: state.userInfo.statusTextInGet,
     statusTextInUpdates: state.userInfo.statusTextInUpdates,
     responseInUpdate: state.userInfo.responseInUpdate,
+    error: state.userInfo.error
   };
 }
 const mapDispatchToProps = dispatch => {

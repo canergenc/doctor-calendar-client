@@ -22,7 +22,7 @@ const createUserGroup = (groupName) => {
                 var userId = helperService.getUserId();
                 userGroupService.createUserGroup(userId, groupId)
                     .then((response) => {
-                        debugger;
+                        
                         dispatch(createUserGroupSuccess(response,groupId));
                         if (response) {
                             history.push({

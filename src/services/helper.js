@@ -5,7 +5,7 @@ import { customVariables } from "../hoc/Config/customVariables";
 
 
 const getErrorMessage = (err) => {
-    debugger;
+    
     let errorMessage = "";
     let statusCode = "";
     if (err && err.status) {

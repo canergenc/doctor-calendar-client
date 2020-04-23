@@ -15,7 +15,7 @@ export const updateObject = (oldObject, updatedProperties) => {
   };
 };
 
-const spliceLocation = (state, action) => {
+const updateRemiderStart = (state, action) => {
   const result = Array.from(state.reminders);
   const [removed] = result.splice(action.index, 1);
   const updatedState = {
@@ -26,7 +26,7 @@ const spliceLocation = (state, action) => {
   return updateObject(state, updatedState);
 };
 
-const rollbackSpliceLocation = (state, action) => {
+const updateReminderFail = (state, action) => {
   const result = Array.from(state.reminders);
   result.splice(action.index, 0, state.removedReminder);
   const updatedState = {
@@ -90,9 +90,6 @@ const setReminders = (state, action) => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-
-
-
     case actionTypes.GET_CALENDARSCOUNT_REQUEST:
       return {
         getCalendarReqloading: true
@@ -112,7 +109,6 @@ const reducer = (state = initialState, action) => {
         calendarsCount: {},
         statusTextAtCalendarsCount: helperService.getErrorMessage(action.errorObj)
       };
-
     case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
       return {
         bulkUpdateReqloading: true
@@ -132,35 +128,15 @@ const reducer = (state = initialState, action) => {
         response: {},
         statusTextAtBulkUpdate: helperService.getErrorMessage(action.errorObj)
       };
-   
     case actionTypes.CLEAN_REMINDER_ERROR: return cleanReminderError(state, action);
     case actionTypes.SET_REMINDERS: return setReminders(state, action);
     case actionTypes.FETCH_REMINDERS_FAILED: return fetchRemindersFailed(state, action);
     case actionTypes.CREATE_REMINDER_SUCCESS: return createReminderSuccess(state, action);
     case actionTypes.CREATE_REMINDER_FAIL: return createReminderFailed(state, action);
     case actionTypes.DELETE_REMINDER_SUCCESS: return deleteReminderSuccess(state, action);
-    case actionTypes.UPDATE_REMINDER_START: return spliceLocation(state, action);
+    case actionTypes.UPDATE_REMINDER_START: return updateRemiderStart(state, action);
     case actionTypes.UPDATE_REMINDER_SUCCESS: return updateReminderSuccess(state, action);
-    case actionTypes.UPDATE_REMINDER_FAIL: return rollbackSpliceLocation(state, action);
-    case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
-      return {
-        loading: true
-      };
-    case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        error: false,
-        response: action.response
-      };
-    case actionTypes.CALENDAR_BULKUPDATE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: true,
-        response: {},
-        statusText: helperService.getErrorMessage(action.errorObj)
-      };
+    case actionTypes.UPDATE_REMINDER_FAIL: return updateReminderFail(state, action);
     default:
       return state;
   }
