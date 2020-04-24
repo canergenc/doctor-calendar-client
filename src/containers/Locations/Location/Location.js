@@ -61,12 +61,12 @@ class Location extends Component {
 
         let selectedLocationsArray = [...this.props.selectedLocations];
 
-        if (this.state.selectedLocations.includes(key)) {
+        if (selectedLocationsArray.includes(key)) {
 
             var index = selectedLocationsArray.indexOf(key);
             if (index !== -1) {
                 selectedLocationsArray.splice(index, 1);
-                this.setState({ selectedLocations: selectedLocationsArray });
+
             }
         }
         else {
@@ -76,9 +76,6 @@ class Location extends Component {
                 key
             ];
 
-            this.setState({
-                selectedLocations: selectedLocationsArray
-            });
         }
 
         if (selectedLocationsArray) {
