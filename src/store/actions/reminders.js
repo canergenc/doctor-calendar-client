@@ -1,3 +1,4 @@
+import moment from "moment";
 import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
 import { helperService } from "../../services";
@@ -52,9 +53,19 @@ export const updateBulkReminderFailure = (err) => {
   };
 }
 
-export const setReminders = (reminders, filterData) => {
+export const setReminders = (reminders, filterData, selectedLocations, selectedUsers) => {
   return {
     type: actionTypes.SET_REMINDERS,
+    reminders: reminders,
+    filterData: filterData,
+    selectedLocations: selectedLocations,
+    selectedUsers: selectedUsers
+  };
+};
+
+export const setRemindersForCrud = (reminders, filterData) => {
+  return {
+    type: actionTypes.SET_REMINDERS_FOR_CRUD,
     reminders: reminders,
     filterData: filterData
   };
@@ -67,7 +78,149 @@ export const fetchRemindersFailed = (error) => {
   };
 };
 
-export const getReminders = (filterData) => {
+export const getReminders = (selectedLocations, selectedUsers, curMonth) => {
+
+  const startOfMonth = moment(curMonth).startOf('month').format("YYYY-MM-DD[T]00:01:00.000[Z]");
+  const endOfMonth = moment(curMonth).endOf('month').format("YYYY-MM-DD[T]23:59:59.000[Z]");
+
+  let locations = [];
+  if (selectedLocations) {
+    selectedLocations.forEach(location => {
+      locations.push({ locationId: { like: location } })
+    });
+  }
+
+  let users = [];
+  if (selectedUsers) {
+    selectedUsers.forEach(user => {
+      users.push({ userId: { like: user } });
+    });
+  }
+
+  let filterData = {};
+  if (locations.length === 0 && users.length === 0) {
+    filterData = {
+      filter: {
+        where: {
+          startDate: {
+            between: [
+              startOfMonth,
+              endOfMonth
+            ]
+          },
+          groupId: {
+            like: helperService.getGroupId()
+          },
+          type: CalendarTypes.Nobet
+        },
+        include: [
+          {
+            relation: "group"
+          },
+          {
+            relation: "user"
+          },
+          {
+            relation: "location"
+          }
+        ]
+      }
+    }
+  }
+  else if (locations.length !== 0 && users.length === 0) {
+    filterData = {
+      filter: {
+        where: {
+          startDate: {
+            between: [
+              startOfMonth,
+              endOfMonth
+            ]
+          },
+          or: locations,
+          groupId: {
+            like: helperService.getGroupId()
+          },
+          type: CalendarTypes.Nobet
+        },
+        include: [
+          {
+            relation: "group"
+          },
+          {
+            relation: "user"
+          },
+          {
+            relation: "location"
+          }
+        ]
+      }
+    }
+  }
+  else if (locations.length === 0 && users.length !== 0) {
+    filterData = {
+      filter: {
+        where: {
+          startDate: {
+            between: [
+              startOfMonth,
+              endOfMonth
+            ]
+          },
+          or: users,
+          groupId: {
+            like: helperService.getGroupId()
+          },
+          type: CalendarTypes.Nobet
+        },
+        include: [
+          {
+            relation: "group"
+          },
+          {
+            relation: "user"
+          },
+          {
+            relation: "location"
+          }
+        ]
+      }
+    }
+  }
+  else if (locations.length !== 0 && users.length !== 0) {
+    filterData = {
+      filter: {
+        where: {
+          startDate: {
+            between: [
+              startOfMonth,
+              endOfMonth
+            ]
+          },
+          and: [
+            { or: locations },
+            { or: users }
+          ],
+          groupId: {
+            like: helperService.getGroupId()
+          },
+          type: CalendarTypes.Nobet
+        },
+        include: [
+          {
+            relation: "group"
+          },
+          {
+            relation: "user"
+          },
+          {
+            relation: "location"
+          }
+        ]
+      }
+    }
+  }
+
   return dispatch => {
     calendarService.getReminderService(filterData)
       .then(res => {
@@ -78,7 +231,27 @@ export const getReminders = (filterData) => {
               reminders.push(element);
             }
           });
-          dispatch(setReminders(reminders, filterData));
+          dispatch(setReminders(reminders, filterData, selectedLocations, selectedUsers));
+        }
+      })
+      .catch(err => {
+        dispatch(fetchRemindersFailed());
+      });
+  }
+}
+
+export const getRemindersForCrud = (filterData) => {
+  return dispatch => {
+    calendarService.getReminderService(filterData)
+      .then(res => {
+        const reminders = []
+        if (res) {
+          res.forEach(element => {
+            if (element !== null) {
+              reminders.push(element);
+            }
+          });
+          dispatch(setRemindersForCrud(reminders, filterData));
         }
       })
       .catch(err => {
@@ -103,37 +276,12 @@ export const createReminderFailed = (error) => {
   };
 };
 
-export const createReminder = (reminderData) => {
+export const createReminder = (reminderData, filterData) => {
   return dispatch => {
     calendarService.createReminderService(reminderData)
       .then((response) => {
-        const filterData = {
-          filter: {
-            where: {
-              locationId: {
-                like: reminderData.locationId
-              },
-              groupId: {
-                like: helperService.getGroupId()
-              }
-              ,
-              type: CalendarTypes.Nobet
-            },
-            include: [
-              {
-                relation: "group"
-              },
-              {
-                relation: "user"
-              },
-              {
-                relation: "location"
-              }
-            ]
-          }
-        }
 
-        dispatch(getReminders(filterData));
+        dispatch(getRemindersForCrud(filterData));
         dispatch(createReminderSuccess(response.id, reminderData));
       }).catch((error) => {
         dispatch(createReminderFailed(error));
@@ -160,7 +308,7 @@ export const deleteReminder = (reminderId, filterData) => {
     calendarService.deleteReminderService(reminderId)
       .then(response => {
 
-        dispatch(getReminders(filterData));
+        dispatch(getRemindersForCrud(filterData));
         dispatch(deleteReminderSuccess(reminderId));
       })
       .catch(error => {
@@ -196,23 +344,13 @@ export const updateReminder = (id, index, reminderData, filterData) => {
     calendarService.updateReminderService(id, reminderData)
       .then(response => {
         dispatch(updateReminderSuccess(response.id));
-        dispatch(getReminders(filterData));
+        dispatch(getRemindersForCrud(filterData));
       })
       .catch(error => {
         dispatch(updateReminderFail(error, index))
       });
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 export const getRemindersCount = (data) => {
   return dispatch => {
@@ -226,8 +364,6 @@ export const getRemindersCount = (data) => {
       });
   }
 }
-
-
 
 export const getRemindersCountRequest = () => {
   return {
@@ -250,12 +386,3 @@ export const getRemindersCountFailure = (err) => {
     status: false,
   };
 }
-
-
-
-
-
-
-
-
-

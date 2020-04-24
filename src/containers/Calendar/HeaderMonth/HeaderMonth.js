@@ -6,16 +6,21 @@ const headerMonth = props => {
   return (
     <header className="month-header">
       <div className="row">
-        <button onClick={props.prevMonthClick}>
+        <button className="prevNext" onClick={props.prevMonthClick}>
           <i className="fas fa-chevron-circle-left" />
         </button>
       </div>
       <div className="row">
-        <h1>{props.curMonth.name}<Button onClick={props.downloadExcelClick}>Excel<i className="fa fa-download" style={{ marginLeft: "5px" }}></i></Button></h1>
+        <h1>
+          {props.curMonth.name}
+          <Button color="primary" style={{padding:"3px 5px"}} onClick={props.downloadExcelClick} size="sm">Excel<i className="fa fa-download" style={{ marginLeft: "5px" }}></i></Button>
+          <Button color="primary" style={{padding:"3px 5px"}} onClick={props.refreshCalendar} size="sm" ><i className="fas fa-sync-alt" style={{fontSize:"12px",color:"white"}}></i></Button>
+        </h1>
       </div>
+      
 
       <div className="row" >
-        <button onClick={props.nextMonthClick}>
+        <button className="prevNext" onClick={props.nextMonthClick}>
           <i className="fas fa-chevron-circle-right" />
         </button>
       </div>

@@ -5,6 +5,8 @@ const initialState = {
   reminders: null,
   removedReminder: null,
   filterData: null,
+  selectedLocations: [],
+  selectedUsers: [],
   error: false
 };
 
@@ -83,6 +85,16 @@ const setReminders = (state, action) => {
   const updatedState = {
     reminders: action.reminders,
     filterData: action.filterData,
+    selectedLocations: action.selectedLocations,
+    selectedUsers: action.selectedUsers,
+    error: false
+  };
+  return updateObject(state, updatedState);
+}
+const setRemindersForCrud = (state, action) => {
+  const updatedState = {
+    reminders: action.reminders,
+    filterData: action.filterData,
     error: false
   };
   return updateObject(state, updatedState);
@@ -92,6 +104,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_CALENDARSCOUNT_REQUEST:
       return {
+        ...state,
         getCalendarReqloading: true
       };
     case actionTypes.GET_CALENDARSCOUNT_SUCCESS:
@@ -111,6 +124,7 @@ const reducer = (state = initialState, action) => {
       };
     case actionTypes.CALENDAR_BULKUPDATE_REQUEST:
       return {
+        ...state,
         bulkUpdateReqloading: true
       };
     case actionTypes.CALENDAR_BULKUPDATE_SUCCESS:
@@ -130,6 +144,7 @@ const reducer = (state = initialState, action) => {
       };
     case actionTypes.CLEAN_REMINDER_ERROR: return cleanReminderError(state, action);
     case actionTypes.SET_REMINDERS: return setReminders(state, action);
+    case actionTypes.SET_REMINDERS_FOR_CRUD: return setRemindersForCrud(state, action);
     case actionTypes.FETCH_REMINDERS_FAILED: return fetchRemindersFailed(state, action);
     case actionTypes.CREATE_REMINDER_SUCCESS: return createReminderSuccess(state, action);
     case actionTypes.CREATE_REMINDER_FAIL: return createReminderFailed(state, action);

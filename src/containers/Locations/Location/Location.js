@@ -3,13 +3,11 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
-import moment from "moment";
 
 import './Location.css';
 
 import { Button } from "reactstrap";
 import { helperService } from '../../../services';
-import { CalendarTypes } from "../../../variables/constants";
 
 const Arrow = ({ text, className }) => {
     return <div className={className}>{text}</div>;
@@ -26,6 +24,7 @@ export const ArrowRight = Arrow({ text: ">", className: "arrow-next" });
 class Location extends Component {
 
     state = {
+        selectedLocations: [],
         locationId: null,
         alignCenter: false,
         clickWhenDrag: false,
@@ -38,13 +37,13 @@ class Location extends Component {
         wheel: true
     }
 
-    createMenu = (list, selected) => {
-        let menu = list.map((el, index) => (
+    createMenu = (list, selectedLocations) => {
+        let menu = list.map((el) => (
             <Button
                 outline
                 key={el.id}
                 color={el.colorCode}
-                className={` ${selected === el.id && this.props.activeLocationId !== "" ? "active" : ""}`}
+                className={` ${selectedLocations.includes(el.id) ? "active" : ""}`}
             > {el.name}
             </Button>
         ));
@@ -60,65 +59,42 @@ class Location extends Component {
 
     onSelect = key => {
 
-        console.log(`onSelect: ${key}`);
+        let selectedLocationsArray = [...this.props.selectedLocations];
 
-        this.props.setActiveLocationId(key);
-        let locationId = "";
+        if (this.state.selectedLocations.includes(key)) {
 
-        if (this.state.selected !== key) {
-            locationId = key;
+            var index = selectedLocationsArray.indexOf(key);
+            if (index !== -1) {
+                selectedLocationsArray.splice(index, 1);
+                this.setState({ selectedLocations: selectedLocationsArray });
+            }
+        }
+        else {
+
+            selectedLocationsArray = [
+                ...selectedLocationsArray,
+                key
+            ];
+
             this.setState({
-                selected: key
+                selectedLocations: selectedLocationsArray
             });
-            this.props.setActiveLocationId(key);
+        }
+
+        if (selectedLocationsArray) {
+            if (selectedLocationsArray.length === 1) {
+                this.props.setActiveLocationId(selectedLocationsArray[0]);
+            }
+            else {
+                this.props.setActiveLocationId("");
+            }
         }
         else {
             this.props.setActiveLocationId("");
-            locationId = "";
-            this.setState({
-                selected: ""
-            });
-        }
-        const startOfMonth = moment(this.props.curMonth).startOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
-        const endOfMonth = moment(this.props.curMonth).endOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
-
-        const filterData = {
-            filter: {
-                where: {
-                    startDate: {
-                        between: [
-                            startOfMonth,
-                            endOfMonth
-                        ]
-                    },
-                    locationId: {
-                        like: locationId
-                    },
-                    groupId: {
-                        like: helperService.getGroupId()
-                    },
-                    type: CalendarTypes.Nobet
-                },
-                include: [
-                    {
-                        relation: "group"
-                    },
-                    {
-                        relation: "user"
-                    },
-                    {
-                        relation: "location"
-                    }
-                ]
-            }
         }
 
-        this.props.getReminders(filterData);
-        console.log("activeLocationId:" + this.props.activeLocationId);
-        var myCheckbox = document.getElementsByName("radio");
-        Array.prototype.forEach.call(myCheckbox, function (el) {
-            el.checked = false;
-        });
+        this.props.getReminders(selectedLocationsArray, this.props.selectedUsers, this.props.curMonth);
+
     };
 
     componentDidMount() {
@@ -149,7 +125,7 @@ class Location extends Component {
 
         let scrollMenu = this.props.error ? "Servisler yüklenemedi" : "Servisler yükleniyor...";
         if (this.props.locations) {
-            let menu = this.createMenu(this.props.locations, this.state.selected);
+            let menu = this.createMenu(this.props.locations, this.props.selectedLocations);
             scrollMenu = <ScrollMenu
                 alignCenter={alignCenter}
                 arrowLeft={ArrowLeft}
@@ -179,6 +155,8 @@ class Location extends Component {
 const mapStateToProps = state => {
     return {
         locations: state.locations.locations,
+        selectedLocations: state.reminders.selectedLocations,
+        selectedUsers: state.reminders.selectedUsers,
         activeLocationId: state.locations.activeLocationId,
         curMonth: state.calendar.curMonth,
         groupId: state.auth.groupId,
@@ -190,7 +168,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onInitLocations: (filterData) => dispatch(actions.initLocations(filterData)),
         setActiveLocationId: (locationId) => dispatch(actions.setActiveLocationId(locationId)),
-        getReminders: (filterData) => dispatch(actions.getReminders(filterData))
+        getReminders: (selectedLocations, selectedUsers, curMonth) => dispatch(actions.getReminders(selectedLocations, selectedUsers, curMonth))
     }
 }
 

@@ -1,6 +1,7 @@
 export const constants = {
     ERROR_MESSAGE: {
-        serviceNotFound: "Lütfen servis seçiniz."
+        serviceNotFound: "Lütfen servis seçiniz.",
+        serviceCountMoreThanOne: "Sadece 1 adet servis seçiniz.",
     },
 
     SUCCESS_MESSAGE: {

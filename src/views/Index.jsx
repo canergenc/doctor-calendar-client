@@ -81,14 +81,23 @@ class Index extends Component {
             type: CalendarTypes.Nobet,
             isWeekend: isWeekend
           }
-          this.props.createReminder(reminder);
+          this.props.createReminder(reminder, this.props.filterData);
         }
         else {
-          MySwal.fire({
-            icon: 'error',
-            title: 'Hay aksi,',
-            text: constants.ERROR_MESSAGE.serviceNotFound
-          });
+          if (this.props.selectedLocations.length > 1) {
+            MySwal.fire({
+              icon: 'error',
+              title: 'Hay aksi,',
+              text: constants.ERROR_MESSAGE.serviceCountMoreThanOne
+            });
+          }
+          else if (this.props.selectedLocations.length === 0) {
+            MySwal.fire({
+              icon: 'error',
+              title: 'Hay aksi,',
+              text: constants.ERROR_MESSAGE.serviceNotFound
+            });
+          }
         }
         break;
       default:
@@ -244,14 +253,15 @@ const mapStateToProps = state => {
     errorFromUsers: state.users.error,
     errorFromReminders: state.reminders.error,
     statusText: state.reminders.statusText,
-    activeLocationId: state.locations.activeLocationId
+    activeLocationId: state.locations.activeLocationId,
+    selectedLocations: state.reminders.selectedLocations
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     cleanReminderError: () => dispatch(actions.cleanReminderError()),
-    createReminder: (reminderData) => dispatch(actions.createReminder(reminderData)),
+    createReminder: (reminderData, filterData) => dispatch(actions.createReminder(reminderData, filterData)),
     updateReminder: (reminderId, reminderIndex, reminderData, filterData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData, filterData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
     findUser: (filterKey, users) => dispatch(actions.findUser(filterKey, users))

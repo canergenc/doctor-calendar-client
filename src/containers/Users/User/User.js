@@ -8,8 +8,6 @@ import "moment/locale/tr";
 import 'pretty-checkbox';
 
 import * as actions from '../../../store/actions/index';
-import { helperService } from '../../../services';
-import { CalendarTypes } from '../../../variables/constants';
 
 const Container = styled.div`
 display: flex;
@@ -66,95 +64,7 @@ const CloneName = styled(Name)`
 
 
 class User extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { checkedRadio: null };
-    }
-
-    OnSelect = (userId, id) => {
-
-        if (this.props.activeLocationId !== "") {
-            this.props.setActiveLocationId("");
-        }
-
-        const startOfMonth = moment(this.props.curMonth).startOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
-        const endOfMonth = moment(this.props.curMonth).endOf('month').format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
-        
-        let filterData = {};
-
-        if (this.state.checkedRadio === userId) {
-            this.setState({ checkedRadio: "nouserid" });
-            id.target.checked = false;
-
-            filterData = {
-                filter: {
-                    where: {
-                        startDate: {
-                            between: [
-                                startOfMonth,
-                                endOfMonth
-                            ]
-                        },
-                        groupId: {
-                            like: helperService.getGroupId()
-                        },
-                        type: CalendarTypes.Nobet
-                    },
-                    include: [
-                        {
-                            relation: "group"
-                        },
-                        {
-                            relation: "user"
-                        },
-                        {
-                            relation: "location"
-                        }
-                    ]
-                }
-            }
-        }
-        else {
-            this.setState({ checkedRadio: userId });
-            id.target.checked = true;
-
-            filterData = {
-                filter: {
-                    where: {
-                        startDate: {
-                            between: [
-                                startOfMonth,
-                                endOfMonth
-                            ]
-                        },
-                        userId: {
-                            like: userId
-                        },
-                        groupId: {
-                            like: helperService.getGroupId()
-                        },
-                        type: CalendarTypes.Nobet
-                    },
-                    include: [
-                        {
-                            relation: "group"
-                        },
-                        {
-                            relation: "user"
-                        },
-                        {
-                            relation: "location"
-                        }
-                    ]
-                }
-            }
-        }
-
-        this.props.getReminders(filterData);
-
-    }
-
-
+    
     render() {
         const momentRange = extendMoment(moment);
 
@@ -190,9 +100,9 @@ class User extends Component {
                             {/* <Badge color="success">{this.props.count}</Badge> */}
                             <div className="pretty p-default p-curve p-fill" style={{ marginLeft: "auto", marginBottom: "auto", marginTop: "auto", marginRight: "4px" }} >
                                 <input
-                                    type="radio"
+                                    type="checkbox"
                                     name="radio"
-                                    onClick={(e) => this.OnSelect(this.props.user.id, e)}
+                                    onClick={this.props.onSelect}
                                 />
                                 <div className="state p-success">
                                     <label></label>
@@ -218,7 +128,7 @@ class User extends Component {
 
 const mapStateToProps = state => {
     return {
-        activeLocationId: state.locations.activeLocationId,
+        selectedLocations: state.reminders.selectedLocations,
         curMonth: state.calendar.curMonth,
         error: state.reminders.error
     }
@@ -226,8 +136,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        getReminders: (filterData) => dispatch(actions.getReminders(filterData)),
-        setActiveLocationId: (locationId) => dispatch(actions.setActiveLocationId(locationId))
+        getReminders: (selectedLocations, selectedUsers, curMonth) => dispatch(actions.getReminders(selectedLocations, selectedUsers, curMonth))
     }
 }
 

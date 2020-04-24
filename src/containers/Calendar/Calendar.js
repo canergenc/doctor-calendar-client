@@ -6,7 +6,6 @@ import moment from "moment";
 import { extendMoment } from 'moment-range';
 import "moment/locale/tr";
 import { helperService } from "../../services";
-import { CalendarTypes } from "../../variables/constants";
 
 import HeaderMonth from "./HeaderMonth/HeaderMonth";
 import HeaderWeekDays from "./HeaderWeekDays/HeaderWeekDays";
@@ -72,38 +71,15 @@ class Calendar extends Component {
   }
 
   initReminders = (curMonth) => {
-    const startOfMonth = moment(curMonth).startOf('month').format('YYYY-MM-DD');
-    const endOfMonth = moment(curMonth).endOf('month').format('YYYY-MM-DD');
     this.props.setCurMonth(curMonth);
-    const filterData = {
-      filter: {
-        where: {
-          startDate: {
-            between: [
-              startOfMonth,
-              endOfMonth
-            ]
-          },
-          groupId: {
-            like: helperService.getGroupId()
-          },
-          type: CalendarTypes.Nobet
-        },
-        include: [
-          {
-            relation: "group"
-          },
-          {
-            relation: "user"
-          },
-          {
-            relation: "location"
-          }
-        ]
-      }
-    }
+    const selectedLocations = [];
+    const selectedUsers = [];
+    this.props.getReminders(selectedLocations, selectedUsers, curMonth);
 
-    this.props.getReminders(filterData);
+    var myCheckbox = document.getElementsByName("radio");
+    Array.prototype.forEach.call(myCheckbox, function (el) {
+      el.checked = false;
+    });
 
   }
 
@@ -410,12 +386,13 @@ class Calendar extends Component {
           prevMonth={this.state.prevMonth}
           prevMonthClick={this.prevMonthClickHandler}
           downloadExcelClick={this.downloadExcelHandler}
+          refreshCalendar={this.initReminders}
         />
 
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>
         <h2 className="h2toplam"><span>Haftaiçi Nöbet: {countOfInWeek}</span><span>Haftasonu Nöbet: {countOfOnWeekend}</span></h2>
-        
+
       </div>
     );
   }
@@ -436,7 +413,7 @@ const mapDispatchToProps = dispatch => {
   return {
     setCurMonth: (curMonth) => dispatch(actions.setCurMonth(curMonth)),
     deleteReminder: (reminderId, filterData) => dispatch(actions.deleteReminder(reminderId, filterData)),
-    getReminders: (filterData) => dispatch(actions.getReminders(filterData))
+    getReminders: (selectedLocations, selectedUsers, curMonth) => dispatch(actions.getReminders(selectedLocations, selectedUsers, curMonth))
   };
 }
 

@@ -20,7 +20,9 @@ import { helperService } from '../../services';
 
 
 class Users extends Component {
-
+    state = {
+        selectedUsers: []
+    }
     componentDidMount() {
         const filterData = {
             filter: {
@@ -29,9 +31,9 @@ class Users extends Component {
                         like: helperService.getGroupId()
                     }
                 },
-                include:[
+                include: [
                     {
-                        relation:"user"
+                        relation: "user"
                     }
                 ]
             }
@@ -43,17 +45,41 @@ class Users extends Component {
         this.props.searchUser(filterKey, this.props.defaultUsers);
     }
 
+    onSelect = (userId) => {
+        
+        let selectedUsersArray = [...this.props.selectedUsers];
+
+        if (selectedUsersArray.includes(userId)) {
+
+            var index = selectedUsersArray.indexOf(userId);
+            if (index !== -1) {
+                selectedUsersArray.splice(index, 1);
+            }
+        }
+        else {
+
+            selectedUsersArray = [
+                ...selectedUsersArray, 
+                userId
+            ];
+        }
+
+        this.props.getReminders(this.props.selectedLocations, selectedUsersArray, this.props.curMonth);
+        
+    }
+
     render() {
 
         let userList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <Spinner />
 
         if (this.props.users) {
             userList = this.props.users.map((user, index) => (
-               
+
                 <User
                     {...user}
                     key={user.id}
                     index={index}
+                    onSelect={() => this.onSelect(user.user.id)}
                 />
             ));
         }
@@ -70,14 +96,14 @@ class Users extends Component {
                 <CardBody >
                     <Droppable droppableId="UserList_1" isDropDisabled={true}>
                         {(provided) => (
-                            <div id="style-6" style={{ maxHeight: '650px',minHeight:'200px', overflowY: 'scroll' }}
+                            <div id="style-6" style={{ maxHeight: '650px', minHeight: '200px', overflowY: 'scroll' }}
                                 ref={provided.innerRef}
                             >
                                 {userList}
                             </div>)}
                     </Droppable>
-                    <div  style={{marginTop:'5%'}} className="add w3-hover-light-grey" onClick={this.props.clicked}><i className="fa fa-plus" style={{marginRight:"4px", fontSize:"12px"}}></i>Kullanıcı Ekle</div>
-                    
+                    <div style={{ marginTop: '5%' }} className="add w3-hover-light-grey" onClick={this.props.clicked}><i className="fa fa-plus" style={{ marginRight: "4px", fontSize: "12px" }}></i>Kullanıcı Ekle</div>
+
                 </CardBody>
             </Card>
         );
@@ -87,6 +113,10 @@ class Users extends Component {
 const mapStateToProps = state => {
     return {
         users: state.users.users,
+        selectedLocations: state.reminders.selectedLocations,
+        selectedUsers: state.reminders.selectedUsers,
+        curMonth: state.calendar.curMonth,
+        remindersError: state.reminders.error,
         defaultUsers: state.users.defaultUsers,
         error: state.users.error
     };
@@ -95,6 +125,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
+        getReminders: (selectedLocations, selectedUsers, curMonth) => dispatch(actions.getReminders(selectedLocations, selectedUsers, curMonth)),
         searchUser: (filterKey, defaultUsers) => dispatch(actions.searchUser(filterKey, defaultUsers))
     };
 }
