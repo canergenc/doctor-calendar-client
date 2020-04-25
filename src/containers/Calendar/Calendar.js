@@ -268,7 +268,7 @@ class Calendar extends Component {
           // eslint-disable-next-line no-loop-func
           this.props.reminders.forEach(element => {
             if (element.location && element.user) {
-              if (moment(element.date).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
+              if (moment(element.startDate).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
                 if (locations[index] === element.location.name) {
                   locationSum = locationSum + 1;
                 }
@@ -304,12 +304,13 @@ class Calendar extends Component {
         let firstAdd = true;
         this.props.reminders.forEach(element => {
           if (element.location && element.user) {
+            
             const locationName = element.location.name;
-            if (moment(element.date).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
+            if (moment(element.startDate).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
               let columnNameIndex = 1;
               if (firstAdd) {
                 excelData.push({
-                  "Tarih": moment(element.date).format("DD.MM.YYYY"),
+                  "Tarih": moment(element.startDate).format("DD.MM.YYYY"),
                   [locationName + "-" + columnNameIndex]: element.user.fullName
                 });
                 dateAdded = true;
