@@ -48,6 +48,7 @@ class Day extends Component {
                 isDrag={true}
                 id={element.id}
                 key={element.id}
+                location={element.location.name}
                 name={element.user.fullName}
                 index={index}
                 color={element.location ? element.location.colorCode : "#fff"}

@@ -18,42 +18,42 @@ class Reminder extends Component {
   render() {
     let sass = null;
     if (this.props.isDrag) {
-      sass =  (<Draggable
-          key={this.props.id}
-          draggableId={this.props.id}
-          index={this.props.index}>
-          {(provided, draggableSnapshot) => (
-            <article className={"reminder " + this.props.color}
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              style={this.getItemStyle(
-                draggableSnapshot.isDragging,
-                provided.draggableProps.style
-              )}
-            >
-              <div className="tools">
-                <button onClick={this.props.onClickDeleteReminder}>
-                  <i className="fas fa-times" />
-                </button>
-              </div>
-              {this.props.name}
-            </article>
-          )}
-        </Draggable>)
-      
+      sass = (<Draggable
+        key={this.props.id}
+        draggableId={this.props.id}
+        index={this.props.index}>
+        {(provided, draggableSnapshot) => (
+          <article title={this.props.location} className={"reminder " + this.props.color}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={this.getItemStyle(
+              draggableSnapshot.isDragging,
+              provided.draggableProps.style
+            )}
+          >
+            <div className="tools">
+              <button onClick={this.props.onClickDeleteReminder}>
+                <i className="fas fa-times" />
+              </button>
+            </div>
+            {this.props.name}
+          </article>
+        )}
+      </Draggable>)
+
     }
     else {
-      sass = (<article className={"reminder " + this.props.color}
-          key={this.props.id}>
-          <div className="tools">
-            <button onClick={this.props.onClickDeleteReminder}>
-              <i className="fas fa-times" />
-            </button>
-          </div>
-          {this.props.name}
-        </article>)
-      
+      sass = (<article title={this.props.location}  className={"reminder " + this.props.color}
+        key={this.props.id}>
+        <div className="tools">
+          <button onClick={this.props.onClickDeleteReminder}>
+            <i className="fas fa-times" />
+          </button>
+        </div>
+        {this.props.name}
+      </article>)
+
     }
     return sass;
   }
