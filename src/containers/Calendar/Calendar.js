@@ -75,7 +75,7 @@ class Calendar extends Component {
     const selectedLocations = [];
     const selectedUsers = [];
     this.props.getReminders(selectedLocations, selectedUsers, curMonth);
-
+    this.props.setActiveLocation('');
     var myCheckbox = document.getElementsByName("radio");
     Array.prototype.forEach.call(myCheckbox, function (el) {
       el.checked = false;
@@ -304,7 +304,7 @@ class Calendar extends Component {
         let firstAdd = true;
         this.props.reminders.forEach(element => {
           if (element.location && element.user) {
-            
+
             const locationName = element.location.name;
             if (moment(element.startDate).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
               let columnNameIndex = 1;
@@ -414,6 +414,7 @@ const mapDispatchToProps = dispatch => {
   return {
     setCurMonth: (curMonth) => dispatch(actions.setCurMonth(curMonth)),
     deleteReminder: (reminderId, filterData) => dispatch(actions.deleteReminder(reminderId, filterData)),
+    setActiveLocation: (locationId) => dispatch(actions.setActiveLocationId(locationId)),
     getReminders: (selectedLocations, selectedUsers, curMonth) => dispatch(actions.getReminders(selectedLocations, selectedUsers, curMonth))
   };
 }

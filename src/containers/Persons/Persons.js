@@ -89,8 +89,21 @@ class Persons extends Component {
                 weekdayCountLimit: weekdayCountLimit,
                 weekendCountLimit: weekendCountLimit
             };
-
-            this.props.updateUser(this.state.id, userData);
+            const filterData = {
+                filter: {
+                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
+                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
+                    where: {
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
+                    },
+                    include: [
+                        { relation: "user" }
+                    ]
+                }
+            }
+            this.props.updateUser(this.state.id, userData, filterData);
             this.toggleModal('editModal', null);
             event.preventDefault();
             MySwal.fire({
@@ -122,8 +135,21 @@ class Persons extends Component {
                 weekendCountLimit: parseInt(this.state.weekendCountLimit),
                 deviceId: "1"
             };
-
-            this.props.createUser(user);
+            const filterData = {
+                filter: {
+                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
+                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
+                    where: {
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
+                    },
+                    include: [
+                        { relation: "user" }
+                    ]
+                }
+            }
+            this.props.createUser(user, filterData);
             this.toggleModal('addModal', null);
             event.preventDefault();
             MySwal.fire({
@@ -144,7 +170,21 @@ class Persons extends Component {
 
     deleteHandle() {
         if (this.state.id) {
-            this.props.deleteUser(this.state.id)
+            const filterData = {
+                filter: {
+                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
+                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
+                    where: {
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
+                    },
+                    include: [
+                        { relation: "user" }
+                    ]
+                }
+            }
+            this.props.deleteUser(this.state.id, filterData)
             this.toggleModal('deleteModal', undefined);
             MySwal.fire({
                 icon: 'success',
@@ -430,7 +470,7 @@ class Persons extends Component {
                 </Modal>
 
                 {/* Page content */}
-                <Container style={{marginTop:"-12rem"}} fluid>
+                <Container style={{ marginTop: "-12rem" }} fluid>
                     {/* Table */}
                     <Row>
                         <div className="col">
@@ -499,9 +539,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
-        createUser: (userData) => dispatch(actions.createUser(userData)),
-        deleteUser: (userId) => dispatch(actions.deleteUser(userId)),
-        updateUser: (userId, userData) => dispatch(actions.updateUser(userId, userData)),
+        createUser: (userData, filterData) => dispatch(actions.createUser(userData, filterData)),
+        deleteUser: (userId, filterData) => dispatch(actions.deleteUser(userId, filterData)),
+        updateUser: (userId, userData, filterData) => dispatch(actions.updateUser(userId, userData, filterData)),
         getGroupUsersCount: () => dispatch(actions.getGroupUsersCount())
     };
 };

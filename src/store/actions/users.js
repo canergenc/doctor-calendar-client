@@ -163,21 +163,9 @@ export const findUser = (filterKey, users) => {
     }
 }
 
-export const deleteUser = (userId) => {
+export const deleteUser = (userId, filterData) => {
     return dispatch => {
         userService.deleteUserService(userId).then(result => {
-            const filterData = {
-                filter: {
-                    where: {
-                        groupId: {
-                            like: helperService.getGroupId()
-                        }
-                    },
-                    include: [
-                        { relation: "user" }
-                    ]
-                }
-            };
             dispatch(getUsers(filterData));
         }).catch(error => {
             dispatch(deleteUserFailed(error));
@@ -199,23 +187,11 @@ export const deleteUserFailed = (error) => {
     };
 };
 
-export const createUser = (userData) => {
+export const createUser = (userData, filterData) => {
     return dispatch => {
         userService.createUserService(userData)
             .then(response => {
                 userGroupService.createUserGroup(response.id);
-                const filterData = {
-                    filter: {
-                        where: {
-                            groupId: {
-                                like: helperService.getGroupId()
-                            }
-                        },
-                        include: [
-                            { relation: "user" }
-                        ]
-                    }
-                };
                 dispatch(getUsers(filterData));
             })
             .catch(error => {
@@ -239,22 +215,10 @@ export const createUserFailed = (error) => {
     };
 };
 
-export const updateUser = (userId, userData) => {
+export const updateUser = (userId, userData, filterData) => {
     return dispatch => {
         userService.updateUserService(userId, userData)
             .then(response => {
-                const filterData = {
-                    filter: {
-                        where: {
-                            groupId: {
-                                like: helperService.getGroupId()
-                            }
-                        },
-                        include: [
-                            { relation: "user" }
-                        ]
-                    }
-                };
                 dispatch(getUsers(filterData));
             })
             .catch(error => {
