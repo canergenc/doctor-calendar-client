@@ -387,7 +387,7 @@ class Calendar extends Component {
           prevMonth={this.state.prevMonth}
           prevMonthClick={this.prevMonthClickHandler}
           downloadExcelClick={this.downloadExcelHandler}
-          refreshCalendar={this.initReminders}
+          refreshCalendar={() => this.initReminders(this.state.curMonth.date)}
         />
 
         <HeaderWeekDays days={weekdays} />
