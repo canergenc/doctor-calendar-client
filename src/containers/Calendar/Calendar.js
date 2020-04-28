@@ -24,7 +24,8 @@ class Calendar extends Component {
     prevMonth: {},
     year: null,
     month: null,
-    calenderDay: []
+    calenderDay: [],
+    downloading: false
   };
 
   componentDidMount() {
@@ -75,7 +76,7 @@ class Calendar extends Component {
     const selectedLocations = [];
     const selectedUsers = [];
     this.props.getReminders(selectedLocations, selectedUsers, curMonth);
-
+    this.props.setActiveLocation('');
     var myCheckbox = document.getElementsByName("radio");
     Array.prototype.forEach.call(myCheckbox, function (el) {
       el.checked = false;
@@ -94,13 +95,19 @@ class Calendar extends Component {
         props["date"] = date;
         props["day"] = i;
         const calendar = [];
-
-        this.props.reminders.forEach((dateRow, index) => {
+        let isAddedReminder = false;
+        for (let index = 0; index < this.props.reminders.length; index++) {
+          const dateRow = this.props.reminders[index];
           if (moment(dateRow.startDate).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
-            // dateRow.index = index;
             calendar.push(dateRow);
+            isAddedReminder = true;
           }
-        });
+          else {
+            if (isAddedReminder) {
+              break;
+            }
+          }
+        }
 
         props["reminders"] = calendar;
         props["deleteReminder"] = this.deleteReminderHandler;
@@ -227,7 +234,8 @@ class Calendar extends Component {
 
   downloadExcelHandler = () => {
     if (this.props.reminders) {
-      console.log("downloadExcelHandler");
+
+      this.props.startDownloading();
 
       const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const fileExtension = '.xlsx';
@@ -268,7 +276,7 @@ class Calendar extends Component {
           // eslint-disable-next-line no-loop-func
           this.props.reminders.forEach(element => {
             if (element.location && element.user) {
-              if (moment(element.date).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
+              if (moment(element.startDate).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
                 if (locations[index] === element.location.name) {
                   locationSum = locationSum + 1;
                 }
@@ -302,14 +310,16 @@ class Calendar extends Component {
 
         let dateAdded = false;
         let firstAdd = true;
-        this.props.reminders.forEach(element => {
+        for (let index = 0; index < this.props.reminders.length; index++) {
+          const element = this.props.reminders[index];
           if (element.location && element.user) {
+
             const locationName = element.location.name;
-            if (moment(element.date).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
+            if (moment(element.startDate).format("DD.MM.YYYY") === date.format("DD.MM.YYYY")) {
               let columnNameIndex = 1;
               if (firstAdd) {
                 excelData.push({
-                  "Tarih": moment(element.date).format("DD.MM.YYYY"),
+                  "Tarih": moment(element.startDate).format("DD.MM.YYYY"),
                   [locationName + "-" + columnNameIndex]: element.user.fullName
                 });
                 dateAdded = true;
@@ -329,8 +339,14 @@ class Calendar extends Component {
                 }
               }
             }
+            else {
+              if (dateAdded) {
+                break;
+              }
+            }
           }
-        });
+        }
+
         if (!dateAdded) {
           excelData.push({
             "Tarih": date.format("DD.MM.YYYY")
@@ -347,6 +363,7 @@ class Calendar extends Component {
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: fileType });
       FileSaver.saveAs(data, moment(startOfMonth).format("MMMM YYYY") + " NÖBET LİSTESİ" + fileExtension);
+      this.props.endDownloading();
     }
   }
 
@@ -379,14 +396,12 @@ class Calendar extends Component {
       <div className="month">
         <HeaderMonth
           curMonth={this.state.curMonth}
-          countOfOnWeekend={countOfOnWeekend}
-          countOfInWeek={countOfInWeek}
           nextMonth={this.state.nextMonth}
           nextMonthClick={this.nextMonthClickHandler}
           prevMonth={this.state.prevMonth}
           prevMonthClick={this.prevMonthClickHandler}
           downloadExcelClick={this.downloadExcelHandler}
-          refreshCalendar={this.initReminders}
+          refreshCalendar={() => this.initReminders(this.state.curMonth.date)}
         />
 
         <HeaderWeekDays days={weekdays} />
@@ -411,8 +426,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    startDownloading: () => dispatch(actions.startDownloading()),
+    endDownloading: () => dispatch(actions.endDownloading()),
     setCurMonth: (curMonth) => dispatch(actions.setCurMonth(curMonth)),
     deleteReminder: (reminderId, filterData) => dispatch(actions.deleteReminder(reminderId, filterData)),
+    setActiveLocation: (locationId) => dispatch(actions.setActiveLocationId(locationId)),
     getReminders: (selectedLocations, selectedUsers, curMonth) => dispatch(actions.getReminders(selectedLocations, selectedUsers, curMonth))
   };
 }

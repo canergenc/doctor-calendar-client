@@ -231,6 +231,12 @@ export const getReminders = (selectedLocations, selectedUsers, curMonth) => {
               reminders.push(element);
             }
           });
+
+          reminders.sort(function (a, b) {
+            var dateA = new Date(a.startDate), dateB = new Date(b.startDate);
+            return dateA - dateB;
+          });
+
           dispatch(setReminders(reminders, filterData, selectedLocations, selectedUsers));
         }
       })
@@ -251,6 +257,12 @@ export const getRemindersForCrud = (filterData) => {
               reminders.push(element);
             }
           });
+
+          reminders.sort(function (a, b) {
+            var dateA = new Date(a.startDate), dateB = new Date(b.startDate);
+            return dateA - dateB;
+          });
+
           dispatch(setRemindersForCrud(reminders, filterData));
         }
       })
@@ -385,4 +397,19 @@ export const getRemindersCountFailure = (err) => {
     erorObj: err,
     status: false,
   };
+}
+
+
+export const startDownloading = () => {
+  return {
+    type: actionTypes.START_DOWNLOADING,
+    downloading: true
+  }
+}
+
+export const endDownloading = () => {
+  return {
+    type: actionTypes.END_DOWNLOADING,
+    downloading: false
+  }
 }
