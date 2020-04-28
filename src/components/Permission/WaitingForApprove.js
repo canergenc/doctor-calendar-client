@@ -437,60 +437,60 @@ class WaitingForApproved extends Component {
 
                 <Card className="shadow">
 
-                    {this.state.listOfPermission.length > 0 &&
-
-                        <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
-                            <Row className="align-items-center">
-                                <Col xs="3">
-                                    <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
-
-                                </Col>
-
-                                <Col xs="2">
-
-                                    <Button
-                                        color="secondary"
-
-                                        onClick={e => this.getPermissionsBySearch()}
-                                        size="lg"
 
 
-                                    >
-                                        <i class="fas fa-search fa-lg"></i>
-                                    </Button>
+                    <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
+                        <Row className="align-items-center">
+                            <Col xs="3">
+                                <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
+
+                            </Col>
+
+                            <Col xs="2">
+
+                                <Button
+                                    color="secondary"
+
+                                    onClick={e => this.getPermissionsBySearch()}
+                                    size="lg"
 
 
-                                    <Button
-                                        color="secondary"
-
-                                        onClick={e => this.refreshPermissions()}
-                                        size="lg"
-
-                                    >
-                                        <i class="fas fa-sync-alt fa-lg"></i>
-                                    </Button>
-
-                                </Col>
+                                >
+                                    <i class="fas fa-search fa-lg"></i>
+                                </Button>
 
 
+                                <Button
+                                    color="secondary"
+
+                                    onClick={e => this.refreshPermissions()}
+                                    size="lg"
+
+                                >
+                                    <i class="fas fa-sync-alt fa-lg"></i>
+                                </Button>
+
+                            </Col>
 
 
-                                <Col className="text-right" xs="7">
-                                    <Button
-                                        color="primary"
-                                        href="#pablo"
-                                        onClick={e => this.openCreateModal()}
-                                        size="sm"
-                                    >
-                                        <span className="btn-inner--icon">
-                                            <i className="ni ni-fat-add" />
-                                        </span>
+
+
+                            <Col className="text-right" xs="7">
+                                <Button
+                                    color="primary"
+                                    href="#pablo"
+                                    onClick={e => this.openCreateModal()}
+                                    size="sm"
+                                >
+                                    <span className="btn-inner--icon">
+                                        <i className="ni ni-fat-add" />
+                                    </span>
             Yeni
 </Button>
-                                </Col>
-                            </Row>
-                        </CardHeader>
-                    }
+                            </Col>
+                        </Row>
+                    </CardHeader>
+
 
 
 

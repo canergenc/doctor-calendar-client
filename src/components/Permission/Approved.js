@@ -131,7 +131,7 @@ class Approved extends Component {
         return (
             <Card className="shadow">
 
-                {this.state.listOfPermission.length > 0 &&
+                
 
                     <CardHeader style={{ paddingLeft: '0.5rem' }} className="border-0">
                         <Row className="align-items-center">
@@ -180,7 +180,7 @@ class Approved extends Component {
                         </Row>
 
                     </CardHeader>
-                }
+                
 
 
                 <Table className="align-items-center table-flush" responsive>
