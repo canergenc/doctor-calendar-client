@@ -257,6 +257,12 @@ export const getRemindersForCrud = (filterData) => {
               reminders.push(element);
             }
           });
+
+          reminders.sort(function (a, b) {
+            var dateA = new Date(a.startDate), dateB = new Date(b.startDate);
+            return dateA - dateB;
+          });
+
           dispatch(setRemindersForCrud(reminders, filterData));
         }
       })
