@@ -130,9 +130,9 @@ class Approved extends Component {
 
         return (
             <Card className="shadow">
-                <CardHeader className="border-0">
+                <CardHeader  style={{paddingLeft:'0.5rem'}}  className="border-0">
                     <Row className="align-items-center">
-                        <Col xs="8">
+                        <Col xs="3">
                             <Input name="searchPermission" onKeyDown={this.keyPress}   value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
                         </Col>
@@ -171,7 +171,7 @@ class Approved extends Component {
                      
 
 
-                        <Col className="text-right" xs="2">
+                        <Col className="text-right" xs="7">
 
                         </Col>
                     </Row>

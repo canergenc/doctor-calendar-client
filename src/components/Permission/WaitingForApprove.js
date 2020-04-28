@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
 import ToastServive from 'react-material-toast';
-
+import Select from 'react-select';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import { permissionHelper } from "./PermissionHelper";
@@ -16,6 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import tr from "date-fns/locale/tr";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
+import './Permission.css';
 registerLocale("tr", tr);
 const MySwal = withReactContent(Swal)
 
@@ -40,7 +41,8 @@ class WaitingForApproved extends Component {
             currentIndex: 0,
             submitted: false,
             listOfPermission: [],
-            copyOfListOfPermission: []
+            copyOfListOfPermission: [],
+            userId: ''
 
         }
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
@@ -57,8 +59,14 @@ class WaitingForApproved extends Component {
         this.props.getCalendarsCount(permissionHelper.getWaitingForApproveCountFilter())
     }
 
+    loadUsers(){
+        this.props.getUsers(permissionHelper.getInitialUserFilter());
+    }
+
     componentDidMount() {
         this.loadPermissions();
+        this.loadUsers();
+    
     }
 
 
@@ -124,31 +132,42 @@ class WaitingForApproved extends Component {
 
     }
 
+  
+
+
+
     createPermission() {
 
-        const getApprovedFilter = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex);
-        const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
-        const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
-        const userId = helperService.getUserId();
-        const groupId = helperService.getGroupId();
-        const type = Number(this.state.permissionType);
-        const description = this.state.description;
-        const status = CalendarStatus.WaitingForApprove;
-        const momentRange = extendMoment(moment);
-        const range = momentRange.range(start, end);
-        console.log('TEST', range);
-        const data = {
-            startDate: start,
-            endDate: end,
-            userId: userId,
-            groupId: groupId,
-            status: status,
-            type: type,
-            description: description,
-            isWeekend: false,
+        const { startDate, endDate, userId, description, type } = this.state;
+        if (!startDate || !endDate || !userId || !description) {
+            const id = toast.error('Tüm alanlar girilmiş olmalı');
+            return;
+        } else {
+            const getApprovedFilter = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex);
+            const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
+            const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
+            const groupId = helperService.getGroupId();
+            const type = Number(this.state.permissionType);
+            const description = this.state.description;
+            const userId = this.state.userId;
+            const status = CalendarStatus.WaitingForApprove;
+            // const momentRange = extendMoment(moment);
+            // const range = momentRange.range(start, end);
+            const data = {
+                startDate: start,
+                endDate: end,
+                userId: userId,
+                groupId: groupId,
+                status: status,
+                type: type,
+                description: description,
+                isWeekend: false,
+
+            }
+            this.props.createPermissions(data);
+            this.setState({ submitted: true })
         }
-        this.props.createPermissions(data);
-        this.setState({ submitted: true })
+
     }
 
     getPermissionsBySearch() {
@@ -207,11 +226,44 @@ class WaitingForApproved extends Component {
         }
     }
 
+    noMessageHandle = () => {
+        return "Eşleşme Yok"
+    }
+
+   
+
+    addUserId(user) {
+        console.log(user);
+        if (user) {
+            this.setState({ userId: user.value })
+        }
+        // if (user) {
+        //     let userGroups = [];
+        //     user.forEach(element => {
+        //         userGroups.push({ userId: element.value, groupId: helperService.getGroupId() });
+        //     });
+        //     this.setState({ userGroups: userGroups })
+        // }
+
+    }
+
     render() {
 
+       
+        console.log('OP1',this.props.users);
+        
+        let options = [];
+        if (this.props.users) {
+            this.props.users.forEach(u => {
+                options.push({label:u.user.fullName+'-'+u.user.email,value:u.userId})
+            });
+           
+        }
 
         if (this.props.permissions) {
-            this.state.listOfPermission = this.props.permissions;
+            this.state.listOfPermission = this.props.permissions.filter((p)=>{
+                return p.id && p.user &&  p.startDate && p.endDate;
+            })
 
             this.state.listOfPermission = this.state.listOfPermission.map((p) => (
                 <tr key={p.id}>
@@ -252,7 +304,8 @@ class WaitingForApproved extends Component {
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={this.state.isOpenCreateModal}
-                    toggle={() => this.toggleModal()}>
+                    // toggle={() => this.toggleModal()}
+                    >
                     <div className="modal-header">
                         <h3 className="modal-title" id="addModalLabel">Yeni İzin Girişi</h3>
                         <button
@@ -322,7 +375,7 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>İzin Tipi:</Label>
                                     <Col sm={7}>
-                                        <Input type="select" name="permissionType" value={this.state.permissionType} onChange={this.inputChangeHandle} >
+                                        <Input type="select" name="permissionType" style={{color:'black',fontSize:'16px'}} value={this.state.permissionType} onChange={this.inputChangeHandle} >
                                             <option value={CalendarTypes.Izin}>İzin</option>
                                             <option value={CalendarTypes.Rapor}>Rapor</option>
                                             <option value={CalendarTypes.Gebelik}>Gebelik</option>
@@ -340,13 +393,34 @@ class WaitingForApproved extends Component {
                                         </Input>
                                     </Col>
                                 </InputGroup>
+
+
+
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Açıklama:</Label>
                                     <Col sm={7}>
-                                        <Input type="textarea" name="description" value={this.state.description} onChange={this.inputChangeHandle} >
+                                        <Input type="textarea" style={{color:'black',fontSize:'16px'}} name="description" value={this.state.description} onChange={this.inputChangeHandle} >
                                         </Input>
                                     </Col>
                                 </InputGroup>
+
+
+
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <Label for="exampleEmail" sm={5}>Kişi Seçimi:</Label>
+                                    <Col sm={7}>
+                                        <Select className="basic-single"
+                                            classNamePrefix="select"
+                                        
+                                            
+                                            noOptionsMessage={() => this.noMessageHandle()} isSearchable={true} options={options} className="select" onChange={(user) => this.addUserId(user)} placeholder="Ara ve Seç..." />
+
+                                    </Col>
+                                </InputGroup>
+
+
+
+
                             </FormGroup>
                         </Form>
                     </div>
@@ -362,9 +436,9 @@ class WaitingForApproved extends Component {
                 </Modal>
 
                 <Card className="shadow">
-                    <CardHeader className="bg-white border-0">
+                    <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
                         <Row className="align-items-center">
-                            <Col xs="8">
+                            <Col xs="3">
                                 <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
                             </Col>
@@ -398,7 +472,7 @@ class WaitingForApproved extends Component {
 
 
 
-                            <Col className="text-right" xs="2">
+                            <Col className="text-right" xs="7">
                                 <Button
                                     color="primary"
                                     href="#pablo"
@@ -448,17 +522,20 @@ class WaitingForApproved extends Component {
 
 const mapStateToProps = state => {
     return {
+        users: state.users.users,
         permissions: state.permission.responseOnGetPermission,
         errorMessageAtGet: state.permission.statusTexAtGet,
         calendarsCount: state.reminders.calendarsCount,
         statusTextAtCreatePermission: state.permission.statusTextAtCreatePermission,
         createPermissionReqLoading: state.permission.createPermissionReqLoading,
         responseOnCreatePermission: state.permission.responseOnCreatePermission,
+        globalUsers: state.users.globalUsers,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        getUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         getCalendarsCount: (filterData) => dispatch(actions.getRemindersCount(filterData)),
         getPermissions: (filterData) => dispatch(actions.permission.getPermissions(filterData)),
         createPermissions: (data) => dispatch(actions.permission.createPermission(data)),

@@ -83,7 +83,7 @@ const getApprovedFilter = (index, searchParam = '') => {
 
 
 
-return approvedFilter;
+    return approvedFilter;
 }
 
 
@@ -254,6 +254,27 @@ const getPermissionRejectData = () => {
 }
 
 
+
+const getInitialUserFilter = () => {
+    const filterData = {
+        filter: {
+            where: {
+                groupId: {
+                    like: helperService.getGroupId()
+                }
+            },
+            include: [
+                {
+                    relation: "user"
+                }
+            ]
+        }
+    };
+
+    return filterData;
+}
+
+
 export const permissionHelper = {
     getApprovedFilter,
     getWaitingForApproveFilter,
@@ -261,6 +282,7 @@ export const permissionHelper = {
     getPermissionRejectData,
     getPermissionRejectFilter,
     getWaitingForApproveCountFilter,
-    getApprovedCountFilter
+    getApprovedCountFilter,
+    getInitialUserFilter
 
 };
