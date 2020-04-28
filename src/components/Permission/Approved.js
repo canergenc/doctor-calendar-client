@@ -16,7 +16,7 @@ const toast = ToastServive.new({
     place: 'topRight',
     duration: 3,
     maxCount: 10,
-    closable:false
+    closable: false
 })
 
 const MySwal = withReactContent(Swal)
@@ -92,9 +92,9 @@ class Approved extends Component {
     }
 
     refreshPermissions() {
-        this.setState({searchParam:""});
+        this.setState({ searchParam: "" });
         this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0));
-        
+
 
     }
 
@@ -130,53 +130,59 @@ class Approved extends Component {
 
         return (
             <Card className="shadow">
-                <CardHeader  style={{paddingLeft:'0.5rem'}}  className="border-0">
-                    <Row className="align-items-center">
-                        <Col xs="3">
-                            <Input name="searchPermission" onKeyDown={this.keyPress}   value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
-                        </Col>
+                {this.state.listOfPermission.length > 0 &&
 
-                        <Col xs="2">
+                    <CardHeader style={{ paddingLeft: '0.5rem' }} className="border-0">
+                        <Row className="align-items-center">
+                            <Col xs="3">
+                                <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
-                            <Button
-                                color="secondary"
+                            </Col>
 
-                                onClick={e => this.getPermissionsBySearch()}
-                                size="lg"
-                               
+                            <Col xs="2">
 
-                            >
-                                <i class="fas fa-search fa-lg"></i>
-                      </Button>
+                                <Button
+                                    color="secondary"
+
+                                    onClick={e => this.getPermissionsBySearch()}
+                                    size="lg"
 
 
-                            <Button
-                                color="secondary"
-
-                                onClick={e => this.refreshPermissions()}
-                                size="lg"
-                                
-                            >
-                                <i class="fas fa-sync-alt fa-lg"></i>
-                            </Button>
-
-                        </Col>
+                                >
+                                    <i class="fas fa-search fa-lg"></i>
+                                </Button>
 
 
+                                <Button
+                                    color="secondary"
 
-                       
+                                    onClick={e => this.refreshPermissions()}
+                                    size="lg"
+
+                                >
+                                    <i class="fas fa-sync-alt fa-lg"></i>
+                                </Button>
+
+                            </Col>
 
 
-                     
 
 
-                        <Col className="text-right" xs="7">
 
-                        </Col>
-                    </Row>
 
-                </CardHeader>
+
+
+
+                            <Col className="text-right" xs="7">
+
+                            </Col>
+                        </Row>
+
+                    </CardHeader>
+                }
+
+
                 <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
                         <tr>

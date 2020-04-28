@@ -59,14 +59,14 @@ class WaitingForApproved extends Component {
         this.props.getCalendarsCount(permissionHelper.getWaitingForApproveCountFilter())
     }
 
-    loadUsers(){
+    loadUsers() {
         this.props.getUsers(permissionHelper.getInitialUserFilter());
     }
 
     componentDidMount() {
         this.loadPermissions();
         this.loadUsers();
-    
+
     }
 
 
@@ -132,7 +132,7 @@ class WaitingForApproved extends Component {
 
     }
 
-  
+
 
 
 
@@ -230,7 +230,7 @@ class WaitingForApproved extends Component {
         return "Eşleşme Yok"
     }
 
-   
+
 
     addUserId(user) {
         console.log(user);
@@ -249,20 +249,20 @@ class WaitingForApproved extends Component {
 
     render() {
 
-       
-        console.log('OP1',this.props.users);
-        
+
+        console.log('OP1', this.props.users);
+
         let options = [];
         if (this.props.users) {
             this.props.users.forEach(u => {
-                options.push({label:u.user.fullName+'-'+u.user.email,value:u.userId})
+                options.push({ label: u.user.fullName + '-' + u.user.email, value: u.userId })
             });
-           
+
         }
 
         if (this.props.permissions) {
-            this.state.listOfPermission = this.props.permissions.filter((p)=>{
-                return p.id && p.user &&  p.startDate && p.endDate;
+            this.state.listOfPermission = this.props.permissions.filter((p) => {
+                return p.id && p.user && p.startDate && p.endDate;
             })
 
             this.state.listOfPermission = this.state.listOfPermission.map((p) => (
@@ -304,8 +304,8 @@ class WaitingForApproved extends Component {
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={this.state.isOpenCreateModal}
-                    // toggle={() => this.toggleModal()}
-                    >
+                // toggle={() => this.toggleModal()}
+                >
                     <div className="modal-header">
                         <h3 className="modal-title" id="addModalLabel">Yeni İzin Girişi</h3>
                         <button
@@ -375,7 +375,7 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>İzin Tipi:</Label>
                                     <Col sm={7}>
-                                        <Input type="select" name="permissionType" style={{color:'black',fontSize:'16px'}} value={this.state.permissionType} onChange={this.inputChangeHandle} >
+                                        <Input type="select" name="permissionType" style={{ color: 'black', fontSize: '16px' }} value={this.state.permissionType} onChange={this.inputChangeHandle} >
                                             <option value={CalendarTypes.Izin}>İzin</option>
                                             <option value={CalendarTypes.Rapor}>Rapor</option>
                                             <option value={CalendarTypes.Gebelik}>Gebelik</option>
@@ -399,7 +399,7 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Açıklama:</Label>
                                     <Col sm={7}>
-                                        <Input type="textarea" style={{color:'black',fontSize:'16px'}} name="description" value={this.state.description} onChange={this.inputChangeHandle} >
+                                        <Input type="textarea" style={{ color: 'black', fontSize: '16px' }} name="description" value={this.state.description} onChange={this.inputChangeHandle} >
                                         </Input>
                                     </Col>
                                 </InputGroup>
@@ -411,8 +411,8 @@ class WaitingForApproved extends Component {
                                     <Col sm={7}>
                                         <Select className="basic-single"
                                             classNamePrefix="select"
-                                        
-                                            
+
+
                                             noOptionsMessage={() => this.noMessageHandle()} isSearchable={true} options={options} className="select" onChange={(user) => this.addUserId(user)} placeholder="Ara ve Seç..." />
 
                                     </Col>
@@ -436,57 +436,63 @@ class WaitingForApproved extends Component {
                 </Modal>
 
                 <Card className="shadow">
-                    <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
-                        <Row className="align-items-center">
-                            <Col xs="3">
-                                <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
-                            </Col>
+                    {this.state.listOfPermission.length > 0 &&
 
-                            <Col xs="2">
+                        <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
+                            <Row className="align-items-center">
+                                <Col xs="3">
+                                    <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
-                                <Button
-                                    color="secondary"
+                                </Col>
 
-                                    onClick={e => this.getPermissionsBySearch()}
-                                    size="lg"
+                                <Col xs="2">
 
+                                    <Button
+                                        color="secondary"
 
-                                >
-                                    <i class="fas fa-search fa-lg"></i>
-                                </Button>
+                                        onClick={e => this.getPermissionsBySearch()}
+                                        size="lg"
 
 
-                                <Button
-                                    color="secondary"
-
-                                    onClick={e => this.refreshPermissions()}
-                                    size="lg"
-
-                                >
-                                    <i class="fas fa-sync-alt fa-lg"></i>
-                                </Button>
-
-                            </Col>
+                                    >
+                                        <i class="fas fa-search fa-lg"></i>
+                                    </Button>
 
 
+                                    <Button
+                                        color="secondary"
+
+                                        onClick={e => this.refreshPermissions()}
+                                        size="lg"
+
+                                    >
+                                        <i class="fas fa-sync-alt fa-lg"></i>
+                                    </Button>
+
+                                </Col>
 
 
-                            <Col className="text-right" xs="7">
-                                <Button
-                                    color="primary"
-                                    href="#pablo"
-                                    onClick={e => this.openCreateModal()}
-                                    size="sm"
-                                >
-                                    <span className="btn-inner--icon">
-                                        <i className="ni ni-fat-add" />
-                                    </span>
-                                    Yeni
-                      </Button>
-                            </Col>
-                        </Row>
-                    </CardHeader>
+
+
+                                <Col className="text-right" xs="7">
+                                    <Button
+                                        color="primary"
+                                        href="#pablo"
+                                        onClick={e => this.openCreateModal()}
+                                        size="sm"
+                                    >
+                                        <span className="btn-inner--icon">
+                                            <i className="ni ni-fat-add" />
+                                        </span>
+            Yeni
+</Button>
+                                </Col>
+                            </Row>
+                        </CardHeader>
+                    }
+
+
 
                     <Table className="align-items-center table-flush" responsive>
 
