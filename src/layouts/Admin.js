@@ -93,7 +93,7 @@ class Admin extends React.Component {
 
           <Switch>{this.getRoutes(routes)}</Switch>
           <Container fluid>
-            <AdminFooter />
+            {/* <AdminFooter /> */}
           </Container>
         </div>
       </>

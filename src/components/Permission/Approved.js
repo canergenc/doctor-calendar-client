@@ -76,7 +76,7 @@ class Approved extends Component {
 
 
     revokePermission(item) {
-        const filterOfWaitingFor = permissionHelper.getApprovedFilter(this.state.currentIndex)
+        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(0);
         const filterOfApproved = permissionHelper.getApprovedFilter(0);
         const data = {
             status: CalendarStatus.WaitingForApprove
