@@ -41,7 +41,7 @@ class Day extends Component {
       if (this.props.reminders.length > 0) {
         let array = this.props.reminders;
         let remindersCount = 0;
-        array.slice().reverse().forEach((element,index) => {
+        array.slice().reverse().forEach((element, index) => {
           if (element.user) {
             if (remindersCount <= 3) {
               preReminders.push(<Reminder
@@ -61,7 +61,7 @@ class Day extends Component {
 
         if (remindersCount === 4) {
           if (this.props.reminders.length > 4) {
-            preReminders.push(<footer className="morefooter" key={5}><div className="more" onClick={()=>this.showFullReminderHandle()} >+{this.props.reminders.length - 4} kayıt</div></footer>)
+            preReminders.push(<footer className="morefooter" key={5}><div className="more" onClick={() => this.showFullReminderHandle()} >+{this.props.reminders.length - 4} kayıt</div></footer>)
           }
         }
       }
@@ -78,7 +78,6 @@ class Day extends Component {
         let array = this.props.reminders;
         array.slice().reverse().forEach(element => {
           if (element.user && element.location) {
-
             fullReminders.push(<Reminder
               isDrag={false}
               key={element.id}
@@ -89,8 +88,6 @@ class Day extends Component {
           }
         });
       }
-
-
     }
     return fullReminders;
   }
@@ -98,7 +95,10 @@ class Day extends Component {
 
   render() {
     let preReminders = this.buildPreReminder();
-    const fullReminders = this.buildFullReminder();
+    let fullReminders = null;
+    if (this.state.showFullReminder) {
+      fullReminders = this.buildFullReminder();
+    }
 
     let day = this.props.firstDayIndex
       ? `day first-index-${this.props.firstDayIndex}`
@@ -122,17 +122,11 @@ class Day extends Component {
               <span aria-hidden={true}>×</span>
             </button>
           </div>
-          <Droppable droppableId={this.props.date}>
-            {provided => (
-              <div className="modal-body popever"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                <React.Fragment>
-                  {fullReminders}
-                </React.Fragment>
-              </div>)}
-          </Droppable>
+          <div className="modal-body popever">
+            <React.Fragment>
+              {fullReminders}
+            </React.Fragment>
+          </div>
           <div className="modal-footer">
             <Button
               color="secondary"

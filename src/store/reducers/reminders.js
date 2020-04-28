@@ -7,6 +7,7 @@ const initialState = {
   filterData: null,
   selectedLocations: [],
   selectedUsers: [],
+  downloading: false,
   error: false
 };
 
@@ -91,6 +92,7 @@ const setReminders = (state, action) => {
   };
   return updateObject(state, updatedState);
 }
+
 const setRemindersForCrud = (state, action) => {
   const updatedState = {
     reminders: action.reminders,
@@ -98,6 +100,14 @@ const setRemindersForCrud = (state, action) => {
     error: false
   };
   return updateObject(state, updatedState);
+}
+
+const startDownloading = (state, action) => {
+  return updateObject(state, { downloading: true });
+}
+
+const endDownloading = (state, action) => {
+  return updateObject(state, { downloading: false });
 }
 
 const reducer = (state = initialState, action) => {
@@ -152,6 +162,8 @@ const reducer = (state = initialState, action) => {
     case actionTypes.UPDATE_REMINDER_START: return updateRemiderStart(state, action);
     case actionTypes.UPDATE_REMINDER_SUCCESS: return updateReminderSuccess(state, action);
     case actionTypes.UPDATE_REMINDER_FAIL: return updateReminderFail(state, action);
+    case actionTypes.START_DOWNLOADING: return startDownloading(state, action);
+    case actionTypes.END_DOWNLOADING: return endDownloading(state, action);
     default:
       return state;
   }

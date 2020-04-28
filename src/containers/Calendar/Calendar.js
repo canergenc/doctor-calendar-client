@@ -24,7 +24,8 @@ class Calendar extends Component {
     prevMonth: {},
     year: null,
     month: null,
-    calenderDay: []
+    calenderDay: [],
+    downloading: false
   };
 
   componentDidMount() {
@@ -94,13 +95,19 @@ class Calendar extends Component {
         props["date"] = date;
         props["day"] = i;
         const calendar = [];
-
-        this.props.reminders.forEach((dateRow, index) => {
+        let isAddedReminder = false;
+        for (let index = 0; index < this.props.reminders.length; index++) {
+          const dateRow = this.props.reminders[index];
           if (moment(dateRow.startDate).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
-            // dateRow.index = index;
             calendar.push(dateRow);
+            isAddedReminder = true;
           }
-        });
+          else {
+            if (isAddedReminder) {
+              break;
+            }
+          }
+        }
 
         props["reminders"] = calendar;
         props["deleteReminder"] = this.deleteReminderHandler;
@@ -227,7 +234,8 @@ class Calendar extends Component {
 
   downloadExcelHandler = () => {
     if (this.props.reminders) {
-      console.log("downloadExcelHandler");
+
+      this.props.startDownloading();
 
       const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
       const fileExtension = '.xlsx';
@@ -302,7 +310,8 @@ class Calendar extends Component {
 
         let dateAdded = false;
         let firstAdd = true;
-        this.props.reminders.forEach(element => {
+        for (let index = 0; index < this.props.reminders.length; index++) {
+          const element = this.props.reminders[index];
           if (element.location && element.user) {
 
             const locationName = element.location.name;
@@ -330,8 +339,14 @@ class Calendar extends Component {
                 }
               }
             }
+            else {
+              if (dateAdded) {
+                break;
+              }
+            }
           }
-        });
+        }
+
         if (!dateAdded) {
           excelData.push({
             "Tarih": date.format("DD.MM.YYYY")
@@ -348,6 +363,7 @@ class Calendar extends Component {
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: fileType });
       FileSaver.saveAs(data, moment(startOfMonth).format("MMMM YYYY") + " NÖBET LİSTESİ" + fileExtension);
+      this.props.endDownloading();
     }
   }
 
@@ -380,8 +396,6 @@ class Calendar extends Component {
       <div className="month">
         <HeaderMonth
           curMonth={this.state.curMonth}
-          countOfOnWeekend={countOfOnWeekend}
-          countOfInWeek={countOfInWeek}
           nextMonth={this.state.nextMonth}
           nextMonthClick={this.nextMonthClickHandler}
           prevMonth={this.state.prevMonth}
@@ -412,6 +426,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    startDownloading: () => dispatch(actions.startDownloading()),
+    endDownloading: () => dispatch(actions.endDownloading()),
     setCurMonth: (curMonth) => dispatch(actions.setCurMonth(curMonth)),
     deleteReminder: (reminderId, filterData) => dispatch(actions.deleteReminder(reminderId, filterData)),
     setActiveLocation: (locationId) => dispatch(actions.setActiveLocationId(locationId)),
