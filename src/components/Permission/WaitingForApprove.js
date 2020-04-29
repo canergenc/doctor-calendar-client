@@ -409,7 +409,7 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Kişi Seçimi:</Label>
                                     <Col sm={7}>
-                                        <Select className="basic-single"
+                                        <Select 
                                             classNamePrefix="select"
 
 
@@ -425,13 +425,11 @@ class WaitingForApproved extends Component {
                         </Form>
                     </div>
                     <div className="modal-footer">
-                        <Button
-                            color="secondary"
-                            data-dismiss="modal"
-                            type="button"
+                        <button
+                        className="bttn bttn-secondary"
                             onClick={() => this.closeCreateModal()}>Kapat
-                        </Button>
-                        <Button color="primary" type="button" onClick={this.createPermission} >Kaydet</Button>
+                        </button>
+                        <button className="bttn bttn-primary" onClick={this.createPermission} >Kaydet</button>
                     </div>
                 </Modal>
 
@@ -456,7 +454,7 @@ class WaitingForApproved extends Component {
 
 
                                 >
-                                    <i class="fas fa-search fa-lg"></i>
+                                    <i className="fas fa-search fa-lg"></i>
                                 </Button>
 
 
@@ -467,7 +465,7 @@ class WaitingForApproved extends Component {
                                     size="lg"
 
                                 >
-                                    <i class="fas fa-sync-alt fa-lg"></i>
+                                    <i className="fas fa-sync-alt fa-lg"></i>
                                 </Button>
 
                             </Col>
