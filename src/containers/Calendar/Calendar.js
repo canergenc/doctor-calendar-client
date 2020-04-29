@@ -100,10 +100,11 @@ class Calendar extends Component {
         
         for (let index = reminderIndex; index < this.props.reminders.length; index++) {
           const dateRow = this.props.reminders[index];
-          reminderIndex = index;
+          
           if (moment(dateRow.startDate).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             calendar.push(dateRow);
             isAddedReminder = true;
+            reminderIndex = index;
           }
           else {
             if (isAddedReminder) {
