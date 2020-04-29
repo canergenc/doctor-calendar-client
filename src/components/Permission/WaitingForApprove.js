@@ -142,7 +142,7 @@ class WaitingForApproved extends Component {
         if (!startDate || !endDate || !userId || !description) {
             const id = toast.error('Tüm alanlar girilmiş olmalı');
             return;
-        } else {
+        }  else {
             const getApprovedFilter = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex);
             const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
             const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
@@ -175,7 +175,8 @@ class WaitingForApproved extends Component {
         if (this.state.searchParam) {
             this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.searchParam));
         } else {
-            const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+            this.refreshPermissions();
+            //const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
         }
     }
 
@@ -220,7 +221,7 @@ class WaitingForApproved extends Component {
             if (e.target.value) {
                 this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(e.target.value));
             } else {
-                const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+               this.refreshPermissions();
 
             }
         }
@@ -338,17 +339,21 @@ class WaitingForApproved extends Component {
 
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Label for="exampleEmail" sm={5}>Başalngıç Tarihi:</Label>
+                                    <Label for="exampleEmail" sm={5}>Başlangıç Tarihi:</Label>
                                     <Col sm={7}>
                                         <DatePicker
                                             showPopperArrow={false}
                                             name="startDate"
                                             dateFormat="dd/MM/yyyy"
                                             minDate={new Date()}
+                                            // maxDate={this.state.endDate}
                                             selected={this.state.startDate}
 
                                             locale="tr"
-                                            onChange={date => this.setStartDate(date)}
+                                            onChange={date =>{ 
+                                                this.setStartDate(date);
+                                                this.setState({endDate:date})
+                                            }}
                                         />
                                     </Col>
 
@@ -365,7 +370,10 @@ class WaitingForApproved extends Component {
                                             minDate={this.state.startDate}
                                             selected={this.state.endDate}
                                             locale="tr"
-                                            onChange={date => this.setEndDate(date)}
+                                            onChange={date => {this.setEndDate(date)
+                                                
+                                            }}
+                                        
                                         />
                                     </Col>
 
