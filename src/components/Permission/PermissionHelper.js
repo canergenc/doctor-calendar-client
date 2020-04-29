@@ -86,7 +86,6 @@ const getApprovedFilter = (index, searchParam = '') => {
     return approvedFilter;
 }
 
-
 const getApprovedCountFilter = () => {
     let approvedFilter = {
         where: {
@@ -104,7 +103,6 @@ const getApprovedCountFilter = () => {
     }
     return approvedFilter;
 }
-
 
 const getWaitingForApproveFilter = (searchParam = '') => {
     let waitingForApproveFilter;
@@ -199,7 +197,6 @@ const getWaitingForApproveFilter = (searchParam = '') => {
     return waitingForApproveFilter;
 }
 
-
 const getWaitingForApproveCountFilter = () => {
     const waitingForApproveFilter = {
         where: {
@@ -217,10 +214,6 @@ const getWaitingForApproveCountFilter = () => {
 
     return waitingForApproveFilter;
 }
-
-
-
-
 
 const getUniqGroupIds = (list) => {
     const uniqueTags = [];
@@ -253,8 +246,6 @@ const getPermissionRejectData = () => {
     return data;
 }
 
-
-
 const getInitialUserFilter = () => {
     const filterData = {
         filter: {
@@ -273,7 +264,6 @@ const getInitialUserFilter = () => {
 
     return filterData;
 }
-
 
 export const permissionHelper = {
     getApprovedFilter,

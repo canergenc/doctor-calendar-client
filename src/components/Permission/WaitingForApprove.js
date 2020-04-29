@@ -142,7 +142,7 @@ class WaitingForApproved extends Component {
         if (!startDate || !endDate || !userId || !description) {
             const id = toast.error('Tüm alanlar girilmiş olmalı');
             return;
-        } else {
+        }  else {
             const getApprovedFilter = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex);
             const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
             const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
@@ -345,10 +345,14 @@ class WaitingForApproved extends Component {
                                             name="startDate"
                                             dateFormat="dd/MM/yyyy"
                                             minDate={new Date()}
+                                            // maxDate={this.state.endDate}
                                             selected={this.state.startDate}
 
                                             locale="tr"
-                                            onChange={date => this.setStartDate(date)}
+                                            onChange={date =>{ 
+                                                this.setStartDate(date);
+                                                this.setState({endDate:date})
+                                            }}
                                         />
                                     </Col>
 
@@ -365,7 +369,10 @@ class WaitingForApproved extends Component {
                                             minDate={this.state.startDate}
                                             selected={this.state.endDate}
                                             locale="tr"
-                                            onChange={date => this.setEndDate(date)}
+                                            onChange={date => {this.setEndDate(date)
+                                                
+                                            }}
+                                        
                                         />
                                     </Col>
 
