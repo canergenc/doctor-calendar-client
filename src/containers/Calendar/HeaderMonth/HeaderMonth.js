@@ -7,8 +7,7 @@ class HeaderMonth extends Component {
   
 
   render() {
-    console.log(this.props.downloading);
-
+    
     return (
 
 
