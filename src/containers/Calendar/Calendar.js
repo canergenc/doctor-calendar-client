@@ -89,6 +89,7 @@ class Calendar extends Component {
     const days = [];
     const props = {};
     if (this.props.reminders && this.props.locations) {
+      let reminderIndex = 0;
       for (let i = 1; i <= this.state.curMonth.days; i++) {
 
         let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`;
@@ -96,8 +97,10 @@ class Calendar extends Component {
         props["day"] = i;
         const calendar = [];
         let isAddedReminder = false;
-        for (let index = 0; index < this.props.reminders.length; index++) {
+        
+        for (let index = reminderIndex; index < this.props.reminders.length; index++) {
           const dateRow = this.props.reminders[index];
+          reminderIndex = index;
           if (moment(dateRow.startDate).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             calendar.push(dateRow);
             isAddedReminder = true;
