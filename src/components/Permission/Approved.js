@@ -44,7 +44,8 @@ class Approved extends Component {
             if (e.target.value) {
                 this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, e.target.value));
             } else {
-                const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+                // const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+                this.refreshPermissions();
 
             }
         }
@@ -87,8 +88,11 @@ class Approved extends Component {
 
 
     getPermissionsBySearch() {
-        console.log(this.state.searchParam);
+        if (this.state.searchParam) {
         this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, this.state.searchParam));
+        } else {
+            this.refreshPermissions();
+        }
     }
 
     refreshPermissions() {

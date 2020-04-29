@@ -175,7 +175,8 @@ class WaitingForApproved extends Component {
         if (this.state.searchParam) {
             this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.searchParam));
         } else {
-            const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+            this.refreshPermissions();
+            //const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
         }
     }
 
@@ -220,7 +221,7 @@ class WaitingForApproved extends Component {
             if (e.target.value) {
                 this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(e.target.value));
             } else {
-                const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
+               this.refreshPermissions();
 
             }
         }
@@ -338,7 +339,7 @@ class WaitingForApproved extends Component {
 
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <Label for="exampleEmail" sm={5}>Başalngıç Tarihi:</Label>
+                                    <Label for="exampleEmail" sm={5}>Başlangıç Tarihi:</Label>
                                     <Col sm={7}>
                                         <DatePicker
                                             showPopperArrow={false}
