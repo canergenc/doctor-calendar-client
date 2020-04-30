@@ -401,15 +401,16 @@ export const getRemindersCountFailure = (err) => {
 
 
 export const startDownloading = () => {
+  console.log('start');
+  
   return {
-    type: actionTypes.START_DOWNLOADING,
-    downloading: true
+    type: actionTypes.START_DOWNLOADING
   }
 }
 
 export const endDownloading = () => {
+  console.log('end');
   return {
-    type: actionTypes.END_DOWNLOADING,
-    downloading: false
+    type: actionTypes.END_DOWNLOADING
   }
 }
