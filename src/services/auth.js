@@ -19,7 +19,8 @@ export const register = (email, fullName, password) => {
             'email': email,
             'password': password,
             'fullName': fullName,
-            "deviceId": "QWE123"
+            "deviceId": "QWE123",
+            "platform":1
         }
     },false);
 };
