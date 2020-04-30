@@ -20,7 +20,8 @@ export const register = (email, fullName, password, title) => {
             'password': password,
             'fullName': fullName,
             "deviceId": "QWE123",
-            "title": title
+            "title": title,
+            "platform":1
         }
     },false);
 };
