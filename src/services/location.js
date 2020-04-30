@@ -2,11 +2,11 @@ import request from "../hoc/Config/apiCentral";
 
 
 
-const createBulkLocationService = (listOfLocaiton) => {
+const createBulkLocationService = (listOfLocation) => {
     return request({
         url: '/locations/bulk',
         method: 'POST',
-        data: listOfLocaiton
+        data: listOfLocation
         
     });
 };

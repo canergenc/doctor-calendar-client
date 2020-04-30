@@ -35,7 +35,6 @@ class GroupSettings extends React.Component {
             editModal: false,
             email: this.props.email,
             fullName: "",
-            title: "",
             deviceId: "",
             password: "",
             newPassword: "",

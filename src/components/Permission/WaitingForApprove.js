@@ -421,7 +421,7 @@ class WaitingForApproved extends Component {
                                             classNamePrefix="select"
 
 
-                                            noOptionsMessage={() => this.noMessageHandle()} isSearchable={true} options={options} className="select" onChange={(user) => this.addUserId(user)} placeholder="Ara ve Seç..." />
+                                            noOptionsMessage={() => this.noMessageHandle()} isSearchable={true} options={options} className="selectPermission" onChange={(user) => this.addUserId(user)} placeholder="Ara ve Seç..." />
 
                                     </Col>
                                 </InputGroup>

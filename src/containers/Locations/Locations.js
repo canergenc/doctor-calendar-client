@@ -219,8 +219,8 @@ class Location extends Component {
                             </td>
                             <td className="text-right">
                                 <UncontrolledDropdown>
-                                    <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
-                                        <i className="fas fa-ellipsis-v" />
+                                    <DropdownToggle className="text-dark" role="button" onClick={e => e.preventDefault()}>
+                                        İşlemler
                                     </DropdownToggle>
                                     <DropdownMenu className="dropdown-menu-arrow" right>
                                         <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.toggleModal("editModal", location)}>Düzenle</DropdownItem>

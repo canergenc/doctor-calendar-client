@@ -66,8 +66,7 @@ const getColorName = (index) => {
         "blue",
         "violet",
         "purple",
-        "pink",
-       
+        "pink"       
     ]
 
     return listOfColorName[index];;

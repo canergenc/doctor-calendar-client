@@ -43,7 +43,6 @@ class Persons extends Component {
             deleteModal: false,
             id: '',
             name: '',
-            title: '',
             email: '',
             workStartDate: '',
             weekendCountLimit: 0,
@@ -59,8 +58,6 @@ class Persons extends Component {
     inputChangeHandle(event) {
 
         const target = event.target;
-        if (target.name === 'title')
-            this.setState({ title: event.target.value });
         if (target.name === 'name')
             this.setState({ name: event.target.value });
         if (target.name === 'email')
@@ -82,7 +79,6 @@ class Persons extends Component {
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
         if (weekdayCountLimit >= 0 && weekendCountLimit >= 0) {
             let userData = {
-                title: this.state.title,
                 fullName: this.state.name,
                 email: this.state.email,
                 workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
@@ -124,10 +120,9 @@ class Persons extends Component {
 
     addHandle(event) {
 
-        if (this.state.title && this.state.name && this.state.email && this.state.password && this.state.workStartDate && this.state.weekdayCountLimit && this.state.weekendCountLimit) {
+        if (this.state.name && this.state.email && this.state.password && this.state.workStartDate && this.state.weekdayCountLimit && this.state.weekendCountLimit) {
             const user = {
                 fullName: this.state.name,
-                title: this.state.title,
                 email: this.state.email,
                 password: this.state.password,
                 workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
@@ -223,7 +218,6 @@ class Persons extends Component {
                 [state]: !this.state[state],
                 id: user.id ? user.id : '',
                 name: user.fullName ? user.fullName : '',
-                title: user.title ? user.title : '',
                 email: user.email ? user.email : '',
                 workStartDate: user.workStartDate ? user.workStartDate : '',
                 weekdayCountLimit: user.weekdayCountLimit ? user.weekdayCountLimit : '',
@@ -235,7 +229,6 @@ class Persons extends Component {
                 [state]: !this.state[state],
                 id: '',
                 name: '',
-                title: '',
                 email: '',
                 workStartDate: '',
                 weekdayCountLimit: '',
@@ -257,7 +250,6 @@ class Persons extends Component {
                 <Person
                     key={user.user.id}
                     id={user.user.id}
-                    title={user.user.title}
                     fullName={user.user.fullName}
                     workStartDate={user.user.workStartDate}
                     email={user.user.email}
@@ -296,12 +288,6 @@ class Persons extends Component {
                         <Form role="form" autoComplete="off">
                             <FormGroup>
 
-                                <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>Ünvan:</InputGroupText>
-                                        <Input name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
-                                    </InputGroupAddon>
-                                </InputGroup>
 
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend">
@@ -383,19 +369,13 @@ class Persons extends Component {
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>Ünvan:</InputGroupText>
-                                        <Input name="title" type="text" value={this.state.title} onChange={(event) => this.inputChangeHandle(event)} />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                                <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
                                         <InputGroupText>Ad - Soyad:</InputGroupText>
                                         <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend">
-                                        <InputGroupText>Ünvan:</InputGroupText>
+                                        <InputGroupText>E-Mail Adresi:</InputGroupText>
                                         <Input name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
@@ -494,7 +474,6 @@ class Persons extends Component {
                                 <Table className="align-items-center table-flush" responsive>
                                     <thead className="thead-light">
                                         <tr>
-                                            <th scope="col">Ünvan</th>
                                             <th scope="col">Ad Soyad</th>
                                             <th scope="col">Kıdem</th>
                                             <th scope="col">E-Mail</th>

@@ -103,8 +103,6 @@ const mapStateToProps = state => {
   return {
     // email: state.userInfo.email,
     fullName: state.userInfo.fullName,
-    // title: state.userInfo.title,
-    // deviceId: state.userInfo.deviceId
   };
 }
 const mapDispatchToProps = dispatch => {

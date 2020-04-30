@@ -11,7 +11,7 @@ export const login = (email, password) => {
     },false);
 };
 
-export const register = (email, fullName, password, title) => {
+export const register = (email, fullName, password) => {
     return request({
         url: `/users`,
         method: 'POST',
@@ -19,8 +19,7 @@ export const register = (email, fullName, password, title) => {
             'email': email,
             'password': password,
             'fullName': fullName,
-            "deviceId": "QWE123",
-            "title": title
+            "deviceId": "QWE123"
         }
     },false);
 };

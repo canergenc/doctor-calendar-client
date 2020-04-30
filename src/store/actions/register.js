@@ -3,10 +3,10 @@ import history from "../../hoc/Config/history"
 import * as actionTypes from "./actionTypes";
 
 
-const register = (email, fullName, title, password) => {
+const register = (email, fullName, password) => {
     return dispatch => {
         dispatch(registerRequest());
-        authService.register(email, fullName, password, title)
+        authService.register(email, fullName, password)
             .then((response) => {
                 dispatch(registerSuccess(response));
                 history.push({

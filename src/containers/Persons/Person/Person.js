@@ -24,7 +24,6 @@ class Person extends Component {
 
         return (
             <tr key={this.props.id}>
-                <td>{this.props.title}</td>
                 <td>{this.props.fullName}</td>
                 <td>{seniority}</td>
                 <td>{this.props.email}</td>
@@ -32,8 +31,8 @@ class Person extends Component {
                 <td>{this.props.weekendCountLimit}</td>
                 <td className="text-right">
                     <UncontrolledDropdown>
-                        <DropdownToggle className="btn-icon-only text-light" role="button" size="sm" color="" onClick={e => e.preventDefault()}>
-                            <i className="fas fa-ellipsis-v" />
+                        <DropdownToggle className="text-dark" role="button" onClick={e => e.preventDefault()}>
+                            İşlemler
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem style={{ marginLeft: "0px" }} onClick={this.props.editClick}>Düzenle</DropdownItem>

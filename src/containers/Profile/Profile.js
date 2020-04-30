@@ -38,7 +38,6 @@ class Profile extends React.Component {
       editModal: false,
       email: this.props.email,
       fullName: "",
-      title: "",
       deviceId: "",
       password: "",
       newPassword: "",
@@ -55,7 +54,7 @@ class Profile extends React.Component {
   componentDidMount() {
     console.log('PROFILE component did mount');
 
-    if (!this.props.email || !this.props.fullName || !this.props.title) {
+    if (!this.props.email || !this.props.fullName) {
       this.props.getUserInfo();
     }
     console.log(this.props.error);
@@ -80,8 +79,6 @@ class Profile extends React.Component {
       this.setState({ email: event.target.value });
     if (target.name === 'fullName')
       this.setState({ fullName: event.target.value });
-    if (target.name === 'title')
-      this.setState({ title: event.target.value });
     if (target.name === 'deviceId')
       this.setState({ deviceId: event.target.value });
     if (target.name === 'password')
@@ -104,9 +101,6 @@ class Profile extends React.Component {
       this.setState({ fullName: this.props.fullName });
     }
 
-    if (this.props.title) {
-      this.setState({ title: this.props.title });
-    }
   }
 
 
@@ -147,7 +141,6 @@ class Profile extends React.Component {
   updateUserInfo(event) {
 
     var data = {
-      title: this.state.title ? this.state.title : this.props.title,
       fullName: this.state.fullName ? this.state.fullName : this.props.fullName,
       email: this.state.email ? this.state.email : this.props.email,
       deviceId: this.state.deviceId ? this.state.deviceId : this.props.deviceId,
@@ -305,24 +298,7 @@ class Profile extends React.Component {
                       </Row>
                       <Row>
                         <Col lg="6">
-                          <FormGroup>
-                            <label
-                              className="form-control-label"
-                              htmlFor="input-first-name"
-                            >
-                              Unvan
-                            </label>
-                            <Input
-                              className="form-control-alternative"
-                              defaultValue={this.props.title}
-
-                              onChange={(event) => this.inputChangeHandle(event)}
-
-                              name="title"
-                              // placeholder="First name"
-                              type="text"
-                            />
-                          </FormGroup>
+                          
                         </Col>
                         <Col lg="6">
 
@@ -348,7 +324,6 @@ const mapStateToProps = state => {
   return {
     email: state.userInfo.email,
     fullName: state.userInfo.fullName,
-    title: state.userInfo.title,
     deviceId: state.userInfo.deviceId,
     statusTextInGet: state.userInfo.statusTextInGet,
     statusTextInUpdates: state.userInfo.statusTextInUpdates,

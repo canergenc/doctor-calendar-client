@@ -120,7 +120,7 @@ class Location extends Component {
             wheel
         } = this.state;
 
-        let scrollMenu = this.props.error ? "Servisler yüklenemedi" : "Servisler yükleniyor...";
+        let scrollMenu = this.props.error ? "Lokasyonlar yüklenemedi" : "Lokasyonlar yükleniyor...";
         if (this.props.locations) {
             let menu = this.createMenu(this.props.locations, this.props.selectedLocations);
             scrollMenu = <ScrollMenu

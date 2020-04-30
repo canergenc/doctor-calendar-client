@@ -28,7 +28,6 @@ class Register extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
       fullName: '',
       email: '',
       password: '',
@@ -46,8 +45,6 @@ class Register extends React.Component {
       this.setState({ password: event.target.value });
     else if (target.name === 'fullName')
       this.setState({ fullName: event.target.value });
-    else if (target.name === 'title')
-      this.setState({ title: event.target.value })
     else if (target.name === 'privacyPolicy')
       this.setState({ privacyPolicy: !this.state.privacyPolicy })
   }
@@ -55,9 +52,9 @@ class Register extends React.Component {
 
     event.preventDefault();
     this.setState({ submitted: true });
-    const { title, fullName, email, password, privacyPolicy } = this.state;
-    if (title && fullName && email && password && privacyPolicy) {
-      this.props.register(email, fullName, title, password);
+    const { fullName, email, password, privacyPolicy } = this.state;
+    if (fullName && email && password && privacyPolicy) {
+      this.props.register(email, fullName, password);
     }
     else {
       MySwal.fire({
@@ -68,7 +65,7 @@ class Register extends React.Component {
     }
   }
   render() {
-    const { title, fullName, email, password, submitted } = this.state;
+    const { fullName, email, password, submitted } = this.state;
     return (
       <>
         <Col lg="6" md="8">
@@ -102,26 +99,7 @@ class Register extends React.Component {
                   }
 
                 </FormGroup>
-                <FormGroup>
-                  <InputGroup className="input-group-alternative mb-3">
-                    <InputGroupAddon addonType="prepend">
-                      <InputGroupText>
-                        <i className="ni ni-badge" />
-                      </InputGroupText>
-                    </InputGroupAddon>
-                    <Input placeholder="Ünvan" name="title" type="text" value={this.state.title} onChange={this.handleInputChange} />
 
-
-                  </InputGroup>
-
-
-                  {submitted && !title &&
-
-                    <p style={{ fontSize: 12 }} className="text-warning">Ünvan gerekli.</p>
-                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
-                  }
-
-                </FormGroup>
                 <FormGroup>
                   <InputGroup className="input-group-alternative mb-3">
                     <InputGroupAddon addonType="prepend">
@@ -224,7 +202,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    register: (email, fullName, title, password) => dispatch(actions.registerActions.register(email, fullName, title, password)),
+    register: (email, fullName, password) => dispatch(actions.registerActions.register(email, fullName, password)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

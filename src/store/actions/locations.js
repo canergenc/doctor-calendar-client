@@ -2,15 +2,15 @@ import * as actionTypes from './actionTypes';
 import { locationService, helperService } from '../../services/index';
 import history from "../../hoc/Config/history"
 
-export const createBulkLocaition = (listOfLocaition) => {
+export const createBulkLocation = (listOfLocation) => {
     return dispatch => {
-        dispatch(createBulkLocaitionRequest());
+        dispatch(createBulkLocationRequest());
 
-        locationService.createBulkLocationService(listOfLocaition)
+        locationService.createBulkLocationService(listOfLocation)
             .then((response) => {
                 //Success
                 console.log(response);
-                dispatch(createBulkLocaitionSuccess(response))
+                dispatch(createBulkLocationSuccess(response))
                 history.push({
                     pathname: '/admin/index'
                 })
@@ -18,25 +18,25 @@ export const createBulkLocaition = (listOfLocaition) => {
             })
             .catch((error) => {
                 console.log('HATA', error);
-                dispatch(createBulkLocaitionFailure(error));
+                dispatch(createBulkLocationFailure(error));
             });
     }
 }
 
-export const createBulkLocaitionRequest = () => {
+export const createBulkLocationRequest = () => {
     return {
         type: actionTypes.CREATE_BULK_LOCATION_REQUEST,
     };
 };
 
-export const createBulkLocaitionSuccess = (response) => {
+export const createBulkLocationSuccess = (response) => {
     return {
         type: actionTypes.CREATE_BULK_LOCATION_SUCCESS,
         response:response
     };
 }
 
-export const createBulkLocaitionFailure = (err) => {
+export const createBulkLocationFailure = (err) => {
     return {
         type: actionTypes.CREATE_BULK_LOCATION_FAILURE,
         erorObj: err,

@@ -50,7 +50,6 @@ const userInfoSuccess = (response) => {
         id: response.user.id,
         email: response.user.email,
         fullName: response.user.fullName,
-        title: response.user.title,
         deviceId: response.user.deviceId,
         createdDate: response.user.createdDate,
         updatedDate: response.user.updatedDate,

@@ -24,9 +24,7 @@ class LocationSplash extends React.Component {
         this.state = {
             groupId: '',
             locationInput: '',
-            listOfLocation: [
-
-            ]
+            listOfLocation: []
         };
 
         // this.removeItem=this.removeItem.bind(this)
@@ -40,12 +38,9 @@ class LocationSplash extends React.Component {
         if (this.state.locationInput && this.state.locationInput.length > 0) {
 
             lists.push({ id: lists.length, context: this.state.locationInput, modifier: helperService.getColorName(lists.length) });
-            this.setState({ listOfLocaiton: lists });
-            this.setState({ locationInput: '' });
+            this.setState({ listOfLocation: lists, locationInput: '' });
             console.log(lists);
         }
-
-
     }
 
     handleInputChange(event) {
@@ -61,8 +56,7 @@ class LocationSplash extends React.Component {
         const index = lists.indexOf(item);
         if (index > -1) {
             lists.splice(index, 1);
-            this.setState({ listOfLocation: lists });
-            this.setState({ locationInput: '' });
+            this.setState({ listOfLocation: lists,locationInput: '' });
         }
     }
 
@@ -126,7 +120,7 @@ class LocationSplash extends React.Component {
                             <ListGroup >
 
                                 {this.state.listOfLocation.length > 0 && this.state.listOfLocation.map(listitem => (
-                                    <ListGroupItem   color= {listitem.modifier}  key={listitem.id} >   {listitem.context}
+                                    <ListGroupItem color={listitem.modifier} key={listitem.id} >   {listitem.context}
                                         <Button onClick={() => this.removeItem(listitem)} type="button" close aria-label="Cancel">
                                             <span aria-hidden>&ndash;</span>
                                         </Button>
@@ -143,7 +137,7 @@ class LocationSplash extends React.Component {
                             {this.state.listOfLocation.length > 0 &&
 
                                 <div className="text-center">
-                                    <Button disabled={this.props.isRegistiring} className="mt-4"  onClick={this.saveChanges} type='button'
+                                    <Button disabled={this.props.isRegistiring} className="mt-4" onClick={this.saveChanges} type='button'
 
                                         onClick={this.saveChanges}
                                         color="primary" >
@@ -184,7 +178,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        createBulkLocation: (listOfLocation) => dispatch(actions.createBulkLocaition(listOfLocation)),
+        createBulkLocation: (listOfLocation) => dispatch(actions.createBulkLocation(listOfLocation)),
     };
 }
 
