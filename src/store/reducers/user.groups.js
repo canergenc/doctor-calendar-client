@@ -29,16 +29,7 @@ const reducer = (state = initialState, action) => {
                 responseOnCreateUserGroup: {},
                 statusTextAtCreateUserGroup: helperService.getErrorMessage(action.errorObj)
             };
-        case actionTypes.CREATE_USERGROUPBULK_SUCCESS:
-            return {
-                ...state,
-                error: false
-            };
-        case actionTypes.CREATE_USERGROUPBULK_FAILURE:
-            return {
-                ...state,
-                error: true
-            };
+        
         default:
             return state;
     }

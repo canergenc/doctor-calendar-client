@@ -77,7 +77,7 @@ class Persons extends Component {
     updateHandle(event) {
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
-        if (weekdayCountLimit >= 0 && weekendCountLimit >= 0) {
+        if (this.state.name && this.state.email && this.state.workStartDate) {
             let userData = {
                 fullName: this.state.name,
                 email: this.state.email,
@@ -111,8 +111,8 @@ class Persons extends Component {
         else {
             MySwal.fire({
                 icon: 'info',
-                title: 'Hay aksi,',
-                text: 'Nöbet sayıları sıfırdan az olmamalı'
+                title: 'Lütfen,',
+                text: 'zorunlu alanları doldurunuz'
             });
         }
 
@@ -179,7 +179,7 @@ class Persons extends Component {
                     ]
                 }
             }
-            this.props.deleteUser(this.state.id, filterData)
+            this.props.deleteUser(this.state.userGroupId, filterData)
             this.toggleModal('deleteModal', undefined);
             MySwal.fire({
                 icon: 'success',
@@ -212,16 +212,17 @@ class Persons extends Component {
         this.props.getGroupUsersCount();
     }
 
-    toggleModal(state, user) {
-        if (user) {
+    toggleModal(state, userGroup) {
+        if (userGroup) {
             this.setState({
                 [state]: !this.state[state],
-                id: user.id ? user.id : '',
-                name: user.fullName ? user.fullName : '',
-                email: user.email ? user.email : '',
-                workStartDate: user.workStartDate ? user.workStartDate : '',
-                weekdayCountLimit: user.weekdayCountLimit ? user.weekdayCountLimit : '',
-                weekendCountLimit: user.weekendCountLimit ? user.weekendCountLimit : ''
+                userGroupId: userGroup.id ? userGroup.id : '',
+                id: userGroup.user.id ? userGroup.user.id : '',
+                name: userGroup.user.fullName ? userGroup.user.fullName : '',
+                email: userGroup.user.email ? userGroup.user.email : '',
+                workStartDate: userGroup.user.workStartDate ? userGroup.user.workStartDate : '',
+                weekdayCountLimit: userGroup.user.weekdayCountLimit ? userGroup.user.weekdayCountLimit : '',
+                weekendCountLimit: userGroup.user.weekendCountLimit ? userGroup.user.weekendCountLimit : ''
             });
         }
         else {
@@ -255,8 +256,8 @@ class Persons extends Component {
                     email={user.user.email}
                     weekdayCountLimit={user.user.weekdayCountLimit}
                     weekendCountLimit={user.user.weekendCountLimit}
-                    editClick={() => this.toggleModal("editModal", user.user)}
-                    deleteClick={() => this.toggleModal("deleteModal", user.user)}
+                    editClick={() => this.toggleModal("editModal", user)}
+                    deleteClick={() => this.toggleModal("deleteModal", user)}
                 />
 
             ));
@@ -267,7 +268,7 @@ class Persons extends Component {
 
         return (
             <>
-                <UserHeader fullName={this.props.fullName} />
+                <UserHeader />
                 {/* Add Modal */}
                 <Modal
                     className="modal-dialog-centered"
@@ -290,45 +291,47 @@ class Persons extends Component {
 
 
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Ad - Soyad:</InputGroupText>
-                                        <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="name" valid={true} me type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>E-Mail Adresi:</InputGroupText>
-                                        <Input name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="email" valid={true} type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Şifre:</InputGroupText>
-                                        <Input name="password" type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="password" valid={true} type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>
                                             <i className="ni ni-calendar-grid-58" style={{ marginRight: "5px" }} />
                                             İş Başlangıç Tarihi:
                                         </InputGroupText>
+
+                                        <DatePicker
+                                            required={true}
+                                            timeFormat={false}
+                                            dateFormat="dd-MM-yyyy"
+                                            selected={Date.parse(this.state.workStartDate)}
+                                            onChange={(event) => this.inputChangeHandleDate(event)}
+                                        />
                                     </InputGroupAddon>
-                                    <DatePicker
-                                        timeFormat={false}
-                                        dateFormat="dd-MM-yyyy"
-                                        selected={Date.parse(this.state.workStartDate)}
-                                        onChange={(event) => this.inputChangeHandleDate(event)}
-                                    />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
                                         <Input name="weekdayCountLimit" type="number" min="0" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
                                         <Input name="weekendCountLimit" type="number" min="0" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
@@ -368,39 +371,38 @@ class Persons extends Component {
                         <Form role="form">
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Ad - Soyad:</InputGroupText>
                                         <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>E-Mail Adresi:</InputGroupText>
                                         <Input name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>
                                             <i className="ni ni-calendar-grid-58" style={{ marginRight: "5px" }} />
                                             İş Başlangıç Tarihi:
                                         </InputGroupText>
+                                        <DatePicker
+                                            dateFormat="dd-MM-yyyy"
+                                            selected={Date.parse(this.state.workStartDate)}
+                                            onChange={(event) => this.inputChangeHandleDate(event)}
+                                        />
                                     </InputGroupAddon>
-                                    <DatePicker
-                                        placeholderText="iş Başlangıç Tarihi"
-                                        dateFormat="dd-MM-yyyy"
-                                        selected={Date.parse(this.state.workStartDate)}
-                                        onChange={(event) => this.inputChangeHandleDate(event)}
-                                    />
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
                                         <Input name="weekdayCountLimit" type="number" min="0" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
                                         <Input name="weekendCountLimit" type="number" min="0" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
@@ -457,9 +459,17 @@ class Persons extends Component {
                             <Card className="shadow">
                                 <CardHeader className="border-0">
                                     <div className="row">
-                                        <div className="col-md-11">
+                                        <div className="col-md-10">
                                             <h3 className="mb-0">Kullanıcı Listesi</h3>
                                         </div>
+                                        <div className="col-md-1">
+                                                <Button
+                                                    color="primary"
+                                                    onClick={() => this.renderTableData(this.state.currentIndex)}
+                                                >
+                                                    <i className="fas fa-sync-alt"></i>
+                                                </Button>
+                                            </div>
                                         <div className="col-md-1">
                                             <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
@@ -519,7 +529,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         createUser: (userData, filterData) => dispatch(actions.createUser(userData, filterData)),
-        deleteUser: (userId, filterData) => dispatch(actions.deleteUser(userId, filterData)),
+        deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
         updateUser: (userId, userData, filterData) => dispatch(actions.updateUser(userId, userData, filterData)),
         getGroupUsersCount: () => dispatch(actions.getGroupUsersCount())
     };

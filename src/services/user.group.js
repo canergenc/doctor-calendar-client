@@ -3,7 +3,7 @@ import { helperService } from './helper';
 
 const createUserGroup = (userId) => {
     console.log("create user group");
-    
+
     return request({
         url: `/user-groups`,
         method: 'POST',
@@ -16,7 +16,7 @@ const createUserGroup = (userId) => {
 
 const createUserGroupBulk = (data) => {
     console.log("create user group");
-    
+
     return request({
         url: `/user-groups/bulk`,
         method: 'POST',
@@ -24,7 +24,17 @@ const createUserGroupBulk = (data) => {
     });
 };
 
+const deleteUserGroup = (userGroupId) => {
+    console.log("delete user group");
+
+    return request({
+        url: '/user-groups/' + userGroupId,
+        method: 'DELETE'
+    });
+};
+
 export const userGroupService = {
     createUserGroup,
+    deleteUserGroup,
     createUserGroupBulk
 };

@@ -55,7 +55,7 @@ export const ColorCodeName = {
     pink: '#E03997',
 
     primary: '#5e72e4',
-    secondary: '#f7fafc',
+    secondary: '#656768',
     success: '#2dce89',
     info: '#11cdef',
     warning: '#fb6340',

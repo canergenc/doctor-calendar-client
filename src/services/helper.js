@@ -50,7 +50,6 @@ const getColorName = (index) => {
         "light",
         "dark",
         "default",
-        "white",
         "darker",
         "indigo",
         "cyan",

@@ -18,8 +18,6 @@ export const setGroupUsersCount = (count) => {
     };
 };
 
-
-
 export const fetchUsersFailed = (error) => {
     return {
         type: actionTypes.FETCH_USERS_FAILED
@@ -70,8 +68,7 @@ export const getUsers = (filterData) => {
                 res.forEach(element => {
                     if (element.user) {
                         users.push({
-                            ...element,
-                            count: 0
+                            ...element
                         });
                     }
                 });
@@ -187,6 +184,31 @@ export const deleteUserFailed = (error) => {
     };
 };
 
+
+export const deleteUserGroup = (userGroupId, filterData) => {
+    return dispatch => {
+        userGroupService.deleteUserGroup(userGroupId).then(result => {
+            dispatch(getUsers(filterData));
+        }).catch(error => {
+            dispatch(deleteUserFailed(error));
+        });
+    };
+};
+
+export const deleteUserGroupSuccess = (id) => {
+    return {
+        type: actionTypes.DELETE_USER_GROUP_SUCCESS,
+        userId: id
+    };
+};
+
+export const deleteUserGroupFailed = (error) => {
+    return {
+        type: actionTypes.DELETE_USER_GROUP_FAIL,
+        error: error
+    };
+};
+
 export const createUser = (userData, filterData) => {
     return dispatch => {
         userService.createUserService(userData)
@@ -242,3 +264,56 @@ export const updateUserFailed = (error) => {
         error: true
     };
 };
+
+
+export const createUserGroupBulk = (userGroupBulk) => {
+    return dispatch => {
+        dispatch(createUserGroupBulkRequest());
+
+        userGroupService.createUserGroupBulk(userGroupBulk)
+            .then((response) => {
+                const filterData = {
+                    filter: {
+                        where: {
+                            groupId: {
+                                like: helperService.getGroupId()
+                            }
+                        },
+                        include: [
+                            {
+                                relation: "user"
+                            }
+                        ]
+                    }
+                };
+                dispatch(getUsers(filterData));
+                dispatch(createUserGroupBulkSuccess(response));
+            })
+            .catch((error) => {
+                dispatch((createUserGroupBulkFailure(error)));
+            });
+    }
+}
+
+
+export const createUserGroupBulkRequest = () => {
+    return {
+        type: actionTypes.CREATE_USERGROUPBULK_REQUEST,
+    };
+};
+
+export const createUserGroupBulkSuccess = (response) => {
+    return {
+        type: actionTypes.CREATE_USERGROUPBULK_SUCCESS,
+        response: response
+    };
+}
+
+export const createUserGroupBulkFailure = (err) => {
+
+    return {
+        type: actionTypes.CREATE_USERGROUPBULK_FAILURE,
+        errorObj: err,
+
+    };
+}

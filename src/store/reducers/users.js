@@ -48,6 +48,16 @@ const reducer = (state = initialState, action) => {
                 error: true,
                 statusText: helperService.getErrorMessage(action.errorObj)
             };
+        case actionTypes.CREATE_USERGROUPBULK_SUCCESS:
+            return {
+                ...state,
+                error: false
+            };
+        case actionTypes.CREATE_USERGROUPBULK_FAILURE:
+            return {
+                ...state,
+                error: true
+            };
         default:
             return state;
     }

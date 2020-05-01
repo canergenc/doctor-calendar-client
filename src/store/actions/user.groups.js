@@ -70,46 +70,10 @@ const createUserGroupFailure = (err) => {
 }
 
 
-const createUserGroupBulk = (userGroupBulk) => {
-    return dispatch => {
-        dispatch(createUserGroupBulkRequest());
 
-        userGroupService.createUserGroupBulk(userGroupBulk)
-            .then((response) => {
-                dispatch(createUserGroupBulkSuccess(response));
-            })
-            .catch((error) => {
-                dispatch((createUserGroupBulkFailure(error)));
-            });
-    }
-}
-
-
-const createUserGroupBulkRequest = () => {
-    return {
-        type: actionTypes.CREATE_USERGROUPBULK_REQUEST,
-    };
-};
-
-const createUserGroupBulkSuccess = (response) => {
-    return {
-        type: actionTypes.CREATE_USERGROUPBULK_SUCCESS,
-        response: response
-    };
-}
-
-const createUserGroupBulkFailure = (err) => {
-
-    return {
-        type: actionTypes.CREATE_USERGROUPBULK_FAILURE,
-        erorObj: err,
-
-    };
-}
 
 export const userGroupActions = {
-    createUserGroup,
-    createUserGroupBulk
+    createUserGroup
 };
 
 

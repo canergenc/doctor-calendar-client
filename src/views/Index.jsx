@@ -263,7 +263,7 @@ const mapDispatchToProps = dispatch => {
     cleanReminderError: () => dispatch(actions.cleanReminderError()),
     createReminder: (reminderData, filterData) => dispatch(actions.createReminder(reminderData, filterData)),
     updateReminder: (reminderId, reminderIndex, reminderData, filterData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData, filterData)),
-    createUserGroupBulk: (userGroupBulk) => dispatch(actions.userGroupActions.createUserGroupBulk(userGroupBulk)),
+    createUserGroupBulk: (userGroupBulk) => dispatch(actions.createUserGroupBulk(userGroupBulk)),
     findUser: (filterKey, users) => dispatch(actions.findUser(filterKey, users))
   };
 };
