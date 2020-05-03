@@ -1,4 +1,4 @@
-import Index from "../../views/Index";
+import Index from "../../views/Index.jsx";
 import Profile from "../../containers/Profile/Profile";
 import Location from "../../containers/Locations/Locations";
 import Person from "../../containers/Persons/Persons.js";

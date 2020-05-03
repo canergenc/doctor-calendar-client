@@ -22,7 +22,7 @@ import {
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 
-import UserHeader from "components/Headers/UserHeader.jsx";
+import UserHeader from "../../components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
 
 const MySwal = withReactContent(Swal)

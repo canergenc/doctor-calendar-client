@@ -7,7 +7,7 @@ import Reminder from "./Reminder/Reminder";
 import "./Day.scss";
 import { Button } from "reactstrap";
 import Modal from '../../../components/UI/Modal/Modal';
-import moment from "moment";
+import moment from "moment/moment";
 
 class Day extends Component {
 
@@ -80,7 +80,9 @@ class Day extends Component {
           if (element.user && element.location) {
             fullReminders.push(<Reminder
               isDrag={false}
+              id={element.id}
               key={element.id}
+              location={element.location.name}
               name={element.user.fullName}
               color={element.location ? element.location.colorCode : "#fff"}
               onClickDeleteReminder={() => this.props.deleteReminder(element.id)}

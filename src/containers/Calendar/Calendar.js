@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
-import moment from "moment";
+import moment from "moment/moment";
 import { extendMoment } from 'moment-range';
 import "moment/locale/tr";
 import { helperService } from "../../services";

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import UserHeader from "components/Headers/UserHeader.jsx";
+import UserHeader from "../../components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
 import CustomPagination from "../../components/Paginations/CustomPagination";
 import { constants } from '../../variables/constants';
@@ -30,7 +30,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import moment from "moment";
+import moment from "moment/moment";
 
 const MySwal = withReactContent(Swal)
 
@@ -41,6 +41,7 @@ class Persons extends Component {
             editModal: false,
             addModal: false,
             deleteModal: false,
+            userGroupId: '',
             id: '',
             name: '',
             email: '',
@@ -77,11 +78,14 @@ class Persons extends Component {
     updateHandle(event) {
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
-        if (this.state.name && this.state.email && this.state.workStartDate) {
+        if (this.state.name && this.state.email && this.state.workStartDate && this.state.userGroupId) {
             let userData = {
                 fullName: this.state.name,
                 email: this.state.email,
                 workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+
+            };
+            const countLimits = {
                 weekdayCountLimit: weekdayCountLimit,
                 weekendCountLimit: weekendCountLimit
             };
@@ -99,6 +103,7 @@ class Persons extends Component {
                     ]
                 }
             }
+            this.props.updateUserGroup(this.state.userGroupId, countLimits)
             this.props.updateUser(this.state.id, userData, filterData);
             this.toggleModal('editModal', null);
             event.preventDefault();
@@ -120,16 +125,19 @@ class Persons extends Component {
 
     addHandle(event) {
 
-        if (this.state.name && this.state.email && this.state.password && this.state.workStartDate && this.state.weekdayCountLimit && this.state.weekendCountLimit) {
+        if (this.state.name && this.state.email && this.state.password && this.state.workStartDate) {
             const user = {
                 fullName: this.state.name,
                 email: this.state.email,
                 password: this.state.password,
                 workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-                weekdayCountLimit: parseInt(this.state.weekdayCountLimit),
-                weekendCountLimit: parseInt(this.state.weekendCountLimit),
-                deviceId: "1"
+                deviceId: "1",
+                platform: 1
             };
+            const countLimits = {
+                weekdayCountLimit: this.state.weekdayCountLimit ? parseInt(this.state.weekdayCountLimit) : '',
+                weekendCountLimit: this.state.weekendCountLimit ? parseInt(this.state.weekendCountLimit) : '',
+            }
             const filterData = {
                 filter: {
                     skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
@@ -144,7 +152,7 @@ class Persons extends Component {
                     ]
                 }
             }
-            this.props.createUser(user, filterData);
+            this.props.createUser(user, countLimits, filterData);
             this.toggleModal('addModal', null);
             event.preventDefault();
             MySwal.fire({
@@ -213,6 +221,8 @@ class Persons extends Component {
     }
 
     toggleModal(state, userGroup) {
+        console.log(userGroup);
+        
         if (userGroup) {
             this.setState({
                 [state]: !this.state[state],
@@ -228,6 +238,7 @@ class Persons extends Component {
         else {
             this.setState({
                 [state]: !this.state[state],
+                userGroupId: '',
                 id: '',
                 name: '',
                 email: '',
@@ -242,6 +253,7 @@ class Persons extends Component {
         this.setState({ currentIndex: index });
         this.renderTableData(index);
     }
+
     render() {
         let users = "Kullanıcılar Yükleniyor...";
         let usersCount = 0;
@@ -254,8 +266,8 @@ class Persons extends Component {
                     fullName={user.user.fullName}
                     workStartDate={user.user.workStartDate}
                     email={user.user.email}
-                    weekdayCountLimit={user.user.weekdayCountLimit}
-                    weekendCountLimit={user.user.weekendCountLimit}
+                    weekdayCountLimit={user.weekdayCountLimit}
+                    weekendCountLimit={user.weekendCountLimit}
                     editClick={() => this.toggleModal("editModal", user)}
                     deleteClick={() => this.toggleModal("deleteModal", user)}
                 />
@@ -460,16 +472,17 @@ class Persons extends Component {
                                 <CardHeader className="border-0">
                                     <div className="row">
                                         <div className="col-md-10">
-                                            <h3 className="mb-0">Kullanıcı Listesi</h3>
+                                            <h3 className="mb-0" style={{display:"inline-block"}}>Kullanıcı Listesi</h3>
+                                            <Button
+                                                color="primary"
+                                                onClick={() => this.renderTableData(this.state.currentIndex)}
+                                            >
+                                                <i className="fas fa-sync-alt"></i>
+                                            </Button>
                                         </div>
                                         <div className="col-md-1">
-                                                <Button
-                                                    color="primary"
-                                                    onClick={() => this.renderTableData(this.state.currentIndex)}
-                                                >
-                                                    <i className="fas fa-sync-alt"></i>
-                                                </Button>
-                                            </div>
+                                            
+                                        </div>
                                         <div className="col-md-1">
                                             <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
@@ -481,7 +494,7 @@ class Persons extends Component {
                                     </div>
 
                                 </CardHeader>
-                                <Table className="align-items-center table-flush" responsive>
+                                <Table className="align-items-center table-flush" >
                                     <thead className="thead-light">
                                         <tr>
                                             <th scope="col">Ad Soyad</th>
@@ -489,7 +502,7 @@ class Persons extends Component {
                                             <th scope="col">E-Mail</th>
                                             <th scope="col">Haftaiçi Nöbet Sayısı</th>
                                             <th scope="col">Haftasonu Nöbet Sayısı</th>
-                                            <th scope="col" />
+                                            <th scope="col" className="text-right">İşlemler</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -528,9 +541,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
-        createUser: (userData, filterData) => dispatch(actions.createUser(userData, filterData)),
+        createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
         updateUser: (userId, userData, filterData) => dispatch(actions.updateUser(userId, userData, filterData)),
+        updateUserGroup: (userGroupId, countLimits) => dispatch(actions.userGroupActions.updateUserGroup(userGroupId, countLimits)),
         getGroupUsersCount: () => dispatch(actions.getGroupUsersCount())
     };
 };

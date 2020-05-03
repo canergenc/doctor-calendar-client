@@ -5,7 +5,7 @@ import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
 import ToastServive from 'react-material-toast';
 import Select from 'react-select';
-import moment from 'moment';
+import moment from 'moment/moment';
 import { extendMoment } from 'moment-range';
 import { permissionHelper } from "./PermissionHelper";
 import 'font-awesome/css/font-awesome.min.css';

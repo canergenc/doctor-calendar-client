@@ -3,9 +3,8 @@ import { Route, Switch } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
-import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
-import AdminFooter from "components/Footers/AdminFooter.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+import AdminNavbar from "../components/Navbars/AdminNavbar.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 
 // import routes from "routes.js";
 
@@ -65,7 +64,7 @@ class Admin extends React.Component {
           routes={routes}
           logo={{
             innerLink: "/admin/index",
-            imgSrc: require("assets/img/brand/calendar-6.png"),
+            imgSrc: require("../assets/img/brand/calendar-6.png"),
             imgAlt: "..."
           }}
         />

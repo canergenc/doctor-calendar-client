@@ -69,11 +69,35 @@ const createUserGroupFailure = (err) => {
     };
 }
 
+const updateUserGroup=(userGroupId,data)=>{
+    return dispatch=>{
+        userGroupService.updateUserGroup(userGroupId,data)
+        .then(response=>{
+            dispatch(updateUserGroupSuccess());
+        })
+        .catch(error=>{
+            dispatch(updateUserGroupFailed(error));
+        })
+    }
+}
 
+export const updateUserGroupSuccess = (id, userData) => {
+    return {
+        type: actionTypes.UPDATE_USER_GROUP_SUCCESS
+    };
+};
 
+export const updateUserGroupFailed = (error) => {
+    return {
+        type: actionTypes.UPDATE_USER_GROUP_FAIL,
+        errorObj: error,
+        error: true
+    };
+};
 
 export const userGroupActions = {
-    createUserGroup
+    createUserGroup,
+    updateUserGroup
 };
 
 

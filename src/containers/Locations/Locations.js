@@ -25,12 +25,13 @@ import {
     FormGroup
 } from "reactstrap";
 // core components
-import UserHeader from "components/Headers/UserHeader.jsx";
-import "./Location.scss";
+import UserHeader from "../../components/Headers/UserHeader.jsx";
+import "./Locations.scss";
+import styles from "./Locations.scss";
 import { RadioGroup } from "pretty-checkbox-react";
 import { helperService } from "../../services";
 
-class Location extends Component {
+class Locations extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -39,7 +40,34 @@ class Location extends Component {
             deleteModal: false,
             id: '',
             name: '',
-            colorCode: ''
+            colorCode: '',
+            colors: [
+                'red',
+                'orange',
+                'yellow',
+                'olive',
+                'green',
+                'teal',
+                'blue',
+                'violet',
+                'purple',
+                'pink',
+                'primary',
+                'secondary',
+                'success',
+                'info',
+                'warning',
+                'danger',
+                'light',
+                'dark',
+                'default',
+                'darker',
+                'indigo',
+                'cyan',
+                'gray',
+                'gray-dark',
+                'lighter'
+            ]
         }
 
         this.updateHandle = this.updateHandle.bind(this);
@@ -53,7 +81,8 @@ class Location extends Component {
             this.setState({ name: event.target.value });
         if (target.name === 'colorCode')
             this.setState({ colorCode: event.target.value });
-    }
+    };
+
     updateHandle(event) {
         const locationData = {
             name: this.state.name,
@@ -63,7 +92,7 @@ class Location extends Component {
         this.toggleModal('editModal', undefined);
 
         event.preventDefault();
-    }
+    };
 
     addHandle(event) {
 
@@ -81,14 +110,14 @@ class Location extends Component {
             alert('Ad alanı zorunludur!')
         }
         event.preventDefault();
-    }
+    };
 
     deleteHandle() {
         if (this.state.id) {
             this.props.deleteLocation(this.state.id)
             this.toggleModal('deleteModal', undefined);
         }
-    }
+    };
 
     renderTableData() {
         const filterData = {
@@ -101,11 +130,11 @@ class Location extends Component {
             }
         }
         this.props.onInitLocations(filterData);
-    }
+    };
 
     componentDidMount() {
         this.renderTableData();
-    }
+    };
 
     toggleModal(state, location) {
         if (location) {
@@ -182,7 +211,6 @@ class Location extends Component {
 
         // change background colour if dragging
         background: isDragging ? "lightgray" : "",
-        width: isDragging ? "1000px" : "",
         // styles we need to apply on draggables
         ...draggableStyle
     });
@@ -219,8 +247,8 @@ class Location extends Component {
                             </td>
                             <td className="text-right">
                                 <UncontrolledDropdown>
-                                    <DropdownToggle className="text-dark" role="button" onClick={e => e.preventDefault()}>
-                                        İşlemler
+                                    <DropdownToggle className="btn-icon-only text-light" size="sm" role="button" onClick={e => e.preventDefault()}>
+                                        <i className="fas fa-ellipsis-v" />
                                     </DropdownToggle>
                                     <DropdownMenu className="dropdown-menu-arrow" right>
                                         <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.toggleModal("editModal", location)}>Düzenle</DropdownItem>
@@ -233,6 +261,21 @@ class Location extends Component {
                 </Draggable>
             ));
         }
+
+        const colorsRadioNew = this.state.colors.map((color, index) =>
+            <div style={{ float: "left" }} key={index}>
+                <input className="radioInput" type="radio" name="colorCode" id={color} value={color} onChange={(event) => this.inputChangeHandle(event)} />
+                <label className="radioLabel" type="radioLabel" htmlFor={color} title={color}><span type="radioSpan" className={"radioSpan " + color}></span></label>
+            </div>
+        );
+
+        const colorsRadioEdit = this.state.colors.map((color, index) =>
+            <div style={{ float: "left" }} key={index}>
+                <input className="radioInput" type="radio" name="colorCode" id={color} value={color} onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === color} />
+                <label className="radioLabel" type="radioLabel" htmlFor={color} title={color}><span type="radioSpan" className={"radioSpan " + color} ></span></label>
+            </div>
+        );
+
         return (
             <>
                 <UserHeader />
@@ -273,39 +316,7 @@ class Location extends Component {
                                         </InputGroupText>
 
                                         <RadioGroup name="colorCode" value={this.state.colorCode} onChange={(event) => this.inputChangeHandle(event)}>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="primary" value="primary" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="primary"><span type="radioSpan" className="radioSpan primary"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="secondary" value="secondary" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="secondary"><span type="radioSpan" className="radioSpan secondary"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="success" value="success" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="success"><span type="radioSpan" className="radioSpan success"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="info" value="info" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="info"><span type="radioSpan" className="radioSpan info"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="warning" value="warning" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="warning"><span type="radioSpan" className="radioSpan warning"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="danger" value="danger" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="danger"><span type="radioSpan" className="radioSpan danger"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="light" value="light" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="light"><span type="radioSpan" className="radioSpan light"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="dark" value="dark" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="dark"><span type="radioSpan" className="radioSpan dark"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="default" value="default" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="default"><span type="radioSpan" className="radioSpan default"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="white" value="white" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="white"><span type="radioSpan" className="radioSpan white"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="darker" value="darker" onChange={(event) => this.inputChangeHandle(event)} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="darker"><span type="radioSpan" className="radioSpan darker"></span></label>
+                                            {colorsRadioNew}
                                         </RadioGroup>
                                     </InputGroupAddon>
                                 </InputGroup>
@@ -350,50 +361,18 @@ class Location extends Component {
                                     </InputGroupAddon>
                                 </InputGroup>
                             </FormGroup>
-                            <FormGroup>
 
+                            <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3 pt-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>
                                             <i className="ni ni-palette" />
                                         </InputGroupText>
 
-
                                         <RadioGroup name="colorCode" value={this.state.colorCode} onChange={(event) => this.inputChangeHandle(event)}>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="primary" value="primary" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "primary"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="primary"><span type="radioSpan" className="radioSpan primary" ></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="secondary" value="secondary" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "secondary"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="secondary"><span type="radioSpan" className="radioSpan secondary"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="success" value="success" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "success"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="success"><span type="radioSpan" className="radioSpan success"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="info" value="info" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "info"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="info"><span type="radioSpan" className="radioSpan info"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="warning" value="warning" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "warning"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="warning"><span type="radioSpan" className="radioSpan warning"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="danger" value="danger" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "danger"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="danger"><span type="radioSpan" className="radioSpan danger"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="light" value="light" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "light"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="light"><span type="radioSpan" className="radioSpan light"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="dark" value="dark" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "dark"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="dark"><span type="radioSpan" className="radioSpan dark"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="default" value="default" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "default"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="default"><span type="radioSpan" className="radioSpan default"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="white" value="white" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "white"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="white"><span type="radioSpan" className="radioSpan white"></span></label>
-
-                                            <input className="radioInput" type="radio" name="colorCode" id="darker" value="darker" onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === "darker"} />
-                                            <label className="radioLabel" type="radioLabel" htmlFor="darker"><span type="radioSpan" className="radioSpan darker"></span></label>
+                                            {colorsRadioEdit}
                                         </RadioGroup>
+
                                     </InputGroupAddon>
                                 </InputGroup>
                             </FormGroup>
@@ -447,17 +426,18 @@ class Location extends Component {
                                 <Card className="shadow">
                                     <CardHeader className="border-0">
                                         <div className="row">
-                                            <div className="col-md-10">
-                                                <h3 className="mb-0">Lokasyon Listesi</h3>
-
-                                            </div>
-                                            <div className="col-md-1">
+                                            <div className="col-md-3">
+                                                <h3 className="mb-0" style={{display:"inline-block"}}>Lokasyon Listesi</h3>
                                                 <Button
                                                     color="primary"
                                                     onClick={() => this.renderTableData()}
+                                                    size="sm"
                                                 >
                                                     <i className="fas fa-sync-alt"></i>
                                                 </Button>
+                                            </div>
+                                            <div className="col-md-8">
+
                                             </div>
                                             <div className="col-md-1">
                                                 <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
@@ -476,7 +456,7 @@ class Location extends Component {
                                                 <th scope="col"></th>
                                                 <th scope="col">Adı</th>
                                                 <th scope="col">Renk</th>
-                                                <th scope="col" />
+                                                <th scope="col" className="text-right">İşlemler</th>
                                             </tr>
                                         </thead>
                                         <Droppable droppableId="LocationList" >
@@ -521,4 +501,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Location);
+export default connect(mapStateToProps, mapDispatchToProps)(Locations);
