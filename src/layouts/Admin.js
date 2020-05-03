@@ -12,6 +12,7 @@ import Sidebar from "components/Sidebar/Sidebar.jsx";
 import { customVariables } from "../hoc/Config/customVariables";
 import history from "../hoc/Config/history";
 import routes from "../hoc/Config/admin.routes";
+import { constants } from "../variables/constants";
 
 
 class Admin extends React.Component {
@@ -24,8 +25,7 @@ class Admin extends React.Component {
 
   getRoutes = routes => {
     return routes.map((prop, key) => {
-      let token = localStorage.getItem(customVariables.TOKEN);
-      let isRememberMe = localStorage.getItem(customVariables.REMEMBERME);
+      let token = localStorage.getItem(constants.TOKEN);
       if (!token) {
         return history.push("/auth/login");
       } else {
@@ -46,10 +46,12 @@ class Admin extends React.Component {
 
   getBrandText = path => {
     for (let i = 0; i < routes.length; i++) {
+    
+      
       if (
         this.props.location.pathname.indexOf(
           routes[i].layout + routes[i].path
-        ) !== -1
+        ) !== -1 
       ) {
         return routes[i].name;
       }

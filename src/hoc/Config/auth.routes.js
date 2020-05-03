@@ -4,6 +4,7 @@ import Location from "../../containers/Locations/Locations";
 import Person from "../../containers/Persons/Persons.js";
 import Login from "../../components/Login/Login.js"
 import register from "../../containers/Register/Register";
+import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
 
 
@@ -50,6 +51,19 @@ var routes = [
         icon: "ni ni-circle-08 text-pink",
         component: register,
         layout: "/auth"
+    },
+
+    {
+        path: "*",
+        name: "Sayfa bulunamadı",
+        icon: "ni ni-active-40 text-primary",
+        component: NotFoundPage,
+        layout: "/auth"
     }
+
+    
+   
+
+   
 ];
 export default routes;

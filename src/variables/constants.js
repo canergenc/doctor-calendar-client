@@ -4,6 +4,8 @@ export const constants = {
         serviceCountMoreThanOne: "Sadece 1 adet lokasyon seçiniz.",
     },
 
+    REMEMBERME:"isRememberMe",
+
     SUCCESS_MESSAGE: {
 
         loginSuccess: "Giriş başarılı",

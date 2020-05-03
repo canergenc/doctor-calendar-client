@@ -1,6 +1,7 @@
 
 import GroupSplash from "../../containers/Splash/Group";
 import LocationSplash from "../../containers/Splash/Location";
+import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
 
 var routes = [
@@ -19,6 +20,15 @@ var routes = [
         component: LocationSplash,
         layout: "/splash"
     },
+
+    {
+        path: "*",
+        name: "Sayfa bulunamadı",
+        icon: "ni ni-active-40 text-primary",
+        component: NotFoundPage,
+        layout: "/splash"
+    }
+
     
 ];
 export default routes;
