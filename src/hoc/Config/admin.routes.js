@@ -44,16 +44,16 @@ var routes = [
         layout: "/admin"
     },
 
-    // {
-    //     path: "*",
-    //     name: "NotFoundPage",
-    //     icon: "ni ni-active-40 text-primary",
-    //     component: NotFoundPage,
-    //     layout: "/admin"
-    // }
+    {
+        path: "*",
+        name: "NotFoundPage",
+        icon: "ni ni-active-40 text-primary",
+        component: NotFoundPage,
+        layout: "/admin"
+    }
 
 
-   
+
 
     // {
     //     path: "/login",

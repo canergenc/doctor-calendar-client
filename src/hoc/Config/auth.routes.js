@@ -55,7 +55,7 @@ var routes = [
 
     {
         path: "*",
-        name: "Sayfa bulunamadı",
+        name: "NotFound",
         icon: "ni ni-active-40 text-primary",
         component: NotFoundPage,
         layout: "/auth"
