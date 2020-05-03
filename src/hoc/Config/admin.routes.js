@@ -3,6 +3,7 @@ import Profile from "../../containers/Profile/Profile.js";
 import Location from "../../containers/Locations/Locations.js";
 import Person from "../../containers/Persons/Persons.js";
 import Permission from "../../containers/Request-Approve/Permission.js";
+import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
 
 var routes = [
@@ -42,6 +43,18 @@ var routes = [
         component: Permission,
         layout: "/admin"
     },
+
+    {
+        path: "*",
+        name: "NotFoundPage",
+        icon: "ni ni-active-40 text-primary",
+        component: NotFoundPage,
+        layout: "/admin"
+    }
+
+
+
+
     // {
     //     path: "/login",
     //     name: "Login",

@@ -31,6 +31,8 @@ import permissionReducer from "./store/reducers/permission";
 import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
 import history from "./hoc/Config/history";
+import NotFoundPage from "./containers/NotFound/NotFoundPage";
+import { constants } from "./variables/constants";
 
 // Redux Chrome Devtool Extension
 const composeEnhancers =
@@ -54,16 +56,36 @@ const rootReducer = combineReducers({
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
+
+
+
+// store.subscribe(() => {
+//   token = store.getState().auth.token;
+//   console.log("Bence oldu", token);
+// })
+
+let token = localStorage.getItem(constants.TOKEN);
+
+let isRememberMe = localStorage.getItem(constants.REMEMBERME);
+
+console.log('İS',isRememberMe);
+
+
 ReactDOM.render(
+
+
   <Provider store={store}>
     <Router history={history}>
       <Switch>
         <Route path="/admin" render={props => <AdminLayout  {...props} />} />
+       
+
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
         <Route path="/splash" render={props => <SplashLayout {...props} />} />
-
-
-        <Redirect from="/" to="/auth/login" />
+         
+    
+        {token &&  isRememberMe ?  <Redirect   from="/" to="/admin/index" /> : <Redirect   from="/" to="/auth/login" />  }
+       
 
       </Switch>
     </Router>

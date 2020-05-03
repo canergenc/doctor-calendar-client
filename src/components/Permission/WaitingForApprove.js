@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { Button, Card, Table, CardHeader, Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
+import { Button, Card,UncontrolledDropdown,DropdownMenu,DropdownItem,DropdownToggle, Table, CardHeader, Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
@@ -142,7 +142,7 @@ class WaitingForApproved extends Component {
         if (!startDate || !endDate || !userId || !description) {
             const id = toast.error('Tüm alanlar girilmiş olmalı');
             return;
-        }  else {
+        } else {
             const getApprovedFilter = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex);
             const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
             const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
@@ -221,7 +221,7 @@ class WaitingForApproved extends Component {
             if (e.target.value) {
                 this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(e.target.value));
             } else {
-               this.refreshPermissions();
+                this.refreshPermissions();
 
             }
         }
@@ -273,7 +273,21 @@ class WaitingForApproved extends Component {
                     <td>{moment(p.startDate).format('DD/MM/YYYY')}</td>
                     <td>{moment(p.endDate).format('DD/MM/YYYY')}</td>
                     <td>{p.description ? p.description : "Açıklama girilmedi."}</td>
+
                     <td className="text-right">
+                        <UncontrolledDropdown>
+                            <DropdownToggle className="text-dark" onClick={e => e.preventDefault()}>
+                                İşlemler
+                        </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-arrow" right>
+                                <DropdownItem style={{ marginLeft: "0px" }}  onClick={() => this.rejectPermission(p)}>İptal</DropdownItem>
+                                <DropdownItem style={{ marginLeft: "0px" }}  onClick={() => this.approvePermisson(p)}>Aktar</DropdownItem>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>
+                    </td>
+
+
+                    {/* <td className="text-right">
                         <Button
                             color="warning"
                             onClick={() => this.rejectPermission(p)}
@@ -289,7 +303,7 @@ class WaitingForApproved extends Component {
                             AKTAR
                       </Button>
 
-                    </td>
+                    </td> */}
                 </tr>
             ));
             this.state.copyOfListOfPermission = this.state.listOfPermission;
@@ -350,9 +364,9 @@ class WaitingForApproved extends Component {
                                             selected={this.state.startDate}
 
                                             locale="tr"
-                                            onChange={date =>{ 
+                                            onChange={date => {
                                                 this.setStartDate(date);
-                                                this.setState({endDate:date})
+                                                this.setState({ endDate: date })
                                             }}
                                         />
                                     </Col>
@@ -370,10 +384,11 @@ class WaitingForApproved extends Component {
                                             minDate={this.state.startDate}
                                             selected={this.state.endDate}
                                             locale="tr"
-                                            onChange={date => {this.setEndDate(date)
-                                                
+                                            onChange={date => {
+                                                this.setEndDate(date)
+
                                             }}
-                                        
+
                                         />
                                     </Col>
 
@@ -417,7 +432,7 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Kişi Seçimi:</Label>
                                     <Col sm={7}>
-                                        <Select 
+                                        <Select
                                             classNamePrefix="select"
 
 
@@ -434,7 +449,7 @@ class WaitingForApproved extends Component {
                     </div>
                     <div className="modal-footer">
                         <button
-                        className="bttn bttn-secondary"
+                            className="bttn bttn-secondary"
                             onClick={() => this.closeCreateModal()}>Kapat
                         </button>
                         <button className="bttn bttn-primary" onClick={this.createPermission} >Kaydet</button>
