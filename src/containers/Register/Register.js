@@ -2,10 +2,11 @@ import { connect } from 'react-redux';
 import React from "react";
 import * as actions from '../../store/actions/index';
 import 'font-awesome/css/font-awesome.min.css';
-
 // reactstrap components
 import {
   Button,
+  Modal,
+  Label,
   Alert,
   Card,
   Badge,
@@ -19,11 +20,7 @@ import {
   Row,
   Col
 } from "reactstrap";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-
-const MySwal = withReactContent(Swal)
-
+import * as EmailValidator from 'email-validator';
 class Register extends React.Component {
   constructor(props) {
     super(props);
@@ -32,42 +29,98 @@ class Register extends React.Component {
       email: '',
       password: '',
       submitted: false,
-      privacyPolicy: false
+      privacyPolicy: false,
+      isClickPrivacyModal: false,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleInputChange(event) {
+    this.setState({ submitted: false });
     const target = event.target;
-    if (target.type === 'email')
+    if (target.name === 'email')
       this.setState({ email: event.target.value });
-    else if (target.type === 'password')
+    else if (target.name === 'password')
       this.setState({ password: event.target.value });
     else if (target.name === 'fullName')
       this.setState({ fullName: event.target.value });
     else if (target.name === 'privacyPolicy')
       this.setState({ privacyPolicy: !this.state.privacyPolicy })
   }
-  handleSubmit(event) {
 
-    event.preventDefault();
-    this.setState({ submitted: true });
+
+  handleValidation() {
+    let formIsValid = true;
     const { fullName, email, password, privacyPolicy } = this.state;
-    if (fullName && email && password && privacyPolicy) {
+    if (!fullName || !email || !password) {
+      formIsValid = false;
+    }
+    if (password && password.length < 8) {
+      formIsValid = false;
+    }
+    if (!privacyPolicy) {
+      formIsValid = false
+    }
+    if (!EmailValidator.validate(email)) {
+      formIsValid = false;
+    }
+    return formIsValid
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    const { fullName, email, password } = this.state;
+    this.setState({ submitted: true });
+    if (this.handleValidation()) {
       this.props.register(email, fullName, password);
     }
-    else {
-      MySwal.fire({
-        icon: 'warning',
-        title: 'Zorunlu alanlar var',
-        text: "Lütfen zorunlu alanları doldurunuz"
-      });
-    }
   }
+
+  togglePrivacyCondition(state) {
+    this.setState({
+      [state]: !this.state[state]
+    });
+  };
+
   render() {
-    const { fullName, email, password, submitted } = this.state;
+    const { fullName, email, password, submitted, privacyPolicy } = this.state;
+    const isEmailValid = EmailValidator.validate(email);
     return (
       <>
+
+
+        <Modal
+          className="modal-dialog-centered"
+
+          isOpen={this.state.isClickPrivacyModal}
+          toggle={() => this.togglePrivacyCondition("isClickPrivacyModal")}>
+          <div className="modal-header">
+            <h5 className="modal-title" id="editModalLabel">Üyelik Sözleşmesi</h5>
+            <button
+              aria-label="Close"
+              className="close"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => this.togglePrivacyCondition("isClickPrivacyModal")}>
+              <span aria-hidden={true}>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            Bir şeyler yazılacak....
+          </div>
+          <div className="modal-footer">
+            <Button
+              color="secondary"
+              data-dismiss="modal"
+              type="button"
+              onClick={() => this.togglePrivacyCondition("isClickPrivacyModal")}>Geri Dön
+                        </Button>
+
+          </div>
+        </Modal>
+
+
         <Col lg="6" md="8">
           <Card className="bg-secondary shadow border-0">
 
@@ -107,12 +160,18 @@ class Register extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" value={this.state.email} onChange={this.handleInputChange} />
+                    <Input name="email" placeholder="Email" type="text" value={this.state.email} onChange={this.handleInputChange} />
                   </InputGroup>
 
                   {submitted && !email &&
 
                     <p style={{ fontSize: 12 }} className="text-warning">Email gerekli.</p>
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                  }
+
+                  {submitted && email && !isEmailValid &&
+
+                    <p style={{ fontSize: 12 }} className="text-warning">Email formatı uygun değil.</p>
                     // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
                   }
                 </FormGroup>
@@ -123,11 +182,22 @@ class Register extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Şifre" type="password" value={this.state.password} onChange={this.handleInputChange} />
+                    <Input placeholder="Şifre" type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
                   {submitted && !password &&
 
                     <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre gerekli.</p>
+
+
+                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                  }
+
+
+                  {submitted && password && password.length < 8 &&
+
+                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre en az 8 karekter olmalı.</p>
+
+
                     // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
                   }
                 </FormGroup>
@@ -153,15 +223,25 @@ class Register extends React.Component {
                         htmlFor="customCheckRegister"
                       >
                         <span className="text-muted">
-                          Okudum, kabul ediyorum{" "}
-                          <a href="#pablo" onClick={e => e.preventDefault()}>
-                            Gizlilik politikası
+                          <a href="#pablo" onClick={() => this.togglePrivacyCondition("isClickPrivacyModal")}>
+                            Üyelik koşullarını{" "}
                           </a>
+                          ve{" "}
+                          <a href="#pablo" onClick={e => e.preventDefault()}>
+                            kişisel verilerimin korunmasını{" "}
+                          </a>
+                          kabul ediyorum
                         </span>
                       </label>
                     </div>
                   </Col>
                 </Row>
+
+
+                {submitted && !privacyPolicy &&
+                  <p style={{ fontSize: 12 }} className="text-warning">Gizlilik politikası onaylanmalı</p>
+                  // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                }
 
 
 
