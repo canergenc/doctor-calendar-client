@@ -5,7 +5,7 @@ import {
   Container
 
 } from "reactstrap";
-import UserHeader from "components/Headers/UserHeader.jsx";
+import UserHeader from "../../components/Headers/UserHeader.jsx";
 
 class NotFoundPage extends React.Component {
   render() {

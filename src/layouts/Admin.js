@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
-import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+import AdminNavbar from "../components/Navbars/AdminNavbar.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import history from "../hoc/Config/history";
 import routes from "../hoc/Config/admin.routes";
 import { constants } from "../variables/constants";

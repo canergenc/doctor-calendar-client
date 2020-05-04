@@ -1,4 +1,3 @@
-import { customVariables } from "../hoc/Config/customVariables";
 import style from "../containers/Locations/Locations.scss";
 
 
