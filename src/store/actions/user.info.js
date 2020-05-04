@@ -1,15 +1,13 @@
 import { userService } from "../../services"
 import * as actionTypes from "./actionTypes";
 import history from "../../hoc/Config/history"
-import { customVariables } from "../../hoc/Config/customVariables";
+import { constants } from "../../variables/constants";
 
 
 const getUserInfo = () => {
     return dispatch => {
         dispatch(userInfoRequest());
-
         userService.userMe().then((response) => {
-            console.log('userMe', response);
             dispatch(userInfoSuccess(response))
         }).catch((error) => {
             dispatch(userInfoFailure(error));
@@ -20,14 +18,11 @@ const getUserInfo = () => {
 const getUserInfoByAuth = () => {
     return dispatch => {
         dispatch(userInfoRequest());
-
         userService.userMe().then((response) => {
-            console.log('userMe', response);
             dispatch(userInfoSuccess(response))
-
             if (response.groups && response.groups.length > 0) {
-                localStorage.setItem(customVariables.GROUPID, response.groups[0].id);
-                history.push('/admin/index'); // Will fix
+                localStorage.setItem(constants.GROUPID,response.groups[0].id);
+                history.push('/admin/index'); 
             } else {
                 history.push('/splash/index');
             }
@@ -62,11 +57,7 @@ const userInfoSuccess = (response) => {
 const userInfoFailure = (error) => {
     return {
         type: actionTypes.USERINFO_FAILURE,
-        errorObj: error,
-        // statusCode: err.data.error.statusCode, // BadRequestError
-        // statusText: err.data.error.message,  // Invalid email or password
-        // statusName: err.data.error.name,   // BadRequestError
-
+        errorObj: error
     };
 }
 
@@ -78,9 +69,6 @@ const updateUserInfo = (id, data) => {
             dispatch(getUserInfo());
 
         }).catch((error) => {
-            console.log('update user info fail');
-            console.log(error);
-
             dispatch(updateUserInfoFailure(error));
         });
     }

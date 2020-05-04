@@ -1,17 +1,16 @@
 import { authService } from "../../services/auth"
 import * as actionTypes from "./actionTypes";
-import { customVariables } from "../../hoc/Config/customVariables";
 import { userInfoActions } from "./user.info"
+import { constants } from "../../variables/constants";
 
 
 const login = (email, password, isRememberMe) => {
     return dispatch => {
         dispatch(loginRequest());
         authService.login(email, password).then((response) => {
-            console.log('LOGİN',response);
-            localStorage.setItem(customVariables.TOKEN, response.tokenModel.token);
-            localStorage.setItem(customVariables.USERID, response.tokenModel.userId);
-            localStorage.setItem(customVariables.REMEMBERME,isRememberMe);
+            localStorage.setItem(constants.TOKEN, response.tokenModel.token);
+            localStorage.setItem(constants.USERID, response.tokenModel.userId);
+            localStorage.setItem(constants.REMEMBERME ,isRememberMe?"1":"0");
             dispatch(loginSuccess(response.tokenModel))
             dispatch(userInfoActions.getUserInfoByAuth());
             
@@ -45,14 +44,9 @@ const loginSuccess = (tokenModel) => {
 
 
 const loginFailure = (err) => {
-    console.log(err);
     return {
         type: actionTypes.LOGIN_FAILURE,
         erorObj: err,
-        //statusCode: err.error.statusCode, // BadRequestError
-        //statusText: err.error.message,  // Invalid email or password
-        //statusName: err.error.name,   // BadRequestError
-
     };
 }
 

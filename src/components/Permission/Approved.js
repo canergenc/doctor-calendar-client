@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Button, Card, Table, CardHeader, Input, Alert, CardFooter, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
+import { Button, Card, Table, CardHeader, Input, Alert, CardFooter, Row, Col} from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
-import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
+import { CalendarStatus, constants } from '../../variables/constants';
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
 import { helperService } from "../../services/helper";
@@ -10,14 +10,14 @@ import Swal from 'sweetalert2'
 import moment from 'moment';
 import { permissionHelper } from "./PermissionHelper";
 import CustomPagination from "../Paginations/CustomPagination";
-import ToastServive from 'react-material-toast';
+// import ToastServive from 'react-material-toast';
 
-const toast = ToastServive.new({
-    place: 'topRight',
-    duration: 3,
-    maxCount: 10,
-    closable: false
-})
+// const toast = ToastServive.new({
+//     place: 'topRight',
+//     duration: 3,
+//     maxCount: 10,
+//     closable: false
+// })
 
 const MySwal = withReactContent(Swal)
 class Approved extends Component {
@@ -44,7 +44,6 @@ class Approved extends Component {
             if (e.target.value) {
                 this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, e.target.value));
             } else {
-                // const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
                 this.refreshPermissions();
 
             }
@@ -141,22 +140,16 @@ class Approved extends Component {
                         <Row className="align-items-center">
                             <Col xs="3">
                                 <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
-
                             </Col>
 
                             <Col xs="2">
-
                                 <Button
                                     color="secondary"
-
                                     onClick={e => this.getPermissionsBySearch()}
                                     size="lg"
-
-
                                 >
                                     <i class="fas fa-search fa-lg"></i>
                                 </Button>
-
 
                                 <Button
                                     color="secondary"
@@ -169,20 +162,10 @@ class Approved extends Component {
                                 </Button>
 
                             </Col>
-
-
-
-
-
-
-
-
-
                             <Col className="text-right" xs="7">
 
                             </Col>
                         </Row>
-
                     </CardHeader>
                 
 

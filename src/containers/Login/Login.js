@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import * as actions from '../../store/actions/index';
 import 'font-awesome/css/font-awesome.min.css';
+import * as EmailValidator from 'email-validator';
 
 import {
   Button,
@@ -25,56 +26,63 @@ class Login extends React.Component {
     super(props);
     this.state = {
       email: '',
-      emailValid: true,
       password: '',
-      passwordValid: true,
-      formErrors: { email: '', password: '' },
       rememberMe: false,
       submitted: false,
-      formValid: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.emailRef = React.createRef();
   }
 
   handleInputChange(event) {
     this.setState({ submitted: false });
+    
     const target = event.target;
     let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
     if (target.name === 'email') {
-      emailValid = event.target.value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-      this.setState({ email: event.target.value, emailValid: emailValid });
+      this.setState({ email: event.target.value});
     }
     else if (target.name === 'password') {
-      passwordValid = event.target.value !== "" ? true : false;
-      this.setState({ password: event.target.value, passwordValid: passwordValid });
+      this.setState({ password: event.target.value});
     }
     else if (target.name === 'remimberMe') {
-      this.setState({ rememberMe: this.state.rememberMe })
+      this.setState({ rememberMe: event.target.value })
     }
   }
 
-  handleCheckBoxInput(event) {
-    this.setState({ rememberMe: !this.state.rememberMe })
+
+
+  handleValidation() {
+    let formIsValid = true;
+    const {  email, password } = this.state;
+    if ( !email || !password) {
+      formIsValid = false;
+    }
+    if (password && password.length < 8) {
+      formIsValid = false;
+    }
+    return formIsValid
   }
 
   handleSubmit(event) {
+
     event.preventDefault();
-    if (this.state.email && this.state.password) {
-      if (this.state.password.length >= 8) {
-        this.setState({ submitted: true });
-        this.props.login(this.state.email, this.state.password, this.state.rememberMe);
-      }
-    }
+    const { email, password,rememberMe } = this.state;
+    this.setState({ submitted: true });
+    if (this.handleValidation()) {
+      this.props.login(email,password,rememberMe);
+    } 
+
   }
 
 
   render() {
-    const { password, submitted, emailValid, passwordValid } = this.state;
-
+    const { password, submitted,email } = this.state;
+    const isEmailValid = EmailValidator.validate(email);
     // this.props.isAuthenticating ?  <Spinner /> :<p>Lütfen bekleyiniz.</p>  
+
+    
 
     return (
       <>
@@ -102,11 +110,15 @@ class Login extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Email" type="email" name="email"  ref={this.emailRef} onChange={this.handleInputChange} />
+                    <Input placeholder="Email" type="text" name="email" value={this.state.email} onChange={this.handleInputChange} />
 
                   </InputGroup>
-                  {!emailValid ?
+                  {submitted && !email ?
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Email gerekli.</p>
+                    : null}
+
+                  { submitted && email && !isEmailValid ?
+                    <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Email formatı uygun değil.</p>
                     : null}
 
                 </FormGroup>
@@ -120,11 +132,11 @@ class Login extends React.Component {
                     <Input placeholder="Şifre" type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
 
-                  {!passwordValid ?
+                  {submitted  && !password ?
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p> : null
                   }
 
-                  {password.length < 8 && password.length > 0 ?
+                  {submitted && password.length < 8 && password.length > 0 ?
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre 8 karakter olmalı.</p> : null
                   }
 

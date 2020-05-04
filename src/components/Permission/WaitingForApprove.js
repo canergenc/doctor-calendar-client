@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Button, Card,UncontrolledDropdown,DropdownMenu,DropdownItem,DropdownToggle, Table, CardHeader, Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
@@ -6,7 +6,6 @@ import { CalendarTypes, CalendarStatus, constants } from '../../variables/consta
 import ToastServive from 'react-material-toast';
 import Select from 'react-select';
 import moment from 'moment';
-import { extendMoment } from 'moment-range';
 import { permissionHelper } from "./PermissionHelper";
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
@@ -15,7 +14,7 @@ import Swal from 'sweetalert2'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import tr from "date-fns/locale/tr";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
+import { registerLocale } from "react-datepicker";
 import './Permission.css';
 registerLocale("tr", tr);
 const MySwal = withReactContent(Swal)
@@ -120,16 +119,10 @@ class WaitingForApproved extends Component {
     }
 
     closeCreateModal() {
-
         this.setState({
             isOpenCreateModal: false
         });
-        //TODO: Will create redux updated for list.
         this.loadPermissions();
-
-
-
-
     }
 
 
@@ -138,12 +131,11 @@ class WaitingForApproved extends Component {
 
     createPermission() {
 
-        const { startDate, endDate, userId, description, type } = this.state;
+        const { startDate, endDate, userId, description } = this.state;
         if (!startDate || !endDate || !userId || !description) {
-            const id = toast.error('Tüm alanlar girilmiş olmalı');
+             toast.error('Tüm alanlar girilmiş olmalı');
             return;
         } else {
-            const getApprovedFilter = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex);
             const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
             const end = moment(this.state.endDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
             const groupId = helperService.getGroupId();
@@ -151,8 +143,6 @@ class WaitingForApproved extends Component {
             const description = this.state.description;
             const userId = this.state.userId;
             const status = CalendarStatus.WaitingForApprove;
-            // const momentRange = extendMoment(moment);
-            // const range = momentRange.range(start, end);
             const data = {
                 startDate: start,
                 endDate: end,
@@ -176,7 +166,6 @@ class WaitingForApproved extends Component {
             this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.searchParam));
         } else {
             this.refreshPermissions();
-            //const id = toast.warning('Lütfen aramak için bir şeyler yaznız');
         }
     }
 
@@ -216,7 +205,7 @@ class WaitingForApproved extends Component {
 
     keyPress(e) {
         console.log(e.keyCode);
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             console.log('value', e.target.value);
             if (e.target.value) {
                 this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(e.target.value));

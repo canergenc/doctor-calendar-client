@@ -3,7 +3,7 @@ import { groupService } from "../../services/group";
 import { userGroupService } from "../../services/user.group";
 import { helperService } from '../../services';
 import history from "../../hoc/Config/history"
-import { customVariables } from '../../hoc/Config/customVariables';
+import { constants } from '../../variables/constants';
 
 const createUserGroup = (groupName) => {
     return dispatch => {
@@ -18,7 +18,7 @@ const createUserGroup = (groupName) => {
         groupService.createGroup(name)
             .then((response) => {
                 var groupId = response.id;
-                localStorage.setItem(customVariables.GROUPID, groupId)
+                localStorage.setItem(constants.GROUPID, groupId)
                 var userId = helperService.getUserId();
                 userGroupService.createUserGroup(userId, groupId)
                     .then((response) => {

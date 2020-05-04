@@ -1,15 +1,8 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-// reactstrap components
 import { Container } from "reactstrap";
-// core components
 import AdminNavbar from "components/Navbars/AdminNavbar.jsx";
-import AdminFooter from "components/Footers/AdminFooter.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-
-// import routes from "routes.js";
-
-import { customVariables } from "../hoc/Config/customVariables";
 import history from "../hoc/Config/history";
 import routes from "../hoc/Config/admin.routes";
 import { constants } from "../variables/constants";

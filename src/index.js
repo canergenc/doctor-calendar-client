@@ -57,18 +57,8 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 
 
-
-
-// store.subscribe(() => {
-//   token = store.getState().auth.token;
-//   console.log("Bence oldu", token);
-// })
-
 let token = localStorage.getItem(constants.TOKEN);
-
-let isRememberMe = localStorage.getItem(constants.REMEMBERME);
-
-console.log('İS',isRememberMe);
+let isRememberMe = Number(localStorage.getItem(constants.REMEMBERME));
 
 
 ReactDOM.render(
@@ -84,7 +74,7 @@ ReactDOM.render(
         <Route path="/splash" render={props => <SplashLayout {...props} />} />
          
     
-        {token &&  isRememberMe ?  <Redirect   from="/" to="/admin/index" /> : <Redirect   from="/" to="/auth/login" />  }
+        {token &&  isRememberMe==1 ?  <Redirect   from="/" to="/admin/index" /> : <Redirect   from="/" to="/auth/login" />  }
        
 
       </Switch>

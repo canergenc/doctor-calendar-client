@@ -1,7 +1,7 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import 'font-awesome/css/font-awesome.min.css';
 import {
-    TabContent, TabPane, Nav, NavItem, NavLink, Col,Container,
+    TabContent, TabPane, Nav, NavItem, NavLink,Container,
     Row,Card
 } from "reactstrap";
 import UserHeader from "components/Headers/UserHeader.jsx";
@@ -17,7 +17,7 @@ class Permission extends Component {
     }
 
     toggle(tab) {
-        if (this.state.activeTab != tab) this.setState({ activeTab: tab })
+        if (this.state.activeTab !== tab) this.setState({ activeTab: tab })
     }
 
     render() {
@@ -33,14 +33,14 @@ class Permission extends Component {
 
                                 <Nav  style={{margin:3}} pills>
                                     <NavItem  style={{ fontSize: 16,margin:2 }}  >
-                                        <NavLink  style={{ color:this.state.activeTab=='1'?'white':'',cursor:this.state.activeTab=='1'?'default':'pointer' }} className={this.state.activeTab == '1' ? 'active' : ''} onClick={() => { this.toggle('1'); }} >
+                                        <NavLink  style={{ color:this.state.activeTab==='1'?'white':'',cursor:this.state.activeTab==='1'?'default':'pointer' }} className={this.state.activeTab === '1' ? 'active' : ''} onClick={() => { this.toggle('1'); }} >
                                             Yeni Talepler
 
                                         
                                         </NavLink>
                                     </NavItem>
                                     <NavItem style={{ fontSize: 16 ,margin:2 }} >
-                                        <NavLink style={{color:this.state.activeTab=='2'?'white':'',cursor:this.state.activeTab=='2'?'default':'pointer'  }}  className={this.state.activeTab == '2' ? 'active' : ''} onClick={() => { this.toggle('2'); }}>
+                                        <NavLink style={{color:this.state.activeTab==='2'?'white':'',cursor:this.state.activeTab==='2'?'default':'pointer'  }}  className={this.state.activeTab === '2' ? 'active' : ''} onClick={() => { this.toggle('2'); }}>
                                             Onaylananlar
                                             </NavLink>
                                     </NavItem>
