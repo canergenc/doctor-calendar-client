@@ -75,7 +75,6 @@ const AsyncSplashLayout = AsyncComponent(() => {
 
 
 
-console.log('İS', isRememberMe);
 let token = localStorage.getItem(constants.TOKEN);
 let isRememberMe = Number(localStorage.getItem(constants.REMEMBERME));
 
