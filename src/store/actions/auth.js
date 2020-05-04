@@ -10,7 +10,13 @@ const login = (email, password, isRememberMe) => {
         authService.login(email, password).then((response) => {
             localStorage.setItem(constants.TOKEN, response.tokenModel.token);
             localStorage.setItem(constants.USERID, response.tokenModel.userId);
-            localStorage.setItem(constants.REMEMBERME ,isRememberMe?"1":"0");
+            let rememberMe;
+            if(isRememberMe){
+                rememberMe=1;
+            }else{
+                rememberMe=0
+            }
+            localStorage.setItem(constants.REMEMBERME ,rememberMe);
             dispatch(loginSuccess(response.tokenModel))
             dispatch(userInfoActions.getUserInfoByAuth());
             
