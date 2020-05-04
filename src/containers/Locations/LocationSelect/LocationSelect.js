@@ -4,7 +4,7 @@ import * as actions from '../../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 
-import './LocationSelect.css';
+import '../Locations.scss';
 
 import { Button } from "reactstrap";
 import { helperService } from '../../../services';
@@ -43,7 +43,7 @@ class Location extends Component {
                 outline
                 key={el.id}
                 color={el.colorCode}
-                className={` ${selectedLocations.includes(el.id) ? "active" : ""}`}
+                className={`${selectedLocations.includes(el.id) ? "active" : ""}`}
             > {el.name}
             </Button>
         ));

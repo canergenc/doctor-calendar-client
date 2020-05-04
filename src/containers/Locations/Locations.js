@@ -243,7 +243,7 @@ class Locations extends Component {
                             </td>
                             <td>{location.name}</td>
                             <td>
-                                <label className="radioLabelList" type="radioLabel" htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
+                                <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
                             <td className="text-right">
                                 <UncontrolledDropdown>

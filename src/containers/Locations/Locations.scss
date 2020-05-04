@@ -28,6 +28,7 @@ $colors: (
   lighter: #e9ecef,
 );
 
+
 * {
   box-sizing: border-box;
 }
@@ -104,9 +105,201 @@ $colors: (
     width: 100%;
     height: 100%;
     @each $name, $value in $colors {
-      &.#{$name} {
+      .#{$name} {
         background: $value;
       }
     }
   }
+}
+
+.location {
+  background-color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  z-index: 110;
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 600;
+  margin-left: 15px;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.30rem 1.20rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.375rem;  
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
+
+.btn:hover, .btn:focus {
+  text-decoration: none;
+}
+
+.btn:focus, .btn.focus {
+  outline: 0;
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.btn.disabled, .btn:disabled {
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+}
+
+.btn:not(:disabled):not(.disabled):active, .btn:not(:disabled):not(.disabled).active {
+  box-shadow: none;
+}
+
+.btn:not(:disabled):not(.disabled):active:focus, .btn:not(:disabled):not(.disabled).active:focus {
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08), none;
+}
+
+a.btn.disabled, fieldset:disabled a.btn {
+  pointer-events: none;
+}
+
+@mixin btn-outline-list {
+  @each $name, $value in $colors {
+      .btn-outline-#{$name} {   
+        color: $value;
+        background-color: transparent;    
+        background-image: none;
+        border-color: $value; 
+      }
+
+      .btn-outline-#{$name}:hover {
+        color: #fff;
+        background-color: $value;
+        border-color: $value;
+      }
+
+      .btn-outline-#{$name}:focus, .btn-outline-#{$name}.focus {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);
+      }
+
+      .btn-outline-#{$name}.disabled, .btn-outline-#{$name}:disabled {
+        color: $value;
+        background-color: transparent;
+      }
+
+      .btn-outline-#{$name}:not(:disabled):not(.disabled):active, .btn-outline-#{$name}:not(:disabled):not(.disabled).active, .show>.btn-outline-#{$name}.dropdown-toggle {
+        color: #fff;
+        background-color: $value;
+        border-color: $value;
+      }
+
+      
+      .btn-outline-#{$name}:not(:disabled):not(.disabled):active:focus, .btn-outline-#{$name}:not(:disabled):not(.disabled).active:focus, .show>.btn-outline-#{$name}.dropdown-toggle:focus {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5);;
+      }
+  }
+}
+
+
+@include btn-outline-list;
+
+
+@mixin reminder-list {
+  @each $name, $value in $colors {
+    .#{$name} {
+      color: #fff;
+      background-color:$value;
+      border-color: $value;
+      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+    }
+
+  }
+}
+
+@include reminder-list;
+
+@mixin color-list {
+  @for $i from 1 through length($colors) {
+    .color-#{$i} {
+      // color:nth($colors, $i);
+      color:'info';
+    }
+  }
+}
+
+@include color-list;
+
+
+
+input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="button"].btn-block {
+  width: 100%;
+}
+
+.fade {
+  transition: opacity 0.15s linear;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .fade {
+    transition: none;
+  }
+}
+
+.fade:not(.show) {
+  opacity: 0;
+}
+
+.collapse:not(.show) {
+  display: none;
+}
+
+.collapsing {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .collapsing {
+    transition: none;
+  }
+}
+
+.btn {
+  position: relative;
+  text-transform: none;
+  transition: all 0.15s ease;
+  letter-spacing: 0.025em;
+  font-size: 0.875rem;
+  will-change: transform;
+}
+
+.menu-item {
+  padding: 0 40px;
+  user-select: none;
+  cursor: pointer;
+  border: 1px transparent solid;
+}
+.menu-item-wrapper {
+  border: 1px transparent solid;
+}
+
+.scroll-menu-arrow {
+  padding: 20px;
+  cursor: pointer;
+}
+
+.scroll-menu-arrow--disabled {
+  visibility: hidden;
 }

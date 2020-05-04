@@ -20,7 +20,11 @@ const createUserGroup = (groupName) => {
                 var groupId = response.id;
                 localStorage.setItem(customVariables.GROUPID, groupId)
                 var userId = helperService.getUserId();
-                userGroupService.createUserGroup(userId, groupId)
+                const countLimits={
+                    weekdayCountLimit:0,
+                    weekendCountLimit:0
+                }
+                userGroupService.createUserGroup(userId, countLimits)
                     .then((response) => {
                         
                         dispatch(createUserGroupSuccess(response,groupId));

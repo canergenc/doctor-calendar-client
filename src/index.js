@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Route, Router, Switch, Redirect } from "react-router-dom";
 import registerServiceWorker from "./registerServiceWorker";
-
+import AsyncComponent from './hoc/AsyncComponent/AsyncComponent';
 // Redux
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
@@ -12,9 +12,9 @@ import "./assets/vendor/nucleo/css/nucleo.css";
 import "./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
 import "./assets/scss/argon-dashboard-react.scss";
 
-import AdminLayout from "./layouts/Admin";
-import AuthLayout from "./layouts/Auth";
-import SplashLayout from "./layouts/Splash";
+// import AdminLayout from "./layouts/Admin";
+// import AuthLayout from "./layouts/Auth";
+// import SplashLayout from "./layouts/Splash";
 
 // Reducers
 import usersReducer from "./store/reducers/users";
@@ -23,13 +23,11 @@ import locationsReducer from "./store/reducers/locations";
 import calendarReducer from "./store/reducers/calendar"
 import userGroupsReducer from "./store/reducers/user.groups";
 import userInfoReducer from "./store/reducers/user.info";
-
 import bulkLocationReducer from "./store/reducers/bulk-location";
-
 import permissionReducer from "./store/reducers/permission";
-
 import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
+
 import history from "./hoc/Config/history";
 import NotFoundPage from "./containers/NotFound/NotFoundPage";
 import { constants } from "./variables/constants";
@@ -59,6 +57,17 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
 
 
+const AsyncAdminLayout = AsyncComponent(() => {
+  return import(/* webpackChunkName: "admin" */ './layouts/Admin')
+});
+const AsyncAuthLayout = AsyncComponent(() => {
+  return import(/* webpackChunkName: "auth" */ './layouts/Auth')
+});
+
+const AsyncSplashLayout = AsyncComponent(() => {
+  return import(/* webpackChunkName: "splash" */ './layouts/Splash')
+});
+
 // store.subscribe(() => {
 //   token = store.getState().auth.token;
 //   console.log("Bence oldu", token);
@@ -68,7 +77,7 @@ let token = localStorage.getItem(constants.TOKEN);
 
 let isRememberMe = localStorage.getItem(constants.REMEMBERME);
 
-console.log('İS',isRememberMe);
+console.log('İS', isRememberMe);
 
 
 ReactDOM.render(
@@ -77,15 +86,20 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Switch>
-        <Route path="/admin" render={props => <AdminLayout  {...props} />} />
+
+
+        {/* <Route path="/admin" render={props => <AdminLayout  {...props} />} />
        
 
         <Route path="/auth" render={props => <AuthLayout {...props} />} />
-        <Route path="/splash" render={props => <SplashLayout {...props} />} />
-         
-    
-        {token &&  isRememberMe ?  <Redirect   from="/" to="/admin/index" /> : <Redirect   from="/" to="/auth/login" />  }
-       
+        <Route path="/splash" render={props => <SplashLayout {...props} />} /> */}
+
+        <Route path="/admin" render={props => <AsyncAdminLayout {...props} />} />
+        <Route path="/auth" render={props => <AsyncAuthLayout {...props} />} />
+        <Route path="/splash" render={props => <AsyncSplashLayout {...props} />} />
+
+        {token && isRememberMe ? <Redirect from="/" to="/admin/index" /> : <Redirect from="/" to="/auth/login" />}
+
 
       </Switch>
     </Router>

@@ -23,7 +23,7 @@ import withReactContent from 'sweetalert2-react-content'
 import { constants } from "../variables/constants";
 import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
 import { CalendarTypes } from "../variables/constants";
-import api from "../api";
+import api from "../hoc/Config/api";
 
 import Select from 'react-select';
 

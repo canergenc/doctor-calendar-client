@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import { helperService } from '../../services/helper'
 import React from "react";
 import * as actions from '../../store/actions/index';
+import style from "../Locations/Locations.scss"
 
 // reactstrap components
 import {
@@ -35,9 +36,11 @@ class LocationSplash extends React.Component {
 
     addItemToLocationList() {
         let lists = this.state.listOfLocation;
+        console.log(style.collapsing);
+        
         if (this.state.locationInput && this.state.locationInput.length > 0) {
 
-            lists.push({ id: lists.length, context: this.state.locationInput, modifier: helperService.getColorName(lists.length) });
+            lists.push({ id: lists.length, context: this.state.locationInput, modifier:  helperService.getColorName(lists.length)  });
             this.setState({ listOfLocation: lists, locationInput: '' });
             console.log(lists);
         }

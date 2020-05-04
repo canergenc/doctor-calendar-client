@@ -1,4 +1,5 @@
 import { customVariables } from "../hoc/Config/customVariables";
+import style from "../containers/Locations/Locations.scss";
 
 
 
@@ -40,6 +41,7 @@ const getGroupId = () => {
 const getColorName = (index) => {
     console.log(index);
     
+    
     let listOfColorName = [
         "primary",
         "secondary",
@@ -68,7 +70,7 @@ const getColorName = (index) => {
         "pink"       
     ]
 
-    return listOfColorName[index];;
+    return listOfColorName[index];
 }
 
 const generateRndStr = (length) => {

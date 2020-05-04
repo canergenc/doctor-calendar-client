@@ -9,7 +9,7 @@ import {
     Input
 } from "reactstrap";
 import { Droppable } from 'react-beautiful-dnd';
-import Api from '../../api';
+import Api from '../../hoc/Config/api';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';

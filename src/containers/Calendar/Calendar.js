@@ -13,7 +13,7 @@ import Day from "./Day/Day";
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from '../../store/actions/index';
-import Api from "../../api";
+import Api from "../../hoc/Config/api";
 import "./Calendar.scss";
 
 class Calendar extends Component {
