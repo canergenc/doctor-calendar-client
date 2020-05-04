@@ -1,4 +1,4 @@
-import moment from "moment";
+import moment from "moment/moment";
 import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
 import { helperService } from "../../services";

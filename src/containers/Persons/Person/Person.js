@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import moment from "moment";
+import moment from "moment/moment";
 import { extendMoment } from 'moment-range';
 import { constants } from '../../../variables/constants';
 import {
@@ -31,8 +31,8 @@ class Person extends Component {
                 <td>{this.props.weekendCountLimit}</td>
                 <td className="text-right">
                     <UncontrolledDropdown>
-                        <DropdownToggle className="text-dark" role="button" onClick={e => e.preventDefault()}>
-                            İşlemler
+                        <DropdownToggle className="btn-icon-only text-light" role="button" onClick={e => e.preventDefault()}>
+                        <i className="fas fa-ellipsis-v" />
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem style={{ marginLeft: "0px" }} onClick={this.props.editClick}>Düzenle</DropdownItem>

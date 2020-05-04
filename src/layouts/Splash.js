@@ -3,7 +3,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { Container, Row } from "reactstrap";
 // import AuthNavbar from "components/Navbars/AuthNavbar.jsx";
-import AuthFooter from "components/Footers/AuthFooter.jsx";
+import AuthFooter from "../components/Footers/AuthFooter.jsx";
 
 
 import routes from "../hoc/Config/splash.routes"

@@ -8,13 +8,13 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import thunk from "redux-thunk";
 
-import "assets/vendor/nucleo/css/nucleo.css";
-import "assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
-import "assets/scss/argon-dashboard-react.scss";
+import "./assets/vendor/nucleo/css/nucleo.css";
+import "./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css";
+import "./assets/scss/argon-dashboard-react.scss";
 
-import AdminLayout from "layouts/Admin";
-import AuthLayout from "layouts/Auth";
-import SplashLayout from "layouts/Splash";
+import AdminLayout from "./layouts/Admin";
+import AuthLayout from "./layouts/Auth";
+import SplashLayout from "./layouts/Splash";
 
 // Reducers
 import usersReducer from "./store/reducers/users";

@@ -7,7 +7,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
 import { helperService } from "../../services/helper";
 import Swal from 'sweetalert2'
-import moment from 'moment';
+import moment from 'moment/moment';
 import { permissionHelper } from "./PermissionHelper";
 import CustomPagination from "../Paginations/CustomPagination";
 // import ToastServive from 'react-material-toast';

@@ -4,7 +4,7 @@ import * as actions from '../../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 
-import './Location.css';
+import './LocationSelect.css';
 
 import { Button } from "reactstrap";
 import { helperService } from '../../../services';

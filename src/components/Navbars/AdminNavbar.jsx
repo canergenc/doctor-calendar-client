@@ -58,7 +58,7 @@ class AdminNavbar extends React.Component {
                     <span  style={{backgroundColor:'transparent'}}  className="avatar avatar-sm rounded-circle">
                       <img style={{backgroundColor:'transparent', width:'75%',height:'75%' }} 
                         alt="..."
-                        src={require("assets/img/theme/notification-ico2.png")}
+                        src={require("../../assets/img/theme/notification-ico2.png")}
                       />
                     </span>
                    

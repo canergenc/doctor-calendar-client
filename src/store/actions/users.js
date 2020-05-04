@@ -209,12 +209,17 @@ export const deleteUserGroupFailed = (error) => {
     };
 };
 
-export const createUser = (userData, filterData) => {
+export const createUser = (userData, countLimits, filterData) => {
     return dispatch => {
         userService.createUserService(userData)
             .then(response => {
-                userGroupService.createUserGroup(response.id);
-                dispatch(getUsers(filterData));
+                userGroupService.createUserGroup(response.id, countLimits)
+                    .then(
+                        res => {
+
+                            dispatch(getUsers(filterData));
+                        }
+                    );
             })
             .catch(error => {
                 dispatch(createUserFailed(error))

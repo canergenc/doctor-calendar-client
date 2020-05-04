@@ -54,7 +54,7 @@ class NotificationNavbar extends React.Component {
                     <span  style={{backgroundColor:'#1083ef'}} className="avatar avatar-sm rounded-circle">
                       <img style={{width:'80%',height:'80%'}}
                         alt="..."
-                        src={require("assets/img/theme/notification-ico2.png")}
+                        src={require("../../assets/img/theme/notification-ico2.png")}
                       />
                     </span>
                     <Media className="ml-2 d-none d-lg-block">

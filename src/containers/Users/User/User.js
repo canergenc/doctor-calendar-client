@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { connect } from 'react-redux';
-import moment from "moment";
+import moment from "moment/moment";
 import { extendMoment } from 'moment-range';
 import "moment/locale/tr";
 import 'pretty-checkbox';
