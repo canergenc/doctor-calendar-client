@@ -1,10 +1,23 @@
 export const constants = {
+
+
+    BASE_URL: "https://doctorcalendar.eu-gb.mybluemix.net",
+   
+    ERRORCODE: {
+        422: '422',
+        400: '400'
+    },
+
+
+    
     ERROR_MESSAGE: {
         serviceNotFound: "Lütfen lokasyon seçiniz.",
         serviceCountMoreThanOne: "Sadece 1 adet lokasyon seçiniz.",
     },
 
     REMEMBERME:"isRememberMe",
+
+    USERID: "id",
 
     SUCCESS_MESSAGE: {
 
@@ -13,7 +26,8 @@ export const constants = {
     },
 
     ERROR_CODE: {
-        422: "422"
+        422: '422',
+        400: '400'
     },
     TOKEN: "token",
 

@@ -4,6 +4,7 @@ import style from "../containers/Locations/Locations.scss";
 
 
 
+import { constants } from "../variables/constants";
 
 const getErrorMessage = (err) => {
     
@@ -14,11 +15,11 @@ const getErrorMessage = (err) => {
     }
     switch (statusCode) {
        
-        case customVariables.ERRORCODE[422]:
+        case constants.ERRORCODE[422]:
             errorMessage = err.data.error.details.length > 0 ? err.data.error.details[0].message : 'İşlem sırasında hata oluştu'
             return errorMessage;
 
-        case customVariables.ERRORCODE[400]:
+        case constants.ERRORCODE[400]:
             console.log(err);
             errorMessage = err.data.error.message;
             return errorMessage;
@@ -29,12 +30,12 @@ const getErrorMessage = (err) => {
 
 
 const getUserId = () => {
-    return localStorage.getItem(customVariables.USERID);
+    return localStorage.getItem(constants.USERID);
 }
 
 
 const getGroupId = () => {
-    return localStorage.getItem(customVariables.GROUPID);
+    return localStorage.getItem(constants.GROUPID);
 }
 
 

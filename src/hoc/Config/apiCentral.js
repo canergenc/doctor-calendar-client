@@ -1,15 +1,15 @@
 import axios from "axios";
-import { customVariables } from "../Config/customVariables";
+import { constants } from "../../variables/constants";
 
 
 const request = async function(options, isHeader = true) {
   let authHeader = null;
   if (isHeader) {
-    authHeader = localStorage.getItem(customVariables.TOKEN); 
+    authHeader = localStorage.getItem(constants.TOKEN); 
   }
 
   const client = axios.create({
-    baseURL: customVariables.BASE_URL,
+    baseURL: constants.BASE_URL,
     headers: { Authorization: `Bearer ${authHeader} ` }
   });
 

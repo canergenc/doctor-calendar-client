@@ -1,8 +1,8 @@
 import Index from "../../views/Index.jsx";
 import Profile from "../../containers/Profile/Profile";
 import Location from "../../containers/Locations/Locations";
-import Person from "../../containers/Persons/Persons.js";
-import Login from "../../components/Login/Login.js"
+import Person from "../../containers/Persons/Persons";
+import Login from "../../containers/Login/Login"
 import register from "../../containers/Register/Register";
 import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 

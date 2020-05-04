@@ -142,7 +142,7 @@ class LocationSplash extends React.Component {
                                 <div className="text-center">
                                     <Button disabled={this.props.isRegistiring} className="mt-4" onClick={this.saveChanges} type='button'
 
-                                        onClick={this.saveChanges}
+                                        
                                         color="primary" >
 
                                         {this.props.createBulkLocationReqLoading && (

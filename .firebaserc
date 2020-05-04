@@ -6,7 +6,7 @@
     "drcalendar-4369b": {
       "hosting": {
         "demo": [
-          "easycal-demo"
+          "omnicali-demo"
         ],
         "dev": [
           "drcalendar-4369b"
