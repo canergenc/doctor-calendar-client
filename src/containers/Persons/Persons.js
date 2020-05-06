@@ -5,6 +5,7 @@ import { helperService } from "../../services";
 import CustomPagination from "../../components/Paginations/CustomPagination";
 import { constants } from '../../variables/constants';
 import Person from './Person/Person';
+import * as EmailValidator from 'email-validator';
 import "./Persons.css"
 import * as actions from '../../store/actions';
 
@@ -41,6 +42,7 @@ class Persons extends Component {
             editModal: false,
             addModal: false,
             deleteModal: false,
+            submitted: false,
             userGroupId: '',
             id: '',
             name: '',
@@ -56,29 +58,57 @@ class Persons extends Component {
         this.addHandle = this.addHandle.bind(this);
     }
 
+    addHandleValidation() {
+        let formIsValid = true;
+        const { name, email, password, workStartDate } = this.state;
+        if (!name || !email || !password || !workStartDate) {
+            formIsValid = false;
+        }
+        if (password && password.length < 8) {
+            formIsValid = false;
+        }
+        if (!EmailValidator.validate(email)) {
+            formIsValid = false;
+        }
+        return formIsValid
+    }
+
+    updateHandleValidation() {
+        let formIsValid = true;
+        const { name, email, workStartDate, userGroupId } = this.state;
+        if (!name || !email || !workStartDate || !userGroupId) {
+            formIsValid = false;
+        }
+        if (!EmailValidator.validate(email)) {
+            formIsValid = false;
+        }
+        return formIsValid
+    }
+
     inputChangeHandle(event) {
 
         const target = event.target;
         if (target.name === 'name')
-            this.setState({ name: event.target.value });
+            this.setState({ name: event.target.value, submitted: false });
         if (target.name === 'email')
-            this.setState({ email: event.target.value });
+            this.setState({ email: event.target.value, submitted: false });
         if (target.name === 'password')
-            this.setState({ password: event.target.value });
+            this.setState({ password: event.target.value, submitted: false });
         if (target.name === 'weekendCountLimit')
-            this.setState({ weekendCountLimit: event.target.value });
+            this.setState({ weekendCountLimit: event.target.value, submitted: false });
         if (target.name === 'weekdayCountLimit')
-            this.setState({ weekdayCountLimit: event.target.value });
+            this.setState({ weekdayCountLimit: event.target.value, submitted: false });
     }
 
     inputChangeHandleDate(date) {
-        this.setState({ workStartDate: date });
+        this.setState({ workStartDate: date, submitted: false });
     }
 
     updateHandle(event) {
+        this.setState({ submitted: true });
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
-        if (this.state.name && this.state.email && this.state.workStartDate && this.state.userGroupId) {
+        if (this.updateHandleValidation()) {
             let userData = {
                 fullName: this.state.name,
                 email: this.state.email,
@@ -86,8 +116,8 @@ class Persons extends Component {
 
             };
             const countLimits = {
-                weekdayCountLimit: weekdayCountLimit,
-                weekendCountLimit: weekendCountLimit
+                ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
+                ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
             };
             const filterData = {
                 filter: {
@@ -103,29 +133,18 @@ class Persons extends Component {
                     ]
                 }
             }
-            this.props.updateUserGroup(this.state.userGroupId, countLimits)
-            this.props.updateUser(this.state.id, userData, filterData);
+            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filterData);
             this.toggleModal('editModal', null);
             event.preventDefault();
-            MySwal.fire({
-                icon: 'success',
-                title: 'Başarılı',
-                text: 'Kullanıcı güncellemesi tamamlandı'
-            });
-        }
-        else {
-            MySwal.fire({
-                icon: 'info',
-                title: 'Lütfen,',
-                text: 'zorunlu alanları doldurunuz'
-            });
         }
 
     }
 
     addHandle(event) {
-
-        if (this.state.name && this.state.email && this.state.password && this.state.workStartDate) {
+        this.setState({ submitted: true });
+        if (this.addHandleValidation()) {
+            const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
+            const weekendCountLimit = parseInt(this.state.weekendCountLimit);
             const user = {
                 fullName: this.state.name,
                 email: this.state.email,
@@ -135,8 +154,8 @@ class Persons extends Component {
                 platform: 1
             };
             const countLimits = {
-                weekdayCountLimit: this.state.weekdayCountLimit ? parseInt(this.state.weekdayCountLimit) : '',
-                weekendCountLimit: this.state.weekendCountLimit ? parseInt(this.state.weekendCountLimit) : '',
+                ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
+                ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
             }
             const filterData = {
                 filter: {
@@ -155,20 +174,8 @@ class Persons extends Component {
             this.props.createUser(user, countLimits, filterData);
             this.toggleModal('addModal', null);
             event.preventDefault();
-            MySwal.fire({
-                icon: 'success',
-                title: 'Başarılı',
-                text: 'Kullanıcı kaydedildi'
-            });
 
-        } else {
-            MySwal.fire({
-                icon: 'warning',
-                title: 'Lütfen',
-                text: 'zorunlu alanları doldurunuz'
-            });
         }
-
     }
 
     deleteHandle() {
@@ -189,11 +196,7 @@ class Persons extends Component {
             }
             this.props.deleteUser(this.state.userGroupId, filterData)
             this.toggleModal('deleteModal', undefined);
-            MySwal.fire({
-                icon: 'success',
-                title: 'Başarılı',
-                text: 'Kullanıcı silindi'
-            });
+
         }
     }
 
@@ -220,9 +223,29 @@ class Persons extends Component {
         this.props.getGroupUsersCount();
     }
 
-    toggleModal(state, userGroup) {
-        console.log(userGroup);
+    componentDidUpdate() {
+        if (this.props.error) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'İşlem başarısız',
+                text: this.props.errorMessage
+            });
+            this.props.cleanFlagUser();
+            this.setState({ submitted: false });
+        }
+        else if (this.props.crudSuccess) {
+            MySwal.fire({
+                icon: 'success',
+                title: 'Başarılı',
+                text: this.props.message
+            });
+            this.props.cleanFlagUser();
+            this.setState({ submitted: false });
+        }
         
+    }
+
+    toggleModal(state, userGroup) {
         if (userGroup) {
             this.setState({
                 [state]: !this.state[state],
@@ -231,8 +254,8 @@ class Persons extends Component {
                 name: userGroup.user.fullName ? userGroup.user.fullName : '',
                 email: userGroup.user.email ? userGroup.user.email : '',
                 workStartDate: userGroup.user.workStartDate ? userGroup.user.workStartDate : '',
-                weekdayCountLimit: userGroup.user.weekdayCountLimit ? userGroup.user.weekdayCountLimit : '',
-                weekendCountLimit: userGroup.user.weekendCountLimit ? userGroup.user.weekendCountLimit : ''
+                weekdayCountLimit: userGroup.weekdayCountLimit ? userGroup.weekdayCountLimit : '',
+                weekendCountLimit: userGroup.weekendCountLimit ? userGroup.weekendCountLimit : ''
             });
         }
         else {
@@ -255,6 +278,8 @@ class Persons extends Component {
     }
 
     render() {
+        const { name, email, password, submitted, workStartDate } = this.state;
+        const isEmailValid = EmailValidator.validate(email);
         let users = "Kullanıcılar Yükleniyor...";
         let usersCount = 0;
 
@@ -308,18 +333,37 @@ class Persons extends Component {
                                         <Input name="name" valid={true} me type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !name &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Ad ve soyad gerekli.</p>
+                                }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>E-Mail Adresi:</InputGroupText>
                                         <Input name="email" valid={true} type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !email &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Email gerekli.</p>
+                                }
+                                {submitted && email && !isEmailValid &&
+
+                                    <p style={{ fontSize: 12 }} className="text-warning">Email formatı uygun değil.</p>
+                                }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Şifre:</InputGroupText>
                                         <Input name="password" valid={true} type="password" value={this.state.password} autoComplete="new-password" onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !password &&
+
+                                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre gerekli.</p>
+                                }
+
+                                {submitted && password && password.length < 8 &&
+
+                                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre en az 8 karekter olmalı.</p>
+                                }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>
@@ -336,6 +380,10 @@ class Persons extends Component {
                                         />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !workStartDate &&
+
+                                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">İş Başlangıç Tarihi gerekli.</p>
+                                }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
@@ -388,12 +436,22 @@ class Persons extends Component {
                                         <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !name &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Ad ve soyad gerekli.</p>
+                                }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>E-Mail Adresi:</InputGroupText>
                                         <Input name="email" type="text" value={this.state.email} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !email &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Email gerekli.</p>
+                                }
+                                {submitted && email && !isEmailValid &&
+
+                                    <p style={{ fontSize: 12 }} className="text-warning">Email formatı uygun değil.</p>
+                                }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>
@@ -407,6 +465,10 @@ class Persons extends Component {
                                         />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !workStartDate &&
+
+                                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">İş Başlangıç Tarihi gerekli.</p>
+                                }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
@@ -472,7 +534,7 @@ class Persons extends Component {
                                 <CardHeader className="border-0">
                                     <div className="row">
                                         <div className="col-md-10">
-                                            <h3 className="mb-0" style={{display:"inline-block"}}>Kullanıcı Listesi</h3>
+                                            <h3 className="mb-0" style={{ display: "inline-block" }}>Kullanıcı Listesi</h3>
                                             <Button
                                                 color="primary"
                                                 onClick={() => this.renderTableData(this.state.currentIndex)}
@@ -481,7 +543,7 @@ class Persons extends Component {
                                             </Button>
                                         </div>
                                         <div className="col-md-1">
-                                            
+
                                         </div>
                                         <div className="col-md-1">
                                             <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
@@ -534,7 +596,10 @@ const mapStateToProps = state => {
         usersCount: state.users.groupUsersCount,
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
-        error: state.users.error
+        crudSuccess: state.users.crudSuccess,
+        message: state.users.message,
+        error: state.users.error,
+        errorMessage: state.users.statusText
     };
 };
 
@@ -543,9 +608,9 @@ const mapDispatchToProps = dispatch => {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
-        updateUser: (userId, userData, filterData) => dispatch(actions.updateUser(userId, userData, filterData)),
-        updateUserGroup: (userGroupId, countLimits) => dispatch(actions.userGroupActions.updateUserGroup(userGroupId, countLimits)),
-        getGroupUsersCount: () => dispatch(actions.getGroupUsersCount())
+        updateUser: (userId, userData, userGroupId, countLimits, filterData) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData)),
+        getGroupUsersCount: () => dispatch(actions.getGroupUsersCount()),
+        cleanFlagUser: () => dispatch(actions.cleanFlags())
     };
 };
 

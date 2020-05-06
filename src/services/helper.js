@@ -39,9 +39,7 @@ const getGroupId = () => {
 
 
 const getColorName = (index) => {
-    console.log(index);
-    
-    
+        
     let listOfColorName = [
         "primary",
         "secondary",

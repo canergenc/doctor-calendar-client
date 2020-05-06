@@ -189,6 +189,7 @@ export const deleteUserGroup = (userGroupId, filterData) => {
     return dispatch => {
         userGroupService.deleteUserGroup(userGroupId).then(result => {
             dispatch(getUsers(filterData));
+            dispatch(deleteUserGroupSuccess(userGroupId));
         }).catch(error => {
             dispatch(deleteUserFailed(error));
         });
@@ -205,7 +206,7 @@ export const deleteUserGroupSuccess = (id) => {
 export const deleteUserGroupFailed = (error) => {
     return {
         type: actionTypes.DELETE_USER_GROUP_FAIL,
-        error: error
+        errorObj: error
     };
 };
 
@@ -213,13 +214,17 @@ export const createUser = (userData, countLimits, filterData) => {
     return dispatch => {
         userService.createUserService(userData)
             .then(response => {
+
                 userGroupService.createUserGroup(response.id, countLimits)
                     .then(
                         res => {
-
                             dispatch(getUsers(filterData));
+                            dispatch(createUserSuccess(response.id))
                         }
-                    );
+                    )
+                    .catch(errorUserGroup => {
+                        dispatch(createUserFailed(errorUserGroup))
+                    });
             })
             .catch(error => {
                 dispatch(createUserFailed(error))
@@ -230,23 +235,30 @@ export const createUser = (userData, countLimits, filterData) => {
 export const createUserSuccess = (id, userData) => {
     return {
         type: actionTypes.CREATE_USER_SUCCESS,
-        userId: id,
-        userData: userData
+        userId: id
     };
 };
 
 export const createUserFailed = (error) => {
     return {
         type: actionTypes.CREATE_USER_FAIL,
-        error: error
+        errorObj: error
     };
 };
 
-export const updateUser = (userId, userData, filterData) => {
+export const updateUser = (userId, userData, userGroupId,countLimits, filterData) => {
     return dispatch => {
         userService.updateUserService(userId, userData)
             .then(response => {
-                dispatch(getUsers(filterData));
+                userGroupService.updateUserGroup(userGroupId, countLimits)
+                    .then(response => {
+                        dispatch(getUsers(filterData));
+                        dispatch(updateUserSuccess(userId))
+                    })
+                    .catch(err => {
+                        dispatch(updateUserFailed(err));
+                    })
+
             })
             .catch(error => {
                 dispatch(updateUserFailed(error))
@@ -254,11 +266,10 @@ export const updateUser = (userId, userData, filterData) => {
     };
 };
 
-export const updateUserSuccess = (id, userData) => {
+export const updateUserSuccess = (id) => {
     return {
         type: actionTypes.UPDATE_USER_SUCCESS,
-        userId: id,
-        userData: userData
+        userId: id
     };
 };
 
@@ -321,4 +332,10 @@ export const createUserGroupBulkFailure = (err) => {
         errorObj: err,
 
     };
+}
+
+export const cleanFlags = () => {
+    return {
+        type: actionTypes.USER_CLEAN_FLAGS
+    }
 }

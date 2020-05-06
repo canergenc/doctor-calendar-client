@@ -9,8 +9,8 @@ const createUserGroup = (userId, countLimits) => {
         method: 'POST',
         data: {
             'userId': userId,  //  Zorunlu alan olması önemli değil // Caner_Genç_Çalışan_Grup
-            'weekdayCountLimit': parseInt(countLimits.weekdayCountLimit),
-            'weekendCountLimit': parseInt(countLimits.weekendCountLimit),
+            ...(countLimits.weekdayCountLimit ? { 'weekdayCountLimit': parseInt(countLimits.weekdayCountLimit) } : null),
+            ...(countLimits.weekendCountLimit ? { 'weekendCountLimit': parseInt(countLimits.weekendCountLimit) } : null),
             'groupId': helperService.getGroupId(),
         }
     });
@@ -18,8 +18,6 @@ const createUserGroup = (userId, countLimits) => {
 
 
 const updateUserGroup = (userGroupId, data) => {
-    console.log("update user group");
-
     return request({
         url: '/user-groups/' + userGroupId,
         method: 'PATCH',

@@ -7,7 +7,7 @@ const initialState = {
     groupUsersCount: null,
     error: false,
     globalUsersError: false,
-
+    crudSuccess: false
 };
 
 
@@ -40,12 +40,49 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_GLOBAL_USERS_FAILED:
             return {
                 ...state,
-                globalUsersError: true
+                globalUsersError: true,
+                crudSuccess: false
+            };
+        case actionTypes.UPDATE_USER_SUCCESS:
+            return {
+                ...state,
+                error: false,
+                crudSuccess: true,
+                message:'Kullanıcı güncellendi.'
             };
         case actionTypes.UPDATE_USER_FAIL:
             return {
                 ...state,
                 error: true,
+                crudSuccess: false,
+                statusText: helperService.getErrorMessage(action.errorObj)
+            };
+        case actionTypes.CREATE_USER_SUCCESS:
+            return {
+                ...state,
+                error: false,
+                crudSuccess: true,
+                message:'Kullanıcı oluşturuldu.'
+            };
+        case actionTypes.CREATE_USER_FAIL:
+            return {
+                ...state,
+                error: true,
+                crudSuccess: false,
+                statusText: helperService.getErrorMessage(action.errorObj)
+            };
+        case actionTypes.DELETE_USER_GROUP_SUCCESS:
+            return {
+                ...state,
+                error: false,
+                crudSuccess: true,
+                message:'Kullanıcı silindi.'
+            };
+        case actionTypes.DELETE_USER_GROUP_FAIL:
+            return {
+                ...state,
+                error: true,
+                crudSuccess: false,
                 statusText: helperService.getErrorMessage(action.errorObj)
             };
         case actionTypes.CREATE_USERGROUPBULK_SUCCESS:
@@ -57,6 +94,12 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 error: true
+            };
+        case actionTypes.USER_CLEAN_FLAGS:
+            return {
+                ...state,
+                error: false,
+                crudSuccess: false
             };
         default:
             return state;
