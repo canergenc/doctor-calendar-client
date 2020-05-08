@@ -610,7 +610,7 @@ const mapDispatchToProps = dispatch => {
         deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
         updateUser: (userId, userData, userGroupId, countLimits, filterData) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData)),
         getGroupUsersCount: () => dispatch(actions.getGroupUsersCount()),
-        cleanFlagUser: () => dispatch(actions.cleanFlags())
+        cleanFlagUser: () => dispatch(actions.cleanFlagsUsers())
     };
 };
 

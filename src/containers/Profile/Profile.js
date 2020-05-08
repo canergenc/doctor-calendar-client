@@ -327,14 +327,15 @@ const mapStateToProps = state => {
     fullName: state.userInfo.fullName,
     statusText: state.userInfo.statusText,
     error: state.userInfo.error,
-    crudSuccess: state.userInfo.crudSuccess
+    crudSuccess: state.userInfo.crudSuccess,
+    message:state.userInfo.message
   };
 }
 const mapDispatchToProps = dispatch => {
   return {
     getUserInfo: () => dispatch(actions.userInfoActions.getUserInfo()),
     updateUserInfo: (id, data) => dispatch(actions.userInfoActions.updateUserInfo(id, data)),
-    cleanFlagUserInfo: () => dispatch(actions.userInfoActions.cleanFlags()),
+    cleanFlagUserInfo: () => dispatch(actions.userInfoActions.cleanFlagsUserInfo()),
   };
 }
 

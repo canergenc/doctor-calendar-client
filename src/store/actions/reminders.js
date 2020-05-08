@@ -241,7 +241,7 @@ export const getReminders = (selectedLocations, selectedUsers, curMonth) => {
         }
       })
       .catch(err => {
-        dispatch(fetchRemindersFailed());
+        dispatch(fetchRemindersFailed(err));
       });
   }
 }
@@ -394,22 +394,18 @@ export const getRemindersCountSuccess = (response) => {
 export const getRemindersCountFailure = (err) => {
   return {
     type: actionTypes.GET_CALENDARSCOUNT_FAILURE,
-    erorObj: err,
+    errorObj: err,
     status: false,
   };
 }
 
-
 export const startDownloading = () => {
-  console.log('start');
-  
   return {
     type: actionTypes.START_DOWNLOADING
   }
 }
 
 export const endDownloading = () => {
-  console.log('end');
   return {
     type: actionTypes.END_DOWNLOADING
   }

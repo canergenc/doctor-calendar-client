@@ -93,7 +93,7 @@ const updateUserGroupSuccess = (userGroupId) => {
 
 const updateUserGroupFailed = (error) => {
     return {
-        type: actionTypes.UPDATE_USER_GROUP_FAIL,
+        type: actionTypes.UPDATE_USER_GROUP_FAILURE,
         errorObj: error,
         error: true
     };

@@ -1,4 +1,5 @@
 import * as actionTypes from "../actions/actionTypes";
+import { updateObject } from '../utility';
 import { helperService } from "../../services/helper";
 
 const initialState = {
@@ -9,13 +10,6 @@ const initialState = {
   selectedUsers: [],
   downloading: false,
   error: false
-};
-
-export const updateObject = (oldObject, updatedProperties) => {
-  return {
-    ...oldObject,
-    ...updatedProperties
-  };
 };
 
 const updateRemiderStart = (state, action) => {
@@ -37,7 +31,7 @@ const updateReminderFail = (state, action) => {
     removedReminder: null,
     loading: false,
     error: true,
-    crudSuccess:false,
+    crudSuccess: false,
     statusText: helperService.getErrorMessage(action.errorObj)
   }
 
@@ -49,13 +43,9 @@ const updateReminderSuccess = (state, action) => {
     reminderId: action.reminderId,
     loading: false,
     error: false,
-    crudSuccess:true
+    crudSuccess: true
   }
   return updateObject(state, updatedState);
-}
-
-const fetchRemindersFailed = (state, action) => {
-  return updateObject(state, { error: true });
 }
 
 const deleteReminderSuccess = (state, action) => {
@@ -63,7 +53,7 @@ const deleteReminderSuccess = (state, action) => {
     reminderId: action.reminderId,
     loading: false,
     error: false,
-    crudSuccess:true
+    crudSuccess: true
   }
   return updateObject(state, updatedState);
 }
@@ -73,7 +63,7 @@ const deleteReminderFail = (state, action) => {
     reminderId: action.reminderId,
     loading: false,
     error: true,
-    crudSuccess:false
+    crudSuccess: false
   }
   return updateObject(state, updatedState);
 }
@@ -82,18 +72,18 @@ const createReminderFailed = (state, action) => {
   const updatedState = {
     loading: false,
     error: true,
-    crudSuccess:false,
+    crudSuccess: false,
     statusText: helperService.getErrorMessage(action.errorObj)
   }
   return updateObject(state, updatedState);
 }
 
 const createReminderSuccess = (state, action) => {
-  return updateObject(state, { loading: false, error: false,crudSuccess:true });
+  return updateObject(state, { loading: false, error: false, crudSuccess: true });
 }
 
 const cleanFlags = (state, action) => {
-  return updateObject(state, { error: false,crudSuccess:false });
+  return updateObject(state, { error: false, crudSuccess: false });
 }
 
 const setReminders = (state, action) => {
@@ -103,6 +93,13 @@ const setReminders = (state, action) => {
     selectedLocations: action.selectedLocations,
     selectedUsers: action.selectedUsers,
     error: false
+  };
+  return updateObject(state, updatedState);
+}
+
+const fetchRemindersFailed = (state, action) => {
+  const updatedState = {
+    error: true
   };
   return updateObject(state, updatedState);
 }
@@ -118,7 +115,7 @@ const setRemindersForCrud = (state, action) => {
 
 const startDownloading = (state, action) => {
   console.log('start reducer');
-  
+
   return updateObject(state, { downloading: true });
 }
 

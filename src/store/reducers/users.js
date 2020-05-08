@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { updateObject } from '../utility';
 import { helperService } from "../../services/helper";
 
 const initialState = {
@@ -10,97 +11,138 @@ const initialState = {
     crudSuccess: false
 };
 
+const setUsers = (state, action) => {
+    const updatedState = {
+        users: action.users,
+        defaultUsers: action.defaultUsers,
+        error: false
+    };
+    return updateObject(state, updatedState);
+};
+
+const fetchUsersFail = (state, action) => {
+    const updatedState = {
+        error: true
+    };
+    return updateObject(state, updatedState);
+};
+
+const setGlobalUsers = (state, action) => {
+    const updatedState = {
+        globalUsers: action.globalUsers,
+        globalUsersError: false
+    };
+    return updateObject(state, updatedState);
+};
+
+const setGroupUsersCount = (state, action) => {
+    const updatedState = {
+        groupUsersCount: action.groupUsersCount,
+        error: false
+    };
+    return updateObject(state, updatedState);
+};
+
+const fetchGlobalUsersFail = (state, action) => {
+    const updatedState = {
+        globalUsersError: true,
+        crudSuccess: false
+    };
+    return updateObject(state, updatedState);
+};
+
+const updateUserSuccess = (state, action) => {
+    const updatedState = {
+        error: false,
+        crudSuccess: true,
+        message: 'Kullanıcı güncellendi.'
+    };
+    return updateObject(state, updatedState);
+};
+
+const updateUserFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    };
+    return updateObject(state, updatedState);
+};
+
+const createUserSuccess = (state, action) => {
+    const updatedState = {
+        error: false,
+        crudSuccess: true,
+        message: 'Kullanıcı oluşturuldu.'
+    };
+    return updateObject(state, updatedState);
+};
+
+const createUserFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    };
+    return updateObject(state, updatedState);
+};
+
+const deleteUserGroupSuccess = (state, action) => {
+    const updatedState = {
+        error: false,
+        crudSuccess: true,
+        message: 'Kullanıcı silindi.'
+    };
+    return updateObject(state, updatedState);
+};
+
+const deleteUserGroupFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    };
+    return updateObject(state, updatedState);
+};
+
+const createUserGroupBulkSuccess = (state, action) => {
+    const updatedState = {
+        error: false
+    };
+    return updateObject(state, updatedState);
+};
+
+const createUserGroupBulkFail = (state, action) => {
+    const updatedState = {
+        error: true
+    };
+    return updateObject(state, updatedState);
+};
+
+const userCleanFlags = (state, action) => {
+    const updatedState = {
+        error: false,
+        crudSuccess: false
+    };
+    return updateObject(state, updatedState);
+};
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SET_USERS:
-            return {
-                ...state,
-                users: action.users,
-                defaultUsers: action.defaultUsers,
-                error: false
-            };
-        case actionTypes.FETCH_USERS_FAILED:
-            return {
-                ...state,
-                error: true
-            };
-        case actionTypes.SET_GLOBAL_USERS:
-            return {
-                ...state,
-                globalUsers: action.globalUsers,
-                globalUsersError: false
-            };
-        case actionTypes.SET_GROUP_USERS_COUNT:
-            return {
-                ...state,
-                groupUsersCount: action.groupUsersCount,
-                error: false
-            };
-        case actionTypes.FETCH_GLOBAL_USERS_FAILED:
-            return {
-                ...state,
-                globalUsersError: true,
-                crudSuccess: false
-            };
-        case actionTypes.UPDATE_USER_SUCCESS:
-            return {
-                ...state,
-                error: false,
-                crudSuccess: true,
-                message:'Kullanıcı güncellendi.'
-            };
-        case actionTypes.UPDATE_USER_FAIL:
-            return {
-                ...state,
-                error: true,
-                crudSuccess: false,
-                statusText: helperService.getErrorMessage(action.errorObj)
-            };
-        case actionTypes.CREATE_USER_SUCCESS:
-            return {
-                ...state,
-                error: false,
-                crudSuccess: true,
-                message:'Kullanıcı oluşturuldu.'
-            };
-        case actionTypes.CREATE_USER_FAIL:
-            return {
-                ...state,
-                error: true,
-                crudSuccess: false,
-                statusText: helperService.getErrorMessage(action.errorObj)
-            };
-        case actionTypes.DELETE_USER_GROUP_SUCCESS:
-            return {
-                ...state,
-                error: false,
-                crudSuccess: true,
-                message:'Kullanıcı silindi.'
-            };
-        case actionTypes.DELETE_USER_GROUP_FAIL:
-            return {
-                ...state,
-                error: true,
-                crudSuccess: false,
-                statusText: helperService.getErrorMessage(action.errorObj)
-            };
-        case actionTypes.CREATE_USERGROUPBULK_SUCCESS:
-            return {
-                ...state,
-                error: false
-            };
-        case actionTypes.CREATE_USERGROUPBULK_FAILURE:
-            return {
-                ...state,
-                error: true
-            };
-        case actionTypes.USER_CLEAN_FLAGS:
-            return {
-                ...state,
-                error: false,
-                crudSuccess: false
-            };
+        case actionTypes.SET_USERS: return setUsers(state, action);
+        case actionTypes.FETCH_USERS_FAILED: return fetchUsersFail(state, action);
+        case actionTypes.SET_GLOBAL_USERS: return setGlobalUsers(state, action);
+        case actionTypes.SET_GROUP_USERS_COUNT: return setGroupUsersCount(state, action);
+        case actionTypes.FETCH_GLOBAL_USERS_FAILED: return fetchGlobalUsersFail(state, action);
+        case actionTypes.UPDATE_USER_SUCCESS: return updateUserSuccess(state, action);
+        case actionTypes.UPDATE_USER_FAIL: return updateUserFail(state, action);
+        case actionTypes.CREATE_USER_SUCCESS: return createUserSuccess(state, action);
+        case actionTypes.CREATE_USER_FAIL: return createUserFail(state, action);
+        case actionTypes.DELETE_USER_GROUP_SUCCESS: return deleteUserGroupSuccess(state, action);
+        case actionTypes.DELETE_USER_GROUP_FAIL: return deleteUserGroupFail(state, action);
+        case actionTypes.CREATE_USERGROUPBULK_SUCCESS: return createUserGroupBulkSuccess(state, action);
+        case actionTypes.CREATE_USERGROUPBULK_FAILURE: return createUserGroupBulkFail(state, action);
+        case actionTypes.USER_CLEAN_FLAGS: return userCleanFlags(state, action);
         default:
             return state;
     }

@@ -102,7 +102,8 @@ class Locations extends Component {
             const location = {
                 name: this.state.name,
                 colorCode: this.state.colorCode,
-                groupId: helperService.getGroupId()
+                groupId: helperService.getGroupId(),
+                sortOrder:this.props.locations.length
             }
 
             this.props.createLocation(location);
@@ -139,21 +140,25 @@ class Locations extends Component {
     };
 
     componentDidUpdate() {
-        if(this.props.error){
+        console.log('component did update');
+        console.log(this.props.error);
+        console.log(this.props.crudSuccess);
+
+        if (this.props.error) {
             MySwal.fire({
                 icon: 'error',
                 title: 'İşlem başarısız',
                 text: this.props.statusText
             });
-            this.props.cleanFlagLocation();
+            this.props.cleanFlagsLocation();
         }
-        else if (this.props.crudSuccess){
+        else if (this.props.crudSuccess) {
             MySwal.fire({
                 icon: 'success',
                 title: 'Başarılı',
                 text: this.props.message
             });
-            this.props.cleanFlagLocation();
+            this.props.cleanFlagsLocation();
         }
     }
 
@@ -322,7 +327,7 @@ class Locations extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>
-                                            Lokasyon Adı
+                                            Lokasyon Adı:
                                         </InputGroupText>
                                         <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
@@ -509,8 +514,9 @@ const mapStateToProps = state => {
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
         error: state.locations.error,
-        crudSuccess:state.locations.crudSuccess,
-        statusText:state.locations.statusText
+        crudSuccess: state.locations.crudSuccess,
+        statusText: state.locations.statusText,
+        message: state.locations.message
     };
 };
 
@@ -520,7 +526,9 @@ const mapDispatchToProps = dispatch => {
         createLocation: (locationData) => dispatch(actions.createLocation(locationData)),
         deleteLocation: (locationId) => dispatch(actions.deleteLocation(locationId)),
         updateLocation: (locationId, locationData) => dispatch(actions.updateLocation(locationId, locationData)),
-        reorderLocation: (locationsData, startIndex, endIndex) => dispatch(actions.reorderLocation(locationsData, startIndex, endIndex))
+        reorderLocation: (locationsData, startIndex, endIndex) => dispatch(actions.reorderLocation(locationsData, startIndex, endIndex)),
+        cleanFlagsLocation: () => dispatch(actions.cleanFlagsLocation())
+
     };
 };
 

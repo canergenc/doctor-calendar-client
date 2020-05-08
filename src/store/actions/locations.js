@@ -107,7 +107,7 @@ export const deleteLocation = (locationId) => {
                 }
             };
             dispatch(initLocations(filterData));
-            dispatch(deleteLocationFailed(locationId));
+            dispatch(deleteLocationSuccess(locationId));
         }).catch(error => {
             dispatch(deleteLocationFailed(error));
         });
@@ -197,7 +197,7 @@ export const updateLocationSuccess = (id, locationData) => {
 export const updateLocationFailed = (error) => {
     return {
         type: actionTypes.UPDATE_LOCATION_FAIL,
-        error: error
+        errorObj: error
     };
 };
 

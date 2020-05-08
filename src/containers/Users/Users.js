@@ -70,7 +70,7 @@ class Users extends Component {
 
     render() {
 
-        let userList = this.props.error ? <p>Doktor listesi yüklenemedi.</p> : <Spinner />
+        let userList = this.props.error ? <p>Kullanıcı listesi yüklenemedi.</p> : <Spinner />
 
         if (this.props.users) {
             userList = this.props.users.map((user, index) => (

@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { updateObject } from '../utility';
 import { constants } from '../../variables/constants';
 import { helperService } from "../../services/helper";
 
@@ -13,23 +14,54 @@ const initialState = {
     crudSuccess: false
 };
 
-export const updateObject = (oldObject, updatedProperties) => {
-    return {
-        ...oldObject,
-        ...updatedProperties
-    };
+const userInfoRequest = (state, action) => {
+    const updatedState = {
+        isReq: true,
+        statusText: "",
+        statusOfGetUser: false
+    }
+    return updateObject(state, updatedState);
+};
+
+const userInfoFail = (state, action) => {
+    const updatedState = {
+        statusOfGetUser: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    }
+    return updateObject(state, updatedState);
+};
+
+const userInfoSuccess = (state, action) => {
+    const updatedState = {
+        id: action.id,
+        email: action.email,
+        fullName: action.fullName,
+        deviceId: action.deviceId,
+        createdDate: action.createdDate,
+        updatedDate: action.updatedDate,
+        statusText: constants.SUCCESS_MESSAGE.loginSuccess,
+        statusOfGetUser: true
+    }
+    return updateObject(state, updatedState);
+};
+
+const updateUserInfoRequest = (state, action) => {
+    const updatedState = {
+        isReq: true
+    }
+    return updateObject(state, updatedState);
 };
 
 const updateUserInfoSuccess = (state, action) => {
-    console.log('update reducer');
-    
+
     const updatedState = {
         isReq: false,
         error: false,
-        crudSuccess: true
+        crudSuccess: true,
+        message:'Bilgileriniz güncellendi.'
     }
     return updateObject(state, updatedState);
-}
+};
 
 const updateUserInfoFail = (state, action) => {
     const updatedState = {
@@ -39,45 +71,21 @@ const updateUserInfoFail = (state, action) => {
         crudSuccess: false
     }
     return updateObject(state, updatedState);
-}
+};
 
 const cleanFlags = (state, action) => {
     return updateObject(state, { error: false, crudSuccess: false });
 };
 
-
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.USERINFO_REQUEST:
-            return {
-                isReq: true,
-                statusText: "",
-                statusOfGetUser: false,
-            };
-        case actionTypes.USERINFO_SUCCESS:
-            return {
-                id: action.id,
-                email: action.email,
-                fullName: action.fullName,
-                deviceId: action.deviceId,
-                createdDate: action.createdDate,
-                updatedDate: action.updatedDate,
-                statusText: constants.SUCCESS_MESSAGE.loginSuccess,
-                statusOfGetUser: true
-            };
-        case actionTypes.USERINFO_FAILURE:
-            return {
-                statusOfGetUser: false,
-                statusText: helperService.getErrorMessage(action.errorObj)
-            };
-        case actionTypes.UPDATE_USERINFO_REQUEST:
-            return {
-                ...state,
-                isReq: true
-            };
-        case actionTypes.UPDATE_USERINFO_SUCCESS: updateUserInfoSuccess(state, action);
-        case actionTypes.UPDATE_USERINFO_FAILURE: updateUserInfoFail(state, action);
-        case actionTypes.USER_INFO_CLEAN_FLAGS: cleanFlags(state, action);
+        case actionTypes.USERINFO_REQUEST: return userInfoRequest(state, action);
+        case actionTypes.USERINFO_SUCCESS: return userInfoSuccess(state, action);
+        case actionTypes.USERINFO_FAILURE: return userInfoFail(state, action);
+        case actionTypes.UPDATE_USERINFO_REQUEST: return updateUserInfoRequest(state, action);
+        case actionTypes.UPDATE_USERINFO_SUCCESS: return updateUserInfoSuccess(state, action);
+        case actionTypes.UPDATE_USERINFO_FAILURE: return updateUserInfoFail(state, action);
+        case actionTypes.USER_INFO_CLEAN_FLAGS: return cleanFlags(state, action);
         default:
             return state;
     }
