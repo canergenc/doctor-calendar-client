@@ -65,7 +65,7 @@ const updateUserInfo = (id, data) => {
     return dispatch => {
         dispatch(updateUserInfoRequest());
         userService.updateUserService(id, data).then((response) => {
-            dispatch(updateUserInfoSuccess(response));
+            dispatch(updateUserInfoSuccess());
             dispatch(getUserInfo());
 
         }).catch((error) => {
@@ -81,7 +81,7 @@ const updateUserInfoRequest = () => {
     };
 };
 
-const updateUserInfoSuccess = (response) => {
+const updateUserInfoSuccess = () => {
     return {
         type: actionTypes.UPDATE_USERINFO_SUCCESS
     };
@@ -93,10 +93,17 @@ const updateUserInfoFailure = (error) => {
         type: actionTypes.UPDATE_USERINFO_FAILURE,
         errorObj: error
     };
+};
+
+const cleanFlagsUserInfo = () => {
+    return {
+        type: actionTypes.USER_INFO_CLEAN_FLAGS
+    }
 }
 
 export const userInfoActions = {
     updateUserInfo,
     getUserInfo,
-    getUserInfoByAuth
+    getUserInfoByAuth,
+    cleanFlagsUserInfo
 };

@@ -260,7 +260,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    cleanReminderError: () => dispatch(actions.cleanReminderError()),
+    cleanFlags: () => dispatch(actions.cleanFlags()),
     createReminder: (reminderData, filterData) => dispatch(actions.createReminder(reminderData, filterData)),
     updateReminder: (reminderId, reminderIndex, reminderData, filterData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData, filterData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.createUserGroupBulk(userGroupBulk)),

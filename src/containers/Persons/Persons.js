@@ -33,7 +33,7 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import moment from "moment/moment";
 
-const MySwal = withReactContent(Swal)
+const MySwal = withReactContent(Swal);
 
 class Persons extends Component {
     constructor(props) {

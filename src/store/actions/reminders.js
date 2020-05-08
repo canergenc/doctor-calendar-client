@@ -5,9 +5,9 @@ import { helperService } from "../../services";
 import { CalendarTypes } from "../../variables/constants";
 
 
-export const cleanReminderError = () => {
+export const cleanFlagsReminder = () => {
   return {
-    type: actionTypes.CLEAN_REMINDER_ERROR
+    type: actionTypes.REMINDER_CLEAN_FLAGS
   };
 };
 

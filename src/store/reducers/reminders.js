@@ -37,6 +37,7 @@ const updateReminderFail = (state, action) => {
     removedReminder: null,
     loading: false,
     error: true,
+    crudSuccess:false,
     statusText: helperService.getErrorMessage(action.errorObj)
   }
 
@@ -47,7 +48,8 @@ const updateReminderSuccess = (state, action) => {
   const updatedState = {
     reminderId: action.reminderId,
     loading: false,
-    error: false
+    error: false,
+    crudSuccess:true
   }
   return updateObject(state, updatedState);
 }
@@ -60,7 +62,18 @@ const deleteReminderSuccess = (state, action) => {
   const updatedState = {
     reminderId: action.reminderId,
     loading: false,
-    error: false
+    error: false,
+    crudSuccess:true
+  }
+  return updateObject(state, updatedState);
+}
+
+const deleteReminderFail = (state, action) => {
+  const updatedState = {
+    reminderId: action.reminderId,
+    loading: false,
+    error: true,
+    crudSuccess:false
   }
   return updateObject(state, updatedState);
 }
@@ -69,17 +82,18 @@ const createReminderFailed = (state, action) => {
   const updatedState = {
     loading: false,
     error: true,
+    crudSuccess:false,
     statusText: helperService.getErrorMessage(action.errorObj)
   }
   return updateObject(state, updatedState);
 }
 
 const createReminderSuccess = (state, action) => {
-  return updateObject(state, { loading: false, error: false });
+  return updateObject(state, { loading: false, error: false,crudSuccess:true });
 }
 
-const cleanReminderError = (state, action) => {
-  return updateObject(state, { error: false });
+const cleanFlags = (state, action) => {
+  return updateObject(state, { error: false,crudSuccess:false });
 }
 
 const setReminders = (state, action) => {
@@ -154,13 +168,14 @@ const reducer = (state = initialState, action) => {
         response: {},
         statusTextAtBulkUpdate: helperService.getErrorMessage(action.errorObj)
       };
-    case actionTypes.CLEAN_REMINDER_ERROR: return cleanReminderError(state, action);
+    case actionTypes.REMINDER_CLEAN_FLAGS: return cleanFlags(state, action);
     case actionTypes.SET_REMINDERS: return setReminders(state, action);
     case actionTypes.SET_REMINDERS_FOR_CRUD: return setRemindersForCrud(state, action);
     case actionTypes.FETCH_REMINDERS_FAILED: return fetchRemindersFailed(state, action);
     case actionTypes.CREATE_REMINDER_SUCCESS: return createReminderSuccess(state, action);
     case actionTypes.CREATE_REMINDER_FAIL: return createReminderFailed(state, action);
     case actionTypes.DELETE_REMINDER_SUCCESS: return deleteReminderSuccess(state, action);
+    case actionTypes.DELETE_REMINDER_FAIL: return deleteReminderFail(state, action);
     case actionTypes.UPDATE_REMINDER_START: return updateRemiderStart(state, action);
     case actionTypes.UPDATE_REMINDER_SUCCESS: return updateReminderSuccess(state, action);
     case actionTypes.UPDATE_REMINDER_FAIL: return updateReminderFail(state, action);

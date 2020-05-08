@@ -9,8 +9,42 @@ const initialState = {
     deviceId: "",
     createdDate: "",
     updatedDate: "",
-    error: false
+    error: false,
+    crudSuccess: false
 };
+
+export const updateObject = (oldObject, updatedProperties) => {
+    return {
+        ...oldObject,
+        ...updatedProperties
+    };
+};
+
+const updateUserInfoSuccess = (state, action) => {
+    console.log('update reducer');
+    
+    const updatedState = {
+        isReq: false,
+        error: false,
+        crudSuccess: true
+    }
+    return updateObject(state, updatedState);
+}
+
+const updateUserInfoFail = (state, action) => {
+    const updatedState = {
+        statusText: helperService.getErrorMessage(action.errorObj),
+        isReq: false,
+        error: true,
+        crudSuccess: false
+    }
+    return updateObject(state, updatedState);
+}
+
+const cleanFlags = (state, action) => {
+    return updateObject(state, { error: false, crudSuccess: false });
+};
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -34,26 +68,16 @@ const reducer = (state = initialState, action) => {
         case actionTypes.USERINFO_FAILURE:
             return {
                 statusOfGetUser: false,
-                statusTextInGet: helperService.getErrorMessage(action.errorObj)
+                statusText: helperService.getErrorMessage(action.errorObj)
             };
         case actionTypes.UPDATE_USERINFO_REQUEST:
             return {
                 ...state,
                 isReq: true
             };
-        case actionTypes.UPDATE_USERINFO_SUCCESS:
-            return {
-                ...state,
-                isReq: false,
-                responseInUpdate: action.response
-            };
-        case actionTypes.UPDATE_USERINFO_FAILURE:
-            return {
-                ...state,
-                statusTextInUpdates: helperService.getErrorMessage(action.errorObj),
-                isReq: false,
-                error: true
-            };
+        case actionTypes.UPDATE_USERINFO_SUCCESS: updateUserInfoSuccess(state, action);
+        case actionTypes.UPDATE_USERINFO_FAILURE: updateUserInfoFail(state, action);
+        case actionTypes.USER_INFO_CLEAN_FLAGS: cleanFlags(state, action);
         default:
             return state;
     }

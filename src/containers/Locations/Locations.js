@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import * as actions from '../../store/actions';
 
-// reactstrap components
 import {
     Modal,
     Button,
@@ -24,12 +23,15 @@ import {
     InputGroup,
     FormGroup
 } from "reactstrap";
-// core components
 import UserHeader from "../../components/Headers/UserHeader.jsx";
 import "./Locations.scss";
 import styles from "./Locations.scss";
 import { RadioGroup } from "pretty-checkbox-react";
 import { helperService } from "../../services";
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+
+const MySwal = withReactContent(Swal);
 
 class Locations extends Component {
     constructor(props) {
@@ -136,6 +138,25 @@ class Locations extends Component {
         this.renderTableData();
     };
 
+    componentDidUpdate() {
+        if(this.props.error){
+            MySwal.fire({
+                icon: 'error',
+                title: 'İşlem başarısız',
+                text: this.props.statusText
+            });
+            this.props.cleanFlagLocation();
+        }
+        else if (this.props.crudSuccess){
+            MySwal.fire({
+                icon: 'success',
+                title: 'Başarılı',
+                text: this.props.message
+            });
+            this.props.cleanFlagLocation();
+        }
+    }
+
     toggleModal(state, location) {
         if (location) {
             this.setState({
@@ -190,7 +211,7 @@ class Locations extends Component {
                 }
             }
             else if (destination.index < source.index) {
-                for (let i = destination.index; i < source.index; i++) {
+                for (let i = destination.index; i <= source.index; i++) {
                     const id = this.props.locations[i].id;
                     if (id !== movedId) {
                         locationsData.push({
@@ -427,7 +448,7 @@ class Locations extends Component {
                                     <CardHeader className="border-0">
                                         <div className="row">
                                             <div className="col-md-3">
-                                                <h3 className="mb-0" style={{display:"inline-block"}}>Lokasyon Listesi</h3>
+                                                <h3 className="mb-0" style={{ display: "inline-block" }}>Lokasyon Listesi</h3>
                                                 <Button
                                                     color="primary"
                                                     onClick={() => this.renderTableData()}
@@ -487,7 +508,9 @@ const mapStateToProps = state => {
         locations: state.locations.locations,
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
-        error: state.locations.error
+        error: state.locations.error,
+        crudSuccess:state.locations.crudSuccess,
+        statusText:state.locations.statusText
     };
 };
 

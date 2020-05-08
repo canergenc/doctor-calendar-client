@@ -334,7 +334,7 @@ export const createUserGroupBulkFailure = (err) => {
     };
 }
 
-export const cleanFlags = () => {
+export const cleanFlagsUsers = () => {
     return {
         type: actionTypes.USER_CLEAN_FLAGS
     }
