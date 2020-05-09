@@ -645,7 +645,12 @@ class Persons extends Component {
                                     </tbody>
                                 </Table>
                                 <CardFooter className="py-4">
-                                    <nav aria-label="...">
+                                    <nav style={{ float: "right" }}>
+                                        <div  style={{ float:"left",margin:"6px 18px"}}>
+
+                                            Toplam : {usersCount}
+                                        </div>
+                                        
                                         {usersCount > 0 ?
                                             <CustomPagination
                                                 paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}

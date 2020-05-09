@@ -103,7 +103,7 @@ class Locations extends Component {
                 name: this.state.name,
                 colorCode: this.state.colorCode,
                 groupId: helperService.getGroupId(),
-                sortOrder:this.props.locations.length
+                sortOrder: this.props.locations.length
             }
 
             this.props.createLocation(location);
@@ -243,8 +243,9 @@ class Locations extends Component {
 
     render() {
         let locations = "Lokasyonlar Yükleniyor...";
+        let locationsCount = 0;
         if (this.props.locations) {
-
+            locationsCount = this.props.locations.length;
             locations = this.props.locations.map((location, index) => (
                 <Draggable
                     key={location.id}
@@ -446,36 +447,37 @@ class Locations extends Component {
                 {/* Page content */}
                 <Container style={{ marginTop: "-12rem" }} fluid>
                     {/* Table */}
-                    <DragDropContext onDragEnd={this.onDragEnd}>
-                        <Row>
-                            <div className="col">
-                                <Card className="shadow">
-                                    <CardHeader className="border-0">
-                                        <div className="row">
-                                            <div className="col-md-3">
-                                                <h3 className="mb-0" style={{ display: "inline-block" }}>Lokasyon Listesi</h3>
-                                                <Button
-                                                    color="primary"
-                                                    onClick={() => this.renderTableData()}
-                                                    size="sm"
-                                                >
-                                                    <i className="fas fa-sync-alt"></i>
-                                                </Button>
-                                            </div>
-                                            <div className="col-md-8">
 
-                                            </div>
-                                            <div className="col-md-1">
-                                                <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
-                                                    <span className="btn-inner--icon">
-                                                        <i className="ni ni-fat-add" />
-                                                    </span>
-                                                    <span className="btn-inner--text">Yeni</span>
-                                                </Button>
-                                            </div>
+                    <Row>
+                        <div className="col">
+                            <Card className="shadow">
+                                <CardHeader className="border-0">
+                                    <div className="row">
+                                        <div className="col-md-3">
+                                            <h3 className="mb-0" style={{ display: "inline-block" }}>Lokasyon Listesi</h3>
+                                            <Button
+                                                color="primary"
+                                                onClick={() => this.renderTableData()}
+                                                size="sm"
+                                            >
+                                                <i className="fas fa-sync-alt"></i>
+                                            </Button>
                                         </div>
+                                        <div className="col-md-8">
 
-                                    </CardHeader>
+                                        </div>
+                                        <div className="col-md-1">
+                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
+                                                <span className="btn-inner--icon">
+                                                    <i className="ni ni-fat-add" />
+                                                </span>
+                                                <span className="btn-inner--text">Yeni</span>
+                                            </Button>
+                                        </div>
+                                    </div>
+
+                                </CardHeader>
+                                <DragDropContext onDragEnd={this.onDragEnd}>
                                     <Table className="align-items-center table-flush">
                                         <thead className="thead-light">
                                             <tr>
@@ -493,15 +495,16 @@ class Locations extends Component {
                                             )}
                                         </Droppable>
                                     </Table>
-                                    <CardFooter className="py-4">
-                                        <nav aria-label="...">
+                                </DragDropContext>
+                                <CardFooter className="py-4" style={{ position: "inherit" }}>
+                                    <nav style={{ float: "right" }}>
+                                        Toplam : {locationsCount}
+                                    </nav>
+                                </CardFooter>
+                            </Card>
+                        </div>
+                    </Row>
 
-                                        </nav>
-                                    </CardFooter>
-                                </Card>
-                            </div>
-                        </Row>
-                    </DragDropContext>
                 </Container>
             </>
         );
