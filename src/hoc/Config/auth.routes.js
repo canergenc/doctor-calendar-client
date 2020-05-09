@@ -3,6 +3,8 @@ import Profile from "../../containers/Profile/Profile";
 import Location from "../../containers/Locations/Locations";
 import Person from "../../containers/Persons/Persons";
 import Login from "../../containers/Login/Login"
+import PasswordForgot from "../../containers/Login/PasswordForgot"
+
 import register from "../../containers/Register/Register";
 import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
@@ -24,20 +26,7 @@ var routes = [
         component: Profile,
         layout: "/admin"
     },
-    {
-        path: "/location",
-        name: "Lokasyon Tanımla",
-        icon: "ni ni-shop text-primary",
-        component: Location,
-        layout: "/admin"
-    },
-    {
-        path: "/persons",
-        name: "Kullanıcı Tanımla",
-        icon: "ni ni-shop text-primary",
-        component: Person,
-        layout: "/admin"
-    },
+    
     {
         path: "/login",
         name: "Login",
@@ -54,12 +43,22 @@ var routes = [
     },
 
     {
+        path: "/password-forgot",
+        name: "Şifremi Unuttum",
+        icon: "ni ni-active-40 text-primary",
+        component: PasswordForgot,
+        layout: "/auth"
+    },
+
+    {
         path: "*",
         name: "NotFound",
         icon: "ni ni-active-40 text-primary",
         component: NotFoundPage,
         layout: "/auth"
     }
+
+    
 
     
    

@@ -27,6 +27,9 @@ import bulkLocationReducer from "./store/reducers/bulk-location";
 import permissionReducer from "./store/reducers/permission";
 import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
+import passwordForgotReducer from "./store/reducers/password.forgot";
+
+
 
 import history from "./hoc/Config/history";
 import NotFoundPage from "./containers/NotFound/NotFoundPage";
@@ -40,6 +43,8 @@ const composeEnhancers =
 
 const rootReducer = combineReducers({
   users: usersReducer,
+  passwordForgot: passwordForgotReducer,
+
   reminders: remindersReducer,
   locations: locationsReducer,
   // alertReducer:alertReducer,

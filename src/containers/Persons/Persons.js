@@ -8,6 +8,7 @@ import Person from './Person/Person';
 import * as EmailValidator from 'email-validator';
 import "./Persons.css"
 import * as actions from '../../store/actions';
+import { personHelper } from "./Person/PersonHelper";
 
 // reactstrap components
 import {
@@ -19,6 +20,7 @@ import {
     Table,
     Container,
     Row,
+    Col,
     Form,
     Input,
     InputGroup,
@@ -44,6 +46,7 @@ class Persons extends Component {
             deleteModal: false,
             submitted: false,
             userGroupId: '',
+            searchParam: '',
             id: '',
             name: '',
             email: '',
@@ -56,6 +59,8 @@ class Persons extends Component {
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
         this.addHandle = this.addHandle.bind(this);
+        this.keyPress = this.keyPress.bind(this);
+        this.getUsersBySearch = this.getUsersBySearch.bind(this);
     }
 
     addHandleValidation() {
@@ -98,6 +103,9 @@ class Persons extends Component {
             this.setState({ weekendCountLimit: event.target.value, submitted: false });
         if (target.name === 'weekdayCountLimit')
             this.setState({ weekdayCountLimit: event.target.value, submitted: false });
+        if (target.name === 'searchInput')
+            this.setState({ searchParam: event.target.value, submitted: false });
+
     }
 
     inputChangeHandleDate(date) {
@@ -178,6 +186,28 @@ class Persons extends Component {
         }
     }
 
+    getUsersBySearch() {
+        debugger;
+        if (this.state.searchParam) {
+            this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
+        } else {
+            this.props.onInitUsers(personHelper.getInitFilter(this.state.currentIndex));
+
+        }
+    }
+
+    keyPress(e) {
+        console.log(e.keyCode);
+        if (e.keyCode === 13) {
+            if (e.target.value) {
+                const param = e.target.value;
+                this.props.onInitUsers(personHelper.getSearchFilter(param));
+            } else {
+                this.props.onInitUsers(personHelper.getInitFilter(this.state.currentIndex));
+            }
+        }
+    }
+
     deleteHandle() {
         if (this.state.id) {
             const filterData = {
@@ -201,21 +231,7 @@ class Persons extends Component {
     }
 
     renderTableData(index) {
-        const filterData = {
-            filter: {
-                skip: index * constants.PAGESIZE_INPERMISSION_PAGE,
-                limit: constants.PAGESIZE_INPERMISSION_PAGE,
-                where: {
-                    groupId: {
-                        like: helperService.getGroupId()
-                    }
-                },
-                include: [
-                    { relation: "user" }
-                ]
-            }
-        }
-        this.props.onInitUsers(filterData);
+        this.props.onInitUsers(personHelper.getInitFilter(index));
     }
 
     componentDidMount() {
@@ -224,6 +240,7 @@ class Persons extends Component {
     }
 
     componentDidUpdate() {
+        
         if (this.props.error) {
             MySwal.fire({
                 icon: 'error',
@@ -241,6 +258,7 @@ class Persons extends Component {
             });
             this.props.cleanFlagUser();
             this.setState({ submitted: false });
+            this.setState({searchParam:''})
         }
 
     }
@@ -278,6 +296,9 @@ class Persons extends Component {
     }
 
     render() {
+
+        console.log('oops', this.props.users);
+
         const { name, email, password, submitted, workStartDate } = this.state;
         const isEmailValid = EmailValidator.validate(email);
         let users = "Kullanıcılar Yükleniyor...";
@@ -532,7 +553,59 @@ class Persons extends Component {
                         <div className="col">
                             <Card className="shadow">
                                 <CardHeader className="border-0">
-                                    <div className="row">
+
+                                    <Row className="align-items-center">
+                                        <Col xs="3">
+                                            <Input name="searchInput" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
+
+                                        </Col>
+
+                                        <Col xs="2">
+
+                                            <Button
+                                                color="secondary"
+
+                                                onClick={e => this.getUsersBySearch()}
+                                                size="lg"
+
+
+                                            >
+                                                <i className="fas fa-search fa-lg"></i>
+                                            </Button>
+
+
+                                            <Button
+                                                color="secondary"
+
+                                                onClick={e => this.renderTableData(this.state.currentIndex)}
+                                                size="lg"
+
+                                            >
+                                                <i className="fas fa-sync-alt fa-lg"></i>
+                                            </Button>
+
+                                        </Col>
+
+
+
+
+                                        <Col className="text-right" xs="7">
+                                            <Button
+                                                color="primary"
+                                                href="#pablo"
+                                                onClick={e => this.openCreateModal()}
+                                                size="sm"
+                                            >
+                                                <span className="btn-inner--icon">
+                                                    <i className="ni ni-fat-add" />
+                                                </span>
+            Yeni
+</Button>
+                                        </Col>
+                                    </Row>
+
+
+                                    {/* <div className="row">
                                         <div className="col-md-10">
                                             <h3 className="mb-0" style={{ display: "inline-block" }}>Kullanıcı Listesi</h3>
                                             <Button
@@ -553,7 +626,7 @@ class Persons extends Component {
                                                 <span className="btn-inner--text">Yeni</span>
                                             </Button>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                 </CardHeader>
                                 <Table className="align-items-center table-flush" >

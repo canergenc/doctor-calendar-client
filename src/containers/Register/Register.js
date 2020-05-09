@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import React from "react";
+import { Link } from "react-router-dom";
 import * as actions from '../../store/actions/index';
 import 'font-awesome/css/font-awesome.min.css';
 // reactstrap components
@@ -13,6 +14,7 @@ import {
   CardBody,
   FormGroup,
   Form,
+  
   Input,
   InputGroupAddon,
   InputGroupText,
@@ -121,7 +123,7 @@ class Register extends React.Component {
         </Modal>
 
 
-        <Col lg="6" md="8">
+        <Col lg="5" md="7">
           <Card className="bg-secondary shadow border-0">
 
             <CardBody className="px-lg-5 py-lg-5">
@@ -244,10 +246,9 @@ class Register extends React.Component {
                 }
 
 
+                <Row>
 
-                <div className="text-center">
-
-                  <Button className="mt-4" color="primary" type="submit" disabled={this.props.isRegistiring}>
+                  <Button style={{ height: '45px' }} block color="primary" color="primary" type="submit" disabled={this.props.isRegistiring} >
 
                     {this.props.isRegistiring && (
                       <i
@@ -260,10 +261,39 @@ class Register extends React.Component {
                     {!this.props.isRegistiring && <span>Kayıt Ol</span>}
                   </Button>
 
-                </div>
+                </Row>
+
+
+
+
               </Form>
             </CardBody>
           </Card>
+
+          <Row className="mt-3">
+            <Col xs="6">
+
+              <Link
+                className="text-light"
+                to="/auth/login"
+              >
+                <small>Üye Girişi</small>
+              </Link>
+
+            </Col>
+            <Col className="text-right" xs="6">
+              <Link
+                className="text-light"
+                to="/auth/password-forgot"
+              >
+                <small>Şifremi Unuttum</small>
+              </Link>
+            </Col>
+          </Row>
+
+
+
+
         </Col>
       </>
     );

@@ -22,9 +22,9 @@ const getApprovedFilter = (index, searchParam = '') => {
                             neq: CalendarTypes.Nobet
                         },
                         status: CalendarStatus.Approve,
-                        description: {
-                            like: searchParam
-                        }
+                        // description: {
+                        //     like: searchParam
+                        // }
                     }]
                 },
 
@@ -33,7 +33,22 @@ const getApprovedFilter = (index, searchParam = '') => {
                         relation: "group"
                     },
                     {
-                        relation: "user"
+                        relation: "user",
+                        scope: {
+                            where: {
+                                or: [
+                                    {
+                                        fullName: {
+                                            like: searchParam
+                                        }
+                                    }, {
+                                        email: {
+                                            like: searchParam
+                                        }
+                                    }
+                                ]
+                            }
+                        }
                     },
                     {
                         relation: "location"
@@ -120,28 +135,9 @@ const getWaitingForApproveFilter = (searchParam = '') => {
                     },
                     status: CalendarStatus.WaitingForApprove,
 
-                    description: {
-                        like: searchParam
-                    }
-
-                    // or: [
-                    //     {
-                    //         description: {
-                    //             like: searchParam
-                    //         }
-                    //     }, {
-                    //         endDate: {
-                    //             like: searchParam
-                    //         }
-                    //     },
-                    //     {
-                    //         startDate: {
-                    //             like: searchParam
-                    //         }
-                    //     }
-
-
-                    // ]
+                    // description: {
+                    //     like: searchParam
+                    // }
 
 
                 },
@@ -150,7 +146,22 @@ const getWaitingForApproveFilter = (searchParam = '') => {
                         relation: "group"
                     },
                     {
-                        relation: "user"
+                        relation: "user",
+                        scope: {
+                            where: {
+                                or: [
+                                    {
+                                        fullName: {
+                                            like: searchParam
+                                        }
+                                    }, {
+                                        email: {
+                                            like: searchParam
+                                        }
+                                    }
+                                ]
+                            }
+                        }
                     },
                     {
                         relation: "location"
