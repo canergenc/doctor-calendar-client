@@ -36,6 +36,8 @@ var routes = [
         layout: "/admin"
     },
 
+    
+
     {
         path: "/permission",
         name: "İzin Yönetimi",

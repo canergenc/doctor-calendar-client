@@ -1,9 +1,13 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
+import history from "../../hoc/Config/history"
 import * as actions from '../../store/actions/index';
 import 'font-awesome/css/font-awesome.min.css';
 import * as EmailValidator from 'email-validator';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2'
+const MySwal = withReactContent(Swal)
 
 import {
   Button,
@@ -36,53 +40,90 @@ class Login extends React.Component {
 
   handleInputChange(event) {
     this.setState({ submitted: false });
-    
+
     const target = event.target;
     let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
     if (target.name === 'email') {
-      this.setState({ email: event.target.value});
+      this.setState({ email: event.target.value });
     }
     else if (target.name === 'password') {
-      this.setState({ password: event.target.value});
+      this.setState({ password: event.target.value });
     }
     else if (target.name === 'remimberMe') {
       this.setState({ rememberMe: event.target.value })
     }
   }
 
+  forgetPassword() {
+
+    MySwal.fire({
+      title: 'Lütfen email adresinizi giriniz',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+
+      confirmButtonText: 'Kaydet',
+      cancelButtonText: 'iptal',
+      showCancelButton: true,
+      showLoaderOnConfirm: true,
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.value) {
+
+        const email = result.value
+
+        //this.props.forgetPassword(email);
+      }
+    })
+  }
+
+
 
 
   handleValidation() {
     let formIsValid = true;
-    const {  email, password } = this.state;
-    if ( !email || !password) {
+    const { email, password } = this.state;
+    if (!email || !password) {
       formIsValid = false;
     }
     if (password && password.length < 8) {
       formIsValid = false;
     }
+
+    if (!EmailValidator.validate(email)) {
+      formIsValid = false;
+    }
+
     return formIsValid
   }
 
   handleSubmit(event) {
 
     event.preventDefault();
-    const { email, password,rememberMe } = this.state;
+    const { email, password, rememberMe } = this.state;
     this.setState({ submitted: true });
     if (this.handleValidation()) {
-      this.props.login(email,password,rememberMe);
-    } 
+      this.props.login(email, password, rememberMe);
+    }
+  }
+
+  forgetPassword() {
+    //history.pus('/forgetPassword');
 
   }
 
 
+
+
+
   render() {
-    const { password, submitted,email } = this.state;
+    const { password, submitted, email } = this.state;
     const isEmailValid = EmailValidator.validate(email);
     // this.props.isAuthenticating ?  <Spinner /> :<p>Lütfen bekleyiniz.</p>  
 
-    
+
 
     return (
       <>
@@ -117,7 +158,7 @@ class Login extends React.Component {
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Email gerekli.</p>
                     : null}
 
-                  { submitted && email && !isEmailValid ?
+                  {submitted && email && !isEmailValid ?
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Email formatı uygun değil.</p>
                     : null}
 
@@ -132,7 +173,7 @@ class Login extends React.Component {
                     <Input placeholder="Şifre" type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
 
-                  {submitted  && !password ?
+                  {submitted && !password ?
                     <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p> : null
                   }
 
@@ -143,7 +184,7 @@ class Login extends React.Component {
                 </FormGroup>
 
                 <Row className="my-4">
-                  <Col xs="12">
+                  <Col xs="7">
                     <div className="custom-control custom-control-alternative custom-checkbox">
                       <input
                         className="custom-control-input"
@@ -163,13 +204,23 @@ class Login extends React.Component {
                       </label>
                     </div>
                   </Col>
+
+                  <Col xs="5">
+
+                    <Link
+                      
+                      to="/auth/password-forgot"
+                    >
+                      <small>Şifremi Unuttum</small>
+                    </Link>
+                   
+                  </Col>
+
                 </Row>
 
+                <Row>
 
-                <div className="text-center">
-
-
-                  <Button className="my-4" color="primary" >
+                  <Button style={{ height: '45px' }} block color="primary" >
 
                     {this.props.isAuthenticating && (
                       <i
@@ -182,19 +233,19 @@ class Login extends React.Component {
                     {!this.props.isAuthenticating && <span>Giriş Yap</span>}
                   </Button>
 
-                </div>
+                </Row>
+
               </Form>
             </CardBody>
           </Card>
           <Row className="mt-3">
             <Col xs="6">
-              <a
+              <Link
                 className="text-light"
-                href="#pablo"
-                onClick={e => e.preventDefault()}
+                to="/auth/password-forgot"
               >
-                <small>Parolamı Unuttum</small>
-              </a>
+                <small>Şifremi Unuttum</small>
+              </Link>
             </Col>
             <Col className="text-right" xs="6">
               <Link

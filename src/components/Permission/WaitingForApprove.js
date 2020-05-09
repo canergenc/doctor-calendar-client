@@ -8,15 +8,16 @@ import Select from 'react-select';
 import moment from 'moment/moment';
 import { permissionHelper } from "./PermissionHelper";
 import 'font-awesome/css/font-awesome.min.css';
-import withReactContent from 'sweetalert2-react-content'
 import { helperService } from "../../services/helper";
-import Swal from 'sweetalert2'
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import tr from "date-fns/locale/tr";
 import { registerLocale } from "react-datepicker";
 import './Permission.css';
 registerLocale("tr", tr);
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2'
 const MySwal = withReactContent(Swal)
 
 const toast = ToastServive.new({

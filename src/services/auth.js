@@ -25,7 +25,18 @@ export const register = (email, fullName, password) => {
     },false);
 };
 
+const forgotPassword = (email) => {
+    return request({
+        url: `/users/forgot`,
+        method: 'GET',
+        params: {
+            email:email
+        }
+    });
+};
+
 export const authService = {
     login,
-    register
+    register,
+    forgotPassword
 };
