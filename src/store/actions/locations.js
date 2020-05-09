@@ -32,7 +32,7 @@ export const createBulkLocationRequest = () => {
 export const createBulkLocationSuccess = (response) => {
     return {
         type: actionTypes.CREATE_BULK_LOCATION_SUCCESS,
-        response:response
+        response: response
     };
 }
 
@@ -107,6 +107,7 @@ export const deleteLocation = (locationId) => {
                 }
             };
             dispatch(initLocations(filterData));
+            dispatch(deleteLocationSuccess(locationId));
         }).catch(error => {
             dispatch(deleteLocationFailed(error));
         });
@@ -115,7 +116,7 @@ export const deleteLocation = (locationId) => {
 
 export const deleteLocationSuccess = (id) => {
     return {
-        type: actionTypes.DELETE_LOCATION,
+        type: actionTypes.DELETE_LOCATION_SUCCESS,
         locationId: id
     };
 };
@@ -123,7 +124,7 @@ export const deleteLocationSuccess = (id) => {
 export const deleteLocationFailed = (error) => {
     return {
         type: actionTypes.DELETE_LOCATION_FAIL,
-        error: error
+        errorObj: error
     };
 };
 
@@ -141,6 +142,7 @@ export const createLocation = (locationData) => {
                     }
                 };
                 dispatch(initLocations(filterData));
+                dispatch(createLocationSuccess(response.id))
             })
             .catch(error => {
                 dispatch(createLocationFailed(error))
@@ -148,18 +150,17 @@ export const createLocation = (locationData) => {
     };
 };
 
-export const createLocationSuccess = (id, locationData) => {
+export const createLocationSuccess = (id) => {
     return {
         type: actionTypes.CREATE_LOCATION_SUCCESS,
-        locationId: id,
-        locationData: locationData
+        locationId: id
     };
 };
 
 export const createLocationFailed = (error) => {
     return {
         type: actionTypes.CREATE_LOCATION_FAIL,
-        error: error
+        errorObj: error
     };
 };
 
@@ -176,6 +177,7 @@ export const updateLocation = (locationId, locationData) => {
                         }
                     }
                 };
+                dispatch(updateLocationSuccess(locationId));
                 dispatch(initLocations(filterData));
             })
             .catch(error => {
@@ -195,15 +197,27 @@ export const updateLocationSuccess = (id, locationData) => {
 export const updateLocationFailed = (error) => {
     return {
         type: actionTypes.UPDATE_LOCATION_FAIL,
-        error: error
+        errorObj: error
     };
 };
 
 export const reorderLocation = (locationsData, startIndex, endIndex) => {
     return dispatch => {
-        
+
         dispatch(reorderLocationStart(startIndex, endIndex))
         locationService.updateBulkLocationService(locationsData)
+            .then(res => {
+                const filterData = {
+                    filter: {
+                        where: {
+                            groupId: {
+                                like: helperService.getGroupId()
+                            }
+                        }
+                    }
+                };
+                dispatch(initLocations(filterData))
+            })
             .catch(error => {
                 dispatch(updateLocationFailed(error))
             });;
@@ -217,3 +231,9 @@ export const reorderLocationStart = (startIndex, endIndex) => {
         endIndex: endIndex
     };
 };
+
+export const cleanFlagsLocation = () => {
+    return {
+        type: actionTypes.LOCATION_CLEAN_FLAGS
+    }
+}

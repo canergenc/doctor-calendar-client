@@ -43,6 +43,17 @@ class Index extends Component {
     this.addHandle = this.addHandle.bind(this);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.errorFromReminders) {
+      MySwal.fire({
+        icon: 'error',
+        title: 'işlem başarısız',
+        text: this.props.statusText
+      });
+      this.props.cleanFlagsReminder();
+    }
+  }
+
   onDragEnd = result => {
 
     const { destination, source } = result;
@@ -144,7 +155,6 @@ class Index extends Component {
       });
       this.setState({ userGroups: userGroups })
     }
-
   }
 
   noMessageHandle = () => {
@@ -156,19 +166,6 @@ class Index extends Component {
 
     if (this.props.globalUsers) {
       options = this.props.globalUsers
-    }
-
-    if (this.props.errorFromReminders) {
-      console.log("---------------------INDEX---------------");
-
-      console.log(this.props.errorFromReminders);
-
-      MySwal.fire({
-        icon: 'error',
-        title: 'Hay aksi,',
-        text: this.props.statusText
-      });
-      this.props.cleanReminderError();
     }
 
     return (
@@ -248,19 +245,20 @@ const mapStateToProps = state => {
     users: state.users.users,
     reminders: state.reminders.reminders,
     filterData: state.reminders.filterData,
+    errorFromReminders: state.reminders.error,
+    message: state.reminders.message,
+    statusText: state.reminders.statusText,
+    selectedLocations: state.reminders.selectedLocations,
     globalUsers: state.users.globalUsers,
     defaultUsers: state.users.defaultUsers,
     errorFromUsers: state.users.error,
-    errorFromReminders: state.reminders.error,
-    statusText: state.reminders.statusText,
-    activeLocationId: state.locations.activeLocationId,
-    selectedLocations: state.reminders.selectedLocations
+    activeLocationId: state.locations.activeLocationId
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    cleanReminderError: () => dispatch(actions.cleanReminderError()),
+    cleanFlagsReminder: () => dispatch(actions.cleanFlagsReminder()),
     createReminder: (reminderData, filterData) => dispatch(actions.createReminder(reminderData, filterData)),
     updateReminder: (reminderId, reminderIndex, reminderData, filterData) => dispatch(actions.updateReminder(reminderId, reminderIndex, reminderData, filterData)),
     createUserGroupBulk: (userGroupBulk) => dispatch(actions.createUserGroupBulk(userGroupBulk)),

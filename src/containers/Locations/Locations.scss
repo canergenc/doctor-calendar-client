@@ -240,6 +240,10 @@ a.btn.disabled, fieldset:disabled a.btn {
 @include color-list;
 
 
+:export{
+  colors:map-get($colors,k);
+}
+
 
 input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="button"].btn-block {
   width: 100%;

@@ -36,7 +36,9 @@ class LocationSplash extends React.Component {
 
     addItemToLocationList() {
         let lists = this.state.listOfLocation;
-        console.log(style.collapsing);
+        console.log('ADD ITEM');
+        
+        console.log(style.location);
         
         if (this.state.locationInput && this.state.locationInput.length > 0) {
 

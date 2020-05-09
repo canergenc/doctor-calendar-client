@@ -77,7 +77,7 @@ const updateUserGroup=(userGroupId,data)=>{
     return dispatch=>{
         userGroupService.updateUserGroup(userGroupId,data)
         .then(response=>{
-            dispatch(updateUserGroupSuccess());
+            dispatch(updateUserGroupSuccess(userGroupId));
         })
         .catch(error=>{
             dispatch(updateUserGroupFailed(error));
@@ -85,23 +85,30 @@ const updateUserGroup=(userGroupId,data)=>{
     }
 }
 
-export const updateUserGroupSuccess = (id, userData) => {
+const updateUserGroupSuccess = (userGroupId) => {
     return {
         type: actionTypes.UPDATE_USER_GROUP_SUCCESS
     };
 };
 
-export const updateUserGroupFailed = (error) => {
+const updateUserGroupFailed = (error) => {
     return {
-        type: actionTypes.UPDATE_USER_GROUP_FAIL,
+        type: actionTypes.UPDATE_USER_GROUP_FAILURE,
         errorObj: error,
         error: true
     };
 };
 
+const cleanFlags=()=>{
+    return{
+        type:actionTypes.USER_GROUP_CLEAN_FLAGS
+    }
+}
+
 export const userGroupActions = {
     createUserGroup,
-    updateUserGroup
+    updateUserGroup,
+    cleanFlags
 };
 
 

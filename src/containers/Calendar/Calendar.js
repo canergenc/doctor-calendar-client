@@ -97,10 +97,10 @@ class Calendar extends Component {
         props["day"] = i;
         const calendar = [];
         let isAddedReminder = false;
-        
+
         for (let index = reminderIndex; index < this.props.reminders.length; index++) {
           const dateRow = this.props.reminders[index];
-          
+
           if (moment(dateRow.startDate).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")) {
             calendar.push(dateRow);
             isAddedReminder = true;
@@ -374,6 +374,8 @@ class Calendar extends Component {
   render() {
     moment.locale('tr');
     const weekdays = moment.weekdays(true);
+    console.log('CALENDAR');
+    console.log(this.props.error);
 
     let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
 

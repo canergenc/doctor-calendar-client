@@ -265,8 +265,8 @@ class WaitingForApproved extends Component {
 
                     <td className="text-right">
                         <UncontrolledDropdown>
-                            <DropdownToggle className="text-dark" onClick={e => e.preventDefault()}>
-                                İşlemler
+                            <DropdownToggle className="btn-icon-only text-light" onClick={e => e.preventDefault()}>
+                            <i className="fas fa-ellipsis-v" />
                         </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                                 <DropdownItem style={{ marginLeft: "0px" }}  onClick={() => this.rejectPermission(p)}>İptal</DropdownItem>
@@ -504,7 +504,7 @@ class WaitingForApproved extends Component {
 
 
 
-                    <Table className="align-items-center table-flush" responsive>
+                    <Table className="align-items-center table-flush" >
 
                         <thead className="thead-light">
                             <tr>
@@ -513,7 +513,7 @@ class WaitingForApproved extends Component {
                                 <th scope="col">Başlangıç Tarihi</th>
                                 <th scope="col">Bitiş Tarihi</th>
                                 <th scope="col">Açıklama</th>
-                                <th scope="col" />
+                                <th scope="col" className="text-right">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody>

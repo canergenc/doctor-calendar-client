@@ -52,26 +52,33 @@ class Profile extends React.Component {
 
 
   componentDidMount() {
-    console.log('PROFILE component did mount');
-
     if (!this.props.email || !this.props.fullName) {
       this.props.getUserInfo();
     }
-    console.log(this.props.error);
-
-
   }
 
-  componentWillMount() {
+  componentDidUpdate() {
+    console.log('component did update');
+    console.log(this.props.error);
+    console.log(this.props.crudSuccess);
+    
     if (this.props.error) {
       MySwal.fire({
         icon: 'error',
-        title: 'Uyarı',
-        text: this.props.statusTextInUpdates
+        title: 'İşlem başarısız',
+        text: this.props.statusText
       });
+      this.props.cleanFlagUserInfo();
+    }
+    else if (this.props.crudSuccess) {
+      MySwal.fire({
+        icon: 'success',
+        title: 'Başarılı',
+        text: this.props.message
+      });
+      this.props.cleanFlagUserInfo();
     }
   }
-
 
   inputChangeHandle(event) {
     const target = event.target;
@@ -103,9 +110,6 @@ class Profile extends React.Component {
 
   }
 
-
-
-
   updatePassword(event) {
 
     if (this.state.password && this.state.newPassword) {
@@ -136,7 +140,6 @@ class Profile extends React.Component {
       });
     }
   }
-
 
   updateUserInfo(event) {
 
@@ -214,8 +217,6 @@ class Profile extends React.Component {
             <Button color="primary" type="submit" onClick={this.updatePassword}>Şifre Güncelle</Button>
           </div>
         </Modal>
-
-
 
         {/* Page content */}
         <Container style={{ marginTop: "-12rem" }} fluid>
@@ -298,7 +299,7 @@ class Profile extends React.Component {
                       </Row>
                       <Row>
                         <Col lg="6">
-                          
+
                         </Col>
                         <Col lg="6">
 
@@ -324,17 +325,17 @@ const mapStateToProps = state => {
   return {
     email: state.userInfo.email,
     fullName: state.userInfo.fullName,
-    deviceId: state.userInfo.deviceId,
-    statusTextInGet: state.userInfo.statusTextInGet,
-    statusTextInUpdates: state.userInfo.statusTextInUpdates,
-    responseInUpdate: state.userInfo.responseInUpdate,
-    error: state.userInfo.error
+    statusText: state.userInfo.statusText,
+    error: state.userInfo.error,
+    crudSuccess: state.userInfo.crudSuccess,
+    message:state.userInfo.message
   };
 }
 const mapDispatchToProps = dispatch => {
   return {
     getUserInfo: () => dispatch(actions.userInfoActions.getUserInfo()),
     updateUserInfo: (id, data) => dispatch(actions.userInfoActions.updateUserInfo(id, data)),
+    cleanFlagUserInfo: () => dispatch(actions.userInfoActions.cleanFlagsUserInfo()),
   };
 }
 
