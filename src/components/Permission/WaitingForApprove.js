@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card,UncontrolledDropdown,DropdownMenu,DropdownItem,DropdownToggle, Table, CardHeader, Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
+import { Button, Card, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle, Table, CardHeader, CardFooter,Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
@@ -133,7 +133,7 @@ class WaitingForApproved extends Component {
 
         const { startDate, endDate, userId, description } = this.state;
         if (!startDate || !endDate || !userId || !description) {
-             toast.error('Tüm alanlar girilmiş olmalı');
+            toast.error('Tüm alanlar girilmiş olmalı');
             return;
         } else {
             const start = moment(this.state.startDate).format("YYYY-MM-DD[T]12:00:00.000[Z]");
@@ -266,11 +266,11 @@ class WaitingForApproved extends Component {
                     <td className="text-right">
                         <UncontrolledDropdown>
                             <DropdownToggle className="btn-icon-only text-light" onClick={e => e.preventDefault()}>
-                            <i className="fas fa-ellipsis-v" />
-                        </DropdownToggle>
+                                <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
-                                <DropdownItem style={{ marginLeft: "0px" }}  onClick={() => this.rejectPermission(p)}>İptal</DropdownItem>
-                                <DropdownItem style={{ marginLeft: "0px" }}  onClick={() => this.approvePermisson(p)}>Aktar</DropdownItem>
+                                <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.rejectPermission(p)}>İptal</DropdownItem>
+                                <DropdownItem style={{ marginLeft: "0px" }} onClick={() => this.approvePermisson(p)}>Aktar</DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </td>
@@ -518,17 +518,23 @@ class WaitingForApproved extends Component {
                         </thead>
                         <tbody>
                             {this.state.listOfPermission}
-                            {this.state.listOfPermission.length == 0 && <div style={{
-                                margin: 20,
-                                alignSelf: 'center',
-                                justifyContent: 'center'
-                            }} >
-                                <p>
-                                    Onay bekleyen kayıt bulunmamaktadır.
-                        </p>
-                            </div>}
+                            {this.state.listOfPermission.length == 0 &&
+                                <div style={{
+                                    margin: 20,
+                                    alignSelf: 'center',
+                                    justifyContent: 'center'
+                                }} >
+                                    <p>Onay bekleyen kayıt bulunmamaktadır.</p>
+                                </div>}
                         </tbody>
                     </Table>
+                    <CardFooter className="py-4" style={{ position: "inherit" }}>
+                        {this.state.listOfPermission.length > 0 &&
+                            <nav style={{ float: "right" }}>
+                                Toplam : {this.state.listOfPermission.length}
+                            </nav>
+                        }
+                    </CardFooter>
                 </Card>
             </>
 

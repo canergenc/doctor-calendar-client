@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, Table, CardHeader, Input, Alert, CardFooter, Row, Col} from "reactstrap";
+import { Button, Card, Table, CardHeader, Input, Alert, CardFooter, Row, Col } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarStatus, constants } from '../../variables/constants';
@@ -88,7 +88,7 @@ class Approved extends Component {
 
     getPermissionsBySearch() {
         if (this.state.searchParam) {
-        this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, this.state.searchParam));
+            this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, this.state.searchParam));
         } else {
             this.refreshPermissions();
         }
@@ -134,40 +134,40 @@ class Approved extends Component {
         return (
             <Card className="shadow">
 
-                
 
-                    <CardHeader style={{ paddingLeft: '0.5rem' }} className="border-0">
-                        <Row className="align-items-center">
-                            <Col xs="3">
-                                <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
-                            </Col>
 
-                            <Col xs="2">
-                                <Button
-                                    color="secondary"
-                                    onClick={e => this.getPermissionsBySearch()}
-                                    size="lg"
-                                >
-                                    <i class="fas fa-search fa-lg"></i>
-                                </Button>
+                <CardHeader style={{ paddingLeft: '0.5rem' }} className="border-0">
+                    <Row className="align-items-center">
+                        <Col xs="3">
+                            <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
+                        </Col>
 
-                                <Button
-                                    color="secondary"
+                        <Col xs="2">
+                            <Button
+                                color="secondary"
+                                onClick={e => this.getPermissionsBySearch()}
+                                size="lg"
+                            >
+                                <i className="fas fa-search fa-lg"></i>
+                            </Button>
 
-                                    onClick={e => this.refreshPermissions()}
-                                    size="lg"
+                            <Button
+                                color="secondary"
 
-                                >
-                                    <i class="fas fa-sync-alt fa-lg"></i>
-                                </Button>
+                                onClick={e => this.refreshPermissions()}
+                                size="lg"
 
-                            </Col>
-                            <Col className="text-right" xs="7">
+                            >
+                                <i className="fas fa-sync-alt fa-lg"></i>
+                            </Button>
 
-                            </Col>
-                        </Row>
-                    </CardHeader>
-                
+                        </Col>
+                        <Col className="text-right" xs="7">
+
+                        </Col>
+                    </Row>
+                </CardHeader>
+
 
 
                 <Table className="align-items-center table-flush" responsive>
@@ -195,15 +195,20 @@ class Approved extends Component {
                     </tbody>
                 </Table>
                 <CardFooter className="py-4">
-                    <nav aria-label="...">
+                    {this.props.permissionCount > 0 ?
+                        <nav style={{ float: "right" }}>
 
-                        {this.props.permissionCount > 0 ?
+                            <div style={{ float: "left", margin: "6px 18px" }}>
+
+                                Toplam : {this.props.permissionCount}
+                            </div>
                             <CustomPagination
                                 paginationItemCount={helperService.getPaginationItemCount(this.props.permissionCount, constants.PAGESIZE_INPERMISSION_PAGE)}
                                 paginationItemClick={(index) => this.onChangePaginationItem(index)}
                                 currentIndex={this.state.currentIndex}
-                            /> : null}
-                    </nav>
+                            />
+                        </nav>
+                        : null}
                 </CardFooter>
             </Card>
 
