@@ -6,6 +6,8 @@ import Login from "../../containers/Login/Login"
 import PasswordForgot from "../../containers/Login/PasswordForgot"
 
 import register from "../../containers/Register/Register";
+import ResetPassword from "../../containers/Login/ResetPassword";
+
 import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
 
@@ -41,6 +43,17 @@ var routes = [
         component: register,
         layout: "/auth"
     },
+
+
+    {
+        path: "/reset-password/:email/:token",
+        name: "Şifre Değiştir",
+        icon: "ni ni-circle-08 text-pink",
+        hash: "#the-hash",
+        component: ResetPassword,
+        layout: "/auth"
+    },
+
 
     {
         path: "/password-forgot",

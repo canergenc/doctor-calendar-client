@@ -242,6 +242,8 @@ class Login extends React.Component {
             <Col xs="6">
               <Link
                 className="text-light"
+                
+                
                 to="/auth/password-forgot"
               >
                 <small>Şifremi Unuttum</small>

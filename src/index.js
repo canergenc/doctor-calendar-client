@@ -28,6 +28,7 @@ import permissionReducer from "./store/reducers/permission";
 import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
 import passwordForgotReducer from "./store/reducers/password.forgot";
+import resetPasswordReducer from "./store/reducers/reset.password";
 
 
 
@@ -44,7 +45,7 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   users: usersReducer,
   passwordForgot: passwordForgotReducer,
-
+  resetPassword:resetPasswordReducer,
   reminders: remindersReducer,
   locations: locationsReducer,
   // alertReducer:alertReducer,
