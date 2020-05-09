@@ -411,7 +411,7 @@ class WaitingForApproved extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Açıklama:</Label>
                                     <Col sm={7}>
-                                        <Input type="textarea" style={{ color: 'black', fontSize: '16px' }} name="description" value={this.state.description} onChange={this.inputChangeHandle} >
+                                        <Input type="text" style={{ color: 'black', fontSize: '16px' }} name="description" value={this.state.description} onChange={this.inputChangeHandle} >
                                         </Input>
                                     </Col>
                                 </InputGroup>
