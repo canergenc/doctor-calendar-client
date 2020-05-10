@@ -2,7 +2,7 @@ import Index from "../../views/Index.jsx";
 import Profile from "../../containers/Profile/Profile.js";
 import Location from "../../containers/Locations/Locations.js";
 import Person from "../../containers/Persons/Persons.js";
-import Permission from "../../containers/Request-Approve/Permission.js";
+import Permission from "../../containers/Permission/Permission.js";
 import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
 

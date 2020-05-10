@@ -35,8 +35,25 @@ const forgotPassword = (email) => {
     });
 };
 
+
+export const resetPassword = (email,password,token) => {
+    return request({
+        url: `/users/resetPassword/${token}`,
+        method: 'POST',
+        data: {
+            'email': email,
+            'password': password,      
+        }
+    },false);
+};
+
+
+
+
+
 export const authService = {
     login,
     register,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 };

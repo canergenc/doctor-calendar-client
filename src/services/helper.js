@@ -69,6 +69,11 @@ const countOfInWeekOrWeekend = (reminders) => {
 }
 
 
+const getToken=()=>{
+    return localStorage.getItem(constants.TOKEN)
+}
+
+
 
 
 
@@ -91,6 +96,7 @@ export const helperService = {
     getColorName,
     countOfInWeekOrWeekend,
     GUID4,
-    getPaginationItemCount
+    getPaginationItemCount,
+    getToken
 
 };
