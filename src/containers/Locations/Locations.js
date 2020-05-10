@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { listOfColorName } from "../../variables/constants";
 import * as actions from '../../store/actions';
 
 import {
@@ -42,34 +43,7 @@ class Locations extends Component {
             deleteModal: false,
             id: '',
             name: '',
-            colorCode: '',
-            colors: [
-                'red',
-                'orange',
-                'yellow',
-                'olive',
-                'green',
-                'teal',
-                'blue',
-                'violet',
-                'purple',
-                'pink',
-                'primary',
-                'secondary',
-                'success',
-                'info',
-                'warning',
-                'danger',
-                'light',
-                'dark',
-                'default',
-                'darker',
-                'indigo',
-                'cyan',
-                'gray',
-                'gray-dark',
-                'lighter'
-            ]
+            colorCode: ''
         }
 
         this.updateHandle = this.updateHandle.bind(this);
@@ -289,14 +263,14 @@ class Locations extends Component {
             ));
         }
 
-        const colorsRadioNew = this.state.colors.map((color, index) =>
+        const colorsRadioNew = listOfColorName.map((color, index) =>
             <div style={{ float: "left" }} key={index}>
                 <input className="radioInput" type="radio" name="colorCode" id={color} value={color} onChange={(event) => this.inputChangeHandle(event)} />
                 <label className="radioLabel" type="radioLabel" htmlFor={color} title={color}><span type="radioSpan" className={"radioSpan " + color}></span></label>
             </div>
         );
 
-        const colorsRadioEdit = this.state.colors.map((color, index) =>
+        const colorsRadioEdit = listOfColorName.map((color, index) =>
             <div style={{ float: "left" }} key={index}>
                 <input className="radioInput" type="radio" name="colorCode" id={color} value={color} onChange={(event) => this.inputChangeHandle(event)} checked={this.state.colorCode === color} />
                 <label className="radioLabel" type="radioLabel" htmlFor={color} title={color}><span type="radioSpan" className={"radioSpan " + color} ></span></label>
