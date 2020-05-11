@@ -244,7 +244,21 @@ class Persons extends Component {
 
     componentDidMount() {
         this.renderTableData(this.state.currentIndex);
-        this.props.getGroupUsersCount();
+
+        const filterData = {
+
+            where: {
+                groupId: {
+                    like: helperService.getGroupId()
+                }
+            },
+            include: [
+                { relation: "user" }
+            ]
+
+        }
+
+        this.props.getGroupUsersCount(filterData);
     }
 
     componentDidUpdate() {
@@ -705,7 +719,7 @@ const mapDispatchToProps = dispatch => {
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
         updateUser: (userId, userData, userGroupId, countLimits, filterData) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData)),
-        getGroupUsersCount: () => dispatch(actions.getGroupUsersCount()),
+        getGroupUsersCount: (filterData) => dispatch(actions.getGroupUsersCount(filterData)),
         cleanFlagUser: () => dispatch(actions.cleanFlagsUsers())
     };
 };

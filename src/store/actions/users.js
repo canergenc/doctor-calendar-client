@@ -37,20 +37,9 @@ export const fetchGlobalUsersFailed = (error) => {
     };
 };
 
-export const getGroupUsersCount = () => {
+export const getGroupUsersCount = (filterData) => {
     return dispatch => {
-        const filterData = {
-
-            where: {
-                groupId: {
-                    like: helperService.getGroupId()
-                }
-            },
-            include: [
-                { relation: "user" }
-            ]
-
-        }
+       
         userService.getGroupUsersCount(filterData)
             .then(res => {
 

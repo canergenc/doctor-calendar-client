@@ -46,13 +46,7 @@ class ResetPasswordPage extends React.Component {
 
         const { token } = this.props.match.params;
         const { email } = this.props.match.params;
-        console.log(token);
-        console.log(email);
-
-        
         this.setState({ token: token, email: email });
-
-
     }
 
     handleInputChange(event) {
@@ -74,7 +68,6 @@ class ResetPasswordPage extends React.Component {
         const { password, rePassword, token, email } = this.state;
         this.setState({ submitted: true });
         if (password.length > 7 && password == rePassword) {
-            const token = helperService.getToken();  //TOKEN olmayacak
             this.props.resetPassword(email, password, token);
         }
     }
@@ -85,117 +78,121 @@ class ResetPasswordPage extends React.Component {
 
 
     render() {
-        const { password, submitted, rePassword,token,email } = this.state;
+        const { password, submitted, rePassword, token, email } = this.state;
         return (
             <>
 
-                
-
-                    <Col lg="5" md="7">
-                        <Card className="bg-secondary shadow border-0">
-
-                            <CardBody className="px-lg-5 py-lg-5">
-                                <div className="text-center text-muted mb-4">
-                                    {/* <small> </small> */}
-                                    <h1> <Badge color="light">ŞİFRE DEĞİŞTİR</Badge></h1>
-                                </div>
 
 
+                <Col lg="5" md="7">
+                    <Card className="bg-secondary shadow border-0">
 
-                                <Form role="form" onSubmit={this.handleSubmit}>
+                        <CardBody className="px-lg-5 py-lg-5">
+                            <div className="text-center text-muted mb-4">
+                                {/* <small> </small> */}
+                                <h1> <Badge color="light">ŞİFRE DEĞİŞTİR</Badge></h1>
+                            </div>
 
-                                    <Row style={{ marginBottom: 10 }} >
-                                        <Col >
-                                            <Label style={{ fontSize: 12 }}>Omnicali hesabınızın şifresini değiştirmek üzeresiniz
+
+
+                            <Form role="form" onSubmit={this.handleSubmit}>
+
+                                <Row style={{ marginBottom: 10 }} >
+                                    <Col >
+                                        <Label style={{ fontSize: 12 }}>Omnicali hesabınızın şifresini değiştirmek üzeresiniz
                                              </Label>
-                                        </Col>
-                                    </Row>
+                                    </Col>
+                                </Row>
 
-                                    {submitted && this.props.statusText && !this.props.loading ?
+                                {submitted && this.props.statusText && !this.props.loading ?
 
-                                        <Alert color="warning">
-                                            {this.props.statusText}
-                                        </Alert>
-                                        : ''}
-
-
+                                    <Alert color="warning">
+                                        {this.props.statusText}
+                                    </Alert>
+                                    : ''}
 
 
+                                {submitted && this.props.response &&
+
+                                    <Alert color="success">
+                                        {'Şifreniz güncellendi.'}
+                                    </Alert>
+                                }
 
 
-                                    <FormGroup>
-                                        <InputGroup className="input-group-alternative">
-                                            <InputGroupAddon addonType="prepend">
-                                                <InputGroupText>
-                                                    <i className="ni ni-lock-circle-open" />
-                                                </InputGroupText>
-                                            </InputGroupAddon>
-                                            <Input placeholder="Şifre" type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
-                                        </InputGroup>
+                                <FormGroup>
+                                    <InputGroup className="input-group-alternative">
+                                        <InputGroupAddon addonType="prepend">
+                                            <InputGroupText>
+                                                <i className="ni ni-lock-circle-open" />
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                        <Input placeholder="Şifre" type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+                                    </InputGroup>
 
-                                        {submitted && !password ?
-                                            <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p> : null
-                                        }
+                                    {submitted && !password ?
+                                        <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p> : null
+                                    }
 
-                                        {submitted && password.length < 8 && password.length > 0 ?
-                                            <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre 8 karakter olmalı.</p> : null
-                                        }
+                                    {submitted && password.length < 8 && password.length > 0 ?
+                                        <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre 8 karakter olmalı.</p> : null
+                                    }
 
-                                    </FormGroup>
+                                </FormGroup>
 
 
-                                    <FormGroup className="mb-3">
-                                        <InputGroup className="input-group-alternative">
-                                            <InputGroupAddon addonType="prepend">
-                                                <InputGroupText>
-                                                    <i className="ni ni-lock-circle-open" />
-                                                </InputGroupText>
-                                            </InputGroupAddon>
-                                            <Input placeholder="Şifre tekrar" type="password" name="rePassword" value={this.state.rePassword} onChange={this.handleInputChange} />
+                                <FormGroup className="mb-3">
+                                    <InputGroup className="input-group-alternative">
+                                        <InputGroupAddon addonType="prepend">
+                                            <InputGroupText>
+                                                <i className="ni ni-lock-circle-open" />
+                                            </InputGroupText>
+                                        </InputGroupAddon>
+                                        <Input placeholder="Şifre tekrar" type="password" name="rePassword" value={this.state.rePassword} onChange={this.handleInputChange} />
 
-                                        </InputGroup>
-                                        {/* {submitted && !rePassword ?
+                                    </InputGroup>
+                                    {/* {submitted && !rePassword ?
                                         <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre gerekli.</p> : null
                                     } */}
 
-                                        {/* {submitted && rePassword.length < 8 && rePassword.length > 0 ?
+                                    {/* {submitted && rePassword.length < 8 && rePassword.length > 0 ?
                                         <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Şifre 8 karakter olmalı.</p> : null
                                     } */}
 
-                                        {submitted && rePassword != password ?
-                                            <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Girmiş olduğunuz şifreler aynı değil!</p> : null
-                                        }
+                                    {submitted && rePassword != password ?
+                                        <p style={{ fontSize: 12, marginTop: '1%' }} className="text-warning">Girmiş olduğunuz şifreler aynı değil!</p> : null
+                                    }
 
-                                    </FormGroup>
-
-
-
-                                    <Row>
-
-                                        <Button type='submit' style={{ height: '45px' }} block color="primary" >
-
-                                            {this.props.loading && (
-                                                <i
-                                                    className="fa fa-refresh fa-spin"
-                                                    style={{ marginRight: "5px" }}
-                                                />
-                                            )}
-
-                                            {this.props.loading && <span>Lütfen bekleyin...</span>}
-                                            {!this.props.loading && <span>Şifre Değiştir</span>}
-                                        </Button>
-
-                                    </Row>
+                                </FormGroup>
 
 
 
+                                <Row>
 
-                                </Form>
-                            </CardBody>
-                        </Card>
+                                    <Button type='submit' style={{ height: '45px' }} block color="primary" >
 
-                    </Col>
-                
+                                        {this.props.loading && (
+                                            <i
+                                                className="fa fa-refresh fa-spin"
+                                                style={{ marginRight: "5px" }}
+                                            />
+                                        )}
+
+                                        {this.props.loading && <span>Lütfen bekleyin...</span>}
+                                        {!this.props.loading && <span>Şifre Değiştir</span>}
+                                    </Button>
+
+                                </Row>
+
+
+
+
+                            </Form>
+                        </CardBody>
+                    </Card>
+
+                </Col>
+
 
 
             </>
