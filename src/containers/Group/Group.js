@@ -60,6 +60,8 @@ class GroupSettings extends React.Component {
   inputChangeHandle(event) {
 
     const target = event.target;
+    console.log(target.name);
+    
     if (target.name === 'weekday')
       this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
     if (target.name === 'weekend')

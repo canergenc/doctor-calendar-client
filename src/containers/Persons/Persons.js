@@ -498,7 +498,7 @@ class Persons extends Component {
                                 }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
-                                        <InputGroupText>Nöbet Devre Dışı:</InputGroupText>
+                                        <InputGroupText>Nöbet Atamayı Devre Dışı Bırak:</InputGroupText>
                                         <div id="checkbox-userDisable" className="pretty p-default p-curve" style={{ marginLeft: "0px", marginBottom: "auto", marginTop: "15px", marginRight: "auto" }} >
                                             <input
                                                 type="checkbox"
