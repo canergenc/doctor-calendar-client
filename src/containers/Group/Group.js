@@ -185,7 +185,7 @@ class GroupSettings extends React.Component {
                             className="form-control-label mr-sm-2"
                             htmlFor="sequentialOrderLimitCount"
                           >
-                            Sıralı Nöbet Sayısı
+                            Maksimum Ardışık Nöbet Sınırı
                             </Label>
                           <Input id="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
 

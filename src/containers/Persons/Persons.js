@@ -120,7 +120,7 @@ class Persons extends Component {
 
     updateHandle(event) {
         this.setState({ submitted: true });
-        
+
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
         if (this.updateHandleValidation()) {
@@ -134,7 +134,7 @@ class Persons extends Component {
                 ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit } : null),
                 ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
             };
-            
+
             const filterData = {
                 filter: {
                     skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
@@ -613,17 +613,12 @@ class Persons extends Component {
 
 
                                         <Col className="text-right" xs="7">
-                                            <Button
-                                                color="primary"
-                                                href="#pablo"
-                                                onClick={e => this.openCreateModal()}
-                                                size="sm"
-                                            >
+                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
                                                 </span>
-            Yeni
-</Button>
+                                                <span className="btn-inner--text">Yeni</span>
+                                            </Button>
                                         </Col>
                                     </Row>
 
