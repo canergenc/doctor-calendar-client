@@ -2,22 +2,26 @@ import axios from "axios";
 import { constants } from "../../variables/constants";
 
 
-const request = async function(options, isHeader = true) {
+const request = async function (options, isHeader = true) {
   let authHeader = null;
+  let header = null;
   if (isHeader) {
-    authHeader = localStorage.getItem(constants.TOKEN); 
+    authHeader = localStorage.getItem(constants.TOKEN);
+    header = {
+      Authorization: `Bearer ${authHeader} `,
+    }
   }
 
   const client = axios.create({
     baseURL: constants.BASE_URL,
-    headers: { Authorization: `Bearer ${authHeader} ` }
+    headers: header
   });
 
-  const onSuccess = function(response) {
+  const onSuccess = function (response) {
     return response.data;
   };
 
-  const onError = function(error) {
+  const onError = function (error) {
 
     if (error.response) {
       // Request was made but server responded with something

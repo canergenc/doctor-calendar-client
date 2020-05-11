@@ -92,7 +92,7 @@ class Register extends React.Component {
       <>
 
 
-        <Modal
+        {/* <Modal
           className="modal-dialog-centered"
 
           isOpen={this.state.isClickPrivacyModal}
@@ -120,7 +120,7 @@ class Register extends React.Component {
                         </Button>
 
           </div>
-        </Modal>
+        </Modal> */}
 
 
         <Col lg="5" md="7">
@@ -225,11 +225,11 @@ class Register extends React.Component {
                         htmlFor="customCheckRegister"
                       >
                         <span className="text-muted">
-                          <a href="#pablo" onClick={() => this.togglePrivacyCondition("isClickPrivacyModal")}>
+                          <a href="https://omnicali-demo.web.app/terms_and_conditions.htm" >
                             Üyelik koşullarını{" "}
                           </a>
                           ve{" "}
-                          <a href="#pablo" onClick={e => e.preventDefault()}>
+                          <a href="https://omnicali-demo.web.app/terms_and_conditions.htm" >
                             kişisel verilerimin korunmasını{" "}
                           </a>
                           kabul ediyorum
