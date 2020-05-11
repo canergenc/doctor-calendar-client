@@ -120,6 +120,7 @@ class Persons extends Component {
 
     updateHandle(event) {
         this.setState({ submitted: true });
+        
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
         if (this.updateHandleValidation()) {
@@ -130,9 +131,10 @@ class Persons extends Component {
 
             };
             const countLimits = {
-                ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
-                ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
+                ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit } : null),
+                ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
             };
+            
             const filterData = {
                 filter: {
                     skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
