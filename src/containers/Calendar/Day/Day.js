@@ -48,10 +48,10 @@ class Day extends Component {
                 isDrag={true}
                 id={element.id}
                 key={element.id}
-                location={element.location.name}
+                location={element.location ? element.location.name : "İzin"}
                 name={element.user.fullName}
                 index={index}
-                color={element.location ? element.location.colorCode : "#fff"}
+                color={element.location ? element.location.colorCode : "lighter"}
                 onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
               />);
               remindersCount += 1;

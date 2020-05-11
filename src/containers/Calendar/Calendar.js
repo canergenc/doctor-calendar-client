@@ -374,9 +374,7 @@ class Calendar extends Component {
   render() {
     moment.locale('tr');
     const weekdays = moment.weekdays(true);
-    console.log('CALENDAR');
-    console.log(this.props.error);
-
+    
     let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
 
     if (this.props.reminders) {

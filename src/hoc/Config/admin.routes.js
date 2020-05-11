@@ -1,5 +1,6 @@
 import Index from "../../views/Index.jsx";
 import Profile from "../../containers/Profile/Profile.js";
+import GroupSettings from "../../containers/Group/Group.js";
 import Location from "../../containers/Locations/Locations.js";
 import Person from "../../containers/Persons/Persons.js";
 import Permission from "../../containers/Permission/Permission.js";
@@ -19,6 +20,13 @@ var routes = [
         name: "Profil",
         icon: "ni ni-circle-08 text-primary",
         component: Profile,
+        layout: "/admin"
+    },
+    {
+        path: "/group",
+        name: "Takvim Ayarları",
+        icon: "ni ni-calendar-grid-58 text-primary",
+        component: GroupSettings,
         layout: "/admin"
     },
     {

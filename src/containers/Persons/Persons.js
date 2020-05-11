@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import UserHeader from "../../components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
-import CustomPagination from "../../components/Paginations/CustomPagination";
-import { constants } from '../../variables/constants';
+import UserHeader from "../../components/Headers/UserHeader.jsx";
 import Person from './Person/Person';
-import * as EmailValidator from 'email-validator';
-import "./Persons.css"
-import * as actions from '../../store/actions';
+import CustomPagination from "../../components/Paginations/CustomPagination";
 import { personHelper } from "./Person/PersonHelper";
+import { constants } from '../../variables/constants';
+import * as EmailValidator from 'email-validator';
+import * as actions from '../../store/actions';
+import "./Persons.css"
+import 'pretty-checkbox';
 
 // reactstrap components
 import {
@@ -103,6 +104,11 @@ class Persons extends Component {
             this.setState({ weekendCountLimit: event.target.value, submitted: false });
         if (target.name === 'weekdayCountLimit')
             this.setState({ weekdayCountLimit: event.target.value, submitted: false });
+        if (target.name === 'userDisable') {
+            if (this.refs.userDisable.checked) {
+                this.setState({ weekendCountLimit: '0', weekdayCountLimit: '0', submitted: false });
+            }
+        }
         if (target.name === 'searchInput')
             this.setState({ searchParam: event.target.value, submitted: false });
 
@@ -240,7 +246,7 @@ class Persons extends Component {
     }
 
     componentDidUpdate() {
-        
+
         if (this.props.error) {
             MySwal.fire({
                 icon: 'error',
@@ -258,7 +264,7 @@ class Persons extends Component {
             });
             this.props.cleanFlagUser();
             this.setState({ submitted: false });
-            this.setState({searchParam:''})
+            this.setState({ searchParam: '' })
         }
 
     }
@@ -284,8 +290,8 @@ class Persons extends Component {
                 name: '',
                 email: '',
                 workStartDate: '',
-                weekdayCountLimit: '',
-                weekendCountLimit: ''
+                weekdayCountLimit: ' ',
+                weekendCountLimit: ' '
             });
         }
     };
@@ -296,8 +302,6 @@ class Persons extends Component {
     }
 
     render() {
-
-        console.log('oops', this.props.users);
 
         const { name, email, password, submitted, workStartDate } = this.state;
         const isEmailValid = EmailValidator.validate(email);
@@ -492,6 +496,23 @@ class Persons extends Component {
                                 }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
+                                        <InputGroupText>Nöbet Devre Dışı:</InputGroupText>
+                                        <div id="checkbox-userDisable" className="pretty p-default p-curve" style={{ marginLeft: "0px", marginBottom: "auto", marginTop: "15px", marginRight: "auto" }} >
+                                            <input
+                                                type="checkbox"
+                                                name="userDisable"
+                                                ref="userDisable"
+                                                onChange={event => this.inputChangeHandle(event)}
+                                                checked={((this.state.weekdayCountLimit === '0' || this.state.weekdayCountLimit === '') && (this.state.weekendCountLimit === '0' || this.state.weekendCountLimit === '')) ? true : false}
+                                            />
+                                            <div className="state p-danger-o">
+                                                <label></label>
+                                            </div>
+                                        </div>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
                                         <Input name="weekdayCountLimit" type="number" min="0" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
@@ -646,11 +667,11 @@ class Persons extends Component {
                                 </Table>
                                 <CardFooter className="py-4">
                                     <nav style={{ float: "right" }}>
-                                        <div  style={{ float:"left",margin:"6px 18px"}}>
+                                        <div style={{ float: "left", margin: "6px 18px" }}>
 
                                             Toplam : {usersCount}
                                         </div>
-                                        
+
                                         {usersCount > 0 ?
                                             <CustomPagination
                                                 paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}

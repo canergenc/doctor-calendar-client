@@ -213,12 +213,39 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 @mixin reminder-list {
   @each $name, $value in $colors {
-    .#{$name} {
-      color: #fff;
-      background-color:$value;
-      border-color: $value;
-      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+    @if $name=="lighter"{
+      .#{$name} {
+        color: black;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
     }
+    @else if $name=="light"{
+      .#{$name} {
+        color: black;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
+    }
+    @else if $name=="cyan"{
+      .#{$name} {
+        color: black;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
+    }
+    @else{
+      .#{$name} {
+        color: #fff;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
+    }
+    
 
   }
 }
