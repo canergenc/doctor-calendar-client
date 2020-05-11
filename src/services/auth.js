@@ -30,19 +30,20 @@ const forgotPassword = (email) => {
         url: `/users/forgot`,
         method: 'GET',
         params: {
-            email:email
+            'email':email
         }
-    });
+    },false);
 };
 
 
 export const resetPassword = (email,password,token) => {
     return request({
-        url: `/users/resetPassword/${token}`,
+        url: `/users/resetPassword`,
         method: 'POST',
         data: {
             'email': email,
-            'password': password,      
+            'password': password,  
+            'code':    token
         }
     },false);
 };
