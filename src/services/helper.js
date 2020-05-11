@@ -1,19 +1,15 @@
 import style from "../containers/Locations/Locations.scss";
-
-
-
-
-import { constants } from "../variables/constants";
+import { constants,listOfColorName } from "../variables/constants";
 
 const getErrorMessage = (err) => {
-    
+
     let errorMessage = "";
     let statusCode = "";
     if (err && err.status) {
         statusCode = err.status.toString();
     }
     switch (statusCode) {
-       
+
         case constants.ERRORCODE[422]:
             errorMessage = err.data.error.details.length > 0 ? err.data.error.details[0].message : 'İşlem sırasında hata oluştu'
             return errorMessage;
@@ -39,36 +35,7 @@ const getGroupId = () => {
 
 
 const getColorName = (index) => {
-        
-    let listOfColorName = [
-        "primary",
-        "secondary",
-        "success",
-        "info",
-        "warning",
-        "danger",
-        "light",
-        "dark",
-        "default",
-        "darker",
-        "indigo",
-        "cyan",
-        "gray",
-        "gray-dark",
-        "lighter",
-        "red",
-        "orange",
-        "yellow",
-        "olive",
-        "green",
-        "teal",
-        "blue",
-        "violet",
-        "purple",
-        "pink"       
-    ]
-
-    return listOfColorName[index];
+    return index > listOfColorName.length ? listOfColorName[index - listOfColorName.length] : listOfColorName[index];
 }
 
 const generateRndStr = (length) => {
@@ -89,7 +56,7 @@ const GUID4 = () => {
 
 
 const countOfInWeekOrWeekend = (reminders) => {
-    const result = { countOfOnWeekend: 0, countOfInWeek:0 }
+    const result = { countOfOnWeekend: 0, countOfInWeek: 0 }
     for (let index = 0; index < reminders.length; index++) {
         const reminder = reminders[index];
         if (reminder.isWeekend) {
@@ -115,9 +82,9 @@ const uniqGroupName = () => {
 }
 
 
-const getPaginationItemCount=(totalListCount,pageSize)=>{
-    let result= Math.ceil(totalListCount/pageSize)
-    return  result;
+const getPaginationItemCount = (totalListCount, pageSize) => {
+    let result = Math.ceil(totalListCount / pageSize)
+    return result;
 }
 
 export const helperService = {

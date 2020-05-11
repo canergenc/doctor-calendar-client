@@ -8,7 +8,6 @@ $colors: (
   "green": #21BA45,
   "teal": #00B5AD,
   "blue": #2185D0,
-  "violet": #6435C9,
   "purple": #A333C8,
   "pink": #E03997,
   "primary":#5e72e4,
@@ -20,11 +19,9 @@ $colors: (
   "light":#adb5bd,
   "dark":#212529,
   "default":#172b4d,
-  "darker":black,
   "indigo": #5603ad,
   "cyan": #2bffc6,
   "gray": #8898aa,
-  "gray-dark": #32325d,
   "lighter": #e9ecef
 );
 
@@ -216,12 +213,39 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 @mixin reminder-list {
   @each $name, $value in $colors {
-    .#{$name} {
-      color: #fff;
-      background-color:$value;
-      border-color: $value;
-      box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+    @if $name=="lighter"{
+      .#{$name} {
+        color: black;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
     }
+    @else if $name=="light"{
+      .#{$name} {
+        color: black;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
+    }
+    @else if $name=="cyan"{
+      .#{$name} {
+        color: black;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
+    }
+    @else{
+      .#{$name} {
+        color: #fff;
+        background-color:$value;
+        border-color: $value;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);;
+      }
+    }
+    
 
   }
 }

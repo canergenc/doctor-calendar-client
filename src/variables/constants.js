@@ -57,31 +57,30 @@ export const CalendarStatus = {
     Reject: 3
 }
 
-
-export const ColorCodeName = {
-    red: '#DB2828',
-    orange: '#F2711C',
-    yellow: '#FBBD08',
-    olive: '#B5CC18',
-    green: '#21BA45',
-    teal: '#00B5AD',
-    blue: '#2185D0',
-    violet: '#6435C9',
-    purple: '#A333C8',
-    pink: '#E03997',
-
-    primary: '#5e72e4',
-    secondary: '#656768',
-    success: '#2dce89',
-    info: '#11cdef',
-    warning: '#fb6340',
-    danger: '#f5365c',
-    light: '#adb5bd',
-    dark: '#bfc0c2',
-    white: '#fff',
-
-}
-
+export const listOfColorName = [
+    "primary",
+    "secondary",
+    "success",
+    "info",
+    "warning",
+    "danger",
+    "light",
+    "dark",
+    "default",
+    "indigo",
+    "cyan",
+    "gray",
+    "lighter",
+    "red",
+    "orange",
+    "yellow",
+    "olive",
+    "green",
+    "teal",
+    "blue",
+    "purple",
+    "pink"
+];
 
 
 

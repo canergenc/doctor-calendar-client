@@ -22,6 +22,7 @@ import remindersReducer from "./store/reducers/reminders";
 import locationsReducer from "./store/reducers/locations";
 import calendarReducer from "./store/reducers/calendar"
 import userGroupsReducer from "./store/reducers/user.groups";
+import groupsSettingsReducer from "./store/reducers/group.settings";
 import userInfoReducer from "./store/reducers/user.info";
 import bulkLocationReducer from "./store/reducers/bulk-location";
 import permissionReducer from "./store/reducers/permission";
@@ -55,7 +56,8 @@ const rootReducer = combineReducers({
   userGroups: userGroupsReducer,
   userInfo: userInfoReducer,
   bulkLocation: bulkLocationReducer,
-  calendar: calendarReducer
+  calendar: calendarReducer,
+  groupSettings:groupsSettingsReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

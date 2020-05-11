@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { helperService } from '../../services/helper'
 import React from "react";
 import * as actions from '../../store/actions/index';
-import style from "../Locations/Locations.scss"
+import "../Locations/Locations.scss"
 
 // reactstrap components
 import {
@@ -25,43 +25,48 @@ class LocationSplash extends React.Component {
         this.state = {
             groupId: '',
             locationInput: '',
+            colorCode: '',
+            currentIndex: 0,
             listOfLocation: []
         };
 
         // this.removeItem=this.removeItem.bind(this)
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.inputChangeHandle = this.inputChangeHandle.bind(this);
         this.saveChanges = this.saveChanges.bind(this);
 
     }
 
     addItemToLocationList() {
         let lists = this.state.listOfLocation;
+        let currentIndex = this.state.currentIndex;
         console.log('ADD ITEM');
-        
-        console.log(style.location);
-        
+
+
         if (this.state.locationInput && this.state.locationInput.length > 0) {
 
-            lists.push({ id: lists.length, context: this.state.locationInput, modifier:  helperService.getColorName(lists.length)  });
-            this.setState({ listOfLocation: lists, locationInput: '' });
-            console.log(lists);
+            lists.push({ id: lists.length, context: this.state.locationInput, modifier: helperService.getColorName(currentIndex) });
+            this.setState({ listOfLocation: lists, locationInput: '', currentIndex: currentIndex + 1 });
+
         }
     }
 
-    handleInputChange(event) {
+    inputChangeHandle(event) {
         const target = event.target;
-        console.log(target);
-        this.setState({ locationInput: event.target.value });
+        if (target.name === 'locationInput')
+            this.setState({ locationInput: event.target.value });
+        if (target.name === 'colorCode')
+            this.setState({ colorCode: event.target.value });
+    };
 
-    }
 
     removeItem(item) {
         console.log(item)
         let lists = this.state.listOfLocation;
+        let currentIndex = this.state.currentIndex;
         const index = lists.indexOf(item);
         if (index > -1) {
             lists.splice(index, 1);
-            this.setState({ listOfLocation: lists,locationInput: '' });
+            this.setState({ listOfLocation: lists, locationInput: '' });
         }
     }
 
@@ -110,14 +115,14 @@ class LocationSplash extends React.Component {
                                         <i className="ni ni-lock-circle-open" />
                                     </InputGroupText>
                                 </InputGroupAddon>
-                                <Input placeholder="Lokasyon" name='locationInput' type="text" value={this.state.locationInput} onChange={this.handleInputChange} />
+                                <Input placeholder="Lokasyon" name='locationInput' type="text" value={this.state.locationInput} onChange={this.inputChangeHandle} />
 
                             </InputGroup>
                         </Col>
                         <Col xs="3" >
                             <Button onClick={() => this.addItemToLocationList()} style={{ marginRight: '5%' }} color="primary"> EKLE</Button>{' '}
                         </Col>
-                    </Row>
+                    </Row>">
 
                     <Row style={{ marginTop: 5 }}>
 
@@ -125,44 +130,51 @@ class LocationSplash extends React.Component {
                             <ListGroup >
 
                                 {this.state.listOfLocation.length > 0 && this.state.listOfLocation.map(listitem => (
-                                    <ListGroupItem color={listitem.modifier} key={listitem.id} >   {listitem.context}
+                                    <ListGroupItem key={listitem.id} >   {listitem.context}
                                         <Button onClick={() => this.removeItem(listitem)} type="button" close aria-label="Cancel">
                                             <span aria-hidden>&ndash;</span>
                                         </Button>
+                                        <div style={{ float: "left" }} >
+                                            <label className="radioLabelList" style={{ margin: "0px 10px" }} type="radioLabel" title={listitem.modifier} htmlFor={listitem.modifier}><span type="radioSpan" className={"radioSpanList " + listitem.modifier} ></span></label>
+                                        </div>
                                     </ListGroupItem>
 
                                 ))}
                             </ListGroup>
                         </Col>
+
+                        <Col xs="3">
+                        </Col>
                     </Row>
 
                     <Row>
-                        <Col xs="7">
+                        <Col xs="9">
 
                             {this.state.listOfLocation.length > 0 &&
 
-                                <div className="text-center">
-                                    <Button disabled={this.props.isRegistiring} className="mt-4" onClick={this.saveChanges} type='button'
 
-                                        
-                                        color="primary" >
+                                <Button disabled={this.props.isRegistiring} className="mt-4 ml-0" onClick={this.saveChanges} type='button'
+                                    style={{ height: '45px' }} block
 
-                                        {this.props.createBulkLocationReqLoading && (
-                                            <i
-                                                className="fa fa-refresh fa-spin"
-                                                style={{ marginRight: "5px" }}
-                                            />
-                                        )}
+                                    color="primary" >
 
-                                        {this.props.createBulkLocationReqLoading && <span>Lütfen bekleyin...</span>}
-                                        {!this.props.createBulkLocationReqLoading && <span> KAYDET</span>}
-                                    </Button>
-                                </div>
+                                    {this.props.createBulkLocationReqLoading && (
+                                        <i
+                                            className="fa fa-refresh fa-spin"
+                                            style={{ marginRight: "5px" }}
+                                        />
+                                    )}
+
+                                    {this.props.createBulkLocationReqLoading && <span>Lütfen bekleyin...</span>}
+                                    {!this.props.createBulkLocationReqLoading && <span> KAYDET</span>}
+                                </Button>
+
+
                             }
 
                         </Col>
 
-                        <Col xs="5">
+                        <Col xs="3">
                         </Col>
                     </Row>
                 </Container>
