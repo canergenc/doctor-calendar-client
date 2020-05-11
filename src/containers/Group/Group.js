@@ -60,6 +60,8 @@ class GroupSettings extends React.Component {
   inputChangeHandle(event) {
 
     const target = event.target;
+    console.log(target.name);
+    
     if (target.name === 'weekday')
       this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
     if (target.name === 'weekend')
@@ -183,7 +185,7 @@ class GroupSettings extends React.Component {
                             className="form-control-label mr-sm-2"
                             htmlFor="sequentialOrderLimitCount"
                           >
-                            Sıralı Nöbet Sayısı
+                            Maksimum Ardışık Nöbet Sınırı
                             </Label>
                           <Input id="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
 

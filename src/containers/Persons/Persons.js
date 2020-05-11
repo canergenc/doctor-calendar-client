@@ -120,6 +120,7 @@ class Persons extends Component {
 
     updateHandle(event) {
         this.setState({ submitted: true });
+
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
         if (this.updateHandleValidation()) {
@@ -130,9 +131,10 @@ class Persons extends Component {
 
             };
             const countLimits = {
-                ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
-                ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
+                ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit } : null),
+                ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
             };
+
             const filterData = {
                 filter: {
                     skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
@@ -510,7 +512,7 @@ class Persons extends Component {
                                 }
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
-                                        <InputGroupText>Nöbet Devre Dışı:</InputGroupText>
+                                        <InputGroupText>Nöbet Atamayı Devre Dışı Bırak:</InputGroupText>
                                         <div id="checkbox-userDisable" className="pretty p-default p-curve" style={{ marginLeft: "0px", marginBottom: "auto", marginTop: "15px", marginRight: "auto" }} >
                                             <input
                                                 type="checkbox"
@@ -625,17 +627,12 @@ class Persons extends Component {
 
 
                                         <Col className="text-right" xs="7">
-                                            <Button
-                                                color="primary"
-                                                href="#pablo"
-                                                onClick={e => this.openCreateModal()}
-                                                size="sm"
-                                            >
+                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
                                                 </span>
-            Yeni
-</Button>
+                                                <span className="btn-inner--text">Yeni</span>
+                                            </Button>
                                         </Col>
                                     </Row>
 

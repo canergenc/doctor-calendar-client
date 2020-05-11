@@ -158,66 +158,34 @@ export const getReminders = (selectedLocations, selectedUsers, curMonth) => {
     }
   }
   else if (locations.length === 0 && users.length !== 0) {
-    if (users.length === 1) {
-      filterData = {
-        filter: {
-          where: {
-            startDate: {
-              between: [
-                startOfMonth,
-                endOfMonth
-              ]
-            },
-            or: users,
-            groupId: {
-              like: helperService.getGroupId()
-            }            
+    filterData = {
+      filter: {
+        where: {
+          startDate: {
+            between: [
+              startOfMonth,
+              endOfMonth
+            ]
           },
-          include: [
-            {
-              relation: "group"
-            },
-            {
-              relation: "user"
-            },
-            {
-              relation: "location"
-            }
-          ]
-        }
+          or: users,
+          groupId: {
+            like: helperService.getGroupId()
+          },
+          type: CalendarTypes.Nobet
+        },
+        include: [
+          {
+            relation: "group"
+          },
+          {
+            relation: "user"
+          },
+          {
+            relation: "location"
+          }
+        ]
       }
     }
-    else {
-      filterData = {
-        filter: {
-          where: {
-            startDate: {
-              between: [
-                startOfMonth,
-                endOfMonth
-              ]
-            },
-            or: users,
-            groupId: {
-              like: helperService.getGroupId()
-            },
-            type: CalendarTypes.Nobet
-          },
-          include: [
-            {
-              relation: "group"
-            },
-            {
-              relation: "user"
-            },
-            {
-              relation: "location"
-            }
-          ]
-        }
-      }
-    }
-
   }
   else if (locations.length !== 0 && users.length !== 0) {
     filterData = {
