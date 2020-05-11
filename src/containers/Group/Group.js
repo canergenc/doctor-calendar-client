@@ -59,9 +59,9 @@ class GroupSettings extends React.Component {
 
   inputChangeHandle(event) {
 
-    const target = event.target;
+    const target = event.target; 
     console.log(target.name);
-    
+
     if (target.name === 'weekday')
       this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
     if (target.name === 'weekend')
@@ -138,7 +138,7 @@ class GroupSettings extends React.Component {
                               type="checkbox"
                               name="weekday"
                               ref="weekday"
-                              onChange={event => this.inputChangeHandle(event)}
+                              onClick={event => this.inputChangeHandle(event)}
                               defaultChecked={this.props.isWeekdayControl}
                             />
                             <div className="state p-success-o">
@@ -163,7 +163,7 @@ class GroupSettings extends React.Component {
                               type="checkbox"
                               name="weekend"
                               ref="weekend"
-                              onChange={event => this.inputChangeHandle(event)}
+                              onClick={event => this.inputChangeHandle(event)}
                               defaultChecked={this.props.isWeekendControl}
                             />
                             <div className="state p-success-o">
@@ -207,7 +207,7 @@ class GroupSettings extends React.Component {
                               type="checkbox"
                               name="locationDayLimit"
                               ref="locationDayLimit"
-                              onChange={event => this.inputChangeHandle(event)}
+                              onClick={event => this.inputChangeHandle(event)}
                               defaultChecked={this.props.locationDayLimit}
                             />
                             <div className="state p-success-o">
