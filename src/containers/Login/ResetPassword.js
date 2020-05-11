@@ -45,14 +45,8 @@ class ResetPasswordPage extends React.Component {
     componentDidMount() {
 
         const { token } = this.props.match.params;
-        const { email } = this.props.match.params;
-        console.log(token);
-        console.log(email);
-
-        
+        const { email } = this.props.match.params;   
         this.setState({ token: token, email: email });
-
-
     }
 
     handleInputChange(event) {
@@ -74,8 +68,7 @@ class ResetPasswordPage extends React.Component {
         const { password, rePassword, token, email } = this.state;
         this.setState({ submitted: true });
         if (password.length > 7 && password == rePassword) {
-            const token = helperService.getToken();  //TOKEN olmayacak
-            this.props.resetPassword(email, password, token);
+            this.props.resetPassword(email, password,token);
         }
     }
 

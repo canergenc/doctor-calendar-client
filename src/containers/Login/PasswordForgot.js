@@ -170,26 +170,7 @@ class PasswordForgotPage extends React.Component {
                             </Form>
                         </CardBody>
                     </Card>
-                    <Row className="mt-3">
-                        <Col xs="6">
-
-                            <Link
-                                className="text-light"
-                                to="/auth/login"
-                            >
-                                <small>Üye Girişi</small>
-                            </Link>
-
-                        </Col>
-                        <Col className="text-right" xs="6">
-                            <Link
-                                className="text-light"
-                                to="/auth/register"
-                            >
-                                <small>Yeni Hesap Oluştur</small>
-                            </Link>
-                        </Col>
-                    </Row>
+                    
                 </Col>
 
             </>

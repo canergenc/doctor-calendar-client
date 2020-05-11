@@ -248,7 +248,7 @@ class Register extends React.Component {
 
                 <Row>
 
-                  <Button style={{ height: '45px' }} block color="primary" color="primary" type="submit" disabled={this.props.isRegistiring} >
+                  <Button  style={{ height: '45px' }} block color="primary" color="primary" type="submit" disabled={this.props.isRegistiring} >
 
                     {this.props.isRegistiring && (
                       <i
@@ -270,27 +270,7 @@ class Register extends React.Component {
             </CardBody>
           </Card>
 
-          <Row className="mt-3">
-            <Col xs="6">
-
-              <Link
-                className="text-light"
-                to="/auth/login"
-              >
-                <small>Üye Girişi</small>
-              </Link>
-
-            </Col>
-            <Col className="text-right" xs="6">
-              <Link
-                className="text-light"
-                to="/auth/password-forgot"
-              >
-                <small>Şifremi Unuttum</small>
-              </Link>
-            </Col>
-          </Row>
-
+          
 
 
 
