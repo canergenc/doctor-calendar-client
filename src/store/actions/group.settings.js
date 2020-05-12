@@ -46,6 +46,7 @@ export const updateGroupSettings = (groupSettingsId, data) => {
     return dispatch => {
         groupSettingsService.updateGroupSettings(groupSettingsId, data)
             .then(response => {
+                dispatch(getGroupSettings());
                 dispatch(updateGroupSettingsSuccess());
             })
             .catch(error => {
