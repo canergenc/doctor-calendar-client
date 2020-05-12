@@ -46,6 +46,7 @@ class Persons extends Component {
             addModal: false,
             deleteModal: false,
             submitted: false,
+            searchSubmitted:false,
             userGroupId: '',
             searchParam: '',
             id: '',
@@ -55,7 +56,8 @@ class Persons extends Component {
             weekendCountLimit: 0,
             weekdayCountLimit: 0,
             password: '',
-            currentIndex: 0
+            currentIndex: 0,
+            isShowPagination: true
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
@@ -135,21 +137,9 @@ class Persons extends Component {
                 ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
             };
 
-            const filterData = {
-                filter: {
-                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
-                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
-                    where: {
-                        groupId: {
-                            like: helperService.getGroupId()
-                        }
-                    },
-                    include: [
-                        { relation: "user" }
-                    ]
-                }
-            }
-            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filterData);
+            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
+            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filter);
+            
             this.toggleModal('editModal', null);
             event.preventDefault();
         }
@@ -173,93 +163,70 @@ class Persons extends Component {
                 ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
                 ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
             }
-            const filterData = {
-                filter: {
-                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
-                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
-                    where: {
-                        groupId: {
-                            like: helperService.getGroupId()
-                        }
-                    },
-                    include: [
-                        { relation: "user" }
-                    ]
-                }
-            }
-            this.props.createUser(user, countLimits, filterData);
+            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
+            this.props.createUser(user, countLimits,filter);
             this.toggleModal('addModal', null);
             event.preventDefault();
 
         }
     }
 
-    getUsersBySearch() {
-        debugger;
-        if (this.state.searchParam) {
-            this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
-        } else {
-            this.props.onInitUsers(personHelper.getInitFilter(this.state.currentIndex));
-
+    deleteHandle() {
+        if (this.state.id) {
+            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
+            this.props.deleteUser(this.state.userGroupId,filter)
+            this.toggleModal('deleteModal', undefined);
         }
     }
 
+    getUsersBySearch() {
+        if (this.state.searchParam) {
+            this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
+            this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
+        } else {
+            this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
+            this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
+        }
+
+    }
+
     keyPress(e) {
-        console.log(e.keyCode);
         if (e.keyCode === 13) {
             if (e.target.value) {
                 const param = e.target.value;
                 this.props.onInitUsers(personHelper.getSearchFilter(param));
+                this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
             } else {
-                this.props.onInitUsers(personHelper.getInitFilter(this.state.currentIndex));
+                this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
+                this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
             }
         }
+
     }
 
-    deleteHandle() {
-        if (this.state.id) {
-            const filterData = {
-                filter: {
-                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
-                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
-                    where: {
-                        groupId: {
-                            like: helperService.getGroupId()
-                        }
-                    },
-                    include: [
-                        { relation: "user" }
-                    ]
-                }
-            }
-            this.props.deleteUser(this.state.userGroupId, filterData)
-            this.toggleModal('deleteModal', undefined);
-
-        }
-    }
-
+    
     renderTableData(index) {
-        this.props.onInitUsers(personHelper.getInitFilter(index));
+        this.props.onInitUsers(personHelper.getFilter(index));
     }
+
+
+    refreshTable(index) {
+        this.renderTableData(index);
+        this.setState({ isShowPagination: true, searchParam: '',searchSubmitted:false });
+    }
+
 
     componentDidMount() {
         this.renderTableData(this.state.currentIndex);
+        this.getUserCount();
 
-        const filterData = {
-
-            where: {
-                groupId: {
-                    like: helperService.getGroupId()
-                }
-            },
-            include: [
-                { relation: "user" }
-            ]
-
-        }
-
-        this.props.getGroupUsersCount(filterData);
     }
+
+
+    getUserCount() {
+        this.props.getGroupUsersCount(personHelper.getInitCountFilter());
+    }
+
 
     componentDidUpdate() {
 
@@ -278,9 +245,13 @@ class Persons extends Component {
                 title: 'Başarılı',
                 text: this.props.message
             });
+            this.getUserCount();
             this.props.cleanFlagUser();
             this.setState({ submitted: false });
-            this.setState({ searchParam: '' })
+            this.setState({ isShowPagination: this.state.searchParam && this.state.searchSubmitted ?false:true })
+            this.setState({ searchParam: this.state.searchParam && !this.state.searchSubmitted ? '': this.state.searchParam })
+
+            
         }
 
     }
@@ -342,6 +313,8 @@ class Persons extends Component {
         }
         if (this.props.usersCount) {
             usersCount = this.props.usersCount;
+            console.log(usersCount);
+
         }
 
         return (
@@ -614,7 +587,7 @@ class Persons extends Component {
                                             <Button
                                                 color="secondary"
 
-                                                onClick={e => this.renderTableData(this.state.currentIndex)}
+                                                onClick={e => this.refreshTable(this.state.currentIndex)}
                                                 size="lg"
 
                                             >
@@ -676,21 +649,26 @@ class Persons extends Component {
                                         {users}
                                     </tbody>
                                 </Table>
-                                <CardFooter className="py-4">
-                                    <nav style={{ float: "right" }}>
-                                        <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                            Toplam : {usersCount}
-                                        </div>
+                                {
+                                    this.state.isShowPagination &&
+                                    <CardFooter className="py-4">
+                                        <nav style={{ float: "right" }}>
+                                            <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                        {usersCount > 0 ?
-                                            <CustomPagination
-                                                paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}
-                                                paginationItemClick={(index) => this.onChangePaginationItem(index)}
-                                                currentIndex={this.state.currentIndex}
-                                            /> : null}
-                                    </nav>
-                                </CardFooter>
+                                                Toplam : {usersCount}
+                                            </div>
+
+                                            {usersCount > 0 ?
+                                                <CustomPagination
+                                                    paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}
+                                                    paginationItemClick={(index) => this.onChangePaginationItem(index)}
+                                                    currentIndex={this.state.currentIndex}
+                                                /> : null}
+                                        </nav>
+                                    </CardFooter>
+                                }
+
                             </Card>
                         </div>
                     </Row>
