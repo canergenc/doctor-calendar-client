@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Card, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle, Table, CardHeader, CardFooter,Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
+import { Button, Card, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle, Table, CardHeader, CardFooter, Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
@@ -81,6 +81,7 @@ class WaitingForApproved extends Component {
         const filterOfApproved = permissionHelper.getApprovedFilter(0);
 
         this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
+        this.setState({ searchParam: '' });
         //this.props.patchPermisson(filter, data, this.waitingForApproveFilter, this.approvedFilter);
     }
 
@@ -88,7 +89,7 @@ class WaitingForApproved extends Component {
         const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex)
         const filterOfApproved = permissionHelper.getApprovedFilter(0);
         MySwal.fire({
-            title: 'Lütfen ret nedenini giriniz',
+            title: 'Lütfen iptal nedenini giriniz',
             input: 'text',
             inputAttributes: {
                 autocapitalize: 'off'
@@ -105,7 +106,9 @@ class WaitingForApproved extends Component {
                     status: CalendarStatus.Reject,
                     description: result.value
                 }
-                this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
+                this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved);
+                this.setState({ searchParam: '' });
+
             }
         })
     }
@@ -156,7 +159,7 @@ class WaitingForApproved extends Component {
 
             }
             this.props.createPermissions(data);
-            this.setState({ submitted: true })
+            this.setState({ submitted: true, searchParam: '' })
         }
 
     }
@@ -235,6 +238,20 @@ class WaitingForApproved extends Component {
         //     });
         //     this.setState({ userGroups: userGroups })
         // }
+
+    }
+
+
+    componentDidUpdate() {
+
+        if (this.props.statusTextAtCreatePermission || this.props.statusTextAtUpdatePermission) {
+            MySwal.fire({
+                icon: 'error',
+                title: 'İşlem Başarısız',
+                text: this.props.statusTextAtCreatePermission || this.props.statusTextAtUpdatePermission
+            });
+
+        }
 
     }
 
@@ -550,6 +567,7 @@ const mapStateToProps = state => {
         errorMessageAtGet: state.permission.statusTexAtGet,
         calendarsCount: state.reminders.calendarsCount,
         statusTextAtCreatePermission: state.permission.statusTextAtCreatePermission,
+        statusTextAtUpdatePermission: state.permission.statusTextAtUpdatePermission,
         createPermissionReqLoading: state.permission.createPermissionReqLoading,
         responseOnCreatePermission: state.permission.responseOnCreatePermission,
         globalUsers: state.users.globalUsers,

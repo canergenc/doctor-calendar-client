@@ -101,6 +101,147 @@ const getApprovedFilter = (index, searchParam = '') => {
     return approvedFilter;
 }
 
+// const getApprovedSearchFilter = (searchParam ) => {
+
+//     let approvedFilter = {
+//         filter: {
+
+//             where: {
+
+//                 groupId: {
+//                     like: helperService.getGroupId()
+//                 },
+
+//                 type: {
+//                     neq: CalendarTypes.Nobet
+//                 },
+//                 status: CalendarStatus.Approve,
+
+//                 include: [
+//                     {
+//                         relation: "group"
+//                     },
+//                     {
+//                         relation: "user",
+//                         scope: {
+//                             where: {
+//                                 or: [
+//                                     {
+//                                         fullName: {
+//                                             like: searchParam
+//                                         }
+//                                     }, {
+//                                         email: {
+//                                             like: searchParam
+//                                         }
+//                                     }
+//                                 ]
+//                             }
+//                         }
+//                     },
+//                     {
+//                         relation: "location"
+//                     }
+//                 ]
+//             }
+
+//         }
+//     }
+
+//     return approvedFilter;
+// }
+
+const getApprovedSearchFilter = (searchParam = '') => {
+    let waitingForApproveFilter;
+    if (searchParam) {
+        waitingForApproveFilter = {
+            filter: {
+                where: {
+
+                    groupId: {
+                        like: helperService.getGroupId()
+                    },
+
+                    type: {
+                        neq: CalendarTypes.Nobet
+                    },
+                    status: CalendarStatus.Approve,
+
+                    // description: {
+                    //     like: searchParam
+                    // }
+
+
+                },
+                include: [
+                    {
+                        relation: "group"
+                    },
+                    {
+                        relation: "user",
+                        scope: {
+                            where: {
+                                or: [
+                                    {
+                                        fullName: {
+                                            like: searchParam
+                                        }
+                                    }, {
+                                        email: {
+                                            like: searchParam
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        relation: "location"
+                    }
+                ]
+            }
+        }
+
+    } else {
+
+        waitingForApproveFilter = {
+            filter: {
+                where: {
+                    and: [{
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
+                    }, {
+                        type: {
+                            neq: CalendarTypes.Nobet
+                        },
+                        status: CalendarStatus.WaitingForApprove,
+
+                    }]
+                },
+                include: [
+                    {
+                        relation: "group"
+                    },
+                    {
+                        relation: "user"
+                    },
+                    {
+                        relation: "location"
+                    }
+                ]
+            }
+        }
+
+    }
+
+
+
+    return waitingForApproveFilter;
+}
+
+
+
 const getApprovedCountFilter = () => {
     let approvedFilter = {
         where: {
@@ -278,6 +419,7 @@ const getInitialUserFilter = () => {
 
 export const permissionHelper = {
     getApprovedFilter,
+    getApprovedSearchFilter,
     getWaitingForApproveFilter,
     getUniqGroupIds,
     getPermissionRejectData,

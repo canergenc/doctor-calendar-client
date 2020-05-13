@@ -9,7 +9,7 @@ import { helperService } from "../../services/helper";
 import Swal from 'sweetalert2'
 import moment from 'moment/moment';
 import { permissionHelper } from "./PermissionHelper";
-import CustomPagination from "../Paginations/CustomPagination";
+import CustomPagination from "../../components/Paginations/CustomPagination";
 // import ToastServive from 'react-material-toast';
 
 // const toast = ToastServive.new({
@@ -27,6 +27,8 @@ class Approved extends Component {
             currentIndex: 0,
             listOfPermission: [],
             searchParam: "",
+            searchSubmitted: false,
+            isShowPagination: true
         }
         permissionHelper.getApprovedFilter = permissionHelper.getApprovedFilter.bind(this);
         this.onChangePaginationItem = this.onChangePaginationItem.bind(this);
@@ -38,17 +40,6 @@ class Approved extends Component {
 
     }
 
-    keyPress(e) {
-        console.log(e.keyCode);
-        if (e.keyCode == 13) {
-            if (e.target.value) {
-                this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, e.target.value));
-            } else {
-                this.refreshPermissions();
-
-            }
-        }
-    }
 
 
     inputChangeHandle(event) {
@@ -88,11 +79,28 @@ class Approved extends Component {
 
     getPermissionsBySearch() {
         if (this.state.searchParam) {
-            this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0, this.state.searchParam));
+            this.props.getApprovedPermissions(permissionHelper.getApprovedSearchFilter(this.state.searchParam));
+            this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
         } else {
             this.refreshPermissions();
+            this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
         }
     }
+
+    keyPress(e) {
+        console.log(e.keyCode);
+        if (e.keyCode == 13) {
+            if (e.target.value) {
+                this.props.getApprovedPermissions(permissionHelper.getApprovedSearchFilter(e.target.value));
+                this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
+            } else {
+                this.refreshPermissions();
+                this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
+
+            }
+        }
+    }
+
 
     refreshPermissions() {
         this.setState({ searchParam: "" });
@@ -107,6 +115,8 @@ class Approved extends Component {
 
 
         if (this.props.approvedPermissions) {
+            console.log(this.props.approvedPermissions);
+            
             this.state.listOfPermission = this.props.approvedPermissions;
             this.state.listOfPermission = this.state.listOfPermission.map((p) => (
                 <tr key={p.id}>
@@ -202,11 +212,14 @@ class Approved extends Component {
 
                                 Toplam : {this.props.permissionCount}
                             </div>
-                            <CustomPagination
-                                paginationItemCount={helperService.getPaginationItemCount(this.props.permissionCount, constants.PAGESIZE_INPERMISSION_PAGE)}
-                                paginationItemClick={(index) => this.onChangePaginationItem(index)}
-                                currentIndex={this.state.currentIndex}
-                            />
+                            {
+                                this.state.isShowPagination && <CustomPagination
+                                    paginationItemCount={helperService.getPaginationItemCount(this.props.permissionCount, constants.PAGESIZE_INPERMISSION_PAGE)}
+                                    paginationItemClick={(index) => this.onChangePaginationItem(index)}
+                                    currentIndex={this.state.currentIndex}
+                                />
+                            }
+
                         </nav>
                         : null}
                 </CardFooter>
