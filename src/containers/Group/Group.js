@@ -107,15 +107,9 @@ class GroupSettings extends React.Component {
     }
     if (this.state.locationDayLimitChange) {
       groupSettings.locationDayLimit = this.state.locationDayLimit;
-
     }
     if (this.state.locationDayLimitCountChange && this.state.locationDayLimit) {
-      let listOfLocations = [];
-
-      this.props.locations.forEach(location => {
-        listOfLocations.push({ id: location.id, dayLimit: parseInt(this.state.locationDayLimitCount) });
-      });
-      this.props.updateBulkLocations(listOfLocations);
+      groupSettings.locationDayLimitCount = this.state.locationDayLimitCount;
     }
 
     this.props.updateGroupSettings(this.props.groupSettingsId, groupSettings);

@@ -53,8 +53,8 @@ class Locations extends Component {
     }
     handleValidation() {
         let formIsValid = true;
-        const { name, dayLimit, colorCode } = this.state;
-        if (!name || !dayLimit || !colorCode) {
+        const { name, colorCode } = this.state;
+        if (!name || !colorCode) {
             formIsValid = false;
         }
         return formIsValid
@@ -63,8 +63,6 @@ class Locations extends Component {
         const target = event.target;
         if (target.name === 'name')
             this.setState({ name: event.target.value, submitted: false });
-        if (target.name === 'dayLimit')
-            this.setState({ dayLimit: event.target.value, submitted: false });
         if (target.name === 'colorCode')
             this.setState({ colorCode: event.target.value, submitted: false });
     };
@@ -74,7 +72,6 @@ class Locations extends Component {
         if (this.handleValidation()) {
             const locationData = {
                 name: this.state.name,
-                dayLimit: parseInt(this.state.dayLimit),
                 colorCode: this.state.colorCode,
             }
             this.props.updateLocation(this.state.id, locationData);
@@ -89,7 +86,6 @@ class Locations extends Component {
         if (this.handleValidation()) {
             const location = {
                 name: this.state.name,
-                dayLimit: parseInt(this.state.dayLimit),
                 colorCode: this.state.colorCode,
                 groupId: helperService.getGroupId(),
                 sortOrder: this.props.locations.length
@@ -154,7 +150,6 @@ class Locations extends Component {
                 [state]: !this.state[state],
                 id: location.id ? location.id : null,
                 name: location.name ? location.name : null,
-                dayLimit: location.dayLimit ? location.dayLimit : null,
                 colorCode: location.colorCode ? location.colorCode : null
             });
         }
@@ -163,7 +158,6 @@ class Locations extends Component {
                 [state]: !this.state[state],
                 id: null,
                 name: null,
-                dayLimit: null,
                 colorCode: null
             });
         }
@@ -230,7 +224,7 @@ class Locations extends Component {
     });
 
     render() {
-        const { name, dayLimit, colorCode, submitted } = this.state;
+        const { name, colorCode, submitted } = this.state;
         let locations = "Lokasyonlar Yükleniyor...";
         let locationsCount = 0;
         if (this.props.locations) {
@@ -258,7 +252,6 @@ class Locations extends Component {
                                 </div>
                             </td>
                             <td>{location.name}</td>
-                            <td>{location.dayLimit}</td>
                             <td>
                                 <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
@@ -327,19 +320,6 @@ class Locations extends Component {
                                     <p style={{ fontSize: 12 }} className="text-warning">Ad alanı gerekli.</p>
                                 }
                             </FormGroup>
-                            <FormGroup>
-                                <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
-                                        <InputGroupText>
-                                            Günlük Limit:
-                                        </InputGroupText>
-                                        <Input name="dayLimit" type="text" value={this.state.dayLimit} onChange={(event) => this.inputChangeHandle(event)} />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                                {submitted && !dayLimit &&
-                                    <p style={{ fontSize: 12 }} className="text-warning">Günlük limit gerekli.</p>
-                                }
-                            </FormGroup>
 
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3 pt-3">
@@ -398,19 +378,6 @@ class Locations extends Component {
                                 </InputGroup>
                                 {submitted && !name &&
                                     <p style={{ fontSize: 12 }} className="text-warning">Ad alanı gerekli.</p>
-                                }
-                            </FormGroup>
-                            <FormGroup>
-                                <InputGroup className="input-group-alternative mb-3">
-                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
-                                        <InputGroupText>
-                                            Günlük Limit
-                                        </InputGroupText>
-                                        <Input name="dayLimit" type="text" value={this.state.dayLimit || ''} onChange={(event) => this.inputChangeHandle(event)} />
-                                    </InputGroupAddon>
-                                </InputGroup>
-                                {submitted && !dayLimit &&
-                                    <p style={{ fontSize: 12 }} className="text-warning">Günlük limit gerekli.</p>
                                 }
                             </FormGroup>
 
@@ -484,11 +451,11 @@ class Locations extends Component {
                                         <div className="col-md-3">
                                             <h3 className="mb-0" style={{ display: "inline-block" }}>Lokasyon Listesi</h3>
                                             <Button
-                                                color="primary"
+                                                color="secondary"
                                                 onClick={() => this.renderTableData()}
-                                                size="sm"
+                                                size="lg"
                                             >
-                                                <i className="fas fa-sync-alt"></i>
+                                                <i className="fas fa-sync-alt fa-lg"></i>
                                             </Button>
                                         </div>
                                         <div className="col-md-8">
@@ -511,7 +478,6 @@ class Locations extends Component {
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">Adı</th>
-                                                <th scope="col">Günlük Limit</th>
                                                 <th scope="col">Renk</th>
                                                 <th scope="col" className="text-right">İşlemler</th>
                                             </tr>
