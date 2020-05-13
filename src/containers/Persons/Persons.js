@@ -118,6 +118,43 @@ class Persons extends Component {
         this.setState({ workStartDate: date, submitted: false });
     }
 
+    updateCountLimits(event) {
+        this.setState({ submitted: true });
+
+        const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
+        const weekendCountLimit = parseInt(this.state.weekendCountLimit);
+        if (this.updateHandleValidation()) {
+            let userData = {
+                fullName: this.state.name,
+                email: this.state.email,
+                workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
+
+            };
+            const countLimits = {
+                ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit } : null),
+                ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
+            };
+
+            const filterData = {
+                filter: {
+                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
+                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
+                    where: {
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
+                    },
+                    include: [
+                        { relation: "user" }
+                    ]
+                }
+            }
+            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filterData);
+            this.toggleModal('editModal', null);
+            event.preventDefault();
+        }
+    }
+
     updateHandle(event) {
         this.setState({ submitted: true });
 
@@ -153,7 +190,6 @@ class Persons extends Component {
             this.toggleModal('editModal', null);
             event.preventDefault();
         }
-
     }
 
     addHandle(event) {
@@ -285,6 +321,10 @@ class Persons extends Component {
 
     }
 
+    personDayLimitHandle = () => {
+
+    }
+
     toggleModal(state, userGroup) {
         if (userGroup) {
             this.setState({
@@ -334,6 +374,7 @@ class Persons extends Component {
                     email={user.user.email}
                     weekdayCountLimit={user.weekdayCountLimit}
                     weekendCountLimit={user.weekendCountLimit}
+                    personDayLimitHandle={() => this.personDayLimitHandle(user.id)}
                     editClick={() => this.toggleModal("editModal", user)}
                     deleteClick={() => this.toggleModal("deleteModal", user)}
                 />

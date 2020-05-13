@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
+import { helperService } from "../../services";
 
 import {
   Button,
@@ -34,7 +35,9 @@ class GroupSettings extends React.Component {
       sequentialOrderLimitCount: "",
       sequentialOrderLimitCountChange: false,
       locationDayLimit: false,
-      locationDayLimitChange: false
+      locationDayLimitChange: false,
+      locationDayLimitCount: "",
+      locationDayLimitCountChange: false
     }
     this.inputChangeHandle = this.inputChangeHandle.bind(this);
 
@@ -43,6 +46,16 @@ class GroupSettings extends React.Component {
   componentDidMount() {
     if (!this.props.isWeekdayControl || !this.props.isWeekendControl || !this.props.sequentialOrderLimitCount || !this.props.locationDayLimit) {
       this.props.getGroupSettings();
+      const filterData = {
+        filter: {
+          where: {
+            groupId: {
+              like: helperService.getGroupId()
+            }
+          }
+        }
+      }
+      this.props.onInitLocations(filterData);
     }
   }
 
@@ -59,8 +72,7 @@ class GroupSettings extends React.Component {
 
   inputChangeHandle(event) {
 
-    const target = event.target; 
-    console.log(target.name);
+    const target = event.target;
 
     if (target.name === 'weekday')
       this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
@@ -68,8 +80,17 @@ class GroupSettings extends React.Component {
       this.setState({ isWeekendControl: this.refs.weekend.checked, isWeekendControlChange: true });
     if (target.name === 'sequentialOrderLimitCount')
       this.setState({ sequentialOrderLimitCount: event.target.value, sequentialOrderLimitCountChange: true });
-    if (target.name === 'locationDayLimit')
-      this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true });
+    if (target.name === 'locationDayLimit') {
+      if (this.refs.locationDayLimit.checked === false) {
+        this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true, locationDayLimitCount: '', locationDayLimitCountChange: false })
+      }
+      else {
+        this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true });
+      }
+
+    }
+    if (target.name === 'locationDayLimitCount')
+      this.setState({ locationDayLimitCount: event.target.value, locationDayLimitCountChange: true });
   }
 
   updateGroupSettings() {
@@ -85,14 +106,23 @@ class GroupSettings extends React.Component {
     }
     if (this.state.locationDayLimitChange) {
       groupSettings.locationDayLimit = this.state.locationDayLimit;
+
+    }
+    if (this.state.locationDayLimitCountChange && this.state.locationDayLimit) {
+      let listOfLocations = [];
+
+      this.props.locations.forEach(location => {
+        listOfLocations.push({ id: location.id, dayLimit: parseInt(this.state.locationDayLimitCount) });
+      });
+      this.props.updateBulkLocations(listOfLocations);
     }
 
     this.props.updateGroupSettings(this.props.groupSettingsId, groupSettings);
-
   }
 
 
   render() {
+    
     return (<>
       <UserHeader />
       <Container style={{ marginTop: "-12rem" }} fluid>
@@ -124,7 +154,7 @@ class GroupSettings extends React.Component {
 
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="4">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                           <Label
@@ -148,7 +178,7 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 
@@ -174,10 +204,12 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
+                    <Col lg="4">
+                    </Col>
                   </Row>
 
                   <Row style={{ marginTop: "25px" }}>
-                    <Col lg="6">
+                    <Col lg="4">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 
@@ -192,7 +224,7 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
-                    <Col lg="6">
+                    <Col lg="4">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                           <Label
@@ -217,6 +249,28 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
+                    <Col lg="4">
+                      <Form inline>
+                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                          <Label
+                            className="form-control-label mr-sm-2"
+                            htmlFor="locationDayLimitCount"
+                          >
+                            Maksimum Lokasyon Nöbet Sınırı
+                          </Label>
+                          <Input
+                            id="locationDayLimitCount"
+                            bsSize="sm"
+                            name="locationDayLimitCount"
+                            type="number"
+                            min="0"
+                            value={this.state.locationDayLimitCount}
+                            disabled={this.state.locationDayLimit != '' ? this.state.locationDayLimit : this.props.locationDayLimit}
+                            onChange={(event) => this.inputChangeHandle(event)}
+                          />
+                        </FormGroup>
+                      </Form>
+                    </Col>
                   </Row>
 
                 </div>
@@ -238,6 +292,7 @@ const mapStateToProps = state => {
     groupSettingsId: state.groupSettings.groupSettingsId,
     isWeekdayControl: state.groupSettings.isWeekdayControl,
     isWeekendControl: state.groupSettings.isWeekendControl,
+    locations: state.locations.locations,
     sequentialOrderLimitCount: state.groupSettings.sequentialOrderLimitCount,
     locationDayLimit: state.groupSettings.locationDayLimit,
     error: state.groupSettings.error,
@@ -249,7 +304,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getGroupSettings: () => dispatch(actions.getGroupSettings()),
+    onInitLocations: (filterData) => dispatch(actions.initLocations(filterData)),
     updateGroupSettings: (id, data) => dispatch(actions.updateGroupSettings(id, data)),
+    updateBulkLocations: (listOfLocations) => dispatch(actions.updateBulkLocations(listOfLocations)),
     cleanFlagsGroupSettings: () => dispatch(actions.cleanFlagsGroupSettings()),
   };
 }

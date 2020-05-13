@@ -6,8 +6,7 @@ import "./HeaderMonth.scss";
 class HeaderMonth extends Component {
 
   componentDidUpdate() {
-    console.log(this.props.downloading);
-    
+        
     if (this.props.downloading) {
       console.log('test download');
 

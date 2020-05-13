@@ -41,6 +41,7 @@ class Locations extends Component {
             editModal: false,
             addModal: false,
             deleteModal: false,
+            submitted: false,
             id: '',
             name: '',
             colorCode: ''
@@ -50,31 +51,45 @@ class Locations extends Component {
         this.deleteHandle = this.deleteHandle.bind(this);
         this.addHandle = this.addHandle.bind(this);
     }
-
+    handleValidation() {
+        let formIsValid = true;
+        const { name, dayLimit, colorCode } = this.state;
+        if (!name || !dayLimit || !colorCode) {
+            formIsValid = false;
+        }
+        return formIsValid
+    }
     inputChangeHandle(event) {
         const target = event.target;
         if (target.name === 'name')
-            this.setState({ name: event.target.value });
+            this.setState({ name: event.target.value, submitted: false });
+        if (target.name === 'dayLimit')
+            this.setState({ dayLimit: event.target.value, submitted: false });
         if (target.name === 'colorCode')
-            this.setState({ colorCode: event.target.value });
+            this.setState({ colorCode: event.target.value, submitted: false });
     };
 
     updateHandle(event) {
-        const locationData = {
-            name: this.state.name,
-            colorCode: this.state.colorCode,
-        }
-        this.props.updateLocation(this.state.id, locationData);
-        this.toggleModal('editModal', undefined);
+        this.setState({ submitted: true });
+        if (this.handleValidation()) {
+            const locationData = {
+                name: this.state.name,
+                dayLimit: parseInt(this.state.dayLimit),
+                colorCode: this.state.colorCode,
+            }
+            this.props.updateLocation(this.state.id, locationData);
+            this.toggleModal('editModal', undefined);
 
-        event.preventDefault();
+            event.preventDefault();
+        }
     };
 
     addHandle(event) {
-
-        if (this.state.name) {
+        this.setState({ submitted: true });
+        if (this.handleValidation()) {
             const location = {
                 name: this.state.name,
+                dayLimit: parseInt(this.state.dayLimit),
                 colorCode: this.state.colorCode,
                 groupId: helperService.getGroupId(),
                 sortOrder: this.props.locations.length
@@ -83,10 +98,8 @@ class Locations extends Component {
             this.props.createLocation(location);
             this.toggleModal('addModal', undefined);
 
-        } else {
-            alert('Ad alanı zorunludur!')
+            event.preventDefault();
         }
-        event.preventDefault();
     };
 
     deleteHandle() {
@@ -114,10 +127,7 @@ class Locations extends Component {
     };
 
     componentDidUpdate() {
-        console.log('component did update');
-        console.log(this.props.error);
-        console.log(this.props.crudSuccess);
-
+        
         if (this.props.error) {
             MySwal.fire({
                 icon: 'error',
@@ -125,6 +135,7 @@ class Locations extends Component {
                 text: this.props.statusText
             });
             this.props.cleanFlagsLocation();
+            this.setState({ submitted: false });
         }
         else if (this.props.crudSuccess) {
             MySwal.fire({
@@ -133,6 +144,7 @@ class Locations extends Component {
                 text: this.props.message
             });
             this.props.cleanFlagsLocation();
+            this.setState({ submitted: false });
         }
     }
 
@@ -142,6 +154,7 @@ class Locations extends Component {
                 [state]: !this.state[state],
                 id: location.id ? location.id : null,
                 name: location.name ? location.name : null,
+                dayLimit: location.dayLimit ? location.dayLimit : null,
                 colorCode: location.colorCode ? location.colorCode : null
             });
         }
@@ -150,6 +163,7 @@ class Locations extends Component {
                 [state]: !this.state[state],
                 id: null,
                 name: null,
+                dayLimit: null,
                 colorCode: null
             });
         }
@@ -216,6 +230,7 @@ class Locations extends Component {
     });
 
     render() {
+        const { name, dayLimit, colorCode, submitted } = this.state;
         let locations = "Lokasyonlar Yükleniyor...";
         let locationsCount = 0;
         if (this.props.locations) {
@@ -243,6 +258,7 @@ class Locations extends Component {
                                 </div>
                             </td>
                             <td>{location.name}</td>
+                            <td>{location.dayLimit}</td>
                             <td>
                                 <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
@@ -307,6 +323,22 @@ class Locations extends Component {
                                         <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !name &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Ad alanı gerekli.</p>
+                                }
+                            </FormGroup>
+                            <FormGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
+                                        <InputGroupText>
+                                            Günlük Limit:
+                                        </InputGroupText>
+                                        <Input name="dayLimit" type="text" value={this.state.dayLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
+                                </InputGroup>
+                                {submitted && !dayLimit &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Günlük limit gerekli.</p>
+                                }
                             </FormGroup>
 
                             <FormGroup>
@@ -321,6 +353,9 @@ class Locations extends Component {
                                         </RadioGroup>
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !colorCode &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Renk seçimi gerekli.</p>
+                                }
                             </FormGroup>
                         </Form>
                     </div>
@@ -361,6 +396,22 @@ class Locations extends Component {
                                         <Input name="name" type="text" value={this.state.name || ''} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !name &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Ad alanı gerekli.</p>
+                                }
+                            </FormGroup>
+                            <FormGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
+                                        <InputGroupText>
+                                            Günlük Limit
+                                        </InputGroupText>
+                                        <Input name="dayLimit" type="text" value={this.state.dayLimit || ''} onChange={(event) => this.inputChangeHandle(event)} />
+                                    </InputGroupAddon>
+                                </InputGroup>
+                                {submitted && !dayLimit &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Günlük limit gerekli.</p>
+                                }
                             </FormGroup>
 
                             <FormGroup>
@@ -376,6 +427,9 @@ class Locations extends Component {
 
                                     </InputGroupAddon>
                                 </InputGroup>
+                                {submitted && !colorCode &&
+                                    <p style={{ fontSize: 12 }} className="text-warning">Renk seçimi gerekli.</p>
+                                }
                             </FormGroup>
                         </Form>
                     </div>
@@ -457,6 +511,7 @@ class Locations extends Component {
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">Adı</th>
+                                                <th scope="col">Günlük Limit</th>
                                                 <th scope="col">Renk</th>
                                                 <th scope="col" className="text-right">İşlemler</th>
                                             </tr>
