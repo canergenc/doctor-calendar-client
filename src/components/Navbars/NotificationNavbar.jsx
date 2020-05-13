@@ -81,7 +81,7 @@ class NotificationNavbar extends React.Component {
                     <span>Ayarlar</span>
                   </DropdownItem> */}
                   <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={this.logOut}>
+                  <DropdownItem  onClick={this.logOut}>
                     <i className="ni ni-user-run" />
                     <span>Çıkış</span>
                   </DropdownItem>

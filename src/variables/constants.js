@@ -2,27 +2,27 @@ export const constants = {
 
 
     BASE_URL: "https://doctorcalendar.eu-gb.mybluemix.net",
-   
+
     ERRORCODE: {
         422: '422',
         400: '400'
     },
 
 
-    
+
     ERROR_MESSAGE: {
         serviceNotFound: "Lütfen lokasyon seçiniz.",
         serviceCountMoreThanOne: "Sadece 1 adet lokasyon seçiniz.",
     },
 
-    REMEMBERME:"isRememberMe",
+    REMEMBERME: "isRememberMe",
 
     USERID: "id",
 
     SUCCESS_MESSAGE: {
 
         loginSuccess: "Giriş başarılı",
-        commonMessage:"İşlem başarılı"
+        commonMessage: "İşlem başarılı"
     },
 
     ERROR_CODE: {
@@ -33,7 +33,7 @@ export const constants = {
 
     GROUPID: 'groupId',
 
-    PAGESIZE_INPERMISSION_PAGE:10
+    PAGESIZE_INPERMISSION_PAGE: 10
 };
 
 
@@ -45,7 +45,7 @@ export const CalendarTypes = {
     ResmiTatil: 5,
     IdariIzin: 6,
     OzelDurum: 7,
-    Rotasyon : 8
+    Rotasyon: 8
 }
 
 
@@ -83,6 +83,11 @@ export const listOfColorName = [
 ];
 
 
-
+export const roleType = {
+    User : 'User',
+    Manager : 'Manager',
+    Admin : 'Admin',
+    SuperAdmin : 'SuperAdmin'
+}
 
 

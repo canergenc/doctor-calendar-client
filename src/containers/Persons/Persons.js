@@ -53,6 +53,7 @@ class Persons extends Component {
             name: '',
             email: '',
             workStartDate: '',
+            maxData: '',
             weekendCountLimit: 0,
             weekdayCountLimit: 0,
             password: '',
@@ -225,6 +226,8 @@ class Persons extends Component {
     }
 
     componentDidMount() {
+        const today = new Date();
+        this.setState({ maxDate: today });
         this.renderTableData(this.state.currentIndex);
         this.getUserCount();
 
@@ -342,8 +345,6 @@ class Persons extends Component {
         }
         if (this.props.usersCount) {
             usersCount = this.props.usersCount;
-
-
         }
 
         return (
@@ -418,6 +419,9 @@ class Persons extends Component {
                                             required={true}
                                             timeFormat={false}
                                             dateFormat="dd-MM-yyyy"
+                                            showYearDropdown
+                                            scrollableYearDropdown
+                                            maxDate={Date.parse(this.state.maxDate)}
                                             selected={Date.parse(this.state.workStartDate)}
                                             onChange={(event) => this.inputChangeHandleDate(event)}
                                         />
@@ -503,6 +507,7 @@ class Persons extends Component {
                                         </InputGroupText>
                                         <DatePicker
                                             dateFormat="dd-MM-yyyy"
+                                            maxDate={Date.parse(this.state.maxDate)}
                                             selected={Date.parse(this.state.workStartDate)}
                                             onChange={(event) => this.inputChangeHandleDate(event)}
                                         />
@@ -637,30 +642,6 @@ class Persons extends Component {
                                             </Button>
                                         </Col>
                                     </Row>
-
-
-                                    {/* <div className="row">
-                                        <div className="col-md-10">
-                                            <h3 className="mb-0" style={{ display: "inline-block" }}>Kullanıcı Listesi</h3>
-                                            <Button
-                                                color="primary"
-                                                onClick={() => this.renderTableData(this.state.currentIndex)}
-                                            >
-                                                <i className="fas fa-sync-alt"></i>
-                                            </Button>
-                                        </div>
-                                        <div className="col-md-1">
-
-                                        </div>
-                                        <div className="col-md-1">
-                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
-                                                <span className="btn-inner--icon">
-                                                    <i className="ni ni-fat-add" />
-                                                </span>
-                                                <span className="btn-inner--text">Yeni</span>
-                                            </Button>
-                                        </div>
-                                    </div> */}
 
                                 </CardHeader>
                                 <Table className="align-items-center table-flush" >

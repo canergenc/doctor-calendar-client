@@ -506,7 +506,6 @@ class WaitingForApproved extends Component {
                             <Col className="text-right" xs="7">
                                 <Button
                                     color="primary"
-                                    href="#pablo"
                                     onClick={e => this.openCreateModal()}
                                     size="sm"
                                 >
