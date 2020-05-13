@@ -46,7 +46,7 @@ class Persons extends Component {
             addModal: false,
             deleteModal: false,
             submitted: false,
-            searchSubmitted:false,
+            searchSubmitted: false,
             userGroupId: '',
             searchParam: '',
             id: '',
@@ -120,31 +120,6 @@ class Persons extends Component {
         this.setState({ workStartDate: date, submitted: false });
     }
 
-    updateCountLimits(event) {
-        this.setState({ submitted: true });
-
-        const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
-        const weekendCountLimit = parseInt(this.state.weekendCountLimit);
-        if (this.updateHandleValidation()) {
-            let userData = {
-                fullName: this.state.name,
-                email: this.state.email,
-                workStartDate: moment(this.state.workStartDate).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
-
-            };
-            const countLimits = {
-                ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit } : null),
-                ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
-            };
-
-            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
-            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filter);
-            
-            this.toggleModal('editModal', null);
-            event.preventDefault();
-        }
-    }
-
     updateHandle(event) {
         this.setState({ submitted: true });
 
@@ -199,8 +174,8 @@ class Persons extends Component {
                 ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
                 ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
             }
-            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
-            this.props.createUser(user, countLimits,filter);
+            let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
+            this.props.createUser(user, countLimits, filter);
             this.toggleModal('addModal', null);
             event.preventDefault();
 
@@ -209,8 +184,8 @@ class Persons extends Component {
 
     deleteHandle() {
         if (this.state.id) {
-            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
-            this.props.deleteUser(this.state.userGroupId,filter)
+            let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
+            this.props.deleteUser(this.state.userGroupId, filter)
             this.toggleModal('deleteModal', undefined);
         }
     }
@@ -218,10 +193,10 @@ class Persons extends Component {
     getUsersBySearch() {
         if (this.state.searchParam) {
             this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
-            this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
+            this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
         } else {
             this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-            this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
+            this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
         }
 
     }
@@ -231,26 +206,23 @@ class Persons extends Component {
             if (e.target.value) {
                 const param = e.target.value;
                 this.props.onInitUsers(personHelper.getSearchFilter(param));
-                this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
+                this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
             } else {
                 this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-                this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
+                this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
             }
         }
 
     }
 
-    
     renderTableData(index) {
         this.props.onInitUsers(personHelper.getFilter(index));
     }
 
-
     refreshTable(index) {
         this.renderTableData(index);
-        this.setState({ isShowPagination: true, searchParam: '',searchSubmitted:false });
+        this.setState({ isShowPagination: true, searchParam: '', searchSubmitted: false });
     }
-
 
     componentDidMount() {
         this.renderTableData(this.state.currentIndex);
@@ -258,11 +230,9 @@ class Persons extends Component {
 
     }
 
-
     getUserCount() {
         this.props.getGroupUsersCount(personHelper.getInitCountFilter());
     }
-
 
     componentDidUpdate() {
 
@@ -284,16 +254,27 @@ class Persons extends Component {
             this.getUserCount();
             this.props.cleanFlagUser();
             this.setState({ submitted: false });
-            this.setState({ isShowPagination: this.state.searchParam && this.state.searchSubmitted ?false:true })
-            this.setState({ searchParam: this.state.searchParam && !this.state.searchSubmitted ? '': this.state.searchParam })
+            this.setState({ isShowPagination: this.state.searchParam && this.state.searchSubmitted ? false : true })
+            this.setState({ searchParam: this.state.searchParam && !this.state.searchSubmitted ? '' : this.state.searchParam })
 
-            
+
         }
 
     }
 
-    personDayLimitHandle = () => {
+    personDayLimitHandle = (userGroupId) => {
+        let userData = {
+        };
+        let weekdayCountLimit = 0;
+        let weekendCountLimit = 0;
+        
+        const countLimits = {
+            weekdayCountLimit: weekdayCountLimit,
+            weekendCountLimit: weekendCountLimit
+        };
 
+        // let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
+        // this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filter);
     }
 
     toggleModal(state, userGroup) {
@@ -681,6 +662,7 @@ class Persons extends Component {
                                             <th scope="col">Ad Soyad</th>
                                             <th scope="col">Kıdem</th>
                                             <th scope="col">E-Mail</th>
+                                            <th scope="col">Nöbet Durumu</th>
                                             <th scope="col">Haftaiçi Nöbet Sayısı</th>
                                             <th scope="col">Haftasonu Nöbet Sayısı</th>
                                             <th scope="col" className="text-right">İşlemler</th>

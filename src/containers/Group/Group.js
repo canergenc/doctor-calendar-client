@@ -122,7 +122,7 @@ class GroupSettings extends React.Component {
 
 
   render() {
-    
+
     return (<>
       <UserHeader />
       <Container style={{ marginTop: "-12rem" }} fluid>
@@ -265,7 +265,7 @@ class GroupSettings extends React.Component {
                             type="number"
                             min="0"
                             value={this.state.locationDayLimitCount}
-                            disabled={this.state.locationDayLimit != '' ? this.state.locationDayLimit : this.props.locationDayLimit}
+                            disabled={!this.state.locationDayLimit}
                             onChange={(event) => this.inputChangeHandle(event)}
                           />
                         </FormGroup>
