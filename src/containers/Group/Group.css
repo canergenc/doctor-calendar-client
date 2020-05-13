@@ -1,0 +1,21 @@
+.specialInput{
+    font-size: 0.875rem;
+    width: 60px;
+    height: calc(1.8125rem + 2px);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    width: 15%;
+    color: #8898aa;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #cad1d7;
+    
+    box-shadow: none;
+    transition: all 0.2s
+}
+
+.specialInput:disabled{
+    background-color: #e9ecef;
+}

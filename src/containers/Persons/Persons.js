@@ -262,19 +262,25 @@ class Persons extends Component {
 
     }
 
-    personDayLimitHandle = (userGroupId) => {
+    personDayLimitHandle = (event, userId, userGroupId) => {
         let userData = {
         };
-        let weekdayCountLimit = 0;
-        let weekendCountLimit = 0;
-        
+        let weekdayCountLimit = 1;
+        let weekendCountLimit = 1;
+
+
+        if (event.target.checked) {
+            weekdayCountLimit = 0;
+            weekendCountLimit = 0;
+        }
+
         const countLimits = {
             weekdayCountLimit: weekdayCountLimit,
             weekendCountLimit: weekendCountLimit
         };
 
-        // let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
-        // this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filter);
+        let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
+        this.props.updateUser(userId, userData, userGroupId, countLimits, filter);
     }
 
     toggleModal(state, userGroup) {
@@ -321,12 +327,13 @@ class Persons extends Component {
                 <Person
                     key={user.user.id}
                     id={user.user.id}
+                    userGroupId={user.id}
                     fullName={user.user.fullName}
                     workStartDate={user.user.workStartDate}
                     email={user.user.email}
                     weekdayCountLimit={user.weekdayCountLimit}
                     weekendCountLimit={user.weekendCountLimit}
-                    personDayLimitHandle={() => this.personDayLimitHandle(user.id)}
+                    personDayLimitHandle={(event) => this.personDayLimitHandle(event, user.user.id, user.id)}
                     editClick={() => this.toggleModal("editModal", user)}
                     deleteClick={() => this.toggleModal("deleteModal", user)}
                 />
@@ -335,7 +342,7 @@ class Persons extends Component {
         }
         if (this.props.usersCount) {
             usersCount = this.props.usersCount;
-            console.log(usersCount);
+
 
         }
 

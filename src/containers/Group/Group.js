@@ -20,6 +20,7 @@ import 'pretty-checkbox';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import UserHeader from "../../components/Headers/UserHeader.jsx";
+import "./Group.css"
 
 const MySwal = withReactContent(Swal)
 
@@ -34,7 +35,7 @@ class GroupSettings extends React.Component {
       isWeekendControlChange: false,
       sequentialOrderLimitCount: "",
       sequentialOrderLimitCountChange: false,
-      locationDayLimit: false,
+      locationDayLimit: "",
       locationDayLimitChange: false,
       locationDayLimitCount: "",
       locationDayLimitCountChange: false
@@ -154,7 +155,7 @@ class GroupSettings extends React.Component {
 
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="4">
+                    <Col lg="6">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                           <Label
@@ -178,7 +179,7 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
-                    <Col lg="4">
+                    <Col lg="6">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 
@@ -204,12 +205,11 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
-                    <Col lg="4">
-                    </Col>
+
                   </Row>
 
                   <Row style={{ marginTop: "25px" }}>
-                    <Col lg="4">
+                    <Col lg="6">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 
@@ -224,7 +224,7 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
-                    <Col lg="4">
+                    <Col lg="6">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                           <Label
@@ -234,7 +234,7 @@ class GroupSettings extends React.Component {
                             Maksimum Lokasyon - Gün Sınırı
                             </Label>
 
-                          <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                          <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
                             <input
                               type="checkbox"
                               name="locationDayLimit"
@@ -246,26 +246,15 @@ class GroupSettings extends React.Component {
                               <label></label>
                             </div>
                           </div>
-                        </FormGroup>
-                      </Form>
-                    </Col>
-                    <Col lg="4">
-                      <Form inline>
-                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                          <Label
-                            className="form-control-label mr-sm-2"
-                            htmlFor="locationDayLimitCount"
-                          >
-                            Maksimum Lokasyon Nöbet Sınırı
-                          </Label>
-                          <Input
+                          <input
                             id="locationDayLimitCount"
-                            bsSize="sm"
                             name="locationDayLimitCount"
+                            className="specialInput"
                             type="number"
                             min="0"
+                            width="60px"
                             value={this.state.locationDayLimitCount}
-                            disabled={!this.state.locationDayLimit}
+                            disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
                             onChange={(event) => this.inputChangeHandle(event)}
                           />
                         </FormGroup>

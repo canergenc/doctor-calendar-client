@@ -32,9 +32,9 @@ class Person extends Component {
                         <input
                             type="checkbox"
                             name="weekend"
-                            ref="weekend"
+                            ref={this.props.userGroupId}
                             onClick={this.props.personDayLimitHandle}
-                            defaultChecked={this.props.isWeekendControl}
+                            defaultChecked={(this.props.weekdayCountLimit === 0 || !this.props.weekdayCountLimit) && (this.props.weekendCountLimit === 0 || !this.props.weekendCountLimit)}
                         />
                         <div className="state p-danger-o">
                             <label></label>
