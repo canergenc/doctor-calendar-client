@@ -5,8 +5,8 @@ import {
     Row,Card
 } from "reactstrap";
 import UserHeader from "../../components/Headers/UserHeader.jsx";
-import WaitingForApprove from "../../components/Permission/WaitingForApprove";
-import Approved from "../../components/Permission/Approved";
+import WaitingForApprove from "./WaitingForApprove";
+import Approved from "./Approved";
 
 class Permission extends Component {
     constructor(props) {

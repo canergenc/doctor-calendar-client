@@ -58,20 +58,20 @@ const updatePermission = (id,data, filterOrWaitingFor ,fiterOfApproved) => {
 
 const updatePermissionRequest = () => {
     return {
-        type: actionTypes.CREATE_PERMISSION_REQUEST,
+        type: actionTypes.UPDATE_PERMISSION_REQUEST,
     };
 };
 
 const updatePermissionSuccess = (response) => {
     return {
-        type: actionTypes.CREATE_PERMISSION_SUCCESS,
+        type: actionTypes.UPDATE_PERMISSION_SUCCESS,
         response: response
     };
 }
 
 const updatePermissionFailure = (err) => {
     return {
-        type: actionTypes.CREATE_PERMISSION_FAILURE,
+        type: actionTypes.UPDATE_PERMISSION_FAILURE,
         errorObj: err,
     };
 }

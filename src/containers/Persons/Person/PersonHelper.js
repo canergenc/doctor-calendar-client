@@ -3,11 +3,10 @@ import { constants } from '../../../variables/constants';
 import { helperService } from "../../../services/helper";
 
 
-const getSearchFilter = (searchParam) => {
 
+const getSearchFilter = (searchParam) => {
     const filterData = {
         filter: {
-            
             where: {
                 groupId: {
                     like: helperService.getGroupId()
@@ -42,11 +41,29 @@ const getSearchFilter = (searchParam) => {
 }
 
 
-const getInitFilter = (index) => {
+const getInitCountFilter = () => {
+
+    const filterData = {
+        where: {
+            groupId: {
+                like: helperService.getGroupId()
+            }
+        },
+        include: [
+            {
+                relation: "user",
+            }
+        ]
+    }
+    return filterData
+}
+
+
+const getFilter = (index) => {
 
     const filterData = {
         filter: {
-            skip: index * constants.PAGESIZE_INPERMISSION_PAGE,
+            skip: index* constants.PAGESIZE_INPERMISSION_PAGE,
             limit: constants.PAGESIZE_INPERMISSION_PAGE,
             where: {
                 groupId: {
@@ -54,20 +71,19 @@ const getInitFilter = (index) => {
                 }
             },
             include: [
-                { relation: "user" }
+                {
+                    relation: "user",
+                }
             ]
         }
+
     }
-
     return filterData
-
 }
 
 
-
 export const personHelper = {
-
     getSearchFilter,
-    getInitFilter
-
+    getInitCountFilter,
+    getFilter
 };
