@@ -108,8 +108,8 @@ class GroupSettings extends React.Component {
     if (this.state.locationDayLimitChange) {
       groupSettings.locationDayLimit = this.state.locationDayLimit;
     }
-    if (this.state.locationDayLimitCountChange && this.state.locationDayLimit) {
-      groupSettings.locationDayLimitCount = this.state.locationDayLimitCount;
+    if (this.state.locationDayLimitCountChange && (this.state.locationDayLimit === '' ? this.props.locationDayLimit : this.state.locationDayLimit)) {
+      groupSettings.locationDayLimitCount = parseInt(this.state.locationDayLimitCount);
     }
 
     this.props.updateGroupSettings(this.props.groupSettingsId, groupSettings);
@@ -247,7 +247,7 @@ class GroupSettings extends React.Component {
                             type="number"
                             min="0"
                             width="60px"
-                            value={this.state.locationDayLimitCount}
+                            defaultValue={this.props.locationDayLimitCount}
                             disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
                             onChange={(event) => this.inputChangeHandle(event)}
                           />
@@ -278,6 +278,7 @@ const mapStateToProps = state => {
     locations: state.locations.locations,
     sequentialOrderLimitCount: state.groupSettings.sequentialOrderLimitCount,
     locationDayLimit: state.groupSettings.locationDayLimit,
+    locationDayLimitCount: state.groupSettings.locationDayLimitCount,
     error: state.groupSettings.error,
     statusText: state.groupSettings.statusText
   };
