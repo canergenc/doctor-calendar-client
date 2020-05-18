@@ -1,3 +1,14 @@
+@media (min-width: 1500px) {
+  .cols-10{
+    flex: 0 0 83.3333333333%;
+    max-width: 83.3333333333%;
+  }
+  .cols-2{
+    flex: 0 0 16.6%;
+    max-width: 16.6%;
+  }
+}
+
 .select{
     width: 420px;
     z-index: 100;

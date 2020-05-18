@@ -216,7 +216,7 @@ class Index extends Component {
         <Container className="mt--8" fluid>
           <DragDropContext onDragEnd={this.onDragEnd} >
             <Row>
-              <Col className="mb-5 mb-xl-0" xl="10">
+              <Col className="mb-5 mb-xl-0 cols-10" xl="9" lg="9" md="9" sm="9">
                 <Row>
                   <Col>
                     <Location />
@@ -228,7 +228,7 @@ class Index extends Component {
                   </Col>
                 </Row>
               </Col>
-              <Col xl="2">
+              <Col className="cols-2"  xl="3" lg="3" md="3" sm="3" >
                 <Users clicked={() => this.toggleModal("addModal")} />
               </Col>
             </Row>
