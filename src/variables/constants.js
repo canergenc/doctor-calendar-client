@@ -33,7 +33,8 @@ export const constants = {
 
     GROUPID: 'groupId',
 
-    PAGESIZE_INPERMISSION_PAGE:10
+    PAGESIZE_INPERMISSION_PAGE:10,
+    PAGESIZE_IN_PERSON_PAGE:10
 };
 
 

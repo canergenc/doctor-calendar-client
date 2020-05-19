@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect,useDispatch } from 'react-redux';
 import { helperService } from "../../services";
 import UserHeader from "../../components/Headers/UserHeader.jsx";
 import Person from './Person/Person';
@@ -38,6 +38,8 @@ import moment from "moment/moment";
 
 const MySwal = withReactContent(Swal);
 
+
+
 class Persons extends Component {
     constructor(props) {
         super(props)
@@ -46,7 +48,7 @@ class Persons extends Component {
             addModal: false,
             deleteModal: false,
             submitted: false,
-            searchSubmitted:false,
+            searchSubmitted: false,
             userGroupId: '',
             searchParam: '',
             id: '',
@@ -57,13 +59,12 @@ class Persons extends Component {
             weekdayCountLimit: 0,
             password: '',
             currentIndex: 0,
-            isShowPagination: true
+            currentPageSize: 0
+            //isShowPagination: true
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
         this.addHandle = this.addHandle.bind(this);
-        this.keyPress = this.keyPress.bind(this);
-        this.getUsersBySearch = this.getUsersBySearch.bind(this);
     }
 
     addHandleValidation() {
@@ -111,8 +112,10 @@ class Persons extends Component {
                 this.setState({ weekendCountLimit: '0', weekdayCountLimit: '0', submitted: false });
             }
         }
-        if (target.name === 'searchInput')
+        if (target.name === 'searchInput') {
             this.setState({ searchParam: event.target.value, submitted: false });
+            this.searchUser(event.target.value);
+        }
 
     }
 
@@ -137,9 +140,8 @@ class Persons extends Component {
                 ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
             };
 
-            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
-            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filter);
-            
+            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, personHelper.getFilter(),this.props.users);
+
             this.toggleModal('editModal', null);
             event.preventDefault();
         }
@@ -163,8 +165,7 @@ class Persons extends Component {
                 ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
                 ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
             }
-            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
-            this.props.createUser(user, countLimits,filter);
+            this.props.createUser(user, countLimits, personHelper.getFilter());
             this.toggleModal('addModal', null);
             event.preventDefault();
 
@@ -173,60 +174,20 @@ class Persons extends Component {
 
     deleteHandle() {
         if (this.state.id) {
-            let filter= this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam):personHelper.getFilter(this.state.currentIndex);
-            this.props.deleteUser(this.state.userGroupId,filter)
+            this.props.deleteUser(this.state.userGroupId, personHelper.getFilter())
             this.toggleModal('deleteModal', undefined);
         }
     }
 
-    getUsersBySearch() {
-        if (this.state.searchParam) {
-            this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
-            this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
-        } else {
-            this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-            this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
-        }
-
+    renderTableData() {
+        this.props.onInitUsers(personHelper.getFilter());
     }
-
-    keyPress(e) {
-        if (e.keyCode === 13) {
-            if (e.target.value) {
-                const param = e.target.value;
-                this.props.onInitUsers(personHelper.getSearchFilter(param));
-                this.setState({ isShowPagination: false, currentIndex: 0,searchSubmitted:true })
-            } else {
-                this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-                this.setState({ isShowPagination: true, currentIndex: 0,searchSubmitted:false })
-            }
-        }
-
-    }
-
-    
-    renderTableData(index) {
-        this.props.onInitUsers(personHelper.getFilter(index));
-    }
-
-
-    refreshTable(index) {
-        this.renderTableData(index);
-        this.setState({ isShowPagination: true, searchParam: '',searchSubmitted:false });
-    }
-
 
     componentDidMount() {
-        this.renderTableData(this.state.currentIndex);
-        this.getUserCount();
-
+        console.log('oops');
+        
+        this.renderTableData();
     }
-
-
-    getUserCount() {
-        this.props.getGroupUsersCount(personHelper.getInitCountFilter());
-    }
-
 
     componentDidUpdate() {
 
@@ -240,18 +201,26 @@ class Persons extends Component {
             this.setState({ submitted: false });
         }
         else if (this.props.crudSuccess) {
+            this.props.cleanFlagUser();
             MySwal.fire({
                 icon: 'success',
                 title: 'Başarılı',
-                text: this.props.message
-            });
-            this.getUserCount();
-            this.props.cleanFlagUser();
-            this.setState({ submitted: false });
-            this.setState({ isShowPagination: this.state.searchParam && this.state.searchSubmitted ?false:true })
-            this.setState({ searchParam: this.state.searchParam && !this.state.searchSubmitted ? '': this.state.searchParam })
+                text: this.props.message,
+                showConfirmButton: true
+
+            }).then((result) => {
+                //getUsers();
+                
+                // this.props.onInitUsers(personHelper.getFilter());
+                if (this.state.searchParam) {
+                    this.searchUser(this.state.searchParam);
+                }
+            })
+
+
 
             
+
         }
 
     }
@@ -285,7 +254,17 @@ class Persons extends Component {
 
     onChangePaginationItem(index) {
         this.setState({ currentIndex: index });
-        this.renderTableData(index);
+        this.paginate()
+
+    }
+
+    //Redux a taşınmalı mı?
+    paginate(listOfUser) {
+        return listOfUser.slice((this.state.currentIndex) * constants.PAGESIZE_IN_PERSON_PAGE, (this.state.currentIndex + 1) * constants.PAGESIZE_IN_PERSON_PAGE);
+    }
+
+    searchUser = (searchParam) => {
+        this.props.searchUser(searchParam, this.props.defaultUsers);
     }
 
     render() {
@@ -296,6 +275,7 @@ class Persons extends Component {
         let usersCount = 0;
 
         if (this.props.users) {
+
             users = this.props.users.map((user) => (
                 <Person
                     key={user.user.id}
@@ -310,11 +290,12 @@ class Persons extends Component {
                 />
 
             ));
+
         }
+
         if (this.props.usersCount) {
             usersCount = this.props.usersCount;
             console.log(usersCount);
-
         }
 
         return (
@@ -565,12 +546,12 @@ class Persons extends Component {
                                 <CardHeader className="border-0">
 
                                     <Row className="align-items-center">
-                                        <Col xs="3">
-                                            <Input name="searchInput" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
+                                        <Col xs="6">
+                                            <Input value={this.state.searchParam} name="searchInput" placeholder="Kullanıcı ara ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
 
                                         </Col>
 
-                                        <Col xs="2">
+                                        {/* <Col xs="2">
 
                                             <Button
                                                 color="secondary"
@@ -594,12 +575,12 @@ class Persons extends Component {
                                                 <i className="fas fa-sync-alt fa-lg"></i>
                                             </Button>
 
-                                        </Col>
+                                        </Col> */}
 
 
 
 
-                                        <Col className="text-right" xs="7">
+                                        <Col className="text-right" xs="6">
                                             <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
@@ -610,28 +591,7 @@ class Persons extends Component {
                                     </Row>
 
 
-                                    {/* <div className="row">
-                                        <div className="col-md-10">
-                                            <h3 className="mb-0" style={{ display: "inline-block" }}>Kullanıcı Listesi</h3>
-                                            <Button
-                                                color="primary"
-                                                onClick={() => this.renderTableData(this.state.currentIndex)}
-                                            >
-                                                <i className="fas fa-sync-alt"></i>
-                                            </Button>
-                                        </div>
-                                        <div className="col-md-1">
 
-                                        </div>
-                                        <div className="col-md-1">
-                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
-                                                <span className="btn-inner--icon">
-                                                    <i className="ni ni-fat-add" />
-                                                </span>
-                                                <span className="btn-inner--text">Yeni</span>
-                                            </Button>
-                                        </div>
-                                    </div> */}
 
                                 </CardHeader>
                                 <Table className="align-items-center table-flush" >
@@ -650,24 +610,23 @@ class Persons extends Component {
                                     </tbody>
                                 </Table>
 
-                                {
-                                    this.state.isShowPagination &&
-                                    <CardFooter className="py-4">
-                                        <nav style={{ float: "right" }}>
-                                            <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                                Toplam : {usersCount}
-                                            </div>
+                                <CardFooter className="py-4">
+                                    <nav style={{ float: "right" }}>
+                                        <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                            {usersCount > 0 ?
-                                                <CustomPagination
-                                                    paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}
-                                                    paginationItemClick={(index) => this.onChangePaginationItem(index)}
-                                                    currentIndex={this.state.currentIndex}
-                                                /> : null}
-                                        </nav>
-                                    </CardFooter>
-                                }
+                                            Toplam : {usersCount}
+                                        </div>
+
+                                        {usersCount > 0 ?
+                                            <CustomPagination
+                                                paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}
+                                                paginationItemClick={(index) => this.onChangePaginationItem(index)}
+                                                currentIndex={this.state.currentIndex}
+                                            /> : null}
+                                    </nav>
+                                </CardFooter>
+
 
                             </Card>
                         </div>
@@ -680,8 +639,9 @@ class Persons extends Component {
 
 const mapStateToProps = state => {
     return {
+        defaultUsers: state.users.defaultUsers,   //getUSers users uusers
         users: state.users.users,
-        usersCount: state.users.groupUsersCount,
+        usersCount: state.users.usersCount,
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
         crudSuccess: state.users.crudSuccess,
@@ -694,12 +654,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
+        searchUser: (filterKey, defaultUsers) => dispatch(actions.searchUser(filterKey, defaultUsers)),
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
-        updateUser: (userId, userData, userGroupId, countLimits, filterData) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData)),
-        getGroupUsersCount: (filterData) => dispatch(actions.getGroupUsersCount(filterData)),
+        updateUser: (userId, userData, userGroupId, countLimits, filterData,users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData,users)),
         cleanFlagUser: () => dispatch(actions.cleanFlagsUsers())
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Persons);
+

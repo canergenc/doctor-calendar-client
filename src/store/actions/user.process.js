@@ -14,13 +14,6 @@ export const setUsers = (users, defaultUsers) => {
     };
 };
 
-export const setGroupUsersCount = (count) => {
-    return {
-        type: actionTypes.SET_GROUP_USERS_COUNT,
-        groupUsersCount: count
-    };
-};
-
 export const fetchUsersFailed = (error) => {
     return {
         type: actionTypes.FETCH_USERS_FAILED
@@ -39,17 +32,6 @@ export const fetchGlobalUsersFailed = (error) => {
         type: actionTypes.FETCH_GLOBAL_USERS_FAILED
     };
 };
-
-export const getGroupUsersCount = (filterData) => {
-    return dispatch => {
-       
-        userService.getGroupUsersCount(filterData)
-            .then(res => {
-
-                dispatch(setGroupUsersCount(res.count));
-            })
-    }
-}
 
 export const getUsers = (filterData) => {
     return dispatch => {
@@ -107,57 +89,6 @@ export const searchUser = (filterKey, defaultUsers) => {
     return dispatch => { dispatch(setUsers(users, defaultUsers)); }
 }
 
-export const findUser = (filterKey, users) => {
-    return dispatch => {
-        if (filterKey.length > 2) {
-            if (filterKey && filterKey.trim() !== "") {
-                const filterData = {
-                    filter: {
-                        where: {
-                            email: {
-                                like: filterKey
-                            },
-                            isActive: true
-                        }
-                    }
-                }
-
-                userService.getGlobalUsers(filterData)
-                    .then(res => {
-                        const globalUsers = [];
-                        res.forEach(element => {
-                            if (element) {
-                                let isExist = false;
-                                users.forEach(localUser => {
-                                    if (localUser.user) {
-                                        if (localUser.user.id === element.id) {
-                                            isExist = true;
-                                        }
-                                    }
-                                })
-                                if (!isExist) {
-                                    globalUsers.push({
-                                        value: element.id,
-                                        label: element.fullName + " - " + element.email
-                                    });
-                                }
-                            }
-                        });
-
-                        dispatch(setGlobalUsers(globalUsers));;
-                    })
-                    .catch(err => {
-                        dispatch(fetchGlobalUsersFailed());
-                    });
-            }
-        }
-        else {
-            const users = [];
-            dispatch(setGlobalUsers(users));;
-        }
-    }
-}
-
 export const deleteUser = (userId, filterData) => {
     return dispatch => {
         userService.deleteUserService(userId).then(result => {
@@ -181,7 +112,6 @@ export const deleteUserFailed = (error) => {
         error: error
     };
 };
-
 
 export const deleteUserGroup = (userGroupId, filterData) => {
     return dispatch => {
@@ -244,16 +174,14 @@ export const createUserFailed = (error) => {
     };
 };
 
-export const updateUser = (userId, userData, userGroupId,countLimits, filterData,users) => {
+export const updateUser = (userId, userData, userGroupId,countLimits, filterData) => {
     return dispatch => {
         userService.updateUserService(userId, userData)
             .then(response => {
                 userGroupService.updateUserGroup(userGroupId, countLimits)
                     .then(response => {
-
-                        users[userId]=userData;
-                        //dispatch(getUsers(filterData));
-                        dispatch(updateUserSuccess(userId,userData,users))
+                        dispatch(getUsers(filterData));
+                        dispatch(updateUserSuccess(userId))
                     })
                     .catch(err => {
                         dispatch(updateUserFailed(err));
@@ -266,12 +194,10 @@ export const updateUser = (userId, userData, userGroupId,countLimits, filterData
     };
 };
 
-export const updateUserSuccess = (id,userData,users) => {
+export const updateUserSuccess = (id) => {
     return {
         type: actionTypes.UPDATE_USER_SUCCESS,
-        userId: id,
-        userData:userData,
-        users:users
+        userId: id
     };
 };
 
@@ -282,59 +208,6 @@ export const updateUserFailed = (error) => {
         error: true
     };
 };
-
-
-export const createUserGroupBulk = (userGroupBulk) => {
-    return dispatch => {
-        dispatch(createUserGroupBulkRequest());
-
-        userGroupService.createUserGroupBulk(userGroupBulk)
-            .then((response) => {
-                const filterData = {
-                    filter: {
-                        where: {
-                            groupId: {
-                                like: helperService.getGroupId()
-                            }
-                        },
-                        include: [
-                            {
-                                relation: "user"
-                            }
-                        ]
-                    }
-                };
-                dispatch(getUsers(filterData));
-                dispatch(createUserGroupBulkSuccess(response));
-            })
-            .catch((error) => {
-                dispatch((createUserGroupBulkFailure(error)));
-            });
-    }
-}
-
-
-export const createUserGroupBulkRequest = () => {
-    return {
-        type: actionTypes.CREATE_USERGROUPBULK_REQUEST,
-    };
-};
-
-export const createUserGroupBulkSuccess = (response) => {
-    return {
-        type: actionTypes.CREATE_USERGROUPBULK_SUCCESS,
-        response: response
-    };
-}
-
-export const createUserGroupBulkFailure = (err) => {
-
-    return {
-        type: actionTypes.CREATE_USERGROUPBULK_FAILURE,
-        errorObj: err,
-
-    };
-}
 
 export const cleanFlagsUsers = () => {
     return {
