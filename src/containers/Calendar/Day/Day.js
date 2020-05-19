@@ -46,6 +46,7 @@ class Day extends Component {
             if (remindersCount <= 3) {
               preReminders.push(<Reminder
                 isDrag={true}
+                isMonthPast={this.props.isMonthPast}
                 id={element.id}
                 key={element.id}
                 location={element.location ? element.location.name : "İzin"}
@@ -138,7 +139,10 @@ class Day extends Component {
           </div>
         </Modal>
 
-        <Droppable droppableId={this.props.date}>
+        <Droppable
+          droppableId={this.props.date}
+          isDropDisabled={this.props.isMonthPast}
+        >
           {provided => (
             <article className={day}
               ref={provided.innerRef}

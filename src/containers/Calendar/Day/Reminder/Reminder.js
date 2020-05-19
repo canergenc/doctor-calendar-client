@@ -22,7 +22,9 @@ class Reminder extends Component {
       sass = (<Draggable
         key={this.props.id}
         draggableId={this.props.id}
-        index={this.props.index}>
+        index={this.props.index}
+        isDragDisabled={this.props.isMonthPast}
+      >
         {(provided, draggableSnapshot) => (
           <article title={this.props.location} className={"reminder " + this.props.color}
             ref={provided.innerRef}
@@ -33,11 +35,14 @@ class Reminder extends Component {
               provided.draggableProps.style
             )}
           >
-            <div className="tools">
-              <button onClick={this.props.onClickDeleteReminder}>
-                <i className="fas fa-times" />
-              </button>
-            </div>
+            {
+              !this.props.isMonthPast &&
+              <div className="tools">
+                <button onClick={this.props.onClickDeleteReminder}>
+                  <i className="fas fa-times" />
+                </button>
+              </div>
+            }
             {this.props.name}
           </article>
         )}
@@ -45,7 +50,7 @@ class Reminder extends Component {
 
     }
     else {
-      sass = (<article title={this.props.location}  className={"reminder " + this.props.color}
+      sass = (<article title={this.props.location} className={"reminder " + this.props.color}
         key={this.props.id}>
         <div className="tools">
           <button onClick={this.props.onClickDeleteReminder}>
