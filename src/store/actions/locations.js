@@ -201,6 +201,33 @@ export const updateLocationFailed = (error) => {
     };
 };
 
+export const updateBulkLocations = (locationId, locationData) => {
+    return dispatch => {
+        locationService.updateBulkLocationService(locationId, locationData)
+            .then(response => {
+                
+                dispatch(updateBulkLocationSuccess(locationId));
+                
+            })
+            .catch(error => {
+                dispatch(updateBulkLocationFailed(error))
+            });
+    };
+};
+
+export const updateBulkLocationSuccess = () => {
+    return {
+        type: actionTypes.UPDATE_LOCATION_SUCCESS,
+    };
+};
+
+export const updateBulkLocationFailed = (error) => {
+    return {
+        type: actionTypes.UPDATE_LOCATION_FAIL,
+        errorObj: error
+    };
+};
+
 export const reorderLocation = (locationsData, startIndex, endIndex) => {
     return dispatch => {
 

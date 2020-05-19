@@ -5,6 +5,11 @@
     /* font-size:14px; */
 }
 
+.textAreaSpecial{
+    height: 90px;
+    resize: none;
+}
+
 .bttn {
     display: inline-block;
     font-weight: 600;

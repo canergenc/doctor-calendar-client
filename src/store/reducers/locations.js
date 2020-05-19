@@ -86,6 +86,25 @@ const updateLocationFail = (state, action) => {
     return updateObject(state, updatedState);
 };
 
+
+const updateBulkLocationSuccess = (state, action) => {
+    const updatedState = {
+        error: false,
+        crudSuccess: true,
+        message: 'Lokasyonlar güncellendi.'
+    }
+    return updateObject(state, updatedState);
+};
+
+const updateBulkLocationFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    }
+    return updateObject(state, updatedState);
+};
+
 const reorderLocation = (state, action) => {
     const result = Array.from(state.locations);
     const [removed] = result.splice(action.startIndex, 1);
@@ -113,6 +132,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.CREATE_LOCATION_FAIL: return createLocationFail(state, action);
         case actionTypes.UPDATE_LOCATION_SUCCESS: return updateLocationSuccess(state, action);
         case actionTypes.UPDATE_LOCATION_FAIL: return updateLocationFail(state, action);
+        case actionTypes.UPDATE_BULK_LOCATION_SUCCESS: return updateBulkLocationSuccess(state, action);
+        case actionTypes.UPDATE_BULK_LOCATION_FAIL: return updateBulkLocationFail(state, action);
         case actionTypes.DELETE_LOCATION_SUCCESS: return deleteLocationSuccess(state, action);
         case actionTypes.DELETE_LOCATION_FAIL: return deleteLocationFail(state, action);
         case actionTypes.REORDER_LOCATION: return reorderLocation(state, action);

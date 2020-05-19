@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from "moment/moment";
 import { extendMoment } from 'moment-range';
-import { constants } from '../../../variables/constants';
+
 import {
     DropdownMenu,
     DropdownItem,
@@ -27,12 +27,26 @@ class Person extends Component {
                 <td>{this.props.fullName}</td>
                 <td>{seniority}</td>
                 <td>{this.props.email}</td>
+                <td>
+                    <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                        <input
+                            type="checkbox"
+                            name="weekend"
+                            ref={this.props.userGroupId}
+                            onClick={this.props.personDayLimitHandle}
+                            defaultChecked={(this.props.weekdayCountLimit === 0 || !this.props.weekdayCountLimit) && (this.props.weekendCountLimit === 0 || !this.props.weekendCountLimit)}
+                        />
+                        <div className="state p-danger-o">
+                            <label></label>
+                        </div>
+                    </div>
+                </td>
                 <td>{this.props.weekdayCountLimit}</td>
                 <td>{this.props.weekendCountLimit}</td>
                 <td className="text-right">
                     <UncontrolledDropdown>
                         <DropdownToggle className="btn-icon-only text-light" role="button" onClick={e => e.preventDefault()}>
-                        <i className="fas fa-ellipsis-v" />
+                            <i className="fas fa-ellipsis-v" />
                         </DropdownToggle>
                         <DropdownMenu className="dropdown-menu-arrow" right>
                             <DropdownItem style={{ marginLeft: "0px" }} onClick={this.props.editClick}>Düzenle</DropdownItem>

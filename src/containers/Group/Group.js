@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
+import { helperService } from "../../services";
 
 import {
   Button,
@@ -19,6 +20,7 @@ import 'pretty-checkbox';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import UserHeader from "../../components/Headers/UserHeader.jsx";
+import "./Group.css"
 
 const MySwal = withReactContent(Swal)
 
@@ -33,8 +35,10 @@ class GroupSettings extends React.Component {
       isWeekendControlChange: false,
       sequentialOrderLimitCount: "",
       sequentialOrderLimitCountChange: false,
-      locationDayLimit: false,
-      locationDayLimitChange: false
+      locationDayLimit: "",
+      locationDayLimitChange: false,
+      locationDayLimitCount: "",
+      locationDayLimitCountChange: false
     }
     this.inputChangeHandle = this.inputChangeHandle.bind(this);
 
@@ -43,6 +47,16 @@ class GroupSettings extends React.Component {
   componentDidMount() {
     if (!this.props.isWeekdayControl || !this.props.isWeekendControl || !this.props.sequentialOrderLimitCount || !this.props.locationDayLimit) {
       this.props.getGroupSettings();
+      const filterData = {
+        filter: {
+          where: {
+            groupId: {
+              like: helperService.getGroupId()
+            }
+          }
+        }
+      }
+      this.props.onInitLocations(filterData);
     }
   }
 
@@ -59,8 +73,7 @@ class GroupSettings extends React.Component {
 
   inputChangeHandle(event) {
 
-    const target = event.target; 
-    console.log(target.name);
+    const target = event.target;
 
     if (target.name === 'weekday')
       this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
@@ -68,8 +81,17 @@ class GroupSettings extends React.Component {
       this.setState({ isWeekendControl: this.refs.weekend.checked, isWeekendControlChange: true });
     if (target.name === 'sequentialOrderLimitCount')
       this.setState({ sequentialOrderLimitCount: event.target.value, sequentialOrderLimitCountChange: true });
-    if (target.name === 'locationDayLimit')
-      this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true });
+    if (target.name === 'locationDayLimit') {
+      if (this.refs.locationDayLimit.checked === false) {
+        this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true, locationDayLimitCount: '', locationDayLimitCountChange: false })
+      }
+      else {
+        this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true });
+      }
+
+    }
+    if (target.name === 'locationDayLimitCount')
+      this.setState({ locationDayLimitCount: event.target.value, locationDayLimitCountChange: true });
   }
 
   updateGroupSettings() {
@@ -86,13 +108,16 @@ class GroupSettings extends React.Component {
     if (this.state.locationDayLimitChange) {
       groupSettings.locationDayLimit = this.state.locationDayLimit;
     }
+    if (this.state.locationDayLimitCountChange && (this.state.locationDayLimit === '' ? this.props.locationDayLimit : this.state.locationDayLimit)) {
+      groupSettings.locationDayLimitCount = parseInt(this.state.locationDayLimitCount);
+    }
 
     this.props.updateGroupSettings(this.props.groupSettingsId, groupSettings);
-
   }
 
 
   render() {
+
     return (<>
       <UserHeader />
       <Container style={{ marginTop: "-12rem" }} fluid>
@@ -174,6 +199,7 @@ class GroupSettings extends React.Component {
                         </FormGroup>
                       </Form>
                     </Col>
+
                   </Row>
 
                   <Row style={{ marginTop: "25px" }}>
@@ -202,7 +228,7 @@ class GroupSettings extends React.Component {
                             Maksimum Lokasyon - Gün Sınırı
                             </Label>
 
-                          <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                          <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
                             <input
                               type="checkbox"
                               name="locationDayLimit"
@@ -214,6 +240,17 @@ class GroupSettings extends React.Component {
                               <label></label>
                             </div>
                           </div>
+                          <input
+                            id="locationDayLimitCount"
+                            name="locationDayLimitCount"
+                            className="specialInput"
+                            type="number"
+                            min="0"
+                            width="60px"
+                            defaultValue={this.props.locationDayLimitCount}
+                            disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
+                            onChange={(event) => this.inputChangeHandle(event)}
+                          />
                         </FormGroup>
                       </Form>
                     </Col>
@@ -238,8 +275,10 @@ const mapStateToProps = state => {
     groupSettingsId: state.groupSettings.groupSettingsId,
     isWeekdayControl: state.groupSettings.isWeekdayControl,
     isWeekendControl: state.groupSettings.isWeekendControl,
+    locations: state.locations.locations,
     sequentialOrderLimitCount: state.groupSettings.sequentialOrderLimitCount,
     locationDayLimit: state.groupSettings.locationDayLimit,
+    locationDayLimitCount: state.groupSettings.locationDayLimitCount,
     error: state.groupSettings.error,
     statusText: state.groupSettings.statusText
   };
@@ -249,7 +288,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getGroupSettings: () => dispatch(actions.getGroupSettings()),
+    onInitLocations: (filterData) => dispatch(actions.initLocations(filterData)),
     updateGroupSettings: (id, data) => dispatch(actions.updateGroupSettings(id, data)),
+    updateBulkLocations: (listOfLocations) => dispatch(actions.updateBulkLocations(listOfLocations)),
     cleanFlagsGroupSettings: () => dispatch(actions.cleanFlagsGroupSettings()),
   };
 }

@@ -1,5 +1,24 @@
 import React, { Component } from "react";
-import { Button, Card, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle, Table, CardHeader, CardFooter, Input, Alert, Row, Col, Modal, Form, Label, FormGroup, InputGroup } from "reactstrap";
+import {
+    Button,
+    Card,
+    UncontrolledDropdown,
+    DropdownMenu,
+    DropdownItem,
+    DropdownToggle,
+    Table,
+    CardHeader,
+    CardFooter,
+    Input,
+    Alert,
+    Row,
+    Col,
+    Modal,
+    Form,
+    Label,
+    FormGroup,
+    InputGroup
+} from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
@@ -7,27 +26,26 @@ import ToastServive from 'react-material-toast';
 import Select from 'react-select';
 import moment from 'moment/moment';
 import { permissionHelper } from "./PermissionHelper";
-import 'font-awesome/css/font-awesome.min.css';
 import { helperService } from "../../services/helper";
-
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import tr from "date-fns/locale/tr";
 import { registerLocale } from "react-datepicker";
-import './Permission.css';
-registerLocale("tr", tr);
 import withReactContent from 'sweetalert2-react-content';
-import Swal from 'sweetalert2'
-const MySwal = withReactContent(Swal)
+import Swal from 'sweetalert2';
+import "react-datepicker/dist/react-datepicker.css";
+import 'font-awesome/css/font-awesome.min.css';
+import './Permission.css';
+
+const MySwal = withReactContent(Swal);
+registerLocale("tr", tr);
 
 const toast = ToastServive.new({
     place: 'topRight',
     closable: false,
     duration: 3,
-    maxCount: 10,
+    maxCount: 10
+});
 
-
-})
 class WaitingForApproved extends Component {
 
     constructor(props) {
@@ -66,9 +84,7 @@ class WaitingForApproved extends Component {
     componentDidMount() {
         this.loadPermissions();
         this.loadUsers();
-
     }
-
 
     approvePermisson(item) {
         console.log('item', item);
@@ -129,10 +145,6 @@ class WaitingForApproved extends Component {
         this.loadPermissions();
     }
 
-
-
-
-
     createPermission() {
 
         const { startDate, endDate, userId, description } = this.state;
@@ -178,10 +190,6 @@ class WaitingForApproved extends Component {
         this.props.getPermissions(permissionHelper.getWaitingForApproveFilter());
     }
 
-
-
-
-
     inputChangeHandle(event) {
         this.setState({ submitted: false })
         const target = event.target;
@@ -224,23 +232,12 @@ class WaitingForApproved extends Component {
         return "Eşleşme Yok"
     }
 
-
-
     addUserId(user) {
         console.log(user);
         if (user) {
             this.setState({ userId: user.value })
         }
-        // if (user) {
-        //     let userGroups = [];
-        //     user.forEach(element => {
-        //         userGroups.push({ userId: element.value, groupId: helperService.getGroupId() });
-        //     });
-        //     this.setState({ userGroups: userGroups })
-        // }
-
     }
-
 
     componentDidUpdate() {
 
@@ -250,16 +247,10 @@ class WaitingForApproved extends Component {
                 title: 'İşlem Başarısız',
                 text: this.props.statusTextAtCreatePermission || this.props.statusTextAtUpdatePermission
             });
-
         }
-
     }
 
     render() {
-
-
-        console.log('OP1', this.props.users);
-
         let options = [];
         if (this.props.users) {
             this.props.users.forEach(u => {
@@ -292,41 +283,16 @@ class WaitingForApproved extends Component {
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </td>
-
-
-                    {/* <td className="text-right">
-                        <Button
-                            color="warning"
-                            onClick={() => this.rejectPermission(p)}
-                            size="sm"
-                        >
-                            İPTAL
-                            </Button>
-                        <Button
-                            color="primary"
-                            onClick={() => this.approvePermisson(p)}
-                            size="sm"
-                        >
-                            AKTAR
-                      </Button>
-
-                    </td> */}
                 </tr>
             ));
             this.state.copyOfListOfPermission = this.state.listOfPermission;
-
-
         }
-
-
-
 
         return (
             <>
                 <Modal
                     className="modal-dialog-centered"
                     isOpen={this.state.isOpenCreateModal}
-                // toggle={() => this.toggleModal()}
                 >
                     <div className="modal-header">
                         <h3 className="modal-title" id="addModalLabel">Yeni İzin Girişi</h3>
@@ -352,11 +318,9 @@ class WaitingForApproved extends Component {
                             {this.state.submitted && !this.props.statusTextAtCreatePermission && this.props.responseOnCreatePermission ?
 
                                 <Alert color="success">
-
                                     {constants.SUCCESS_MESSAGE.commonMessage}
                                 </Alert>
                                 : ''}
-
 
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
@@ -378,8 +342,6 @@ class WaitingForApproved extends Component {
                                         />
                                     </Col>
 
-
-
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Bitiş Tarihi:</Label>
@@ -393,13 +355,9 @@ class WaitingForApproved extends Component {
                                             locale="tr"
                                             onChange={date => {
                                                 this.setEndDate(date)
-
                                             }}
-
                                         />
                                     </Col>
-
-
 
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
@@ -414,27 +372,17 @@ class WaitingForApproved extends Component {
                                             <option value={CalendarTypes.OzelDurum}>Özel Durum</option>
                                             <option value={CalendarTypes.Rotasyon}>Rotasyon</option>
 
-
-
-
-
-
-
                                         </Input>
                                     </Col>
                                 </InputGroup>
-
-
 
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Açıklama:</Label>
                                     <Col sm={7}>
-                                        <Input type="text" style={{ color: 'black', fontSize: '16px' }} name="description" value={this.state.description} onChange={this.inputChangeHandle} >
+                                        <Input type="textarea" style={{ color: 'black', fontSize: '16px' }} className="textAreaSpecial" name="description" value={this.state.description} onChange={this.inputChangeHandle} >
                                         </Input>
                                     </Col>
                                 </InputGroup>
-
-
 
                                 <InputGroup className="input-group-alternative mb-3">
                                     <Label for="exampleEmail" sm={5}>Kişi Seçimi:</Label>
@@ -447,9 +395,6 @@ class WaitingForApproved extends Component {
 
                                     </Col>
                                 </InputGroup>
-
-
-
 
                             </FormGroup>
                         </Form>
@@ -465,8 +410,6 @@ class WaitingForApproved extends Component {
 
                 <Card className="shadow">
 
-
-
                     <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
                         <Row className="align-items-center">
                             <Col xs="3">
@@ -478,49 +421,36 @@ class WaitingForApproved extends Component {
 
                                 <Button
                                     color="secondary"
-
                                     onClick={e => this.getPermissionsBySearch()}
                                     size="lg"
-
-
                                 >
                                     <i className="fas fa-search fa-lg"></i>
                                 </Button>
 
-
                                 <Button
                                     color="secondary"
-
                                     onClick={e => this.refreshPermissions()}
                                     size="lg"
-
                                 >
                                     <i className="fas fa-sync-alt fa-lg"></i>
                                 </Button>
 
                             </Col>
 
-
-
-
                             <Col className="text-right" xs="7">
                                 <Button
                                     color="primary"
-                                    href="#pablo"
                                     onClick={e => this.openCreateModal()}
                                     size="sm"
                                 >
                                     <span className="btn-inner--icon">
                                         <i className="ni ni-fat-add" />
                                     </span>
-            Yeni
-</Button>
+                                    Yeni
+                                </Button>
                             </Col>
                         </Row>
                     </CardHeader>
-
-
-
 
                     <Table className="align-items-center table-flush" >
 
@@ -555,7 +485,6 @@ class WaitingForApproved extends Component {
                     </CardFooter>
                 </Card>
             </>
-
         )
     }
 };

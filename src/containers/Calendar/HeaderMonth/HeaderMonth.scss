@@ -6,27 +6,32 @@
   .row {
     flex: 3;
     display: block;
+    
     &:first-child {
+      
       text-align: left;
       margin-left:auto ;
       margin-bottom: auto;
+      max-width: 20%;
     };
     &:nth-child(2) {
       text-align: center;
       margin-bottom: auto;
+      align-items: center;
     };
 
     &:last-child {
       text-align: right;
       margin-right: auto;
       margin-bottom: auto;
+      max-width: 20%;
     };
 
     h1 {
       font: normal 16px Montserrat,sans-serif;
       font-size: 32px;
       color: black;
-
+      display: inline;
     }
 
     .fas {

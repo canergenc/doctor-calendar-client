@@ -6,8 +6,7 @@ import "./HeaderMonth.scss";
 class HeaderMonth extends Component {
 
   componentDidUpdate() {
-    console.log(this.props.downloading);
-    
+
     if (this.props.downloading) {
       console.log('test download');
 
@@ -26,19 +25,15 @@ class HeaderMonth extends Component {
           </button>
         </div>
         <div className="row">
-          <h1>
+          <h1 >
             {this.props.curMonth.name}
             <Button color="primary" style={{ padding: "3px 5px" }} onClick={this.props.downloadExcelClick} size="sm" disabled={this.props.downloading}>
-
-
-              Excel{this.props.downloading === true ? <i className="fa fa-refresh fa-spin" style={{ marginLeft: "5px" }}></i> : <i className="fa fa-download" style={{ marginLeft: "5px" }}></i>}
-
-            </Button>
-            <Button color="primary" style={{ padding: "3px 5px" }} onClick={this.props.refreshCalendar} size="sm" ><i className="fas fa-sync-alt" style={{ fontSize: "12px", color: "white" }}></i></Button>
+            Excel{this.props.downloading === true ? <i className="fa fa-refresh fa-spin" style={{ marginLeft: "5px" }}></i> : <i className="fa fa-download" style={{ marginLeft: "5px" }}></i>}
+          </Button>
+          <Button color="primary" style={{ padding: "3px 5px" }} onClick={this.props.refreshCalendar} size="sm" ><i className="fas fa-sync-alt" style={{ fontSize: "12px", color: "white" }}></i></Button>
           </h1>
+          
         </div>
-
-
         <div className="row" >
           <button className="prevNext" onClick={this.props.nextMonthClick}>
             <i className="fas fa-chevron-circle-right" />

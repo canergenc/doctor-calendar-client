@@ -15,6 +15,7 @@ const getGroupSettingsSuccess = (state, action) => {
         isWeekendControl: action.groupSettings.isWeekendControl,
         sequentialOrderLimitCount: action.groupSettings.sequentialOrderLimitCount,
         locationDayLimit: action.groupSettings.locationDayLimit,
+        locationDayLimitCount: action.groupSettings.locationDayLimitCount,
         groupSettingsId: action.groupSettings.id,
         error: false,
         message: 'Ayarlara ulaşıldı.'

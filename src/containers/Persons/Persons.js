@@ -55,6 +55,7 @@ class Persons extends Component {
             name: '',
             email: '',
             workStartDate: '',
+            maxData: '',
             weekendCountLimit: 0,
             weekdayCountLimit: 0,
             password: '',
@@ -145,7 +146,6 @@ class Persons extends Component {
             this.toggleModal('editModal', null);
             event.preventDefault();
         }
-
     }
 
     addHandle(event) {
@@ -225,6 +225,27 @@ class Persons extends Component {
 
     }
 
+    personDayLimitHandle = (event, userId, userGroupId) => {
+        let userData = {
+        };
+        let weekdayCountLimit = 1;
+        let weekendCountLimit = 1;
+
+
+        if (event.target.checked) {
+            weekdayCountLimit = 0;
+            weekendCountLimit = 0;
+        }
+
+        const countLimits = {
+            weekdayCountLimit: weekdayCountLimit,
+            weekendCountLimit: weekendCountLimit
+        };
+
+        let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
+        this.props.updateUser(userId, userData, userGroupId, countLimits, filter);
+    }
+
     toggleModal(state, userGroup) {
         if (userGroup) {
             this.setState({
@@ -280,11 +301,13 @@ class Persons extends Component {
                 <Person
                     key={user.user.id}
                     id={user.user.id}
+                    userGroupId={user.id}
                     fullName={user.user.fullName}
                     workStartDate={user.user.workStartDate}
                     email={user.user.email}
                     weekdayCountLimit={user.weekdayCountLimit}
                     weekendCountLimit={user.weekendCountLimit}
+                    personDayLimitHandle={(event) => this.personDayLimitHandle(event, user.user.id, user.id)}
                     editClick={() => this.toggleModal("editModal", user)}
                     deleteClick={() => this.toggleModal("deleteModal", user)}
                 />
@@ -370,6 +393,9 @@ class Persons extends Component {
                                             required={true}
                                             timeFormat={false}
                                             dateFormat="dd-MM-yyyy"
+                                            showYearDropdown
+                                            scrollableYearDropdown
+                                            maxDate={Date.parse(this.state.maxDate)}
                                             selected={Date.parse(this.state.workStartDate)}
                                             onChange={(event) => this.inputChangeHandleDate(event)}
                                         />
@@ -455,6 +481,7 @@ class Persons extends Component {
                                         </InputGroupText>
                                         <DatePicker
                                             dateFormat="dd-MM-yyyy"
+                                            maxDate={Date.parse(this.state.maxDate)}
                                             selected={Date.parse(this.state.workStartDate)}
                                             onChange={(event) => this.inputChangeHandleDate(event)}
                                         />
@@ -600,6 +627,7 @@ class Persons extends Component {
                                             <th scope="col">Ad Soyad</th>
                                             <th scope="col">Kıdem</th>
                                             <th scope="col">E-Mail</th>
+                                            <th scope="col">Nöbet Durumu</th>
                                             <th scope="col">Haftaiçi Nöbet Sayısı</th>
                                             <th scope="col">Haftasonu Nöbet Sayısı</th>
                                             <th scope="col" className="text-right">İşlemler</th>

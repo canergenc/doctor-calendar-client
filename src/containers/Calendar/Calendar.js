@@ -90,6 +90,14 @@ class Calendar extends Component {
     const props = {};
     if (this.props.reminders && this.props.locations) {
       let reminderIndex = 0;
+      let isMonthPast = false;
+      var date = new Date();
+      let realMonth = date.getFullYear() + "-" + (date.getMonth() + 1);
+
+      if (moment(this.state.curMonth.date) < moment(realMonth, "YYYY-MM")) {
+        isMonthPast = true;
+      }
+
       for (let i = 1; i <= this.state.curMonth.days; i++) {
 
         let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`;
@@ -114,6 +122,7 @@ class Calendar extends Component {
         }
 
         props["reminders"] = calendar;
+        props["isMonthPast"] = isMonthPast;
         props["deleteReminder"] = this.deleteReminderHandler;
 
         if (i === 1) {
@@ -374,7 +383,7 @@ class Calendar extends Component {
   render() {
     moment.locale('tr');
     const weekdays = moment.weekdays(true);
-    
+
     let days = this.props.error ? <p>Takvim yüklenemedi.</p> : <Spinner />
 
     if (this.props.reminders) {

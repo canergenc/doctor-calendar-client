@@ -38,6 +38,7 @@
     "file-saver": "^2.0.2",
     "font-awesome": "^4.7.0",
     "history": "^4.10.1",
+    "mdbreact": "^4.26.1",
     "moment": "^2.25.1",
     "moment-range": "^4.0.2",
     "node-sass": "^4.14.0",
