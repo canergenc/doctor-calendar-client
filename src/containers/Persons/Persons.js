@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect,useDispatch } from 'react-redux';
 import { helperService } from "../../services";
 import UserHeader from "../../components/Headers/UserHeader.jsx";
 import Person from './Person/Person';
@@ -38,6 +38,8 @@ import moment from "moment/moment";
 
 const MySwal = withReactContent(Swal);
 
+
+
 class Persons extends Component {
     constructor(props) {
         super(props)
@@ -58,13 +60,12 @@ class Persons extends Component {
             weekdayCountLimit: 0,
             password: '',
             currentIndex: 0,
-            isShowPagination: true
+            currentPageSize: 0
+            //isShowPagination: true
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
         this.addHandle = this.addHandle.bind(this);
-        this.keyPress = this.keyPress.bind(this);
-        this.getUsersBySearch = this.getUsersBySearch.bind(this);
     }
 
     addHandleValidation() {
@@ -112,8 +113,10 @@ class Persons extends Component {
                 this.setState({ weekendCountLimit: '0', weekdayCountLimit: '0', submitted: false });
             }
         }
-        if (target.name === 'searchInput')
+        if (target.name === 'searchInput') {
             this.setState({ searchParam: event.target.value, submitted: false });
+            this.searchUser(event.target.value);
+        }
 
     }
 
@@ -138,21 +141,8 @@ class Persons extends Component {
                 ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
             };
 
-            const filterData = {
-                filter: {
-                    skip: this.state.currentIndex * constants.PAGESIZE_INPERMISSION_PAGE,
-                    limit: constants.PAGESIZE_INPERMISSION_PAGE,
-                    where: {
-                        groupId: {
-                            like: helperService.getGroupId()
-                        }
-                    },
-                    include: [
-                        { relation: "user" }
-                    ]
-                }
-            }
-            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, filterData);
+            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, personHelper.getFilter(),this.props.users);
+
             this.toggleModal('editModal', null);
             event.preventDefault();
         }
@@ -175,8 +165,7 @@ class Persons extends Component {
                 ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
                 ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
             }
-            let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
-            this.props.createUser(user, countLimits, filter);
+            this.props.createUser(user, countLimits, personHelper.getFilter());
             this.toggleModal('addModal', null);
             event.preventDefault();
 
@@ -185,8 +174,7 @@ class Persons extends Component {
 
     deleteHandle() {
         if (this.state.id) {
-            let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
-            this.props.deleteUser(this.state.userGroupId, filter)
+            this.props.deleteUser(this.state.userGroupId, personHelper.getFilter())
             this.toggleModal('deleteModal', undefined);
         }
     }
@@ -246,6 +234,7 @@ class Persons extends Component {
             this.setState({ submitted: false });
         }
         else if (this.props.crudSuccess) {
+            this.props.cleanFlagUser();
             MySwal.fire({
                 icon: 'success',
                 title: 'Başarılı',
@@ -309,7 +298,17 @@ class Persons extends Component {
 
     onChangePaginationItem(index) {
         this.setState({ currentIndex: index });
-        this.renderTableData(index);
+        this.paginate()
+
+    }
+
+    //Redux a taşınmalı mı?
+    paginate(listOfUser) {
+        return listOfUser.slice((this.state.currentIndex) * constants.PAGESIZE_IN_PERSON_PAGE, (this.state.currentIndex + 1) * constants.PAGESIZE_IN_PERSON_PAGE);
+    }
+
+    searchUser = (searchParam) => {
+        this.props.searchUser(searchParam, this.props.defaultUsers);
     }
 
     render() {
@@ -320,6 +319,7 @@ class Persons extends Component {
         let usersCount = 0;
 
         if (this.props.users) {
+
             users = this.props.users.map((user) => (
                 <Person
                     key={user.user.id}
@@ -336,9 +336,12 @@ class Persons extends Component {
                 />
 
             ));
+
         }
+
         if (this.props.usersCount) {
             usersCount = this.props.usersCount;
+            console.log(usersCount);
         }
 
         return (
@@ -626,6 +629,9 @@ class Persons extends Component {
                                         </Col>
                                     </Row>
 
+
+
+
                                 </CardHeader>
                                 <Table className="align-items-center table-flush specialTablePrs" >
                                     <thead className="thead-light" >
@@ -644,24 +650,23 @@ class Persons extends Component {
                                     </tbody>
                                 </Table>
 
-                                {
-                                    this.state.isShowPagination &&
-                                    <CardFooter className="py-4">
-                                        <nav style={{ float: "right" }}>
-                                            <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                                Toplam : {usersCount}
-                                            </div>
+                                <CardFooter className="py-4">
+                                    <nav style={{ float: "right" }}>
+                                        <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                            {usersCount > 0 ?
-                                                <CustomPagination
-                                                    paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}
-                                                    paginationItemClick={(index) => this.onChangePaginationItem(index)}
-                                                    currentIndex={this.state.currentIndex}
-                                                /> : null}
-                                        </nav>
-                                    </CardFooter>
-                                }
+                                            Toplam : {usersCount}
+                                        </div>
+
+                                        {usersCount > 0 ?
+                                            <CustomPagination
+                                                paginationItemCount={helperService.getPaginationItemCount(usersCount, constants.PAGESIZE_INPERMISSION_PAGE)}
+                                                paginationItemClick={(index) => this.onChangePaginationItem(index)}
+                                                currentIndex={this.state.currentIndex}
+                                            /> : null}
+                                    </nav>
+                                </CardFooter>
+
 
                             </Card>
                         </div>
@@ -674,8 +679,9 @@ class Persons extends Component {
 
 const mapStateToProps = state => {
     return {
+        defaultUsers: state.users.defaultUsers,   //getUSers users uusers
         users: state.users.users,
-        usersCount: state.users.groupUsersCount,
+        usersCount: state.users.usersCount,
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
         crudSuccess: state.users.crudSuccess,
@@ -688,12 +694,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
+        searchUser: (filterKey, defaultUsers) => dispatch(actions.searchUser(filterKey, defaultUsers)),
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
-        updateUser: (userId, userData, userGroupId, countLimits, filterData) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData)),
-        getGroupUsersCount: (filterData) => dispatch(actions.getGroupUsersCount(filterData)),
+        updateUser: (userId, userData, userGroupId, countLimits, filterData,users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData,users)),
         cleanFlagUser: () => dispatch(actions.cleanFlagsUsers())
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Persons);
+

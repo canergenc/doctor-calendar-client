@@ -16,6 +16,7 @@ const getSearchFilter = (searchParam) => {
                 {
                     relation: "user",
                     scope: {
+                        
                         where: {
                             or: [
                                 {
@@ -27,7 +28,8 @@ const getSearchFilter = (searchParam) => {
                                         like: searchParam
                                     }
                                 }
-                            ]
+                            ],
+                            
                         }
                     }
                 }
@@ -59,12 +61,12 @@ const getInitCountFilter = () => {
 }
 
 
-const getFilter = (index) => {
+const getFilter = () => {
 
     const filterData = {
         filter: {
-            skip: index* constants.PAGESIZE_INPERMISSION_PAGE,
-            limit: constants.PAGESIZE_INPERMISSION_PAGE,
+            // skip: index* constants.PAGESIZE_INPERMISSION_PAGE,
+            // limit: constants.PAGESIZE_INPERMISSION_PAGE,
             where: {
                 groupId: {
                     like: helperService.getGroupId()
@@ -73,6 +75,9 @@ const getFilter = (index) => {
             include: [
                 {
                     relation: "user",
+                    
+                        order:'workStartDate DESC'
+                    
                 }
             ]
         }
@@ -83,7 +88,7 @@ const getFilter = (index) => {
 
 
 export const personHelper = {
-    getSearchFilter,
-    getInitCountFilter,
+    //getSearchFilter,
+    //getInitCountFilter,
     getFilter
 };

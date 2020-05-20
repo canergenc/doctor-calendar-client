@@ -15,6 +15,8 @@ const setUsers = (state, action) => {
     const updatedState = {
         users: action.users,
         defaultUsers: action.defaultUsers,
+        usersCount: action.usersCount,
+        defaultUsersCount: action.defaultUsersCount,
         error: false
     };
     return updateObject(state, updatedState);
@@ -53,6 +55,8 @@ const fetchGlobalUsersFail = (state, action) => {
 
 const updateUserSuccess = (state, action) => {
     const updatedState = {
+
+        users: action.users,
         error: false,
         crudSuccess: true,
         message: 'Kullanıcı güncellendi.'
