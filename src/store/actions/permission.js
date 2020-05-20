@@ -1,5 +1,60 @@
 import * as actionTypes from "./actionTypes";
 import { calendarService } from "../../services/calendar"
+import StateManager from "react-select";
+
+
+
+const getPermissionsCount = (filterData) => {
+    return dispatch => {
+        dispatch(getPermissionsCountRequest());
+        calendarService.getReminderService(filterData)
+            .then(res => {
+
+                let permissions = []
+                let permissionCount = 0;
+                if (res) {
+                    res.forEach(element => {
+                        if (element !== null && element.user && element.startDate && element.endDate) {
+                            permissions.push(element);
+                        }
+                    });
+                    permissionCount = permissions.length;
+                }
+
+                console.log('action',permissionCount);
+                
+
+                dispatch(getPermissionsCountSuccess(permissionCount));
+
+
+            })
+            .catch(err => {
+                dispatch(getPermissionsCountFailure(err));
+            });
+    }
+}
+
+const getPermissionsCountRequest = () => {
+    return {
+        type: actionTypes.GET_PERMISSION_COUNT_REQUEST,
+    };
+};
+
+const getPermissionsCountSuccess = (permissionCount) => {
+    return {
+        type: actionTypes.GET_PERMISSION_COUNT_SUCCESS,
+        permissionCount: permissionCount
+    };
+}
+
+const getPermissionsCountFailure = (err) => {
+    return {
+        type: actionTypes.GET_PERMISSION_COUNT_FAILURE,
+        errorObj: err,
+    };
+}
+
+
 
 
 const createPermission = (data) => {
@@ -40,14 +95,14 @@ const createPermissionFailure = (err) => {
 
 
 
-const updatePermission = (id,data, filterOrWaitingFor ,fiterOfApproved) => {
+const updatePermission = (id, data, filterOrWaitingFor, fiterOfApproved) => {
     return dispatch => {
         dispatch(updatePermissionRequest());
-        calendarService.updateReminderService(id,data)
+        calendarService.updateReminderService(id, data)
             .then(response => {
                 dispatch(updatePermissionSuccess(response));
-                dispatch(getPermissions(filterOrWaitingFor)); 
-                dispatch(getApprovedPermissions(fiterOfApproved));     
+                dispatch(getPermissions(filterOrWaitingFor));
+                dispatch(getApprovedPermissions(fiterOfApproved));
 
             })
             .catch(err => {
@@ -83,14 +138,16 @@ const getPermissions = (filterData) => {
         calendarService.getReminderService(filterData)
             .then(res => {
                 let permissions = []
+                let permissionCount = 0;
                 if (res) {
                     res.forEach(element => {
-                        if (element !== null) {
+                        if (element !== null && element.user && element.startDate && element.endDate) {
                             permissions.push(element);
                         }
                     });
-                    dispatch(getPermissionsSuccess(permissions));
+                    permissionCount = permissions.length;
                 }
+                dispatch(getPermissionsSuccess(permissions, permissionCount));
             })
             .catch(err => {
                 dispatch(getPermissionsFailed(err));
@@ -104,10 +161,12 @@ const getPermissionsRequest = () => {
     };
 };
 
-const getPermissionsSuccess = (reminders) => {
+const getPermissionsSuccess = (permissions, permissionCount) => {
     return {
+
         type: actionTypes.GET_PERMISSIONS_SUCCESS,
-        response: reminders
+        response: permissions,
+        permissionCount: permissionCount
     };
 };
 
@@ -126,15 +185,20 @@ const getApprovedPermissions = (filter) => {
         dispatch(getApprovedPermissionsRequest());
         calendarService.getReminderService(filter)
             .then(res => {
-                const reminders = []
+                let permissions = []
+                let permissionCount = 0;
                 if (res) {
-                    res.forEach(element => {
-                        if (element !== null) {
-                            reminders.push(element);
-                        }
-                    });
-                    dispatch(getApprovedPermissionsSuccess(reminders));
+                    if (res) {
+                        res.forEach(element => {
+                            if (element !== null && element.user && element.startDate && element.endDate) {
+                                permissions.push(element);
+                            }
+                        });
+
+                        permissionCount = permissions.length;
+                    }
                 }
+                dispatch(getApprovedPermissionsSuccess(permissions, permissionCount));
             })
             .catch(err => {
                 dispatch(getApprovedPermissionsFailure(err));
@@ -150,10 +214,11 @@ const getApprovedPermissionsRequest = () => {
     };
 };
 
-const getApprovedPermissionsSuccess = (reminders) => {
+const getApprovedPermissionsSuccess = (permissions, permissionCount) => {
     return {
         type: actionTypes.GET_APPROVED_PERMISSIONS__SUCCESS,
-        response: reminders
+        response: permissions,
+        permissionCount: permissionCount
     };
 }
 
@@ -171,6 +236,7 @@ const getApprovedPermissionsFailure = (err) => {
 
 
 export const permission = {
+    getPermissionsCount,
     createPermission,
     getPermissions,
     getApprovedPermissions,

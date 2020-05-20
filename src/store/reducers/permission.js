@@ -10,6 +10,28 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
+
+        case actionTypes.GET_PERMISSION_COUNT_REQUEST:
+            return {
+                getPermissionCountReqLoading: true
+            };
+        case actionTypes.GET_PERMISSION_COUNT_SUCCESS:
+            return {
+                ...state,
+                getPermissionCountReqLoading: false,
+                errorOnPermissionCount: false,
+                permissionCount: action.permissionCount
+            };
+        case actionTypes.GET_PERMISSION_COUNT_FAILURE:
+            return {
+                ...state,
+                getPermissionCountReqLoading: false,
+                errorOnPermissionCount: true,
+                permissionCount: {},
+                statusTextAtPermissionCount: helperService.getErrorMessage(action.errorObj)
+            };
+
+
         case actionTypes.CREATE_PERMISSION_REQUEST:
             return {
                 createPermissionReqLoading: true
@@ -61,7 +83,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 getPermissionReqLoading: false,
                 errorOnGetPermission: false,
-                responseOnGetPermission: action.response
+                responseOnGetPermission: action.response,
+                //permissionCount:action.permissionCount
             };
         case actionTypes.GET_PERMISSIONS_FAILURE:
             return {
@@ -82,7 +105,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 getApprovedPermissionReqLoading: false,
                 errorOnGetApprovedPermission: false,
-                responseOnGetApprovedPermission: action.response
+                responseOnGetApprovedPermission: action.response,
+                approvedPermissionCount:action.permissionCount
             };
         case actionTypes.GET_APPROVED_PERMISSIONS__FAILURE:
             return {

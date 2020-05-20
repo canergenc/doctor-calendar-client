@@ -52,7 +52,7 @@ class Permission extends Component {
                                     <WaitingForApprove />
                                 </TabPane>
                                 <TabPane tabId="2">
-                                    <Approved />
+                                     <Approved /> 
                                 </TabPane>
                             </TabContent>  
                             </Card>

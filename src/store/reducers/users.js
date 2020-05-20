@@ -95,6 +95,9 @@ const deleteUserGroupSuccess = (state, action) => {
     const updatedState = {
         error: false,
         crudSuccess: true,
+        users:action.users,
+        defaultUsers:action.defaultUsers,
+        usersCount: action.usersCount,
         message: 'Kullanıcı silindi.'
     };
     return updateObject(state, updatedState);

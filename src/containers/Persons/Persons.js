@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect,useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { helperService } from "../../services";
 import UserHeader from "../../components/Headers/UserHeader.jsx";
 import Person from './Person/Person';
@@ -61,7 +61,6 @@ class Persons extends Component {
             password: '',
             currentIndex: 0,
             currentPageSize: 0
-            //isShowPagination: true
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
@@ -141,7 +140,7 @@ class Persons extends Component {
                 ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
             };
 
-            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, personHelper.getFilter(),this.props.users);
+            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, personHelper.getFilter(), this.props.users);
 
             this.toggleModal('editModal', null);
             event.preventDefault();
@@ -149,7 +148,7 @@ class Persons extends Component {
     }
 
     addHandle(event) {
-        this.setState({ submitted: true });
+        this.setState({ submitted: true, searchParam: '' });
         if (this.addHandleValidation()) {
             const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
             const weekendCountLimit = parseInt(this.state.weekendCountLimit);
@@ -174,7 +173,7 @@ class Persons extends Component {
 
     deleteHandle() {
         if (this.state.id) {
-            this.props.deleteUser(this.state.userGroupId, personHelper.getFilter())
+            this.props.deleteUser(this.state.userGroupId, personHelper.getFilter(), this.props.users, this.props.defaultUsers)
             this.toggleModal('deleteModal', undefined);
         }
     }
@@ -185,7 +184,7 @@ class Persons extends Component {
 
     componentDidMount() {
         console.log('oops');
-        
+
         this.renderTableData();
     }
 
@@ -208,45 +207,40 @@ class Persons extends Component {
                 text: this.props.message,
                 showConfirmButton: true
 
-            }).then((result) => {
-                //getUsers();
-                
-                // this.props.onInitUsers(personHelper.getFilter());
-                if (this.state.searchParam) {
-                    this.searchUser(this.state.searchParam);
-                }
-            })
+            });
 
-
-
-            
 
         }
 
     }
 
-    personDayLimitHandle = (event, userId, userGroupId) => {
+    personDayLimitHandle = (event, userModel) => {
         let userData = {
+            email: userModel.user.email,
+            fullName: userModel.user.fullName,
+            workStartDate: userModel.user.workStartDate
         };
         let weekdayCountLimit = 1;
         let weekendCountLimit = 1;
-
-
         if (event.target.checked) {
             weekdayCountLimit = 0;
             weekendCountLimit = 0;
         }
-
         const countLimits = {
             weekdayCountLimit: weekdayCountLimit,
             weekendCountLimit: weekendCountLimit
         };
+        this.setState({ weekdayCountLimit: weekdayCountLimit, weekendCountLimit: weekendCountLimit })
+        this.props.updateUser(userModel.user.id, userData, userModel.id, countLimits, personHelper.getFilter(), this.props.users);
 
-        let filter = this.state.searchParam && this.state.searchSubmitted ? personHelper.getSearchFilter(this.state.searchParam) : personHelper.getFilter(this.state.currentIndex);
-        this.props.updateUser(userId, userData, userGroupId, countLimits, filter);
     }
 
     toggleModal(state, userGroup) {
+        debugger;
+        console.log('modal', state);
+        console.log('modal', userGroup);
+
+
         if (userGroup) {
             this.setState({
                 [state]: !this.state[state],
@@ -258,6 +252,8 @@ class Persons extends Component {
                 weekdayCountLimit: userGroup.weekdayCountLimit ? userGroup.weekdayCountLimit : '',
                 weekendCountLimit: userGroup.weekendCountLimit ? userGroup.weekendCountLimit : ''
             });
+            console.log('userGroupState', state);
+
         }
         else {
             this.setState({
@@ -270,6 +266,7 @@ class Persons extends Component {
                 weekdayCountLimit: ' ',
                 weekendCountLimit: ' '
             });
+            console.log('userGroupState DEğil', state);
         }
     };
 
@@ -288,6 +285,15 @@ class Persons extends Component {
         this.props.searchUser(searchParam, this.props.defaultUsers);
     }
 
+    setDefaultCheck = (weekdayCountLimit, weekendCountLimit) => {
+        
+        let isChecked = false;
+        if ((weekdayCountLimit == 0 || weekdayCountLimit == '') && (weekendCountLimit == 0 || weekendCountLimit == '')) {
+            isChecked = true;
+        }
+        return isChecked;
+    }
+
     render() {
 
         const { name, email, password, submitted, workStartDate } = this.state;
@@ -296,8 +302,9 @@ class Persons extends Component {
         let usersCount = 0;
 
         if (this.props.users) {
-
-            users = this.props.users.map((user) => (
+            console.log('updated',this.props.users);
+            
+            users = this.paginate(this.props.users).map((user) => (
                 <Person
                     key={user.user.id}
                     id={user.user.id}
@@ -307,7 +314,10 @@ class Persons extends Component {
                     email={user.user.email}
                     weekdayCountLimit={user.weekdayCountLimit}
                     weekendCountLimit={user.weekendCountLimit}
-                    personDayLimitHandle={(event) => this.personDayLimitHandle(event, user.user.id, user.id)}
+                    defaultChecked={this.setDefaultCheck(user.weekdayCountLimit, user.weekendCountLimit)}
+                    // personDayLimitHandle={(event) => this.personDayLimitHandle(event, user.user.id, user.id)}
+                    personDayLimitHandle={(event) => this.personDayLimitHandle(event, user)}
+
                     editClick={() => this.toggleModal("editModal", user)}
                     deleteClick={() => this.toggleModal("deleteModal", user)}
                 />
@@ -684,8 +694,8 @@ const mapDispatchToProps = dispatch => {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         searchUser: (filterKey, defaultUsers) => dispatch(actions.searchUser(filterKey, defaultUsers)),
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
-        deleteUser: (userGroupId, filterData) => dispatch(actions.deleteUserGroup(userGroupId, filterData)),
-        updateUser: (userId, userData, userGroupId, countLimits, filterData,users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData,users)),
+        deleteUser: (userGroupId, filterData, users, defaultUsers) => dispatch(actions.deleteUserGroup(userGroupId, filterData, users, defaultUsers)),
+        updateUser: (userId, userData, userGroupId, countLimits, filterData, users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData, users)),
         cleanFlagUser: () => dispatch(actions.cleanFlagsUsers())
     };
 };

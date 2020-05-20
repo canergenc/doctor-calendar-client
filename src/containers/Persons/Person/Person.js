@@ -11,6 +11,11 @@ import {
 
 class Person extends Component {
     render() {
+
+        console.log('defaultChecked',this.props.defaultChecked );
+
+
+        
         const momentRange = extendMoment(moment);
 
         const workStartDate = moment(this.props.workStartDate).format('YYYY-MM-DD');
@@ -34,7 +39,7 @@ class Person extends Component {
                             name="weekend"
                             ref={this.props.userGroupId}
                             onClick={this.props.personDayLimitHandle}
-                            defaultChecked={(this.props.weekdayCountLimit === 0 || !this.props.weekdayCountLimit) && (this.props.weekendCountLimit === 0 || !this.props.weekendCountLimit)}
+                            checked={this.props.defaultChecked}
                         />
                         <div className="state p-danger-o">
                             <label></label>

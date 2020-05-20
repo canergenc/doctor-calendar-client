@@ -59,8 +59,9 @@ class WaitingForApproved extends Component {
             currentIndex: 0,
             submitted: false,
             listOfPermission: [],
-            copyOfListOfPermission: [],
-            userId: ''
+            //copyOfListOfPermission: [],
+            userId: '',
+            searchParam:''
 
         }
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
@@ -68,13 +69,11 @@ class WaitingForApproved extends Component {
         this.getPermissionsBySearch = this.getPermissionsBySearch.bind(this);
         this.refreshPermissions = this.refreshPermissions.bind(this);
         this.keyPress = this.keyPress.bind(this);
-        // this.searchPermission = this.searchPermission.bind(this);
 
     }
 
     loadPermissions() {
         this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.currentIndex));
-        this.props.getCalendarsCount(permissionHelper.getWaitingForApproveCountFilter())
     }
 
     loadUsers() {
@@ -82,28 +81,25 @@ class WaitingForApproved extends Component {
     }
 
     componentDidMount() {
+
         this.loadPermissions();
         this.loadUsers();
     }
 
     approvePermisson(item) {
-        console.log('item', item);
-
         const data = {
             status: CalendarStatus.Approve
         }
-
-        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex)
+        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex,this.state.searchParam);
         const filterOfApproved = permissionHelper.getApprovedFilter(0);
-
         this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
-        this.setState({ searchParam: '' });
-        //this.props.patchPermisson(filter, data, this.waitingForApproveFilter, this.approvedFilter);
+        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
+        this.setState({ searchParam: this.state.searchParam });
     }
 
     rejectPermission(item) {
-        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex)
-        const filterOfApproved = permissionHelper.getApprovedFilter(0);
+        
+        
         MySwal.fire({
             title: 'Lütfen iptal nedenini giriniz',
             input: 'text',
@@ -118,12 +114,15 @@ class WaitingForApproved extends Component {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.value) {
+                const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex,this.state.searchParam)
+                const filterOfApproved = permissionHelper.getApprovedFilter(0);
                 const data = {
                     status: CalendarStatus.Reject,
                     description: result.value
                 }
                 this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved);
-                this.setState({ searchParam: '' });
+                this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
+                 this.setState({ searchParam: this.state.searchParam });
 
             }
         })
@@ -179,7 +178,7 @@ class WaitingForApproved extends Component {
     getPermissionsBySearch() {
         console.log(this.state.searchParam);
         if (this.state.searchParam) {
-            this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(this.state.searchParam));
+            this.props.getPermissions(permissionHelper.getWaitingForApproveSearchFilter(this.state.searchParam));
         } else {
             this.refreshPermissions();
         }
@@ -187,7 +186,7 @@ class WaitingForApproved extends Component {
 
     refreshPermissions() {
         this.setState({ searchParam: "" });
-        this.props.getPermissions(permissionHelper.getWaitingForApproveFilter());
+        this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(0));
     }
 
     inputChangeHandle(event) {
@@ -220,7 +219,7 @@ class WaitingForApproved extends Component {
         if (e.keyCode === 13) {
             console.log('value', e.target.value);
             if (e.target.value) {
-                this.props.getPermissions(permissionHelper.getWaitingForApproveFilter(e.target.value));
+                this.props.getPermissions(permissionHelper.getWaitingForApproveSearchFilter(e.target.value));
             } else {
                 this.refreshPermissions();
 
@@ -260,9 +259,7 @@ class WaitingForApproved extends Component {
         }
 
         if (this.props.permissions) {
-            this.state.listOfPermission = this.props.permissions.filter((p) => {
-                return p.id && p.user && p.startDate && p.endDate;
-            })
+            this.state.listOfPermission = this.props.permissions;
 
             this.state.listOfPermission = this.state.listOfPermission.map((p) => (
                 <tr key={p.id}>
@@ -285,7 +282,7 @@ class WaitingForApproved extends Component {
                     </td>
                 </tr>
             ));
-            this.state.copyOfListOfPermission = this.state.listOfPermission;
+            //this.state.copyOfListOfPermission = this.state.listOfPermission;
         }
 
         return (
@@ -472,7 +469,7 @@ class WaitingForApproved extends Component {
                                     alignSelf: 'center',
                                     justifyContent: 'center'
                                 }} >
-                                    <p>Onay bekleyen kayıt bulunmamaktadır.</p>
+                                    <p>Kayıt bulunmamaktadır.</p>
                                 </div>}
                         </tbody>
                     </Table>
@@ -494,21 +491,21 @@ const mapStateToProps = state => {
         users: state.users.users,
         permissions: state.permission.responseOnGetPermission,
         errorMessageAtGet: state.permission.statusTexAtGet,
-        calendarsCount: state.reminders.calendarsCount,
         statusTextAtCreatePermission: state.permission.statusTextAtCreatePermission,
         statusTextAtUpdatePermission: state.permission.statusTextAtUpdatePermission,
         createPermissionReqLoading: state.permission.createPermissionReqLoading,
         responseOnCreatePermission: state.permission.responseOnCreatePermission,
         globalUsers: state.users.globalUsers,
+        totalPermissionCount: state.permission.permissionCount,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         getUsers: (filterData) => dispatch(actions.getUsers(filterData)),
-        getCalendarsCount: (filterData) => dispatch(actions.getRemindersCount(filterData)),
         getPermissions: (filterData) => dispatch(actions.permission.getPermissions(filterData)),
         createPermissions: (data) => dispatch(actions.permission.createPermission(data)),
+        getPermissionsCount: (filter) => dispatch(actions.permission.getPermissionsCount(filter)),
         updatePermission: (id, data, filterOfWaitingFor, filterOfApproved) => dispatch(actions.permission.updatePermission(id, data, filterOfWaitingFor, filterOfApproved)),
     };
 };

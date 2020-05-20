@@ -8,8 +8,8 @@ export const setUsers = (users, defaultUsers) => {
         type: actionTypes.SET_USERS,
         users: users,
         defaultUsers: defaultUsers,
-        defaultUsersCount:defaultUsers.length,
-        usersCount:users.length,
+        defaultUsersCount: defaultUsers.length,
+        usersCount: users.length,
 
     };
 };
@@ -42,7 +42,7 @@ export const fetchGlobalUsersFailed = (error) => {
 
 export const getGroupUsersCount = (filterData) => {
     return dispatch => {
-       
+
         userService.getGroupUsersCount(filterData)
             .then(res => {
 
@@ -90,9 +90,9 @@ export const searchUser = (filterKey, defaultUsers) => {
                     return (
 
                         row.user.email &&
-                            row.user.email.toLowerCase().includes(filterKey.toLowerCase().trim())
+                        row.user.email.toLowerCase().includes(filterKey.toLowerCase().trim())
 
-                            ||
+                        ||
 
                         (row.user.fullName &&
                             row.user.fullName.toLowerCase().includes(filterKey.toLowerCase().trim()))
@@ -159,6 +159,10 @@ export const findUser = (filterKey, users) => {
 }
 
 export const deleteUser = (userId, filterData) => {
+
+
+
+
     return dispatch => {
         userService.deleteUserService(userId).then(result => {
             dispatch(getUsers(filterData));
@@ -183,21 +187,30 @@ export const deleteUserFailed = (error) => {
 };
 
 
-export const deleteUserGroup = (userGroupId, filterData) => {
+export const deleteUserGroup = ( userGroupId, filterData, users,defaultUsers) => {
+
     return dispatch => {
         userGroupService.deleteUserGroup(userGroupId).then(result => {
-            dispatch(getUsers(filterData));
-            dispatch(deleteUserGroupSuccess(userGroupId));
+            console.log(defaultUsers);
+            
+            let deleteddefaultUserIndex=defaultUsers.findIndex(u => u.id === userGroupId);
+            defaultUsers.splice(deleteddefaultUserIndex, 1);
+            let deletedUserindex = users.findIndex(u => u.id === userGroupId);
+            users.splice(deletedUserindex, 1);
+            dispatch(deleteUserGroupSuccess(userGroupId, users,defaultUsers));
         }).catch(error => {
             dispatch(deleteUserFailed(error));
         });
     };
 };
 
-export const deleteUserGroupSuccess = (id) => {
+export const deleteUserGroupSuccess = (id, users,defaultUsers) => {
     return {
         type: actionTypes.DELETE_USER_GROUP_SUCCESS,
-        userId: id
+        userId: id,
+        users: users,
+        defaultUsers:defaultUsers,
+        usersCount: users.length,
     };
 };
 
@@ -244,16 +257,35 @@ export const createUserFailed = (error) => {
     };
 };
 
-export const updateUser = (userId, userData, userGroupId,countLimits, filterData,users) => {
+export const updateUser = (userId, userData, userGroupId, countLimits, filterData, listOfUser) => {
     return dispatch => {
         userService.updateUserService(userId, userData)
             .then(response => {
                 userGroupService.updateUserGroup(userGroupId, countLimits)
                     .then(response => {
+                        debugger;
 
-                        users[userId]=userData;
-                        //dispatch(getUsers(filterData));
-                        dispatch(updateUserSuccess(userId,userData,users))
+
+                        console.log('userData', userData);
+                        console.log('countLimits', countLimits);
+
+
+
+                        listOfUser.map((u) => {
+                            if (u.user.id == userId) {
+                                u.user.email = userData.email
+                                u.user.fullName = userData.fullName
+                                u.user.workStartDate = userData.workStartDate
+                                u.weekdayCountLimit = countLimits.weekdayCountLimit
+                                u.weekendCountLimit = countLimits.weekendCountLimit
+
+                            }
+                        })
+
+
+
+                        console.log('updUser->', listOfUser);
+                        dispatch(updateUserSuccess(userId, userData, listOfUser))
                     })
                     .catch(err => {
                         dispatch(updateUserFailed(err));
@@ -266,12 +298,12 @@ export const updateUser = (userId, userData, userGroupId,countLimits, filterData
     };
 };
 
-export const updateUserSuccess = (id,userData,users) => {
+export const updateUserSuccess = (id, userData, users) => {
     return {
         type: actionTypes.UPDATE_USER_SUCCESS,
         userId: id,
-        userData:userData,
-        users:users
+        userData: userData,
+        users: users
     };
 };
 
