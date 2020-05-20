@@ -125,3 +125,64 @@ a.bttn.disabled, fieldset:disabled a.bttn {
 .bttn-secondary:not(:disabled):not(.disabled):active:focus, .bttn-secondary:not(:disabled):not(.disabled).active:focus, .show>.bttn-secondary.dropdown-toggle:focus {
     box-shadow: none, 0 0 0 0 rgba(247, 250, 252, 0.5);
 }
+
+
+@media (max-width: 2560px) {
+    .specialTable {
+        
+        table-layout: fixed;
+        width:100%;
+        overflow-x:auto
+    }
+
+    .searchPermission{
+        width: 40%;
+    }
+}
+
+@media (max-width: 1440px) {
+    
+    .searchPermission{
+        width: 30%;
+    }
+    
+}
+
+
+@media (max-width: 1024px) {
+    .specialTable {
+        display: block;
+        table-layout: auto;
+        width:100%;
+        overflow-x:auto
+    }
+    .searchPermission{
+        width: 60%;
+    }
+}
+
+@media (max-width: 768px) {
+    .permissions {
+        padding-top: 60px;
+    }
+    .searchPermission{
+        width: 75%;
+    }
+    .btnPermission{
+        margin-left: 0px;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 425px) {
+    .permissions {
+        padding-top: 50px;
+    }
+    .searchPermission{
+        width: 100%;
+    }
+}
+
+
+
+

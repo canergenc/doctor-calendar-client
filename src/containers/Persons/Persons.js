@@ -178,8 +178,36 @@ class Persons extends Component {
         }
     }
 
-    renderTableData() {
-        this.props.onInitUsers(personHelper.getFilter());
+    getUsersBySearch() {
+        if (this.state.searchParam) {
+            this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
+            this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
+        } else {
+            this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
+            this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
+        }
+    }
+
+    keyPress(e) {
+        if (e.keyCode === 13) {
+            if (e.target.value) {
+                const param = e.target.value;
+                this.props.onInitUsers(personHelper.getSearchFilter(param));
+                this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
+            } else {
+                this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
+                this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
+            }
+        }
+    }
+
+    renderTableData(index) {
+        this.props.onInitUsers(personHelper.getFilter(index));
+    }
+
+    refreshTable(index) {
+        this.renderTableData(index);
+        this.setState({ isShowPagination: true, searchParam: '', searchSubmitted: false });
     }
 
     componentDidMount() {
@@ -211,7 +239,6 @@ class Persons extends Component {
 
 
         }
-
     }
 
     personDayLimitHandle = (event, userModel) => {
@@ -575,7 +602,7 @@ class Persons extends Component {
                 </Modal>
 
                 {/* Page content */}
-                <Container style={{ marginTop: "-12rem" }} fluid>
+                <Container style={{ marginTop: "-12rem" }} className="persons" fluid>
                     {/* Table */}
                     <Row>
                         <div className="col">
@@ -583,41 +610,30 @@ class Persons extends Component {
                                 <CardHeader className="border-0">
 
                                     <Row className="align-items-center">
-                                        <Col xs="6">
-                                            <Input value={this.state.searchParam} name="searchInput" placeholder="Kullanıcı ara ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
-
-                                        </Col>
-
-                                        {/* <Col xs="2">
-
+                                        <Col xl="9" lg="9" md="8" sm="9" xs="7">
+                                            <Input name="searchInput" className="searchPerson" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
                                             <Button
                                                 color="secondary"
-
+                                                className="btnPerson"
                                                 onClick={e => this.getUsersBySearch()}
                                                 size="lg"
-
-
+                                                style={{ display: "inline-block" }}
                                             >
                                                 <i className="fas fa-search fa-lg"></i>
                                             </Button>
 
-
                                             <Button
                                                 color="secondary"
-
+                                                className="btnPerson"
                                                 onClick={e => this.refreshTable(this.state.currentIndex)}
                                                 size="lg"
-
+                                                style={{ display: "inline-block" }}
                                             >
                                                 <i className="fas fa-sync-alt fa-lg"></i>
                                             </Button>
+                                        </Col>
 
-                                        </Col> */}
-
-
-
-
-                                        <Col className="text-right" xs="6">
+                                        <Col className="text-right" xl="3" lg="3" md="4" sm="3" xs="5">
                                             <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
@@ -631,8 +647,8 @@ class Persons extends Component {
 
 
                                 </CardHeader>
-                                <Table className="align-items-center table-flush" >
-                                    <thead className="thead-light">
+                                <Table className="align-items-center table-flush specialTablePrs" >
+                                    <thead className="thead-light" >
                                         <tr>
                                             <th scope="col">Ad Soyad</th>
                                             <th scope="col">Kıdem</th>
@@ -643,7 +659,7 @@ class Persons extends Component {
                                             <th scope="col" className="text-right">İşlemler</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody >
                                         {users}
                                     </tbody>
                                 </Table>

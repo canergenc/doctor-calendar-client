@@ -10,6 +10,7 @@ import {
     Card,
     CardHeader,
     CardFooter,
+    Col,
     Table,
     Container,
     Row,
@@ -251,11 +252,11 @@ class Locations extends Component {
                                     <span className="span"></span>
                                 </div>
                             </td>
-                            <td>{location.name}</td>
-                            <td>
+                            <td ><div style={{display:"block", wordWrap:"break-word"}}>{location.name}</div></td>
+                            <td >
                                 <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
-                            <td className="text-right">
+                            <td className="text-right" >
                                 <UncontrolledDropdown>
                                     <DropdownToggle className="btn-icon-only text-light" size="sm" role="button" onClick={e => e.preventDefault()}>
                                         <i className="fas fa-ellipsis-v" />
@@ -440,40 +441,38 @@ class Locations extends Component {
                     </div>
                 </Modal>
                 {/* Page content */}
-                <Container style={{ marginTop: "-12rem" }} fluid>
+                <Container style={{ marginTop: "-12rem" }} className="locationsListSpec" fluid>
                     {/* Table */}
 
                     <Row>
                         <div className="col">
                             <Card className="shadow">
                                 <CardHeader className="border-0">
-                                    <div className="row">
-                                        <div className="col-md-3">
+                                    <Row>
+                                        <Col xl="10" lg="9" md="8" sm="7" xs="7">
                                             <h3 className="mb-0" style={{ display: "inline-block" }}>Lokasyon Listesi</h3>
                                             <Button
                                                 color="secondary"
+                                                className="btnLoc"
                                                 onClick={() => this.renderTableData()}
                                                 size="lg"
                                             >
                                                 <i className="fas fa-sync-alt fa-lg"></i>
                                             </Button>
-                                        </div>
-                                        <div className="col-md-8">
-
-                                        </div>
-                                        <div className="col-md-1">
-                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
+                                        </Col>
+                                        <Col  xl="2" lg="3" md="4" sm="5" xs="5">
+                                            <Button color="primary" type="submit"  onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
                                                 </span>
                                                 <span className="btn-inner--text">Yeni</span>
                                             </Button>
-                                        </div>
-                                    </div>
+                                        </Col>
+                                    </Row>
 
                                 </CardHeader>
                                 <DragDropContext onDragEnd={this.onDragEnd}>
-                                    <Table className="align-items-center table-flush">
+                                    <Table className="align-items-center table-flush specialTableLoc" >
                                         <thead className="thead-light">
                                             <tr>
                                                 <th scope="col"></th>

@@ -25,6 +25,8 @@ import Swal from 'sweetalert2';
 import UserHeader from "../../components/Headers/UserHeader.jsx";
 import { helperService } from "../../services";
 
+import "./Profile.css"
+
 const MySwal = withReactContent(Swal)
 
 class Profile extends React.Component {
@@ -56,10 +58,6 @@ class Profile extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('component did update');
-    console.log(this.props.error);
-    console.log(this.props.crudSuccess);
-    
     if (this.props.error) {
       MySwal.fire({
         icon: 'error',
@@ -217,17 +215,17 @@ class Profile extends React.Component {
         </Modal>
 
         {/* Page content */}
-        <Container style={{ marginTop: "-12rem" }} fluid>
+        <Container style={{ marginTop: "-12rem" }} fluid className="profile"> 
           <Row>
 
             <Col className="order-xl-1" xl="12">
               <Card className="bg-secondary shadow">
                 <CardHeader className="bg-white border-0">
                   <Row className="align-items-center">
-                    <Col xs="9">
+                    <Col xl="8" lg="6" md="3" sm="2" xs="3">
                       <h3 className="mb-0">Hesabım</h3>
                     </Col>
-                    <Col className="text-right" xs="1">
+                    <Col className="text-right" xl="4" lg="6"  md="9" sm="10" xs="9">
                       <Button
                         type="button"
                         color="primary"
@@ -236,8 +234,6 @@ class Profile extends React.Component {
                       >
                         GÜNCELLE
                       </Button>
-                    </Col>
-                    <Col className="text-right" xs="1">
                       <Button
                         type="button"
                         color="success"
@@ -326,7 +322,7 @@ const mapStateToProps = state => {
     statusText: state.userInfo.statusText,
     error: state.userInfo.error,
     crudSuccess: state.userInfo.crudSuccess,
-    message:state.userInfo.message
+    message: state.userInfo.message
   };
 }
 const mapDispatchToProps = dispatch => {

@@ -12,3 +12,62 @@
     color: black;
     caret-color: black;
 }
+
+@media (max-width: 2560px) {
+    .specialTablePrs {
+        
+        table-layout: fixed;
+        width:100%;
+        overflow-x:auto
+    }
+
+    .searchPerson{
+        width: 40%;
+    }
+}
+
+
+@media (max-width: 1440px) {
+    .specialTablePrs {
+        display: block;
+        table-layout: auto;
+        width:100%;
+        overflow-x:auto
+    }
+    .searchPerson{
+        width: 30%;
+    }
+    
+}
+
+@media (max-width: 1024px) {
+    
+    .searchPerson{
+        width: 60%;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .persons {
+        padding-top: 60px;
+    }
+    .searchPerson{
+        width: 75%;
+    }
+    .btnPerson{
+        margin-left: 0px;
+        margin-top: 10px;
+    }
+}
+
+
+@media (max-width: 425px) {
+    .persons {
+        padding-top: 50px;
+    }
+    .searchPerson{
+        width: 100%;
+    }
+}
+

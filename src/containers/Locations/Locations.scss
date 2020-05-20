@@ -331,3 +331,44 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 .scroll-menu-arrow--disabled {
   visibility: hidden;
 }
+
+@media (max-width: 2560px) {
+  .specialTableLoc {   
+      table-layout: fixed;
+      width:100%;
+      overflow-x:auto
+  }
+}
+
+@media (max-width: 1440px) {
+
+}
+
+@media (max-width: 1024px) {
+  
+
+}
+
+@media (max-width: 768px) {
+  .locationsListSpec {
+    padding-top: 60px;
+  }
+
+  .specialTableLoc {
+    display: block;
+    table-layout: auto;
+    width:100%;
+    overflow-x:auto
+  }
+
+
+}
+
+@media (max-width: 425px) {
+  .locationsListSpec {
+      padding-top: 50px;
+  }
+  .btnLoc{
+    margin-left: 0px;
+  }
+}

@@ -343,10 +343,11 @@ export const updateReminderSuccess = (id) => {
   };
 };
 
-export const updateReminderFail = (error) => {
+export const updateReminderFail = (error, index) => {
   return {
     type: actionTypes.UPDATE_REMINDER_FAIL,
-    errorObj: error
+    errorObj: error,
+    index: index
   };
 };
 
