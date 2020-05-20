@@ -120,17 +120,17 @@ class GroupSettings extends React.Component {
 
     return (<>
       <UserHeader />
-      <Container style={{ marginTop: "-12rem" }} className="groupSettings" fluid>
+      <Container style={{ marginTop: "-12rem" }} fluid className="groupSettings">
         <Row>
 
-          <Col  xl="12">
+          <Col className="order-xl-1" xl="12">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xl="9" lg="8" md="8" xs="5" >
                     <h3 className="mb-0">Takvim Ayarları</h3>
                   </Col>
-                  <Col className="text-right"  xl="3" lg="4" md="4"  xs="7">
+                  <Col className="text-right" xl="3" lg="4" md="4" xs="7">
                     <Button
                       type="button"
                       color="primary"
@@ -143,118 +143,114 @@ class GroupSettings extends React.Component {
                 </Row>
               </CardHeader>
               <CardBody>
-
-                <div className="pl-lg-4">
-                  <Row>
-                    <Col lg="6" className="formRow">
-                      <Form inline>
-                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                          <Label
-                            className="form-control-label mr-sm-2"
-                            htmlFor="checkbox-weekday"
-                          >
-                            Haftaiçi Kontrolü
+                <Form>
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col lg="6" className="formRow">
+                        <Form inline>
+                            <Label
+                              className="form-control-label mr-sm-2"
+                              htmlFor="checkbox-weekday"
+                            >
+                              Haftaiçi Kontrolü
                             </Label>
-                          <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
-                            <input
-                              type="checkbox"
-                              name="weekday"
-                              ref="weekday"
-                              onClick={event => this.inputChangeHandle(event)}
-                              defaultChecked={this.props.isWeekdayControl}
-                            />
-                            <div className="state p-success-o">
-                              <label></label>
+                            <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                              <input
+                                type="checkbox"
+                                name="weekday"
+                                ref="weekday"
+                                onClick={event => this.inputChangeHandle(event)}
+                                defaultChecked={this.props.isWeekdayControl}
+                              />
+                              <div className="state p-success-o">
+                                <label></label>
+                              </div>
                             </div>
-                          </div>
-                        </FormGroup>
-                      </Form>
-                    </Col>
-                    <Col lg="6">
-                      <Form inline>
-                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                        </Form>
+                      </Col>
+                      <Col lg="6">
+                        <Form inline>
+                          <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 
-                          <Label
-                            className="form-control-label mr-sm-2"
-                            htmlFor="checkbox-weekend"
-                          >
-                            Haftasonu Kontrolü
+                            <Label
+                              className="form-control-label mr-sm-2"
+                              htmlFor="checkbox-weekend"
+                            >
+                              Haftasonu Kontrolü
                             </Label>
-                          <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
-                            <input
-                              type="checkbox"
-                              name="weekend"
-                              ref="weekend"
-                              onClick={event => this.inputChangeHandle(event)}
-                              defaultChecked={this.props.isWeekendControl}
-                            />
-                            <div className="state p-success-o">
-                              <label></label>
+                            <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                              <input
+                                type="checkbox"
+                                name="weekend"
+                                ref="weekend"
+                                onClick={event => this.inputChangeHandle(event)}
+                                defaultChecked={this.props.isWeekendControl}
+                              />
+                              <div className="state p-success-o">
+                                <label></label>
+                              </div>
                             </div>
-                          </div>
 
-                        </FormGroup>
-                      </Form>
-                    </Col>
+                          </FormGroup>
+                        </Form>
+                      </Col>
 
-                  </Row>
+                    </Row>
 
-                  <Row style={{ marginTop: "25px" }}>
-                    <Col lg="6"  className="formRow">
-                      <Form inline>
-                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0 ">
+                    <Row style={{ marginTop: "25px" }}>
+                      <Col lg="6" className="formRow">
+                        <Form inline>
+                          <FormGroup className="mb-2 mr-sm-2 mb-sm-0 ">
 
-                          <Label
-                            className="form-control-label mr-sm-2"
-                            htmlFor="sequentialOrderLimitCount"
-                          >
-                            Maksimum Ardışık Nöbet Sınırı
+                            <Label
+                              className="form-control-label mr-sm-2"
+                              htmlFor="sequentialOrderLimitCount"
+                            >
+                              Maksimum Ardışık Nöbet Sınırı
                             </Label>
-                          <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
+                            <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
 
-                        </FormGroup>
-                      </Form>
-                    </Col>
-                    <Col lg="6">
-                      <Form inline>
-                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                          <Label
-                            className="form-control-label mr-sm-2"
-                            htmlFor="checkbox-locationDayLimit"
-                          >
-                            Maksimum Lokasyon - Gün Sınırı
+                          </FormGroup>
+                        </Form>
+                      </Col>
+                      <Col lg="6">
+                        <Form inline>
+                            <Label
+                              className="form-control-label"
+                              htmlFor="checkbox-locationDayLimit"
+                            >
+                              Maksimum Lokasyon - Gün Sınırı
                             </Label>
 
-                          <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
-                            <input
-                              type="checkbox"
-                              name="locationDayLimit"
-                              ref="locationDayLimit"
-                              onClick={event => this.inputChangeHandle(event)}
-                              defaultChecked={this.props.locationDayLimit}
-                            />
-                            <div className="state p-success-o">
-                              <label></label>
+                            <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
+                              <input
+                                type="checkbox"
+                                name="locationDayLimit"
+                                ref="locationDayLimit"
+                                onClick={event => this.inputChangeHandle(event)}
+                                defaultChecked={this.props.locationDayLimit}
+                              />
+                              <div className="state p-success-o">
+                                <label></label>
+                              </div>
                             </div>
-                          </div>
-                          <input
-                            id="locationDayLimitCount"
-                            name="locationDayLimitCount"
-                            className="specialInput"
-                            type="number"
-                            min="0"
-                            width="60px"
-                            defaultValue={this.props.locationDayLimitCount}
-                            disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
-                            onChange={(event) => this.inputChangeHandle(event)}
-                          />
-                        </FormGroup>
-                      </Form>
-                    </Col>
-                  </Row>
+                            <input
+                              id="locationDayLimitCount"
+                              name="locationDayLimitCount"
+                              className="specialInput"
+                              type="number"
+                              min="0"
+                              defaultValue={this.props.locationDayLimitCount}
+                              disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
+                              onChange={(event) => this.inputChangeHandle(event)}
+                            />
+                        </Form>
+                      </Col>
+                    </Row>
 
-                </div>
+                  </div>
                 <hr className="my-4" />
+                </Form>
 
               </CardBody>
             </Card>

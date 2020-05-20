@@ -215,7 +215,6 @@ class Persons extends Component {
         const today = new Date();
         this.setState({ maxDate: today });
         this.renderTableData(this.state.currentIndex);
-        this.getUserCount();
     }
 
     getUserCount() {
@@ -238,13 +237,17 @@ class Persons extends Component {
             MySwal.fire({
                 icon: 'success',
                 title: 'Başarılı',
-                text: this.props.message
+                text: this.props.message,
+                showConfirmButton: true
+
+            }).then((result) => {
+                //getUsers();
+                
+                // this.props.onInitUsers(personHelper.getFilter());
+                if (this.state.searchParam) {
+                    this.searchUser(this.state.searchParam);
+                }
             });
-            this.getUserCount();
-            this.props.cleanFlagUser();
-            this.setState({ submitted: false });
-            this.setState({ isShowPagination: this.state.searchParam && this.state.searchSubmitted ? false : true })
-            this.setState({ searchParam: this.state.searchParam && !this.state.searchSubmitted ? '' : this.state.searchParam })
         }
     }
 

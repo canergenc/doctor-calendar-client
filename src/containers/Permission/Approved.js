@@ -148,7 +148,7 @@ class Approved extends Component {
 
                 <CardHeader style={{ paddingLeft: '0.5rem' }} className="border-0">
                     <Row className="align-items-center">
-                        <Col xl="12" lg="12" md="12" sm="12"  xs="12">
+                        <Col xl="9" lg="9" md="8" sm="9"  xs="7">
                             <Input name="searchPermission" className="searchPermission" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
                             <Button
                                 color="secondary"
@@ -168,6 +168,9 @@ class Approved extends Component {
                             >
                                 <i className="fas fa-sync-alt fa-lg"></i>
                             </Button>
+                        </Col>
+                        <Col xl="3" lg="3" md="4" sm="3"  xs="5">
+
                         </Col>
 
                     </Row>
