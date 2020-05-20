@@ -412,32 +412,30 @@ class WaitingForApproved extends Component {
 
                     <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
                         <Row className="align-items-center">
-                            <Col xs="3">
-                                <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
-
-                            </Col>
-
-                            <Col xs="2">
-
+                            <Col xl="9" lg="9" md="8" sm="9"  xs="7">
+                                <Input name="searchPermission" className="searchPermission"  style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
                                 <Button
                                     color="secondary"
+                                    className="btnPermission"
                                     onClick={e => this.getPermissionsBySearch()}
                                     size="lg"
+                                    style={{ display: "inline-block" }}
                                 >
                                     <i className="fas fa-search fa-lg"></i>
                                 </Button>
 
                                 <Button
                                     color="secondary"
+                                    className="btnPermission"
                                     onClick={e => this.refreshPermissions()}
                                     size="lg"
+                                    style={{ display: "inline-block" }}
                                 >
                                     <i className="fas fa-sync-alt fa-lg"></i>
                                 </Button>
-
                             </Col>
 
-                            <Col className="text-right" xs="7">
+                            <Col className="text-right" xl="3" lg="3" md="4" sm="3"  xs="5">
                                 <Button
                                     color="primary"
                                     onClick={e => this.openCreateModal()}
@@ -452,7 +450,7 @@ class WaitingForApproved extends Component {
                         </Row>
                     </CardHeader>
 
-                    <Table className="align-items-center table-flush" >
+                    <Table className="align-items-center table-flush specialTable"  >
 
                         <thead className="thead-light">
                             <tr>

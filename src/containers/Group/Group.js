@@ -120,20 +120,17 @@ class GroupSettings extends React.Component {
 
     return (<>
       <UserHeader />
-      <Container style={{ marginTop: "-12rem" }} fluid>
+      <Container style={{ marginTop: "-12rem" }} className="groupSettings" fluid>
         <Row>
 
-          <Col className="order-xl-1" xl="12">
+          <Col  xl="12">
             <Card className="bg-secondary shadow">
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
-                  <Col xs="9">
+                  <Col xl="9" lg="8" md="8" xs="5" >
                     <h3 className="mb-0">Takvim Ayarları</h3>
                   </Col>
-                  <Col className="text-right" xs="1">
-
-                  </Col>
-                  <Col className="text-right" xs="1">
+                  <Col className="text-right"  xl="3" lg="4" md="4"  xs="7">
                     <Button
                       type="button"
                       color="primary"
@@ -149,7 +146,7 @@ class GroupSettings extends React.Component {
 
                 <div className="pl-lg-4">
                   <Row>
-                    <Col lg="6">
+                    <Col lg="6" className="formRow">
                       <Form inline>
                         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                           <Label
@@ -203,9 +200,9 @@ class GroupSettings extends React.Component {
                   </Row>
 
                   <Row style={{ marginTop: "25px" }}>
-                    <Col lg="6">
+                    <Col lg="6"  className="formRow">
                       <Form inline>
-                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                        <FormGroup className="mb-2 mr-sm-2 mb-sm-0 ">
 
                           <Label
                             className="form-control-label mr-sm-2"
@@ -213,7 +210,7 @@ class GroupSettings extends React.Component {
                           >
                             Maksimum Ardışık Nöbet Sınırı
                             </Label>
-                          <Input id="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
+                          <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
 
                         </FormGroup>
                       </Form>

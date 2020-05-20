@@ -148,15 +148,13 @@ class Approved extends Component {
 
                 <CardHeader style={{ paddingLeft: '0.5rem' }} className="border-0">
                     <Row className="align-items-center">
-                        <Col xs="3">
-                            <Input name="searchPermission" onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
-                        </Col>
-
-                        <Col xs="2">
+                        <Col xl="12" lg="12" md="12" sm="12"  xs="12">
+                            <Input name="searchPermission" className="searchPermission" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
                             <Button
                                 color="secondary"
                                 onClick={e => this.getPermissionsBySearch()}
                                 size="lg"
+                                style={{ display: "inline-block" }}
                             >
                                 <i className="fas fa-search fa-lg"></i>
                             </Button>
@@ -166,21 +164,18 @@ class Approved extends Component {
 
                                 onClick={e => this.refreshPermissions()}
                                 size="lg"
-
+                                style={{ display: "inline-block" }}
                             >
                                 <i className="fas fa-sync-alt fa-lg"></i>
                             </Button>
-
                         </Col>
-                        <Col className="text-right" xs="7">
 
-                        </Col>
                     </Row>
                 </CardHeader>
 
 
 
-                <Table className="align-items-center table-flush" responsive>
+                <Table className="align-items-center table-flush specialTable" >
                     <thead className="thead-light">
                         <tr>
                             <th scope="col">İsim Soyisim</th>

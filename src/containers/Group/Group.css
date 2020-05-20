@@ -19,3 +19,38 @@
 .specialInput:disabled{
     background-color: #e9ecef;
 }
+
+@media (max-width: 1024px) {
+    
+    .sequentialOrderLimitCount{
+        max-width: 25%;
+    }
+    .specialInput{
+        max-width: 10%;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .groupSettings {
+        padding-top: 60px;
+    }
+    .sequentialOrderLimitCount{
+        max-width: 20%;
+    }
+    .formRow{
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 425px) {
+    .groupSettings {
+        padding-top: 50px;
+    }
+    .sequentialOrderLimitCount{
+        max-width: 20%;   
+    }
+    .formRow{
+        margin-bottom: 10px;
+    }
+}

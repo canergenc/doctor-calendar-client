@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+    .profile {
+        padding-top: 60px;
+    }
+}
+
+@media (max-width: 425px) {
+    .profile {
+        padding-top: 50px;
+    }
+}
