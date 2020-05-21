@@ -253,7 +253,7 @@ class Locations extends Component {
                                 </div>
                             </td>
                             <td ><div style={{display:"block", wordWrap:"break-word"}}>{location.name}</div></td>
-                            <td >
+                            <td className="color-right-resp" >
                                 <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
                             <td className="text-right" >
@@ -477,7 +477,7 @@ class Locations extends Component {
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">Adı</th>
-                                                <th scope="col">Renk</th>
+                                                <th scope="col" className="color-right-resp">Renk</th>
                                                 <th scope="col" className="text-right">İşlemler</th>
                                             </tr>
                                         </thead>

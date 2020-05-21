@@ -345,7 +345,9 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
 }
 
 @media (max-width: 1024px) {
-  
+  .color-right-resp{
+    text-align: right;
+  }
 
 }
 

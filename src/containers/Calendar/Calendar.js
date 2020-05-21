@@ -431,8 +431,8 @@ const mapStateToProps = state => {
   return {
     reminders: state.reminders.reminders,
     filterData: state.reminders.filterData,
-    locations: state.locations.locations,
     error: state.reminders.error,
+    locations: state.locations.locations,
     curMonth: state.calendar.curMonth
   };
 };
