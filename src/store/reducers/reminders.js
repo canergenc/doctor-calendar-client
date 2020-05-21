@@ -99,8 +99,11 @@ const setReminders = (state, action) => {
 
 const fetchRemindersFailed = (state, action) => {
   const updatedState = {
-    error: true
-  };
+    loading: false,
+    crudSuccess: false,
+    error: true,
+    statusText: helperService.getErrorMessage(action.errorObj)
+  };  
   return updateObject(state, updatedState);
 }
 

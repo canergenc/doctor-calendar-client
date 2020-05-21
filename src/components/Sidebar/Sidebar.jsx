@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
-// nodejs library to set properties for components
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index';
 import { PropTypes } from "prop-types";
 
 // reactstrap components
@@ -13,7 +14,14 @@ import {
   Nav,
   Container,
   Row,
-  Col
+  Col,
+  DropdownMenu,
+  DropdownItem,
+  UncontrolledDropdown,
+  DropdownToggle,
+  Media
+
+
 } from "reactstrap";
 
 class Sidebar extends React.Component {
@@ -24,6 +32,22 @@ class Sidebar extends React.Component {
     super(props);
     this.activeRoute.bind(this);
   }
+
+  logOut() {
+    localStorage.clear();
+    history.push('/');
+  }
+
+
+
+  componentDidMount() {
+    if (!this.props.email) {
+      this.props.getUserInfo();
+    }
+
+  }
+
+
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -100,7 +124,31 @@ class Sidebar extends React.Component {
               />
             </NavbarBrand>
           ) : null}
-
+          <Nav className="align-items-center d-md-none">
+            <UncontrolledDropdown nav>
+              <DropdownToggle className="pr-0" nav>
+                <Media className="align-items-center">
+                  <span className="mb-0 text-sm font-weight-bold">
+                    {this.props.fullName}
+                  </span>
+                </Media>
+              </DropdownToggle>
+              <DropdownMenu className="dropdown-menu-arrow" right>
+                <DropdownItem className="noti-title" header tag="div">
+                  <h6 className="text-overflow m-0">Hoşgeldiniz!!</h6>
+                </DropdownItem>
+                <DropdownItem to="/admin/user-profile" tag={Link}>
+                  <i className="ni ni-single-02" />
+                  <span>Profilim</span>
+                </DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem onClick={this.logOut}>
+                  <i className="ni ni-user-run" />
+                  <span>Çıkış</span>
+                </DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </Nav>
           {/* Collapse */}
           <Collapse navbar isOpen={this.state.collapseOpen}>
             {/* Collapse header */}
@@ -166,4 +214,17 @@ Sidebar.propTypes = {
   })
 };
 
-export default Sidebar;
+
+const mapStateToProps = state => {
+  return {
+    fullName: state.userInfo.fullName,
+  };
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getUserInfo: () => dispatch(actions.userInfoActions.getUserInfo()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
