@@ -26,7 +26,7 @@ class Approved extends Component {
             count: 0
         }
         permissionHelper.getApprovedFilter = permissionHelper.getApprovedFilter.bind(this);
-        this.onChangePaginationItem = this.onChangePaginationItem.bind(this);
+        //this.onChangePaginationItem = this.onChangePaginationItem.bind(this);
         this.getPermissionsBySearch = this.getPermissionsBySearch.bind(this);
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
         this.refreshPermissions = this.refreshPermissions.bind(this);
@@ -49,34 +49,24 @@ class Approved extends Component {
     }
 
     componentDidMount() {
-        console.log('Did Mount Çalıştı');
-        
         this.loadPermissions();
-        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
-
-
     }
 
 
 
-    onChangePaginationItem(index) {
-        this.setState({ currentIndex: index });
-        this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(index));
-        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
-    }
+    // onChangePaginationItem(index) {
+    //     this.setState({ currentIndex: index });
+    //     this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(index));
+    // }
 
 
     revokePermission(item) {
-        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(0,this.state.searchParam);
+        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(0);
         const filterOfApproved = permissionHelper.getApprovedFilter(this.state.currentIndex, this.state.searchParam);
         const data = {
             status: CalendarStatus.WaitingForApprove
         }
-
         this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
-        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
-        
-       
     }
 
 
@@ -108,29 +98,15 @@ class Approved extends Component {
     refreshPermissions() {
         this.setState({ searchParam: "",searchSubmitted: false ,isShowPagination: true });
         this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0));
-        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
 
     }
 
-    componentDidUpdate() {
-
-        console.log(' Did Update Çalıştı');
-
-
-        //this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
-
-    }
-
-
-
+  
 
     render() {
 
 
-        if (this.props.permissionCount) {
-            console.log(this.props.permissionCount);
-
-        }
+       
 
 
         if (this.props.approvedPermissions) {
@@ -230,28 +206,25 @@ class Approved extends Component {
                     {this.props.permissionCount > 0 ?
                         <nav style={{ float: "right" }}>
 
-                            {this.state.searchSubmitted ?
+                            
 
                                 <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                    Toplam : {this.props.permissionCount}
-                                </div> :
-                                <div style={{ float: "left", margin: "6px 18px" }}>
+                                    Toplam : {this.state.listOfPermission.length}
+                                </div> 
+                               
 
-                                    Toplam : {this.props.totalPermissionCount}
-                                </div>
-
-                            }
+                            
 
 
-                            {
+                            {/* {
                                 this.state.isShowPagination &&
                                 <CustomPagination
                                     paginationItemCount={helperService.getPaginationItemCount(this.props.totalPermissionCount, constants.PAGESIZE_INPERMISSION_PAGE)}
                                     paginationItemClick={(index) => this.onChangePaginationItem(index)}
                                     currentIndex={this.state.currentIndex}
                                 />
-                            }
+                            } */}
 
 
 
