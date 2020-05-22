@@ -75,7 +75,7 @@ class User extends Component {
         const year = range.diff('years');
         const month = range.diff('months');
         const monthText = (month > 12 ? month % 12 : month) + "ay - ";
-        const seniority = year + "y" + monthText;
+        const seniority = year + "y " + monthText;
 
         return (
             <Draggable

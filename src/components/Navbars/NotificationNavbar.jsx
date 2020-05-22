@@ -72,14 +72,6 @@ class NotificationNavbar extends React.Component {
                     <i className="ni ni-single-02" />
                     <span>Profilim</span>
                   </DropdownItem>
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-calendar-grid-58" />
-                    <span>Aktivite</span>
-                  </DropdownItem> */}
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-support-16" />
-                    <span>Ayarlar</span>
-                  </DropdownItem> */}
                   <DropdownItem divider />
                   <DropdownItem  onClick={this.logOut}>
                     <i className="ni ni-user-run" />
@@ -97,11 +89,7 @@ class NotificationNavbar extends React.Component {
 
 
 const mapStateToProps = state => {
-
-  console.log(state);
-  
   return {
-    // email: state.userInfo.email,
     fullName: state.userInfo.fullName,
   };
 }

@@ -253,7 +253,7 @@ class Locations extends Component {
                                 </div>
                             </td>
                             <td ><div style={{display:"block", wordWrap:"break-word"}}>{location.name}</div></td>
-                            <td  className="color-right-resp">
+                            <td className="color-right-resp" >
                                 <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
                             <td className="text-right" >
