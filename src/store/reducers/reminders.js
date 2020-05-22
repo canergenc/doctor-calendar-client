@@ -117,8 +117,6 @@ const setRemindersForCrud = (state, action) => {
 }
 
 const startDownloading = (state, action) => {
-  console.log('start reducer');
-
   return updateObject(state, { downloading: true });
 }
 

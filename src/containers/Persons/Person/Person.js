@@ -11,10 +11,6 @@ import {
 
 class Person extends Component {
     render() {
-
-        console.log('defaultChecked',this.props.defaultChecked );
-
-
         
         const momentRange = extendMoment(moment);
 

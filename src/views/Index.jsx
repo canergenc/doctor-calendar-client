@@ -116,7 +116,6 @@ class Index extends Component {
 
         const reminderIndex = this.props.reminders.map(function (x) { return x.id; }).indexOf(reminderId);
 
-        console.log(reminderIndex);
 
         const reminder = {
           startDate: moment(destination.droppableId).format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]"),
@@ -124,7 +123,6 @@ class Index extends Component {
           userId: this.props.reminders[reminderIndex].userId,
           isWeekend: isWeekend
         }
-        console.log(reminder);
 
         this.props.updateReminder(reminderId, reminderIndex, reminder, this.props.filterData);
         break;
