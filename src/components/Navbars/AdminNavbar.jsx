@@ -40,28 +40,27 @@ class AdminNavbar extends React.Component {
     return (
       <>
 
-        
-        <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
+
+        <Navbar className="navbar-top navbar-dark" expand="xl" id="navbar-main">
 
           <Container fluid>
             <div
-              className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
+              className="h4 mb-0 text-white text-uppercase d-none d-xl-inline-block"
             >
-              {this.props.brandText }
+              {this.props.brandText}
             </div>
 
-            <Nav className="align-items-center d-none d-md-flex" navbar >
+            <Nav className="align-items-center d-none d-xl-flex" navbar >
 
               <UncontrolledDropdown nav>
                 <DropdownToggle className="pr-0" nav>
-                  <Media  className="align-items-center">
-                    <span  style={{backgroundColor:'transparent'}}  className="avatar avatar-sm rounded-circle">
-                      <img style={{backgroundColor:'transparent', width:'75%',height:'75%' }} 
+                  <Media className="align-items-center">
+                    <span style={{ backgroundColor: 'transparent' }} className="avatar avatar-sm rounded-circle">
+                      <img style={{ backgroundColor: 'transparent', width: '75%', height: '75%' }}
                         alt="..."
                         src={require("../../assets/img/theme/notification-ico2.png")}
                       />
                     </span>
-                   
                   </Media>
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
@@ -72,16 +71,8 @@ class AdminNavbar extends React.Component {
                     <i className="ni ni-collection" />
                     <span>İzin Yönetimi</span>
                   </DropdownItem>
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-calendar-grid-58" />
-                    <span>Aktivite</span>
-                  </DropdownItem> */}
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-support-16" />
-                    <span>Ayarlar</span>
-                  </DropdownItem> */}
                   <DropdownItem divider />
-                  
+
                 </DropdownMenu>
               </UncontrolledDropdown>
 
@@ -89,7 +80,7 @@ class AdminNavbar extends React.Component {
                 <DropdownToggle className="pr-0" nav>
                   <Media className="align-items-center">
                     <Media className="ml-1 d-none d-lg-block">
-                      <span style={{marginRight:"30px"}} className="mb-0 text-sm font-weight-bold">
+                      <span style={{ marginRight: "30px" }} className="mb-0 text-sm font-weight-bold">
                         {this.props.fullName}
                       </span>
                     </Media>
@@ -104,17 +95,9 @@ class AdminNavbar extends React.Component {
                     <span>Profilim</span>
                   </DropdownItem>
 
-                  
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-calendar-grid-58" />
-                    <span>Aktivite</span>
-                  </DropdownItem> */}
-                  {/* <DropdownItem to="/admin/user-profile" tag={Link}>
-                    <i className="ni ni-support-16" />
-                    <span>Ayarlar</span>
-                  </DropdownItem> */}
                   <DropdownItem divider />
-                  <DropdownItem  onClick={this.logOut}>
+                  
+                  <DropdownItem onClick={this.logOut}>
                     <i className="ni ni-user-run" />
                     <span>Çıkış</span>
                   </DropdownItem>
