@@ -178,28 +178,28 @@ class Persons extends Component {
         }
     }
 
-    getUsersBySearch() {
-        if (this.state.searchParam) {
-            this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
-            this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
-        } else {
-            this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-            this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
-        }
-    }
+    // getUsersBySearch() {
+    //     if (this.state.searchParam) {
+    //         this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
+    //         this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
+    //     } else {
+    //         this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
+    //         this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
+    //     }
+    // }
 
-    keyPress(e) {
-        if (e.keyCode === 13) {
-            if (e.target.value) {
-                const param = e.target.value;
-                this.props.onInitUsers(personHelper.getSearchFilter(param));
-                this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
-            } else {
-                this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-                this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
-            }
-        }
-    }
+    // keyPress(e) {
+    //     if (e.keyCode === 13) {
+    //         if (e.target.value) {
+    //             const param = e.target.value;
+    //             this.props.onInitUsers(personHelper.getSearchFilter(param));
+    //             this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
+    //         } else {
+    //             this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
+    //             this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
+    //         }
+    //     }
+    // }
 
     renderTableData(index) {
         this.props.onInitUsers(personHelper.getFilter(index));
@@ -299,7 +299,7 @@ class Persons extends Component {
 
     onChangePaginationItem(index) {
         this.setState({ currentIndex: index });
-        this.paginate()
+        this.paginate(this.props.users)
 
     }
 
@@ -309,6 +309,9 @@ class Persons extends Component {
     }
 
     searchUser = (searchParam) => {
+        this.setState({ currentIndex: 0 });
+        console.log('def',this.props.defaultUsers);
+        
         this.props.searchUser(searchParam, this.props.defaultUsers);
     }
 
@@ -611,8 +614,8 @@ class Persons extends Component {
 
                                     <Row className="align-items-center">
                                         <Col xl="9" lg="9" md="8" sm="9" xs="7">
-                                            <Input name="searchInput" className="searchPerson" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
-                                            <Button
+                                            <Input name="searchInput" className="searchPerson" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder='Ara' onChange={(event) => this.inputChangeHandle(event)}></Input>
+                                            {/* <Button
                                                 color="secondary"
                                                 className="btnPerson"
                                                 onClick={e => this.getUsersBySearch()}
@@ -630,7 +633,7 @@ class Persons extends Component {
                                                 style={{ display: "inline-block" }}
                                             >
                                                 <i className="fas fa-sync-alt fa-lg"></i>
-                                            </Button>
+                                            </Button> */}
                                         </Col>
 
                                         <Col className="text-right" xl="3" lg="3" md="4" sm="3" xs="5">

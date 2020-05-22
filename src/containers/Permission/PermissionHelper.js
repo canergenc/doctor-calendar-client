@@ -2,41 +2,41 @@ import { helperService } from "../../services/helper";
 import { CalendarTypes, CalendarStatus, constants } from '../../variables/constants';
 
 
-const getApprovedCountFilter = () => {
+// const getApprovedCountFilter = () => {
     
-     const   approvedFilter = {
-            filter: {
-                where: {
-                    and: [{
-                        groupId: {
-                            like: helperService.getGroupId()
-                        }
-                    }, {
-                        type: {
-                            neq: CalendarTypes.Nobet
-                        },
-                        status: CalendarStatus.Approve,
+//      const   approvedFilter = {
+//             filter: {
+//                 where: {
+//                     and: [{
+//                         groupId: {
+//                             like: helperService.getGroupId()
+//                         }
+//                     }, {
+//                         type: {
+//                             neq: CalendarTypes.Nobet
+//                         },
+//                         status: CalendarStatus.Approve,
                        
-                    }]
-                },
+//                     }]
+//                 },
 
-                include: [
-                    {
-                        relation: "group"
-                    },
-                    {
-                        relation: "user",
+//                 include: [
+//                     {
+//                         relation: "group"
+//                     },
+//                     {
+//                         relation: "user",
                        
-                    },
-                    {
-                        relation: "location"
-                    }
-                ]
-            }
+//                     },
+//                     {
+//                         relation: "location"
+//                     }
+//                 ]
+//             }
 
-        }
-    return approvedFilter;
-}
+//         }
+//     return approvedFilter;
+// }
 
 const getApprovedFilter = (index, searchParam = '') => {
     let approvedFilter;
@@ -45,8 +45,8 @@ const getApprovedFilter = (index, searchParam = '') => {
         approvedFilter = {
             filter: {
 
-                skip: index * constants.PAGESIZE_INPERMISSION_PAGE,
-                limit: constants.PAGESIZE_INPERMISSION_PAGE,
+                // skip: index * constants.PAGESIZE_INPERMISSION_PAGE,
+                // limit: constants.PAGESIZE_INPERMISSION_PAGE,
 
                 where: {
                     and: [{
@@ -101,8 +101,8 @@ const getApprovedFilter = (index, searchParam = '') => {
 
         approvedFilter = {
             filter: {
-                skip: index * constants.PAGESIZE_INPERMISSION_PAGE,
-                limit: constants.PAGESIZE_INPERMISSION_PAGE,
+                // skip: index * constants.PAGESIZE_INPERMISSION_PAGE,
+                // limit: constants.PAGESIZE_INPERMISSION_PAGE,
 
                 where: {
                     and: [{
@@ -141,9 +141,9 @@ const getApprovedFilter = (index, searchParam = '') => {
 }
 
 const getApprovedSearchFilter = (searchParam = '') => {
-    let waitingForApproveFilter;
+    let approvedSearchFilter;
     if (searchParam) {
-        waitingForApproveFilter = {
+        approvedSearchFilter = {
             filter: {
                 where: {
 
@@ -195,7 +195,7 @@ const getApprovedSearchFilter = (searchParam = '') => {
 
     } else {
 
-        waitingForApproveFilter = {
+        approvedSearchFilter = {
             filter: {
                 where: {
                     and: [{
@@ -228,7 +228,7 @@ const getApprovedSearchFilter = (searchParam = '') => {
 
 
 
-    return waitingForApproveFilter;
+    return approvedSearchFilter;
 }
 
 
@@ -470,7 +470,7 @@ const getInitialUserFilter = () => {
 export const permissionHelper = {
     getApprovedFilter,
     getApprovedSearchFilter,
-    getApprovedCountFilter,
+    //getApprovedCountFilter,
     getWaitingForApproveFilter,
     getWaitingForApproveSearchFilter,
     getUniqGroupIds,
