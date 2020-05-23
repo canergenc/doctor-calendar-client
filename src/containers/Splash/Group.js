@@ -1,7 +1,7 @@
+import React from "react";
 import { connect } from 'react-redux';
 import { helperService } from '../../services/helper'
-import React from "react";
-import history from "../../hoc/Config/history";
+import * as actions from '../../store/actions/index';
 // reactstrap components
 import {
     Button,
@@ -14,54 +14,93 @@ import {
     InputGroupAddon,
     InputGroupText,
     InputGroup,
-    Col
+    Col,
+    Row,
+    Label
 } from "reactstrap";
-import * as actions from '../../store/actions/index';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import 'pretty-checkbox';
+import './Group.css';
+
 const MySwal = withReactContent(Swal);
-
-
 
 class GroupSplash extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             groupName: helperService.generateRndStr(10),
-            
+            isWeekdayControl: false,
+            isWeekdayControlChange: false,
+            isWeekendControl: false,
+            isWeekendControlChange: false,
+            sequentialOrderLimitCount: "",
+            sequentialOrderLimitCountChange: false,
+            locationDayLimit: "",
+            locationDayLimitChange: false,
+            locationDayLimitCount: "",
+            locationDayLimitCountChange: false
+
         };
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.inputChangeHandle = this.inputChangeHandle.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    handleInputChange(event) {
+    inputChangeHandle(event) {
         const target = event.target;
         if (target.name === 'groupName') {
             this.setState({ groupName: event.target.value });
         }
+        if (target.name === 'weekday')
+            this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
+        if (target.name === 'weekend')
+            this.setState({ isWeekendControl: this.refs.weekend.checked, isWeekendControlChange: true });
+        if (target.name === 'sequentialOrderLimitCount')
+            this.setState({ sequentialOrderLimitCount: event.target.value, sequentialOrderLimitCountChange: true });
+        if (target.name === 'locationDayLimit') {
+            if (this.refs.locationDayLimit.checked === false) {
+                this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true, locationDayLimitCount: '', locationDayLimitCountChange: false })
+            }
+            else {
+                this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true });
+            }
+        }
+        if (target.name === 'locationDayLimitCount')
+            this.setState({ locationDayLimitCount: event.target.value, locationDayLimitCountChange: true });
     }
-    handleSubmit(event) {
 
-       
+
+
+    handleSubmit(event) {
         const { groupName } = this.state;
+        
+        let groupSettings = {};
+        if (this.state.isWeekdayControlChange) {
+            groupSettings.isWeekdayControl = this.state.isWeekdayControl;
+        }
+        if (this.state.isWeekendControlChange) {
+            groupSettings.isWeekendControl = this.state.isWeekendControl;
+        }
+        if (this.state.sequentialOrderLimitCountChange) {
+            groupSettings.sequentialOrderLimitCount = parseInt(this.state.sequentialOrderLimitCount);
+        }
+        if (this.state.locationDayLimitChange) {
+            groupSettings.locationDayLimit = this.state.locationDayLimit;
+        }
+        if (this.state.locationDayLimitCountChange && (this.state.locationDayLimit === '' ? this.props.locationDayLimit : this.state.locationDayLimit)) {
+            groupSettings.locationDayLimitCount = parseInt(this.state.locationDayLimitCount);
+        }
+
         if (groupName) {
-            this.props.createGroup(groupName);
+            this.props.createGroup(groupName, groupSettings);
         } else {
-            this.props.createGroup(null);
+            this.props.createGroup(null, groupSettings);
         }
         event.preventDefault();
-
     }
-
 
     handleCanceled = () => {
-        console.log("opps");
         this.props.createGroup(null);
     }
-
-    componentDidMount() {
-        console.log(this.props);
-    }
-
 
     showSwal() {
         MySwal.fire({
@@ -80,11 +119,7 @@ class GroupSplash extends React.Component {
     }
 
 
-
     render() {
-
-       
-
 
         return (
             <>
@@ -105,10 +140,107 @@ class GroupSplash extends React.Component {
                                                 <i className="chart-pie-35" />
                                             </InputGroupText>
                                         </InputGroupAddon>
-                                        <Input placeholder="Grup Adı" name="groupName" type="text" value={this.state.groupName} onChange={this.handleInputChange} />
+                                        <Input placeholder="Grup Adı" name="groupName" type="text" value={this.state.groupName} onChange={this.inputChangeHandle} />
                                     </InputGroup>
 
                                 </FormGroup>
+                                <div className="pl-lg-1">
+                                    <Row>
+                                        <Col lg="6" className="formRow">
+                                            <Label
+                                                className="form-control-label mr-sm-2"
+                                                htmlFor="checkbox-weekday"
+                                            >
+                                                Haftaiçi Kontrolü
+                                            </Label>
+                                            <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                                                <input
+                                                    type="checkbox"
+                                                    name="weekday"
+                                                    ref="weekday"
+                                                    onClick={event => this.inputChangeHandle(event)}
+                                                    defaultChecked={this.props.isWeekdayControl}
+                                                />
+                                                <div className="state p-success-o">
+                                                    <label></label>
+                                                </div>
+                                            </div>
+                                        </Col>
+                                        <Col lg="6">
+                                            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+
+                                                <Label
+                                                    className="form-control-label mr-sm-2"
+                                                    htmlFor="checkbox-weekend"
+                                                >
+                                                    Haftasonu Kontrolü
+                                                    </Label>
+                                                <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                                                    <input
+                                                        type="checkbox"
+                                                        name="weekend"
+                                                        ref="weekend"
+                                                        onClick={event => this.inputChangeHandle(event)}
+                                                        defaultChecked={this.props.isWeekendControl}
+                                                    />
+                                                    <div className="state p-success-o">
+                                                        <label></label>
+                                                    </div>
+                                                </div>
+
+                                            </FormGroup>
+                                        </Col>
+
+                                    </Row>
+
+                                    <Row style={{ marginTop: "25px" }}>
+                                        <Col lg="6" className="formRow">
+                                            <FormGroup className="mb-2 mr-sm-2 mb-sm-0 ">
+
+                                                <Label
+                                                    className="form-control-label mr-sm-2"
+                                                    htmlFor="sequentialOrderLimitCount"
+                                                >
+                                                    Maksimum Ardışık Nöbet Sınırı
+                                                    </Label>
+                                                <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
+
+                                            </FormGroup>
+                                        </Col>
+                                        <Col lg="6">
+                                            <Label
+                                                className="form-control-label"
+                                                htmlFor="checkbox-locationDayLimit"
+                                            >
+                                                Maksimum Lokasyon - Gün Sınırı
+                                                </Label>
+
+                                            <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
+                                                <input
+                                                    type="checkbox"
+                                                    name="locationDayLimit"
+                                                    ref="locationDayLimit"
+                                                    onClick={event => this.inputChangeHandle(event)}
+                                                    defaultChecked={this.props.locationDayLimit}
+                                                />
+                                                <div className="state p-success-o">
+                                                    <label></label>
+                                                </div>
+                                            </div>
+                                            <input
+                                                id="locationDayLimitCount"
+                                                name="locationDayLimitCount"
+                                                className="specialInput"
+                                                type="number"
+                                                min="0"
+                                                defaultValue={this.props.locationDayLimitCount}
+                                                disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
+                                                onChange={(event) => this.inputChangeHandle(event)}
+                                            />
+                                        </Col>
+                                    </Row>
+
+                                </div>
                                 <div className="modal-footer">
 
 
@@ -125,7 +257,7 @@ class GroupSplash extends React.Component {
                                         {!this.props.createUserGroupReqLoading && <span>DEVAM ET</span>}
                                     </Button>
 
-                                    {/* <Button color="primary" type="submit" onClick={this.handleSubmit}> DEVAM ET</Button> */}
+
                                 </div>
                             </Form>
                         </CardBody>
@@ -147,7 +279,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        createGroup: (groupName) => dispatch(actions.userGroupActions.createUserGroup(groupName)),
+        createGroup: (groupName, groupSettings) => dispatch(actions.userGroupActions.createUserGroup(groupName, groupSettings)),
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GroupSplash);

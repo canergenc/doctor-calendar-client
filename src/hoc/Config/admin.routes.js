@@ -1,6 +1,6 @@
 import Index from "../../views/Index.jsx";
 import Profile from "../../containers/Profile/Profile.js";
-import GroupSettings from "../../containers/Group/Group.js";
+import GroupSettings from "../../containers/GroupSettings/GroupSettings.js";
 import Location from "../../containers/Locations/Locations.js";
 import Person from "../../containers/Persons/Persons.js";
 import Permission from "../../containers/Permission/Permission.js";

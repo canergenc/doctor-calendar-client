@@ -20,7 +20,7 @@ import 'pretty-checkbox';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import UserHeader from "../../components/Headers/UserHeader.jsx";
-import "./Group.css"
+import "./GroupSettings.css"
 
 const MySwal = withReactContent(Swal)
 

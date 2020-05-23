@@ -5,13 +5,30 @@ import "./HeaderMonth.scss";
 
 class HeaderMonth extends Component {
 
-  componentDidUpdate() {
-
-    if (this.props.downloading) {
-      console.log('test download');
-
+  constructor(props) {
+    super(props)
+    this.clickDownload = this.clickDownload.bind(this);
+    this.state = {
+      downloading: false
     }
   }
+
+  
+
+
+  clickDownload = () => {
+    console.log('clickDownload start');
+    this.setState({ downloading: true });
+    this.props.downloadExcelClick();
+    
+    console.log('clickDownload end');
+  }
+
+  // componentDidUpdate() {
+  //   if (this.state.downloading) {
+  //     this.setState({ downloading: false });
+  //   }
+  // }
 
   render() {
 
@@ -27,12 +44,12 @@ class HeaderMonth extends Component {
         <div className="row">
           <h1 >
             {this.props.curMonth.name}
-            <Button color="primary" style={{ padding: "3px 5px" }} onClick={this.props.downloadExcelClick} size="sm" disabled={this.props.downloading}>
-            Excel{this.props.downloading === true ? <i className="fa fa-refresh fa-spin" style={{ marginLeft: "5px" }}></i> : <i className="fa fa-download" style={{ marginLeft: "5px" }}></i>}
-          </Button>
-          <Button color="primary" style={{ padding: "3px 5px" }} onClick={this.props.refreshCalendar} size="sm" ><i className="fas fa-sync-alt" style={{ fontSize: "12px", color: "white" }}></i></Button>
+            <Button color="primary" style={{ padding: "3px 5px" }} onClick={() => this.clickDownload()} size="sm" disabled={this.state.downloading}>
+              Excel {this.state.downloading ? <i className="fa fa-refresh fa-spin" style={{ marginLeft: "5px" }}></i> : <i className="fa fa-download" style={{ marginLeft: "5px" }}></i>}
+            </Button>
+            <Button color="primary" style={{ padding: "3px 5px" }} onClick={this.props.refreshCalendar} size="sm" ><i className="fas fa-sync-alt" style={{ fontSize: "12px", color: "white" }}></i></Button>
           </h1>
-          
+
         </div>
         <div className="row" >
           <button className="prevNext" onClick={this.props.nextMonthClick}>
@@ -46,7 +63,7 @@ class HeaderMonth extends Component {
 
 const mapStateToProps = state => {
   return {
-    downloading: state.reminders.downloading
+    downloadingRedux: state.reminders.downloading
   }
 }
 

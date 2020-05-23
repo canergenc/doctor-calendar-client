@@ -117,10 +117,13 @@ const setRemindersForCrud = (state, action) => {
 }
 
 const startDownloading = (state, action) => {
+  console.log('start downloading');
+  
   return updateObject(state, { downloading: true });
 }
 
 const endDownloading = (state, action) => {
+  console.log('end downloading');
   return updateObject(state, { downloading: false });
 }
 

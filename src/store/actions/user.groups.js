@@ -1,11 +1,12 @@
 import * as actionTypes from './actionTypes';
 import { groupService } from "../../services/group";
 import { userGroupService } from "../../services/user.group";
+import { groupSettingsService } from '../../services/index';
 import { helperService } from '../../services';
 import history from "../../hoc/Config/history"
 import { constants } from '../../variables/constants';
 
-const createUserGroup = (groupName) => {
+const createUserGroup = (groupName, groupSettingsData) => {
     return dispatch => {
         dispatch(createUserGroupRequest());
         var name = "";
@@ -20,26 +21,55 @@ const createUserGroup = (groupName) => {
                 var groupId = response.id;
                 localStorage.setItem(constants.GROUPID, groupId)
                 var userId = helperService.getUserId();
-                const countLimits={
-                    weekdayCountLimit:0,
-                    weekendCountLimit:0
+                const countLimits = {
+                    weekdayCountLimit: 0,
+                    weekendCountLimit: 0
                 }
                 userGroupService.createUserGroup(userId, countLimits)
                     .then((response) => {
-                        
-                        dispatch(createUserGroupSuccess(response,groupId));
-                        if (response) {
-                            history.push({
-                                pathname: '/splash/location',
-                                state: { groupId: groupId }
-                            })
+                        const filterData = {
+                            filter: {
+                                where: {
+                                    groupId: {
+                                        like: groupId
+                                    }
+                                }
+                            }
                         }
+                        groupSettingsService.getGroupSettings(filterData)
+                            .then(response => {
+                                if (response.length > 0) {
+                                    let groupSettingsId = response[0].id;
+
+                                    groupSettingsService.updateGroupSettings(groupSettingsId, groupSettingsData)
+                                        .then(response => {
+                                            dispatch(createUserGroupSuccess(response, groupId));
+
+                                            if (response) {
+                                                history.push({
+                                                    pathname: '/splash/location',
+                                                    state: { groupId: groupId }
+                                                })
+                                            }
+                                        })
+                                        .catch(error => {
+                                            dispatch((createUserGroupFailure(error)));
+                                        });
+                                }
+                                else {
+                                    dispatch((createUserGroupFailure(error)));
+                                }
+                            })
+                            .catch(error => {
+                                dispatch((createUserGroupFailure(error)));
+                            });
 
                     })
                     .catch((error) => {
                         dispatch((createUserGroupFailure(error)));
 
                     });
+
             })
             .catch((error) => {
                 dispatch((createUserGroupFailure));
@@ -54,11 +84,11 @@ const createUserGroupRequest = () => {
     };
 };
 
-const createUserGroupSuccess = (response,groupId) => {
+const createUserGroupSuccess = (response, groupId) => {
     return {
         type: actionTypes.CREATE_USER_GROUP_SUCCESS,
         response: response,
-        groupId:groupId
+        groupId: groupId
         // id: response.id,
         // groupId: response.groupId,
     };
@@ -73,15 +103,15 @@ const createUserGroupFailure = (err) => {
     };
 }
 
-const updateUserGroup=(userGroupId,data)=>{
-    return dispatch=>{
-        userGroupService.updateUserGroup(userGroupId,data)
-        .then(response=>{
-            dispatch(updateUserGroupSuccess(userGroupId));
-        })
-        .catch(error=>{
-            dispatch(updateUserGroupFailed(error));
-        })
+const updateUserGroup = (userGroupId, data) => {
+    return dispatch => {
+        userGroupService.updateUserGroup(userGroupId, data)
+            .then(response => {
+                dispatch(updateUserGroupSuccess(userGroupId));
+            })
+            .catch(error => {
+                dispatch(updateUserGroupFailed(error));
+            })
     }
 }
 
@@ -99,9 +129,9 @@ const updateUserGroupFailed = (error) => {
     };
 };
 
-const cleanFlags=()=>{
-    return{
-        type:actionTypes.USER_GROUP_CLEAN_FLAGS
+const cleanFlags = () => {
+    return {
+        type: actionTypes.USER_GROUP_CLEAN_FLAGS
     }
 }
 

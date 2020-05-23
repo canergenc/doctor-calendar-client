@@ -247,7 +247,7 @@ class Calendar extends Component {
 
   downloadExcelHandler = () => {
     if (this.props.reminders) {
-
+      this.setState({ downloading: true });
       this.props.startDownloading();
 
       const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -376,6 +376,7 @@ class Calendar extends Component {
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], { type: fileType });
       FileSaver.saveAs(data, moment(startOfMonth).format("MMMM YYYY") + " NÖBET LİSTESİ" + fileExtension);
+      this.setState({ downloading: false });
       this.props.endDownloading();
     }
   }

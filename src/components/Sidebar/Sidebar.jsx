@@ -163,7 +163,7 @@ class Sidebar extends React.Component {
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
-                  <span className="mb-0 text-sm font-weight-bold">
+                  <span className="mb-0 text-sm font-weight-bold mr-2">
                     {this.props.fullName}
                   </span>
                 </Media>
