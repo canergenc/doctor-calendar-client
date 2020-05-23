@@ -9,7 +9,6 @@ export const createBulkLocation = (listOfLocation) => {
         locationService.createBulkLocationService(listOfLocation)
             .then((response) => {
                 //Success
-                console.log(response);
                 dispatch(createBulkLocationSuccess(response))
                 history.push({
                     pathname: '/admin/index'
@@ -17,7 +16,6 @@ export const createBulkLocation = (listOfLocation) => {
 
             })
             .catch((error) => {
-                console.log('HATA', error);
                 dispatch(createBulkLocationFailure(error));
             });
     }

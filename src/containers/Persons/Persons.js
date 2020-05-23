@@ -218,7 +218,6 @@ class Persons extends Component {
     }
 
     componentDidMount() {
-        console.log('oops');
 
         this.renderTableData();
     }
@@ -285,7 +284,6 @@ class Persons extends Component {
                 weekdayCountLimit: userGroup.weekdayCountLimit > -1 ? userGroup.weekdayCountLimit : '',
                 weekendCountLimit: userGroup.weekendCountLimit > -1 ? userGroup.weekendCountLimit : ''
             });
-            console.log('userGroupState', state);
 
         }
         else {
@@ -300,7 +298,6 @@ class Persons extends Component {
                 weekdayCountLimit: ' ',
                 weekendCountLimit: ' '
             });
-            console.log('userGroupState DEğil', state);
         }
     };
 
@@ -318,7 +315,6 @@ class Persons extends Component {
     searchUser = (searchParam) => {
         debugger;
         this.setState({ currentIndex: 0 });
-        console.log('def', this.props.defaultUsers);
 
         this.props.searchUser(searchParam, this.props.defaultUsers);
     }
@@ -340,7 +336,6 @@ class Persons extends Component {
         let usersCount = 0;
 
         if (this.props.users) {
-            console.log('updated', this.props.users);
 
             users = this.paginate(this.props.users).map((user) => (
                 <Person
@@ -366,7 +361,6 @@ class Persons extends Component {
 
         if (this.props.usersCount) {
             usersCount = this.props.usersCount;
-            console.log(usersCount);
         }
 
         return (

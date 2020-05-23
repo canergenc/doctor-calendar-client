@@ -54,13 +54,10 @@ class GroupSplash extends React.Component {
 
 
     handleCanceled = () => {
-        console.log("opps");
         this.props.createGroup(null);
     }
 
-    componentDidMount() {
-        console.log(this.props);
-    }
+   
 
 
     showSwal() {
@@ -73,7 +70,6 @@ class GroupSplash extends React.Component {
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
-            console.log(result);
             this.setState({ submitted: false });
 
         })

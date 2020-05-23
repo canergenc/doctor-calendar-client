@@ -191,7 +191,6 @@ export const deleteUserGroup = ( userGroupId, filterData, users,defaultUsers) =>
 
     return dispatch => {
         userGroupService.deleteUserGroup(userGroupId).then(result => {
-            console.log(defaultUsers);
             
             let deleteddefaultUserIndex=defaultUsers.findIndex(u => u.id === userGroupId);
             defaultUsers.splice(deleteddefaultUserIndex, 1);
@@ -266,9 +265,7 @@ export const updateUser = (userId, userData, userGroupId, countLimits, filterDat
                         debugger;
 
 
-                        console.log('userData', userData);
-                        console.log('countLimits', countLimits);
-
+                     
 
 
                         listOfUser.map((u) => {
@@ -282,9 +279,6 @@ export const updateUser = (userId, userData, userGroupId, countLimits, filterDat
                             }
                         })
 
-
-
-                        console.log('updUser->', listOfUser);
                         dispatch(updateUserSuccess(userId, userData, listOfUser))
                     })
                     .catch(err => {

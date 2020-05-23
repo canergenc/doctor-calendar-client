@@ -81,7 +81,6 @@ class Approved extends Component {
     }
 
     keyPress(e) {
-        console.log(e.keyCode);
         if (e.keyCode == 13) {
             if (e.target.value) {
                 this.props.getApprovedPermissions(permissionHelper.getApprovedSearchFilter(e.target.value));
@@ -110,7 +109,6 @@ class Approved extends Component {
 
 
         if (this.props.approvedPermissions) {
-            console.log(this.props.approvedPermissions);
 
             this.state.listOfPermission = this.props.approvedPermissions;
             this.state.listOfPermission = this.state.listOfPermission.map((p) => {

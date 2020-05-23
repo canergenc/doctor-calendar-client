@@ -157,7 +157,6 @@ class Calendar extends Component {
   nextMonthClickHandler = () => {
     const year = moment(this.state.nextMonth).format("YYYY");
     const month = moment(this.state.nextMonth).format("MM");
-    console.log(this.state.nextMonth);
     const curMonth =
       year && month
         ? `${year}-${month}`
@@ -193,7 +192,6 @@ class Calendar extends Component {
   prevMonthClickHandler = () => {
     const year = moment(this.state.prevMonth).format("YYYY");
     const month = moment(this.state.prevMonth).format("MM");
-    console.log(this.state.prevMonth);
     const curMonth =
       year && month
         ? `${year}-${month}`
@@ -367,7 +365,6 @@ class Calendar extends Component {
         }
       }
 
-      // console.log(excelData);
 
 
       const ws = XLSX.utils.json_to_sheet(excelData);

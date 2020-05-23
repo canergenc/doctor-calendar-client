@@ -76,12 +76,6 @@ const AsyncSplashLayout = AsyncComponent(() => {
   return import(/* webpackChunkName: "splash" */ './layouts/Splash')
 });
 
-// store.subscribe(() => {
-//   token = store.getState().auth.token;
-//   console.log("Bence oldu", token);
-// })
-
-
 
 let token = localStorage.getItem(constants.TOKEN);
 let isRememberMe = Number(localStorage.getItem(constants.REMEMBERME));
