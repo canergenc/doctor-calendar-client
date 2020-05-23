@@ -76,12 +76,14 @@ const getApprovedFilter = (index, searchParam = '') => {
                                     {
                                         fullName: {
                                             like: searchParam,
+                                            "options": "i"
 
 
                                         }
                                     }, {
                                         email: {
                                             like: searchParam,
+                                            "options": "i"
 
                                         }
                                     }

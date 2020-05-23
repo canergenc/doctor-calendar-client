@@ -65,6 +65,8 @@ class Persons extends Component {
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
         this.addHandle = this.addHandle.bind(this);
+        this.getUsersBySearch = this.getUsersBySearch.bind(this);
+
     }
 
     addHandleValidation() {
@@ -114,7 +116,7 @@ class Persons extends Component {
         }
         if (target.name === 'searchInput') {
             this.setState({ searchParam: event.target.value, submitted: false });
-            this.searchUser(event.target.value);
+            //this.searchUser(event.target.value);
         }
 
     }
@@ -125,7 +127,7 @@ class Persons extends Component {
 
     updateHandle(event) {
         this.setState({ submitted: true });
-
+        debugger;
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
         if (this.updateHandleValidation()) {
@@ -136,9 +138,12 @@ class Persons extends Component {
 
             };
             const countLimits = {
-                ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit } : null),
-                ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : null)
+                ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit } : 0),
+                ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit } : 0)
             };
+
+
+
 
             this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, personHelper.getFilter(), this.props.users);
 
@@ -160,9 +165,15 @@ class Persons extends Component {
                 deviceId: "1",
                 platform: 1
             };
+
+            // const countLimits = {
+            //     ...(weekdayCountLimit > -1 ? { weekdayCountLimit: weekdayCountLimit == null ? 0 : weekdayCountLimit } : 0),
+            //     ...(weekendCountLimit > -1 ? { weekendCountLimit: weekendCountLimit == null ? 0 : weekdayCountLimit } : 0)
+            // };
+
             const countLimits = {
-                ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : null),
-                ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : null)
+                ...(weekdayCountLimit ? { weekdayCountLimit: weekdayCountLimit } : 0),
+                ...(weekendCountLimit ? { weekendCountLimit: weekendCountLimit } : 0)
             }
             this.props.createUser(user, countLimits, personHelper.getFilter());
             this.toggleModal('addModal', null);
@@ -178,36 +189,32 @@ class Persons extends Component {
         }
     }
 
-    // getUsersBySearch() {
-    //     if (this.state.searchParam) {
-    //         this.props.onInitUsers(personHelper.getSearchFilter(this.state.searchParam));
-    //         this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
-    //     } else {
-    //         this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-    //         this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
-    //     }
-    // }
-
-    // keyPress(e) {
-    //     if (e.keyCode === 13) {
-    //         if (e.target.value) {
-    //             const param = e.target.value;
-    //             this.props.onInitUsers(personHelper.getSearchFilter(param));
-    //             this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
-    //         } else {
-    //             this.props.onInitUsers(personHelper.getFilter(this.state.currentIndex));
-    //             this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
-    //         }
-    //     }
-    // }
-
-    renderTableData(index) {
-        this.props.onInitUsers(personHelper.getFilter(index));
+    getUsersBySearch() {
+        if (this.state.searchParam) {
+            this.searchUser(this.state.searchParam);
+        } else {
+            this.refreshTable();
+        }
     }
 
-    refreshTable(index) {
-        this.renderTableData(index);
-        this.setState({ isShowPagination: true, searchParam: '', searchSubmitted: false });
+    keyPress = (e) => {
+        if (e.keyCode === 13) {
+            if (e.target.value) {
+                const param = e.target.value;
+                this.searchUser(param);
+            } else {
+                this.refreshTable();
+            }
+        }
+    }
+
+    renderTableData() {
+        this.props.onInitUsers(personHelper.getFilter());
+    }
+
+    refreshTable() {
+        this.setState({ searchParam: '' });
+        this.renderTableData();
     }
 
     componentDidMount() {
@@ -228,7 +235,7 @@ class Persons extends Component {
             this.setState({ submitted: false });
         }
         else if (this.props.crudSuccess) {
-            this.props.cleanFlagUser();
+
             MySwal.fire({
                 icon: 'success',
                 title: 'Başarılı',
@@ -236,6 +243,7 @@ class Persons extends Component {
                 showConfirmButton: true
 
             });
+            this.props.cleanFlagUser();
 
 
         }
@@ -264,8 +272,6 @@ class Persons extends Component {
 
     toggleModal(state, userGroup) {
         debugger;
-        console.log('modal', state);
-        console.log('modal', userGroup);
 
 
         if (userGroup) {
@@ -276,8 +282,8 @@ class Persons extends Component {
                 name: userGroup.user.fullName ? userGroup.user.fullName : '',
                 email: userGroup.user.email ? userGroup.user.email : '',
                 workStartDate: userGroup.user.workStartDate ? userGroup.user.workStartDate : '',
-                weekdayCountLimit: userGroup.weekdayCountLimit ? userGroup.weekdayCountLimit : '',
-                weekendCountLimit: userGroup.weekendCountLimit ? userGroup.weekendCountLimit : ''
+                weekdayCountLimit: userGroup.weekdayCountLimit > -1 ? userGroup.weekdayCountLimit : '',
+                weekendCountLimit: userGroup.weekendCountLimit > -1 ? userGroup.weekendCountLimit : ''
             });
             console.log('userGroupState', state);
 
@@ -289,6 +295,7 @@ class Persons extends Component {
                 id: '',
                 name: '',
                 email: '',
+                password:'',
                 workStartDate: '',
                 weekdayCountLimit: ' ',
                 weekendCountLimit: ' '
@@ -309,14 +316,15 @@ class Persons extends Component {
     }
 
     searchUser = (searchParam) => {
+        debugger;
         this.setState({ currentIndex: 0 });
-        console.log('def',this.props.defaultUsers);
-        
+        console.log('def', this.props.defaultUsers);
+
         this.props.searchUser(searchParam, this.props.defaultUsers);
     }
 
     setDefaultCheck = (weekdayCountLimit, weekendCountLimit) => {
-        
+        debugger;
         let isChecked = false;
         if ((weekdayCountLimit == 0 || weekdayCountLimit == '') && (weekendCountLimit == 0 || weekendCountLimit == '')) {
             isChecked = true;
@@ -332,8 +340,8 @@ class Persons extends Component {
         let usersCount = 0;
 
         if (this.props.users) {
-            console.log('updated',this.props.users);
-            
+            console.log('updated', this.props.users);
+
             users = this.paginate(this.props.users).map((user) => (
                 <Person
                     key={user.user.id}
@@ -540,7 +548,7 @@ class Persons extends Component {
                                                 name="userDisable"
                                                 ref="userDisable"
                                                 onChange={event => this.inputChangeHandle(event)}
-                                                checked={((this.state.weekdayCountLimit === '0' || this.state.weekdayCountLimit === '') && (this.state.weekendCountLimit === '0' || this.state.weekendCountLimit === '')) ? true : false}
+                                                checked={((this.state.weekdayCountLimit == 0 || this.state.weekdayCountLimit === '') && (this.state.weekendCountLimit == 0 || this.state.weekendCountLimit === '')) ? true : false}
                                             />
                                             <div className="state p-danger-o">
                                                 <label></label>
@@ -614,8 +622,8 @@ class Persons extends Component {
 
                                     <Row className="align-items-center">
                                         <Col xl="9" lg="9" md="8" sm="9" xs="7">
-                                            <Input name="searchInput" className="searchPerson" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder='Ara' onChange={(event) => this.inputChangeHandle(event)}></Input>
-                                            {/* <Button
+                                            <Input name="searchInput" className="searchPerson" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Kullanıcı adı, soyadı veya email'e göre ara" onChange={(event) => this.inputChangeHandle(event)}></Input>
+                                            <Button
                                                 color="secondary"
                                                 className="btnPerson"
                                                 onClick={e => this.getUsersBySearch()}
@@ -633,7 +641,7 @@ class Persons extends Component {
                                                 style={{ display: "inline-block" }}
                                             >
                                                 <i className="fas fa-sync-alt fa-lg"></i>
-                                            </Button> */}
+                                            </Button>
                                         </Col>
 
                                         <Col className="text-right" xl="3" lg="3" md="4" sm="3" xs="5">
@@ -664,6 +672,14 @@ class Persons extends Component {
                                     </thead>
                                     <tbody >
                                         {users}
+                                        {users.length == 0 &&
+                                            <div style={{
+                                                margin: 20,
+                                                alignSelf: 'center',
+                                                justifyContent: 'center'
+                                            }} >
+                                                <p>Kayıt bulunmamaktadır.</p>
+                                            </div>}
                                     </tbody>
                                 </Table>
 
@@ -701,10 +717,11 @@ const mapStateToProps = state => {
         usersCount: state.users.usersCount,
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
+        errorMessage:state.users.statusText,
         crudSuccess: state.users.crudSuccess,
         message: state.users.message,
         error: state.users.error,
-        errorMessage: state.users.statusText
+        //errorMessage: state.users.statusText
     };
 };
 

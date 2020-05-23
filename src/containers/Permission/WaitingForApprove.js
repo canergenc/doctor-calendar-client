@@ -410,7 +410,7 @@ class WaitingForApproved extends Component {
                     <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
                         <Row className="align-items-center">
                             <Col xl="9" lg="9" md="8" sm="9"  xs="7">
-                                <Input name="searchPermission" className="searchPermission"  style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Bir şeyler yazın ..." onChange={(event) => this.inputChangeHandle(event)}></Input>
+                                <Input name="searchPermission" className="searchPermission"  style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Kullanıcı adı, soyadı veya email'e göre ara" onChange={(event) => this.inputChangeHandle(event)}></Input>
                                 <Button
                                     color="secondary"
                                     className="btnPermission"

@@ -5,7 +5,8 @@ export const constants = {
 
     ERRORCODE: {
         422: '422',
-        400: '400'
+        400: '400',
+        409: '409'
     },
 
 
@@ -33,8 +34,8 @@ export const constants = {
 
     GROUPID: 'groupId',
 
-    PAGESIZE_INPERMISSION_PAGE:10,
-    PAGESIZE_IN_PERSON_PAGE:10
+    PAGESIZE_INPERMISSION_PAGE: 10,
+    PAGESIZE_IN_PERSON_PAGE: 10
 };
 
 
@@ -85,10 +86,10 @@ export const listOfColorName = [
 
 
 export const roleType = {
-    User : 'User',
-    Manager : 'Manager',
-    Admin : 'Admin',
-    SuperAdmin : 'SuperAdmin'
+    User: 'User',
+    Manager: 'Manager',
+    Admin: 'Admin',
+    SuperAdmin: 'SuperAdmin'
 }
 
 
