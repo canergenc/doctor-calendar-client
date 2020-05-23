@@ -20,9 +20,9 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   Media
-
-
 } from "reactstrap";
+
+import './Sidebar.css';
 
 class Sidebar extends React.Component {
   state = {
@@ -58,6 +58,14 @@ class Sidebar extends React.Component {
       collapseOpen: !this.state.collapseOpen
     });
   };
+
+  toggleCollapseSideBar = () => {
+    this.setState({
+      collapseOpen: !this.state.collapseOpen
+    });
+  };
+
+
   // closes the collapse
   closeCollapse = () => {
     this.setState({
@@ -102,7 +110,7 @@ class Sidebar extends React.Component {
     return (
       <Navbar
         className="navbar-vertical fixed-left navbar-light bg-white"
-        expand="md"
+        expand="xl"
         id="sidenav-main" style={{ paddingTop: "5px" }}
       >
         <Container fluid>
@@ -114,6 +122,7 @@ class Sidebar extends React.Component {
           >
             <span className="navbar-toggler-icon" />
           </button>
+
           {/* Brand */}
           {logo ? (
             <NavbarBrand className="pt-0" {...navbarBrandProps} >
@@ -124,7 +133,33 @@ class Sidebar extends React.Component {
               />
             </NavbarBrand>
           ) : null}
-          <Nav className="align-items-center d-md-none">
+          <Nav className="align-items-center d-xl-none">
+
+            <UncontrolledDropdown nav>
+              <DropdownToggle className="pr-0" nav>
+                <Media className="align-items-center">
+                  <span style={{ backgroundColor: 'transparent' }} className="avatar avatar-sm rounded-circle">
+                    <img style={{ backgroundColor: 'transparent', width: '75%', height: '75%' }}
+                      alt="..."
+                      src={require("../../assets/img/theme/notification-ico2.png")}
+                    />
+                  </span>
+                </Media>
+              </DropdownToggle>
+              <DropdownMenu className="dropdown-menu-arrow" right>
+                <DropdownItem className="noti-title" header tag="div">
+                  <h6 className="text-overflow m-0">BİLDİRİMLER</h6>
+                </DropdownItem>
+                <DropdownItem to="/admin/permission" tag={Link}>
+                  <i className="ni ni-collection" />
+                  <span>İzin Yönetimi</span>
+                </DropdownItem>
+                <DropdownItem divider />
+
+              </DropdownMenu>
+            </UncontrolledDropdown>
+
+
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
@@ -181,7 +216,7 @@ class Sidebar extends React.Component {
             </div>
 
             {/* Navigation */}
-            <Nav navbar>{this.createLinks(routes)}</Nav>
+            <Nav className="collapseSpec" navbar>{this.createLinks(routes)}</Nav>
             {/* Divider */}
             <hr className="my-3" />
             {/* Navigation */}
