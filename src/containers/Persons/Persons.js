@@ -295,6 +295,7 @@ class Persons extends Component {
                 id: '',
                 name: '',
                 email: '',
+                password:'',
                 workStartDate: '',
                 weekdayCountLimit: ' ',
                 weekendCountLimit: ' '
