@@ -9,9 +9,6 @@ html {
   box-sizing: inherit;
 }
 
-
-
-
 .month {
   font: normal 16px "Montserrat", sans-serif;
   min-height: 200px;
@@ -30,7 +27,6 @@ html {
   }
 }
 
-
 .h2toplam {
   color: black;
   width: 100%; 
@@ -43,4 +39,16 @@ html {
 .h2toplam span { 
    background:#fff; 
    padding:0 10px; 
+}
+
+
+@media (max-width: 560px) {
+  .h2toplam {
+    border-top: 1px solid #000; 
+    border-bottom: 0px;
+    line-height: normal;
+  }
+  .dutyCount{
+    display: block;
+  }
 }

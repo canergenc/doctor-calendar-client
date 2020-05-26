@@ -15,7 +15,6 @@
 
 @media (max-width: 2560px) {
     .specialTablePrs {
-        
         table-layout: fixed;
         width:100%;
         overflow-x:auto

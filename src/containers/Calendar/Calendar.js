@@ -417,7 +417,7 @@ class Calendar extends Component {
 
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>
-        <h2 className="h2toplam"><span>Haftaiçi Nöbet: {countOfInWeek}</span><span>Haftasonu Nöbet: {countOfOnWeekend}</span></h2>
+        <h2 className="h2toplam"><span className="dutyCount">Haftaiçi Nöbet: {countOfInWeek}</span><span className="dutyCount" >Haftasonu Nöbet: {countOfOnWeekend}</span></h2>
 
       </div>
     );
