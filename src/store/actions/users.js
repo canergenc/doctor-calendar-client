@@ -2,6 +2,7 @@ import * as actionTypes from './actionTypes';
 import { userService } from '../../services/user';
 import { userGroupService } from "../../services/user.group";
 import { helperService } from '../../services';
+import moment from 'moment';
 
 export const setUsers = (users, defaultUsers) => {
     return {
@@ -59,6 +60,9 @@ export const getUsers = (filterData) => {
 
                 res.forEach(element => {
                     if (element.user) {
+                        if(!element.user.workStartDate){
+                            element.user.workStartDate=moment().format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]")
+                        }
                         users.push({
                             ...element
                         });
