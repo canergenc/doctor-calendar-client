@@ -2,7 +2,6 @@ import request from '../hoc/Config/apiCentral';
 import { helperService } from './helper';
 
 const createUserGroup = (userId, countLimits) => {
-    console.log("create user group");
 
     return request({
         url: `/user-groups`,
@@ -26,7 +25,6 @@ const updateUserGroup = (userGroupId, data) => {
 };
 
 const createUserGroupBulk = (data) => {
-    console.log("create user group");
 
     return request({
         url: `/user-groups/bulk`,
@@ -36,7 +34,6 @@ const createUserGroupBulk = (data) => {
 };
 
 const deleteUserGroup = (userGroupId) => {
-    console.log("delete user group");
 
     return request({
         url: '/user-groups/' + userGroupId,

@@ -39,7 +39,6 @@ class LocationSplash extends React.Component {
     addItemToLocationList() {
         let lists = this.state.listOfLocation;
         let currentIndex = this.state.currentIndex;
-        console.log('ADD ITEM');
 
 
         if (this.state.locationInput && this.state.locationInput.length > 0) {
@@ -60,7 +59,6 @@ class LocationSplash extends React.Component {
 
 
     removeItem(item) {
-        console.log(item)
         let lists = this.state.listOfLocation;
         let currentIndex = this.state.currentIndex;
         const index = lists.indexOf(item);
@@ -83,7 +81,6 @@ class LocationSplash extends React.Component {
             result.push(locModel);
         });
 
-        console.log(result);
         this.props.createBulkLocation(result);
 
 

@@ -102,6 +102,9 @@ class GroupSplash extends React.Component {
         this.props.createGroup(null);
     }
 
+   
+
+
     showSwal() {
         MySwal.fire({
             icon: 'error',
@@ -112,7 +115,6 @@ class GroupSplash extends React.Component {
             showLoaderOnConfirm: true,
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
-            console.log(result);
             this.setState({ submitted: false });
 
         })

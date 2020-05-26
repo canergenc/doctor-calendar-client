@@ -3,7 +3,6 @@ import { constants, listOfColorName } from "../variables/constants";
 
 const getErrorMessage = (err) => {
     debugger
-    console.log(err);
 
     let errorMessage = "";
     let statusCode = "";
@@ -17,12 +16,10 @@ const getErrorMessage = (err) => {
             return errorMessage;
 
         case constants.ERRORCODE[400]:
-            console.log(err);
             errorMessage = err.data.error.message;
             return errorMessage;
 
         case constants.ERRORCODE[409]:
-            console.log(err);
             errorMessage = err.data.error.message;
             return errorMessage;
         default:

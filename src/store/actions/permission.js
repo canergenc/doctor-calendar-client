@@ -21,7 +21,6 @@ const getPermissionsCount = (filterData) => {
                     permissionCount = permissions.length;
                 }
 
-                console.log('action',permissionCount);
                 
 
                 dispatch(getPermissionsCountSuccess(permissionCount));

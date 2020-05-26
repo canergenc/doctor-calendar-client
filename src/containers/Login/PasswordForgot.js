@@ -79,7 +79,6 @@ class PasswordForgotPage extends React.Component {
         const isEmailValid = EmailValidator.validate(email);
         // this.props.isAuthenticating ?  <Spinner /> :<p>Lütfen bekleyiniz.</p>  
 
-        console.log(this.props.response);
 
 
         return (

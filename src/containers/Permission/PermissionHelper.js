@@ -425,7 +425,6 @@ const getUniqGroupIds = (list) => {
             uniqueTags.push(cal.calendarGroupId)
         }
     });
-    console.log(uniqueTags);
     return uniqueTags;
 }
 

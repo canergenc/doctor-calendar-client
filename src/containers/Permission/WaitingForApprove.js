@@ -176,7 +176,6 @@ class WaitingForApproved extends Component {
     }
 
     getPermissionsBySearch() {
-        console.log(this.state.searchParam);
         if (this.state.searchParam) {
             this.props.getPermissions(permissionHelper.getWaitingForApproveSearchFilter(this.state.searchParam));
         } else {
@@ -192,7 +191,6 @@ class WaitingForApproved extends Component {
     inputChangeHandle(event) {
         this.setState({ submitted: false })
         const target = event.target;
-        console.log('target-value', target.value);
         if (target.name === 'permissionType') {
             this.setState({ permissionType: event.target.value });
         } else if (target.name === "description") {
@@ -204,20 +202,16 @@ class WaitingForApproved extends Component {
 
     setEndDate(date) {
         this.setState({ submitted: false })
-        console.log(date);
         this.setState({ endDate: date })
     }
 
     setStartDate(date) {
         this.setState({ submitted: false })
-        console.log(date);
         this.setState({ startDate: date })
     }
 
     keyPress(e) {
-        console.log(e.keyCode);
         if (e.keyCode === 13) {
-            console.log('value', e.target.value);
             if (e.target.value) {
                 this.props.getPermissions(permissionHelper.getWaitingForApproveSearchFilter(e.target.value));
             } else {
@@ -232,7 +226,6 @@ class WaitingForApproved extends Component {
     }
 
     addUserId(user) {
-        console.log(user);
         if (user) {
             this.setState({ userId: user.value })
         }
