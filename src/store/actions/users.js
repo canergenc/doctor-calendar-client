@@ -2,6 +2,7 @@ import * as actionTypes from './actionTypes';
 import { userService } from '../../services/user';
 import { userGroupService } from "../../services/user.group";
 import { helperService } from '../../services';
+import moment from 'moment';
 
 export const setUsers = (users, defaultUsers) => {
     return {
@@ -59,6 +60,9 @@ export const getUsers = (filterData) => {
 
                 res.forEach(element => {
                     if (element.user) {
+                        if (!element.user.workStartDate) {
+                            element.user.workStartDate = moment().format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]")
+                        }
                         users.push({
                             ...element
                         });
@@ -187,28 +191,50 @@ export const deleteUserFailed = (error) => {
 };
 
 
-export const deleteUserGroup = ( userGroupId, filterData, users,defaultUsers) => {
+export const deleteUserGroup = (userGroupId, filterData, users, defaultUsers) => {
 
     return dispatch => {
         userGroupService.deleteUserGroup(userGroupId).then(result => {
-            
-            let deleteddefaultUserIndex=defaultUsers.findIndex(u => u.id === userGroupId);
-            defaultUsers.splice(deleteddefaultUserIndex, 1);
-            let deletedUserindex = users.findIndex(u => u.id === userGroupId);
-            users.splice(deletedUserindex, 1);
-            dispatch(deleteUserGroupSuccess(userGroupId, users,defaultUsers));
+
+
+
+
+            let defIndex = defaultUsers.findIndex(u => u.id == userGroupId);
+            if (defIndex > -1) {
+                defaultUsers.splice(defIndex, 1);
+            }
+
+
+
+            let userIndex = users.findIndex(u => u.id == userGroupId);
+            if (userIndex > -1) {
+                users.splice(userIndex, 1);
+
+            }
+
+
+            // console.log('DELET RES INDEX',deleteddefaultUserIndex);
+            // console.log('DELET RES DEF IDNEX',deletedUserindex);
+
+            // console.log('DELET RES',users);
+            // console.log('DELET RES DEF',defaultUsers);
+
+
+
+
+            dispatch(deleteUserGroupSuccess(userGroupId, users, defaultUsers));
         }).catch(error => {
             dispatch(deleteUserFailed(error));
         });
     };
 };
 
-export const deleteUserGroupSuccess = (id, users,defaultUsers) => {
+export const deleteUserGroupSuccess = (id, users, defaultUsers) => {
     return {
         type: actionTypes.DELETE_USER_GROUP_SUCCESS,
         userId: id,
         users: users,
-        defaultUsers:defaultUsers,
+        defaultUsers: defaultUsers,
         usersCount: users.length,
     };
 };
@@ -265,7 +291,7 @@ export const updateUser = (userId, userData, userGroupId, countLimits, filterDat
                         debugger;
 
 
-                     
+
 
 
                         listOfUser.map((u) => {
