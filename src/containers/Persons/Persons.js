@@ -127,7 +127,6 @@ class Persons extends Component {
 
     updateHandle(event) {
         this.setState({ submitted: true });
-        debugger;
         const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
         const weekendCountLimit = parseInt(this.state.weekendCountLimit);
         if (this.updateHandleValidation()) {
@@ -184,6 +183,11 @@ class Persons extends Component {
 
     deleteHandle() {
         if (this.state.id) {
+            // console.log(this.props.users);
+            // console.log(this.props.defaultUsers);
+
+            // debugger;
+
             this.props.deleteUser(this.state.userGroupId, personHelper.getFilter(), this.props.users, this.props.defaultUsers)
             this.toggleModal('deleteModal', undefined);
         }
@@ -213,7 +217,7 @@ class Persons extends Component {
     }
 
     refreshTable() {
-        this.setState({ searchParam: '' });
+        this.setState({ searchParam: '', currentIndex: 0 });
         this.renderTableData();
     }
 
@@ -270,7 +274,6 @@ class Persons extends Component {
     }
 
     toggleModal(state, userGroup) {
-        debugger;
 
 
         if (userGroup) {
@@ -293,7 +296,7 @@ class Persons extends Component {
                 id: '',
                 name: '',
                 email: '',
-                password:'',
+                password: '',
                 workStartDate: '',
                 weekdayCountLimit: ' ',
                 weekendCountLimit: ' '
@@ -307,20 +310,22 @@ class Persons extends Component {
 
     }
 
-    //Redux a taşınmalı mı?
+    //Redux a taşınmalı mı?  Bana burası- USERS listesi dönüyor. USERS redux ? 
     paginate(listOfUser) {
-        return listOfUser.slice((this.state.currentIndex) * constants.PAGESIZE_IN_PERSON_PAGE, (this.state.currentIndex + 1) * constants.PAGESIZE_IN_PERSON_PAGE);
+        let result = listOfUser.slice((this.state.currentIndex) * constants.PAGESIZE_IN_PERSON_PAGE, (this.state.currentIndex + 1) * constants.PAGESIZE_IN_PERSON_PAGE);
+        console.log('CI',this.state.currentIndex);
+        console.log('RESULT',result);
+        return result;
     }
 
     searchUser = (searchParam) => {
-        debugger;
         this.setState({ currentIndex: 0 });
 
         this.props.searchUser(searchParam, this.props.defaultUsers);
     }
 
     setDefaultCheck = (weekdayCountLimit, weekendCountLimit) => {
-        debugger;
+
         let isChecked = false;
         if ((weekdayCountLimit == 0 || weekdayCountLimit == '') && (weekendCountLimit == 0 || weekendCountLimit == '')) {
             isChecked = true;
@@ -711,7 +716,7 @@ const mapStateToProps = state => {
         usersCount: state.users.usersCount,
         groupId: state.auth.groupId,
         fullName: state.userInfo.fullName,
-        errorMessage:state.users.statusText,
+        errorMessage: state.users.statusText,
         crudSuccess: state.users.crudSuccess,
         message: state.users.message,
         error: state.users.error,
@@ -723,6 +728,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         searchUser: (filterKey, defaultUsers) => dispatch(actions.searchUser(filterKey, defaultUsers)),
+
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData, users, defaultUsers) => dispatch(actions.deleteUserGroup(userGroupId, filterData, users, defaultUsers)),
         updateUser: (userId, userData, userGroupId, countLimits, filterData, users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData, users)),
