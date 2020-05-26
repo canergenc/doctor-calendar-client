@@ -4,7 +4,15 @@ const getGroupSettings = (filterData) => {
     return request({
         url: '/group-settings',
         method: 'GET',
-        data: filterData
+        params: filterData
+    });
+};
+
+const createGroupSettings = (data) => {
+    return request({
+        url: '/group-settings',
+        method: 'POST',
+        data: data
     });
 };
 
@@ -18,5 +26,6 @@ const updateGroupSettings = (groupSettingsId, data) => {
 
 export const groupSettingsService = {
     getGroupSettings,
+    createGroupSettings,
     updateGroupSettings
 };

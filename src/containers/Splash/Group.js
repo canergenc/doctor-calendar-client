@@ -73,7 +73,7 @@ class GroupSplash extends React.Component {
     handleSubmit(event) {
         const { groupName } = this.state;
         
-        let groupSettings = {};
+        let groupSettings = {type:1};
         if (this.state.isWeekdayControlChange) {
             groupSettings.isWeekdayControl = this.state.isWeekdayControl;
         }
