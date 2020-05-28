@@ -63,7 +63,7 @@ class ResetPasswordPage extends React.Component {
 
 
     handleSubmit(event) {
-        debugger;
+        
         event.preventDefault();
         const { password, rePassword, token, email } = this.state;
         this.setState({ submitted: true });

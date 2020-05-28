@@ -288,11 +288,6 @@ export const updateUser = (userId, userData, userGroupId, countLimits, filterDat
             .then(response => {
                 userGroupService.updateUserGroup(userGroupId, countLimits)
                     .then(response => {
-                        debugger;
-
-
-
-
 
                         listOfUser.map((u) => {
                             if (u.user.id == userId) {

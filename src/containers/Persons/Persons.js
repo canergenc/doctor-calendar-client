@@ -8,8 +8,6 @@ import { personHelper } from "./Person/PersonHelper";
 import { constants } from '../../variables/constants';
 import * as EmailValidator from 'email-validator';
 import * as actions from '../../store/actions';
-import "./Persons.css"
-import 'pretty-checkbox';
 
 // reactstrap components
 import {
@@ -29,16 +27,17 @@ import {
     InputGroupText,
     FormGroup
 } from "reactstrap";
-import "./Persons.css";
-import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import moment from "moment/moment";
+import tr from "date-fns/locale/tr";
+import "./Persons.css";
+import 'pretty-checkbox';
+import "react-datepicker/dist/react-datepicker.css";
 
 const MySwal = withReactContent(Swal);
-
-
+registerLocale("tr", tr);
 
 class Persons extends Component {
     constructor(props) {
@@ -55,7 +54,7 @@ class Persons extends Component {
             name: '',
             email: '',
             workStartDate: '',
-            maxData: '',
+            maxDate: '',
             weekendCountLimit: 0,
             weekdayCountLimit: 0,
             password: '',
@@ -224,6 +223,7 @@ class Persons extends Component {
     componentDidMount() {
 
         this.renderTableData();
+        this.setState({ maxDate: new Date() });
     }
 
     componentDidUpdate() {
@@ -313,8 +313,8 @@ class Persons extends Component {
     //Redux a taşınmalı mı?  Bana burası- USERS listesi dönüyor. USERS redux ? 
     paginate(listOfUser) {
         let result = listOfUser.slice((this.state.currentIndex) * constants.PAGESIZE_IN_PERSON_PAGE, (this.state.currentIndex + 1) * constants.PAGESIZE_IN_PERSON_PAGE);
-        console.log('CI',this.state.currentIndex);
-        console.log('RESULT',result);
+        console.log('CI', this.state.currentIndex);
+        console.log('RESULT', result);
         return result;
     }
 
@@ -442,6 +442,7 @@ class Persons extends Component {
                                             dateFormat="dd-MM-yyyy"
                                             showYearDropdown
                                             scrollableYearDropdown
+                                            locale="tr"
                                             maxDate={Date.parse(this.state.maxDate)}
                                             selected={Date.parse(this.state.workStartDate)}
                                             onChange={(event) => this.inputChangeHandleDate(event)}
@@ -527,7 +528,12 @@ class Persons extends Component {
                                             İş Başlangıç Tarihi:
                                         </InputGroupText>
                                         <DatePicker
+                                            required={true}
+                                            timeFormat={false}
                                             dateFormat="dd-MM-yyyy"
+                                            showYearDropdown
+                                            scrollableYearDropdown
+                                            locale="tr"
                                             maxDate={Date.parse(this.state.maxDate)}
                                             selected={Date.parse(this.state.workStartDate)}
                                             onChange={(event) => this.inputChangeHandleDate(event)}

@@ -34,7 +34,6 @@ import resetPasswordReducer from "./store/reducers/reset.password";
 
 
 import history from "./hoc/Config/history";
-import NotFoundPage from "./containers/NotFound/NotFoundPage";
 import { constants } from "./variables/constants";
 
 // Redux Chrome Devtool Extension
@@ -88,19 +87,11 @@ ReactDOM.render(
     <Router history={history}>
       <Switch>
 
-
-        {/* <Route path="/admin" render={props => <AdminLayout  {...props} />} />
-       
-
-        <Route path="/auth" render={props => <AuthLayout {...props} />} />
-        <Route path="/splash" render={props => <SplashLayout {...props} />} /> */}
-
         <Route path="/admin" render={props => <AsyncAdminLayout {...props} />} />
         <Route path="/auth" render={props => <AsyncAuthLayout {...props} />} />
         <Route path="/splash" render={props => <AsyncSplashLayout {...props} />} />
 
         {token && isRememberMe===1 ? <Redirect from="/" to="/admin/index" /> : <Redirect from="/" to="/auth/login" />}
-
 
       </Switch>
     </Router>

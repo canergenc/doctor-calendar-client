@@ -2,7 +2,6 @@ import style from "../containers/Locations/Locations.scss";
 import { constants, listOfColorName } from "../variables/constants";
 
 const getErrorMessage = (err) => {
-    debugger
 
     let errorMessage = "";
     let statusCode = "";
