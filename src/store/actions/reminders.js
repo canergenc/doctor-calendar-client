@@ -393,15 +393,3 @@ export const getRemindersCountFailure = (err) => {
     status: false,
   };
 }
-
-export const startDownloading = () => {
-  return {
-    type: actionTypes.START_DOWNLOADING
-  }
-}
-
-export const endDownloading = () => {
-  return {
-    type: actionTypes.END_DOWNLOADING
-  }
-}

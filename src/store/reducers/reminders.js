@@ -116,16 +116,6 @@ const setRemindersForCrud = (state, action) => {
   return updateObject(state, updatedState);
 }
 
-const startDownloading = (state, action) => {
-  console.log('start downloading');
-  
-  return updateObject(state, { downloading: true });
-}
-
-const endDownloading = (state, action) => {
-  console.log('end downloading');
-  return updateObject(state, { downloading: false });
-}
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -180,8 +170,6 @@ const reducer = (state = initialState, action) => {
     case actionTypes.UPDATE_REMINDER_START: return updateRemiderStart(state, action);
     case actionTypes.UPDATE_REMINDER_SUCCESS: return updateReminderSuccess(state, action);
     case actionTypes.UPDATE_REMINDER_FAIL: return updateReminderFail(state, action);
-    case actionTypes.START_DOWNLOADING: return startDownloading(state, action);
-    case actionTypes.END_DOWNLOADING: return endDownloading(state, action);
     default:
       return state;
   }

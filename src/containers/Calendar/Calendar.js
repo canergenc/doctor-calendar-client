@@ -232,8 +232,7 @@ class Calendar extends Component {
   createExcel = async () => {
     if (this.props.reminders) {
       this.setState({ downloading: true });
-      this.props.startDownloading();
-
+      
       const fileType =
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
       const fileExtension = ".xlsx";
@@ -367,7 +366,6 @@ class Calendar extends Component {
         fileExtension
       );
       this.setState({ downloading: false });
-      this.props.endDownloading();
     }
   };
 
@@ -438,8 +436,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    startDownloading: () => dispatch(actions.startDownloading()),
-    endDownloading: () => dispatch(actions.endDownloading()),
     setCurMonth: (curMonth) => dispatch(actions.setCurMonth(curMonth)),
     deleteReminder: (reminderId, filterData) =>
       dispatch(actions.deleteReminder(reminderId, filterData)),
