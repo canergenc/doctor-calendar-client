@@ -359,9 +359,7 @@ class Persons extends Component {
                     editClick={() => this.toggleModal("editModal", user)}
                     deleteClick={() => this.toggleModal("deleteModal", user)}
                 />
-
             ));
-
         }
 
         if (this.props.usersCount) {

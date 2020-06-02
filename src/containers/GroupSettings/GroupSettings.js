@@ -8,13 +8,14 @@ import {
   Card,
   CardHeader,
   CardBody,
+  Container,
+  Col,
   FormGroup,
   Form,
   Input,
-  Container,
   Row,
-  Col,
-  Label
+  Label,
+  Table
 } from "reactstrap";
 import 'pretty-checkbox';
 import withReactContent from 'sweetalert2-react-content';
@@ -47,6 +48,7 @@ class GroupSettings extends React.Component {
   componentDidMount() {
     if (!this.props.isWeekdayControl || !this.props.isWeekendControl || !this.props.sequentialOrderLimitCount || !this.props.locationDayLimit) {
       this.props.getGroupSettings();
+      this.props.getSeniority();
       const filterData = {
         filter: {
           where: {
@@ -117,6 +119,29 @@ class GroupSettings extends React.Component {
 
 
   render() {
+    let seniority = "Kıdemler yükleniyor...";
+    if (this.props.seniority) {
+      seniority = this.props.seniority.map((senior) => (
+        <tr key={senior.id}>
+          <td>{senior.name}</td>
+          <td>{senior.start}</td>
+          <td>{senior.finish}</td>
+          <td>{senior.defaultWeekDayDutyLimit}</td>
+          <td>{senior.defaultWeekEndDutyLimit}</td>
+          <td className="text-right">
+            <UncontrolledDropdown>
+              <DropdownToggle className="btn-icon-only text-light" role="button" onClick={e => e.preventDefault()}>
+                <i className="fas fa-ellipsis-v" />
+              </DropdownToggle>
+              <DropdownMenu className="dropdown-menu-arrow" right>
+                <DropdownItem style={{ marginLeft: "0px" }} onClick={this.props.editClick}>Düzenle</DropdownItem>
+                <DropdownItem style={{ marginLeft: "0px" }} onClick={this.props.deleteClick}>Kaldır</DropdownItem>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </td>
+        </tr>
+      ));
+    }
 
     return (<>
       <UserHeader />
@@ -148,24 +173,24 @@ class GroupSettings extends React.Component {
                     <Row>
                       <Col lg="6" className="formRow">
                         <Form inline>
-                            <Label
-                              className="form-control-label mr-sm-2"
-                              htmlFor="checkbox-weekday"
-                            >
-                              Haftaiçi Kontrolü
+                          <Label
+                            className="form-control-label mr-sm-2"
+                            htmlFor="checkbox-weekday"
+                          >
+                            Haftaiçi Kontrolü
                             </Label>
-                            <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
-                              <input
-                                type="checkbox"
-                                name="weekday"
-                                ref="weekday"
-                                onClick={event => this.inputChangeHandle(event)}
-                                defaultChecked={this.props.isWeekdayControl}
-                              />
-                              <div className="state p-success-o">
-                                <label></label>
-                              </div>
+                          <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                            <input
+                              type="checkbox"
+                              name="weekday"
+                              ref="weekday"
+                              onClick={event => this.inputChangeHandle(event)}
+                              defaultChecked={this.props.isWeekdayControl}
+                            />
+                            <div className="state p-success-o">
+                              <label></label>
                             </div>
+                          </div>
                         </Form>
                       </Col>
                       <Col lg="6">
@@ -215,43 +240,89 @@ class GroupSettings extends React.Component {
                       </Col>
                       <Col lg="6">
                         <Form inline>
-                            <Label
-                              className="form-control-label"
-                              htmlFor="checkbox-locationDayLimit"
-                            >
-                              Maksimum Lokasyon - Gün Sınırı
+                          <Label
+                            className="form-control-label"
+                            htmlFor="checkbox-locationDayLimit"
+                          >
+                            Maksimum Lokasyon - Gün Sınırı
                             </Label>
 
-                            <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
-                              <input
-                                type="checkbox"
-                                name="locationDayLimit"
-                                ref="locationDayLimit"
-                                onClick={event => this.inputChangeHandle(event)}
-                                defaultChecked={this.props.locationDayLimit}
-                              />
-                              <div className="state p-success-o">
-                                <label></label>
-                              </div>
-                            </div>
+                          <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
                             <input
-                              id="locationDayLimitCount"
-                              name="locationDayLimitCount"
-                              className="specialInput"
-                              type="number"
-                              min="0"
-                              defaultValue={this.props.locationDayLimitCount}
-                              disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
-                              onChange={(event) => this.inputChangeHandle(event)}
+                              type="checkbox"
+                              name="locationDayLimit"
+                              ref="locationDayLimit"
+                              onClick={event => this.inputChangeHandle(event)}
+                              defaultChecked={this.props.locationDayLimit}
                             />
+                            <div className="state p-success-o">
+                              <label></label>
+                            </div>
+                          </div>
+                          <input
+                            id="locationDayLimitCount"
+                            name="locationDayLimitCount"
+                            className="specialInput"
+                            type="number"
+                            min="0"
+                            defaultValue={this.props.locationDayLimitCount}
+                            disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
+                            onChange={(event) => this.inputChangeHandle(event)}
+                          />
                         </Form>
                       </Col>
                     </Row>
-
                   </div>
-                <hr className="my-4" />
                 </Form>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
 
+        <Row className="mt-4">
+          <Col  className="order-xl-1"  xl="12">
+            <Card className="bg-secondary shadow">
+              <CardHeader className="bg-white border-0">
+                <Row className="align-items-center">
+                  <Col xl="9" lg="8" md="8" xs="5" >
+                    <h3 className="mb-0">Kıdem Ayarları</h3>
+                  </Col>
+                  <Col className="text-right" xl="3" lg="4" md="4" xs="7">
+                    <Button
+                      type="button"
+                      color="primary"
+                      size="sm"
+                      onClick={() => this.updateGroupSettings()}
+                    >
+                      Yeni
+                      </Button>
+                  </Col>
+                </Row>
+              </CardHeader>
+              <CardBody>
+                <Table className="align-items-center table-flush specialTablePrs" >
+                  <thead className="thead-light" >
+                    <tr>
+                      <th scope="col">Tanım</th>
+                      <th scope="col">Başlangıç</th>
+                      <th scope="col">Bitiş</th>
+                      <th scope="col">Haftaiçi Nöbet Sayısı</th>
+                      <th scope="col">Haftasonu Nöbet Sayısı</th>
+                      <th scope="col" className="text-right">İşlemler</th>
+                    </tr>
+                  </thead>
+                  <tbody >
+                    {seniority}
+                    {seniority.length == 0 &&
+                      <div style={{
+                        margin: 20,
+                        alignSelf: 'center',
+                        justifyContent: 'center'
+                      }} >
+                        <p>Kayıt bulunmamaktadır.</p>
+                      </div>}
+                  </tbody>
+                </Table>
               </CardBody>
             </Card>
           </Col>
@@ -268,6 +339,7 @@ const mapStateToProps = state => {
     groupSettingsId: state.groupSettings.groupSettingsId,
     isWeekdayControl: state.groupSettings.isWeekdayControl,
     isWeekendControl: state.groupSettings.isWeekendControl,
+    seniority: state.groupSettings.seniority,
     locations: state.locations.locations,
     sequentialOrderLimitCount: state.groupSettings.sequentialOrderLimitCount,
     locationDayLimit: state.groupSettings.locationDayLimit,
@@ -281,6 +353,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getGroupSettings: () => dispatch(actions.getGroupSettings()),
+    getSeniority: () => dispatch(actions.getSeniority()),
     onInitLocations: (filterData) => dispatch(actions.initLocations(filterData)),
     updateGroupSettings: (id, data) => dispatch(actions.updateGroupSettings(id, data)),
     updateBulkLocations: (listOfLocations) => dispatch(actions.updateBulkLocations(listOfLocations)),

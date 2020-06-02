@@ -73,3 +73,97 @@ export const cleanFlagsGroupSettings = () => {
         type: actionTypes.GROUPSETTINGS_CLEAN_FLAGS
     };
 };
+
+
+export const getSeniority = () => {
+    return dispatch => {
+        const filterData = {
+            filter: {
+                where: {
+                    groupId: {
+                        like: helperService.getGroupId()
+                    },
+                    typeId:2
+                }
+            }
+        }
+        groupSettingsService.getSeniority(filterData)
+            .then(response => {
+                if(response.length>0){
+                    dispatch(getSenioritySuccess(response[0]));
+                }
+                else{
+                    dispatch(getSeniorityFailed(error));    
+                }
+            })
+            .catch(error => {
+                dispatch(getSeniorityFailed(error))
+            });
+    };
+};
+
+export const getSenioritySuccess = (data) => {
+    return {
+        type: actionTypes.GET_SENIORITY_SUCCESS,
+        groupSettings: data
+    };
+};
+
+export const getSeniorityFailed = (error) => {
+    return {
+        type: actionTypes.GET_SENIORITY_FAIL,
+        errorObj: error
+    };
+};
+
+export const updateSeniority = (seniorityId, data) => {
+    return dispatch => {
+        groupSettingsService.updateSeniority(seniorityId, data)
+            .then(response => {
+                dispatch(getSeniority());
+                dispatch(updateSenioritySuccess());
+            })
+            .catch(error => {
+                dispatch(updateSeniorityFailed(error))
+            });
+    };
+};
+
+export const updateSenioritySuccess = () => {
+    return {
+        type: actionTypes.UPDATE_SENIORITY_SUCCESS
+    };
+};
+
+export const updateSeniorityFailed = (error) => {
+    return {
+        type: actionTypes.UPDATE_SENIORITY_FAIL,
+        errorObj: error
+    };
+};
+
+export const createSeniority = (data) => {
+    return dispatch => {
+        groupSettingsService.createSeniority(data)
+            .then(response => {
+                dispatch(getGroupSettings());
+                dispatch(createSenioritySuccess());
+            })
+            .catch(error => {
+                dispatch(createSeniorityFailed(error))
+            });
+    };
+};
+
+export const createSenioritySuccess = () => {
+    return {
+        type: actionTypes.CREATE_SENIORITY_SUCCESS
+    };
+};
+
+export const createSeniorityFailed = (error) => {
+    return {
+        type: actionTypes.CREATE_SENIORITY_FAIL,
+        errorObj: error
+    };
+};

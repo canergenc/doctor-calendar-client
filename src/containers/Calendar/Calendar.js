@@ -327,7 +327,7 @@ class Calendar extends Component {
                 while (!isAddedColumn) {
                   if (
                     excelData[excelData.length - 1][
-                      locationName + "-" + columnNameIndex
+                    locationName + "-" + columnNameIndex
                     ]
                   ) {
                     columnNameIndex += 1;
@@ -363,8 +363,8 @@ class Calendar extends Component {
       FileSaver.saveAs(
         data,
         moment(startOfMonth).format("MMMM YYYY") +
-          " NÖBET LİSTESİ" +
-          fileExtension
+        " NÖBET LİSTESİ" +
+        fileExtension
       );
       this.setState({ downloading: false });
       this.props.endDownloading();
@@ -402,17 +402,18 @@ class Calendar extends Component {
 
     return (
       <div className="month">
-        {!this.state.downloading && (
-          <HeaderMonth
-            curMonth={this.state.curMonth}
-            nextMonth={this.state.nextMonth}
-            nextMonthClick={this.nextMonthClickHandler}
-            prevMonth={this.state.prevMonth}
-            prevMonthClick={this.prevMonthClickHandler}
-            downloadExcelClick={this.downloadExcelHandler}
-            refreshCalendar={() => this.initReminders(this.state.curMonth.date)}
-          />
-        )}
+
+        <HeaderMonth
+          curMonth={this.state.curMonth}
+          nextMonth={this.state.nextMonth}
+          nextMonthClick={this.nextMonthClickHandler}
+          prevMonth={this.state.prevMonth}
+          prevMonthClick={this.prevMonthClickHandler}
+          downloadExcelClick={this.downloadExcelHandler}
+          refreshCalendar={() => this.initReminders(this.state.curMonth.date)}
+          downloading={this.state.downloading}
+        />
+
 
         <HeaderWeekDays days={weekdays} />
         <section className="days">{days}</section>
