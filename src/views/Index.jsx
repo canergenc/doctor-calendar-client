@@ -20,7 +20,7 @@ import Users from '../containers/Users/Users';
 import Location from '../containers/Locations/LocationSelect/LocationSelect';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { CalendarTypes,constants,holidays } from "../variables/constants";
+import { CalendarTypes, constants, holidays } from "../variables/constants";
 import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
 import api from "../hoc/Config/api";
 
@@ -79,12 +79,9 @@ class Index extends Component {
 
     const monthlyHolidays = holidays[moment(destination.droppableId).format("YYYY")][moment(destination.droppableId).format("M")];
 
-    console.log('inside dragend');
-    console.log(monthlyHolidays);
-    console.log(moment(destination.droppableId).format("D"));
-    const dayNumber=parseInt(moment(destination.droppableId).format("D"));
-    
-    if (monthlyHolidays.includes(dayNumber)) {
+    const dayNumber = parseInt(moment(destination.droppableId).format("D"));
+
+    if (monthlyHolidays && monthlyHolidays.includes(dayNumber)) {
       isWeekend = true;
     }
 
@@ -236,7 +233,7 @@ class Index extends Component {
                   </Col>
                 </Row>
               </Col>
-              <Col className="cols-2 no-padding-right no-padding-left"  xl="3" lg="3" md="3" sm="3" >
+              <Col className="cols-2 no-padding-right no-padding-left" xl="3" lg="3" md="3" sm="3" >
                 <Users clicked={() => this.toggleModal("addModal")} />
               </Col>
             </Row>

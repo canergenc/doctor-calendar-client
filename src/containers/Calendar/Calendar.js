@@ -90,7 +90,7 @@ class Calendar extends Component {
       }
 
       const monthlyHolidays = holidays[moment(this.state.curMonth.date).format("YYYY")][moment(this.state.curMonth.date).format("M")];
-      
+
 
       for (let i = 1; i <= this.state.curMonth.days; i++) {
         let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`;
@@ -311,7 +311,7 @@ class Calendar extends Component {
 
       for (let index = 0; index < locations.length; index += 2) {
         for (let j = 1; j <= locations[index + 1]; j++) {
-          excelData[excelData.length - 1][locations[index] + "-" + j] = "Test";
+          excelData[excelData.length - 1][locations[index]] = "Test";
         }
       }
 
@@ -326,11 +326,12 @@ class Calendar extends Component {
               moment(element.startDate).format("DD.MM.YYYY") ===
               date.format("DD.MM.YYYY")
             ) {
-              let columnNameIndex = 1;
+              let columnNameIndex = 2;
+              debugger;
               if (firstAdd) {
                 excelData.push({
                   Tarih: moment(element.startDate).format("DD.MM.YYYY"),
-                  [locationName + "-" + columnNameIndex]: element.user.fullName,
+                  [locationName]: element.user.fullName,
                 });
                 dateAdded = true;
                 firstAdd = false;
@@ -339,13 +340,27 @@ class Calendar extends Component {
                 while (!isAddedColumn) {
                   if (
                     excelData[excelData.length - 1][
-                    locationName + "-" + columnNameIndex
+                    locationName
                     ]
                   ) {
-                    columnNameIndex += 1;
-                  } else {
-                    excelData[excelData.length - 1][
+                    if (
+                      excelData[excelData.length - 1][
                       locationName + "-" + columnNameIndex
+                      ]
+                    ) {
+                      columnNameIndex += 1;
+                    }
+                    else {
+                      excelData[excelData.length - 1][
+                        locationName + "-" + columnNameIndex
+                      ] = element.user.fullName;
+                      dateAdded = true;
+                      isAddedColumn = true;
+                    }
+                  }
+                  else {
+                    excelData[excelData.length - 1][
+                      locationName
                     ] = element.user.fullName;
                     dateAdded = true;
                     isAddedColumn = true;
