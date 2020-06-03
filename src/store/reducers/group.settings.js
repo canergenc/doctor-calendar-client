@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const getGroupSettingsSuccess = (state, action) => {
-    
+
     const updatedState = {
         isWeekdayControl: action.groupSettings.isWeekdayControl,
         isWeekendControl: action.groupSettings.isWeekendControl,
@@ -34,7 +34,8 @@ const getGroupSettingsFail = (state, action) => {
 const updateGroupSettingsSuccess = (state, action) => {
     const updatedState = {
         error: false,
-        message: 'Ayarlar güncellendi.'
+        crudSuccess: true,
+        message: 'Kayıt güncellendi.'
     }
     return updateObject(state, updatedState);
 };
@@ -42,6 +43,7 @@ const updateGroupSettingsSuccess = (state, action) => {
 const updateGroupSettingsFail = (state, action) => {
     const updatedState = {
         error: true,
+        crudSuccess: false,
         statusText: helperService.getErrorMessage(action.errorObj)
     }
     return updateObject(state, updatedState);
@@ -49,10 +51,69 @@ const updateGroupSettingsFail = (state, action) => {
 
 const groupSettingsCleanFlags = (state, action) => {
     const updatedState = {
-        error: false
+        error: false,
+        crudSuccess: false
     }
     return updateObject(state, updatedState);
 };
+
+
+const getSenioritySuccess = (state, action) => {
+
+    const updatedState = {
+        seniority: action.seniority,
+        error: false,
+        message: 'Kıdemlere ulaşıldı.'
+    }
+    return updateObject(state, updatedState);
+};
+
+const getSeniorityFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    }
+    return updateObject(state, updatedState);
+};
+
+const createGroupSettingsSuccess = (state, action) => {
+
+    const updatedState = {
+        error: false,
+        crudSuccess: true,
+        message: 'Kayıt oluşturuldu.'
+    }
+    return updateObject(state, updatedState);
+};
+
+const createGroupSettingsFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    }
+    return updateObject(state, updatedState);
+};
+
+const deleteGroupSettingsSuccess = (state, action) => {
+
+    const updatedState = {
+        error: false,
+        crudSuccess: true,
+        message: 'Kayıt silindi.'
+    }
+    return updateObject(state, updatedState);
+};
+
+const deleteGroupSettingsFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    }
+    return updateObject(state, updatedState);
+};
+
 
 
 const reducer = (state = initialState, action) => {
@@ -61,6 +122,16 @@ const reducer = (state = initialState, action) => {
         case actionTypes.GET_GROUPSETTINGS_FAIL: return getGroupSettingsFail(state, action);
         case actionTypes.UPDATE_GROUPSETTINGS_SUCCESS: return updateGroupSettingsSuccess(state, action);
         case actionTypes.UPDATE_GROUPSETTINGS_FAIL: return updateGroupSettingsFail(state, action);
+        case actionTypes.CREATE_GROUPSETTINGS_SUCCESS: return createGroupSettingsSuccess(state, action);
+        case actionTypes.CREATE_GROUPSETTINGS_FAIL: return createGroupSettingsFail(state, action);
+        case actionTypes.CREATE_SENIORITY_SUCCESS: return createGroupSettingsSuccess(state, action);
+        case actionTypes.CREATE_SENIORITY_FAIL: return createGroupSettingsFail(state, action);
+        case actionTypes.UPDATE_SENIORITY_SUCCESS: return updateGroupSettingsSuccess(state, action);
+        case actionTypes.UPDATE_SENIORITY_FAIL: return updateGroupSettingsFail(state, action);
+        case actionTypes.DELETE_GROUPSETTINGS_SUCCESS: return deleteGroupSettingsSuccess(state, action);
+        case actionTypes.DELETE_GROUPSETTINGS_FAIL: return deleteGroupSettingsFail(state, action);
+        case actionTypes.GET_SENIORITY_SUCCESS: return getSenioritySuccess(state, action);
+        case actionTypes.GET_SENIORITY_FAIL: return getSeniorityFail(state, action);
         case actionTypes.GROUPSETTINGS_CLEAN_FLAGS: return groupSettingsCleanFlags(state, action);
         default:
             return state;

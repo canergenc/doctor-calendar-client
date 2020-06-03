@@ -14,6 +14,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../store/actions/index";
 import Api from "../../hoc/Config/api";
+import { holidays } from '../../variables/constants';
 import "./Calendar.scss";
 
 class Calendar extends Component {
@@ -88,8 +89,13 @@ class Calendar extends Component {
         isMonthPast = true;
       }
 
+      const monthlyHolidays = holidays[moment(this.state.curMonth.date).format("YYYY")][moment(this.state.curMonth.date).format("M")];
+      
+
       for (let i = 1; i <= this.state.curMonth.days; i++) {
         let date = `${this.state.curMonth.date}-${("0" + i).slice(-2)}`;
+
+
         props["date"] = date;
         props["day"] = i;
         const calendar = [];
@@ -143,6 +149,13 @@ class Calendar extends Component {
         ) {
           isWeekend = true;
         }
+
+
+        if (monthlyHolidays && monthlyHolidays.includes(i)) {
+          isWeekend = true;
+        }
+
+
 
         props["weekend"] = isWeekend;
 
@@ -232,7 +245,7 @@ class Calendar extends Component {
   createExcel = async () => {
     if (this.props.reminders) {
       this.setState({ downloading: true });
-      
+
       const fileType =
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
       const fileExtension = ".xlsx";

@@ -20,9 +20,8 @@ import Users from '../containers/Users/Users';
 import Location from '../containers/Locations/LocationSelect/LocationSelect';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { constants } from "../variables/constants";
+import { CalendarTypes,constants,holidays } from "../variables/constants";
 import withErrorHandler from "../hoc/withErrorHandler/withErrorHandler";
-import { CalendarTypes } from "../variables/constants";
 import api from "../hoc/Config/api";
 
 import Select from 'react-select';
@@ -75,6 +74,17 @@ class Index extends Component {
 
     let isWeekend = false;
     if (moment(destination.droppableId).isoWeekday() === 6 || moment(destination.droppableId).isoWeekday() === 7) {
+      isWeekend = true;
+    }
+
+    const monthlyHolidays = holidays[moment(destination.droppableId).format("YYYY")][moment(destination.droppableId).format("M")];
+
+    console.log('inside dragend');
+    console.log(monthlyHolidays);
+    console.log(moment(destination.droppableId).format("D"));
+    const dayNumber=parseInt(moment(destination.droppableId).format("D"));
+    
+    if (monthlyHolidays.includes(dayNumber)) {
       isWeekend = true;
     }
 

@@ -15,11 +15,11 @@ export const getGroupSettings = () => {
         }
         groupSettingsService.getGroupSettings(filterData)
             .then(response => {
-                if(response.length>0){
+                if (response.length > 0) {
                     dispatch(getGroupSettingsSuccess(response[0]));
                 }
-                else{
-                    dispatch(getGroupSettingsFailed(error));    
+                else {
+                    dispatch(getGroupSettingsFailed(error));
                 }
             })
             .catch(error => {
@@ -80,20 +80,25 @@ export const getSeniority = () => {
         const filterData = {
             filter: {
                 where: {
-                    groupId: {
-                        like: helperService.getGroupId()
+                    and: [{
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
                     },
-                    typeId:2
+                    {
+                        type: 2
+                        
+                    }]
                 }
             }
         }
-        groupSettingsService.getSeniority(filterData)
+        groupSettingsService.getGroupSettings(filterData)
             .then(response => {
-                if(response.length>0){
-                    dispatch(getSenioritySuccess(response[0]));
+                if (response.length > 0) {
+                    dispatch(getSenioritySuccess(response));
                 }
-                else{
-                    dispatch(getSeniorityFailed(error));    
+                else {
+                    dispatch(getSeniorityFailed(error));
                 }
             })
             .catch(error => {
@@ -105,7 +110,7 @@ export const getSeniority = () => {
 export const getSenioritySuccess = (data) => {
     return {
         type: actionTypes.GET_SENIORITY_SUCCESS,
-        groupSettings: data
+        seniority: data
     };
 };
 
@@ -116,37 +121,12 @@ export const getSeniorityFailed = (error) => {
     };
 };
 
-export const updateSeniority = (seniorityId, data) => {
-    return dispatch => {
-        groupSettingsService.updateSeniority(seniorityId, data)
-            .then(response => {
-                dispatch(getSeniority());
-                dispatch(updateSenioritySuccess());
-            })
-            .catch(error => {
-                dispatch(updateSeniorityFailed(error))
-            });
-    };
-};
-
-export const updateSenioritySuccess = () => {
-    return {
-        type: actionTypes.UPDATE_SENIORITY_SUCCESS
-    };
-};
-
-export const updateSeniorityFailed = (error) => {
-    return {
-        type: actionTypes.UPDATE_SENIORITY_FAIL,
-        errorObj: error
-    };
-};
 
 export const createSeniority = (data) => {
     return dispatch => {
-        groupSettingsService.createSeniority(data)
+        groupSettingsService.createGroupSettings(data)
             .then(response => {
-                dispatch(getGroupSettings());
+                dispatch(getSeniority());
                 dispatch(createSenioritySuccess());
             })
             .catch(error => {
@@ -164,6 +144,61 @@ export const createSenioritySuccess = () => {
 export const createSeniorityFailed = (error) => {
     return {
         type: actionTypes.CREATE_SENIORITY_FAIL,
+        errorObj: error
+    };
+};
+
+
+export const updateSeniority = (groupSettingsId, data) => {
+    return dispatch => {
+        groupSettingsService.updateGroupSettings(groupSettingsId, data)
+            .then(response => {
+                dispatch(getSeniority());
+                dispatch(updateSenioritySuccess());
+            })
+            .catch(error => {
+                dispatch(updateSeniorityFailed(error))
+            });
+    };
+};
+
+export const updateSenioritySuccess = () => {
+    console.log('updateSenioritySuccess');
+    
+    return {
+        type: actionTypes.UPDATE_SENIORITY_SUCCESS
+    };
+};
+
+export const updateSeniorityFailed = (error) => {
+    return {
+        type: actionTypes.UPDATE_SENIORITY_FAIL,
+        errorObj: error
+    };
+};
+
+export const deleteGroupSettings = (groupSettingsId) => {
+    return dispatch => {
+        groupSettingsService.deleteGroupSettings(groupSettingsId)
+            .then(response => {
+                dispatch(getSeniority());
+                dispatch(deleteGroupSettingsSuccess());
+            })
+            .catch(error => {
+                dispatch(deleteGroupSettingsFailed(error))
+            });
+    };
+};
+
+export const deleteGroupSettingsSuccess = () => {
+    return {
+        type: actionTypes.DELETE_GROUPSETTINGS_SUCCESS
+    };
+};
+
+export const deleteGroupSettingsFailed = (error) => {
+    return {
+        type: actionTypes.DELETE_GROUPSETTINGS_FAIL,
         errorObj: error
     };
 };
