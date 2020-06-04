@@ -59,7 +59,6 @@ const groupSettingsCleanFlags = (state, action) => {
 
 
 const getSenioritySuccess = (state, action) => {
-
     const updatedState = {
         seniority: action.seniority,
         error: false,

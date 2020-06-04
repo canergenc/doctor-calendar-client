@@ -103,7 +103,7 @@ class GroupSettings extends React.Component {
     if (target.name === 'weekday')
       this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
     if (target.name === 'weekend')
-      this.setState({ isWeekendControl: this.refs.weekend.checked, isWeekendControlChange: true});
+      this.setState({ isWeekendControl: this.refs.weekend.checked, isWeekendControlChange: true });
     if (target.name === 'sequentialOrderLimitCount')
       this.setState({ sequentialOrderLimitCount: event.target.value, sequentialOrderLimitCountChange: true });
     if (target.name === 'locationDayLimit') {
@@ -653,13 +653,15 @@ class GroupSettings extends React.Component {
                 <tbody >
                   {seniority}
                   {seniority.length == 0 &&
-                    <div style={{
+                    <tr style={{
                       margin: 20,
                       alignSelf: 'center',
                       justifyContent: 'center'
                     }} >
-                      <p>Kayıt bulunmamaktadır.</p>
-                    </div>}
+                      <td>
+                        <p>Kayıt bulunmamaktadır.</p>
+                      </td>
+                    </tr>}
                 </tbody>
               </Table>
             </Card>

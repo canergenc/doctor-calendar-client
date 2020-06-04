@@ -94,12 +94,9 @@ export const getSeniority = () => {
         }
         groupSettingsService.getGroupSettings(filterData)
             .then(response => {
-                if (response.length > 0) {
+                
                     dispatch(getSenioritySuccess(response));
-                }
-                else {
-                    dispatch(getSeniorityFailed(error));
-                }
+                
             })
             .catch(error => {
                 dispatch(getSeniorityFailed(error))
