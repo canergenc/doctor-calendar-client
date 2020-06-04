@@ -263,56 +263,65 @@ class Calendar extends Component {
 
       let locations = [];
 
-      this.props.reminders.forEach((element) => {
-        if (element.location && element.user) {
-          if (locations.length === 0) {
-            const locationName = element.location.name;
-            locations.push(locationName, 0);
-          } else {
-            let isExistColumn = false;
-            for (let index = 0; index < locations.length; index += 2) {
-              if (locations[index] === element.location.name) {
-                isExistColumn = true;
-              }
-            }
-            if (!isExistColumn) {
-              const locationName = element.location.name;
-              locations.push(locationName, 0);
-            }
+      // this.props.reminders.forEach((element) => {
+      //   if (element.location && element.user) {
+      //     if (locations.length === 0) {
+      //       const locationName = element.location.name;
+      //       locations.push(locationName, 0);
+      //     } else {
+      //       let isExistColumn = false;
+      //       for (let index = 0; index < locations.length; index += 2) {
+      //         if (locations[index] === element.location.name) {
+      //           isExistColumn = true;
+      //         }
+      //       }
+      //       if (!isExistColumn) {
+      //         const locationName = element.location.name;
+      //         locations.push(locationName, 0);
+      //       }
+      //     }
+      //   }
+      // });
+
+      this.props.locations.forEach((element) => {
+          if (element.name) {
+            const locationName = element.name;
+            locations.push(locationName);
           }
-        }
       });
 
-      for (let index = 0; index < locations.length; index += 2) {
-        for (let date of range.by("day")) {
-          let locationSum = 0;
-          // eslint-disable-next-line no-loop-func
-          this.props.reminders.forEach((element) => {
-            if (element.location && element.user) {
-              if (
-                moment(element.startDate).format("DD.MM.YYYY") ===
-                date.format("DD.MM.YYYY")
-              ) {
-                if (locations[index] === element.location.name) {
-                  locationSum = locationSum + 1;
-                }
-              }
-            }
-          });
-          if (locationSum > locations[index + 1]) {
-            locations[index + 1] = locationSum;
-          }
-        }
-      }
+
+
+      // for (let index = 0; index < locations.length; index += 2) {
+      //   for (let date of range.by("day")) {
+      //     let locationSum = 0;
+      //     // eslint-disable-next-line no-loop-func
+      //     this.props.reminders.forEach((element) => {
+      //       if (element.location && element.user) {
+      //         if (
+      //           moment(element.startDate).format("DD.MM.YYYY") ===
+      //           date.format("DD.MM.YYYY")
+      //         ) {
+      //           if (locations[index] === element.location.name) {
+      //             locationSum = locationSum + 1;
+      //           }
+      //         }
+      //       }
+      //     });
+      //     if (locationSum > locations[index + 1]) {
+      //       locations[index + 1] = locationSum;
+      //     }
+      //   }
+      // }
 
       excelData.push({
         Tarih: moment(startOfMonth).format("DD.MM.YYYY"),
       });
 
-      for (let index = 0; index < locations.length; index += 2) {
-        for (let j = 1; j <= locations[index + 1]; j++) {
+      for (let index = 0; index < locations.length; index += 1) {
+        // for (let j = 1; j <= locations[index + 1]; j++) {
           excelData[excelData.length - 1][locations[index]] = "Test";
-        }
+        // }
       }
 
       for (let date of range.by("day")) {
