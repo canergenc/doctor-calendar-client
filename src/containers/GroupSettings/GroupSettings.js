@@ -147,7 +147,17 @@ class GroupSettings extends React.Component {
       groupSettings.locationDayLimitCount = parseInt(this.state.locationDayLimitCount);
     }
 
-    this.props.updateGroupSettings(this.props.groupSettingsId, groupSettings);
+    if (Object.keys(groupSettings).length !== 0) {
+      this.props.updateGroupSettings(this.props.groupSettingsId, groupSettings);
+      this.setState({
+        isWeekdayControlChange: false,
+        isWeekendControlChange: false,
+        sequentialOrderLimitCountChange: false,
+        locationDayLimitChange: false,
+        locationDayLimitCountChange: false
+      })
+    }
+
   }
 
   addHandleValidation() {
