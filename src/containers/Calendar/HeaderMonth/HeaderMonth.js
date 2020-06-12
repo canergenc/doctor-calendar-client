@@ -30,10 +30,10 @@ class HeaderMonth extends Component {
   defaultIsDraft = () => {
 
     if (this.props.isDraft !== undefined) {
-      return this.props.isDraft;
+      return this.props.isDraft ? false : true;
     }
     else {
-      return false;
+      return true;
     }
   }
 
@@ -57,9 +57,9 @@ class HeaderMonth extends Component {
               </Button>
               <Button color="primary" style={{ padding: "3px 5px" }} onClick={this.props.refreshCalendar} size="sm" ><i className="fas fa-sync-alt" style={{ fontSize: "12px", color: "white" }}></i></Button>
               <div className="pretty p-switch p-fill special">
-                <input type="checkbox" ref="isDraft" defaultChecked={this.props.isDraft} checked={this.defaultIsDraft()} onChange={(event) => this.isDraftClick(event)} />
+                <input type="checkbox" ref="isDraft"  checked={this.defaultIsDraft()} onChange={(event) => this.isDraftClick(event)} />
                 <div className="state p-primary">
-                  <label className="">Taslak</label>
+                  <label className="">Yayınla</label>
                 </div>
               </div>
             </h1>

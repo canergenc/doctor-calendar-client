@@ -417,16 +417,14 @@ class Calendar extends Component {
 
   isDraftProcess = (event) => {
 
-    let isDraft = false;
-    const startOfMonth=moment(this.props.curMonth).startOf("month").format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
+    let isDraft = true;
+    const startOfMonth = moment(this.props.curMonth).startOf("month").format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
 
     if (event.target.checked) {
-      console.log('checkbox control');
-      console.log(event.target.checked);
       
-      isDraft = true;
+      isDraft = false;
     }
-    
+
     let isWeekend = false;
     if (moment(startOfMonth).isoWeekday() === 6 || moment(startOfMonth).isoWeekday() === 7) {
       isWeekend = true;
