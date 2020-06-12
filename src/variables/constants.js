@@ -47,7 +47,8 @@ export const CalendarTypes = {
     ResmiTatil: 5,
     IdariIzin: 6,
     OzelDurum: 7,
-    Rotasyon: 8
+    Rotasyon: 8,
+    Yayin: 9
 }
 
 

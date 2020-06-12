@@ -31,6 +31,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import moment from "moment/moment";
+import { extendMoment } from 'moment-range';
 import tr from "date-fns/locale/tr";
 import "./Persons.css";
 import 'pretty-checkbox';
@@ -143,7 +144,7 @@ class Persons extends Component {
 
 
 
-            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, personHelper.getFilter(), this.props.users);
+            this.props.updateUser(this.state.id, userData, this.state.userGroupId, countLimits, this.props.users);
 
             this.toggleModal('editModal', null);
             event.preventDefault();
@@ -258,18 +259,26 @@ class Persons extends Component {
             fullName: userModel.user.fullName,
             workStartDate: userModel.user.workStartDate
         };
-        let weekdayCountLimit = 1;
-        let weekendCountLimit = 1;
+
         if (event.target.checked) {
-            weekdayCountLimit = 0;
-            weekendCountLimit = 0;
+            const countLimits = {
+                weekdayCountLimit: 0,
+                weekendCountLimit: 0
+            };
+            this.props.updateUser(userModel.user.id, userData, userModel.id, countLimits, this.props.users);
         }
-        const countLimits = {
-            weekdayCountLimit: weekdayCountLimit,
-            weekendCountLimit: weekendCountLimit
-        };
-        this.setState({ weekdayCountLimit: weekdayCountLimit, weekendCountLimit: weekendCountLimit })
-        this.props.updateUser(userModel.user.id, userData, userModel.id, countLimits, personHelper.getFilter(), this.props.users);
+        else {
+            const momentRange = extendMoment(moment);
+            const workStartDate = moment(userModel.user.workStartDate).format('YYYY-MM-DD');
+            const today = moment(new Date()).format('YYYY-MM-DD');
+            const range = momentRange.range(workStartDate, today);
+            const month = range.diff('months');
+            userData.seniority = month;
+            this.props.updateUserWeekdayCount(userModel.user.id, userData, userModel.id, this.props.users);
+        }
+
+        //this.setState({ weekdayCountLimit: weekdayCountLimit, weekendCountLimit: weekendCountLimit })
+
 
     }
 
@@ -313,8 +322,7 @@ class Persons extends Component {
     //Redux a taşınmalı mı?  Bana burası- USERS listesi dönüyor. USERS redux ? 
     paginate(listOfUser) {
         let result = listOfUser.slice((this.state.currentIndex) * constants.PAGESIZE_IN_PERSON_PAGE, (this.state.currentIndex + 1) * constants.PAGESIZE_IN_PERSON_PAGE);
-        console.log('CI', this.state.currentIndex);
-        console.log('RESULT', result);
+
         return result;
     }
 
@@ -735,7 +743,8 @@ const mapDispatchToProps = dispatch => {
 
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData, users, defaultUsers) => dispatch(actions.deleteUserGroup(userGroupId, filterData, users, defaultUsers)),
-        updateUser: (userId, userData, userGroupId, countLimits, filterData, users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, filterData, users)),
+        updateUser: (userId, userData, userGroupId, countLimits, users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, users)),
+        updateUserWeekdayCount: (userId, userData, userGroupId, users) => dispatch(actions.updateUserWeekdayCount(userId, userData, userGroupId, users)),
         cleanFlagUser: () => dispatch(actions.cleanFlagsUsers())
     };
 };

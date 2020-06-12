@@ -134,6 +134,27 @@ const userCleanFlags = (state, action) => {
     return updateObject(state, updatedState);
 };
 
+const updateUserWeekdaySuccess = (state, action) => {
+    const updatedState = {
+
+        users: action.users,
+        error: false,
+        crudSuccess: true,
+        message: 'Kullanıcı günleri güncellendi.'
+    };
+    return updateObject(state, updatedState);
+};
+
+const updateUserWeekdayFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: 'Tanımlı kıdem bulunamadı'
+    };
+    return updateObject(state, updatedState);
+};
+
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.SET_USERS: return setUsers(state, action);
@@ -149,6 +170,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.DELETE_USER_GROUP_FAIL: return deleteUserGroupFail(state, action);
         case actionTypes.CREATE_USERGROUPBULK_SUCCESS: return createUserGroupBulkSuccess(state, action);
         case actionTypes.CREATE_USERGROUPBULK_FAILURE: return createUserGroupBulkFail(state, action);
+        case actionTypes.UPDATE_USER_WEEKDAY_SUCCESS: return updateUserWeekdaySuccess(state, action);
+        case actionTypes.UPDATE_USER_WEEKDAY_FAIL: return updateUserWeekdayFail(state, action);
         case actionTypes.USER_CLEAN_FLAGS: return userCleanFlags(state, action);
         default:
             return state;

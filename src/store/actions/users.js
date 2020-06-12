@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
 import { userService } from '../../services/user';
 import { userGroupService } from "../../services/user.group";
-import { helperService } from '../../services';
+import { helperService, groupSettingsService } from '../../services';
 import moment from 'moment';
 
 export const setUsers = (users, defaultUsers) => {
@@ -282,7 +282,7 @@ export const createUserFailed = (error) => {
     };
 };
 
-export const updateUser = (userId, userData, userGroupId, countLimits, filterData, listOfUser) => {
+export const updateUser = (userId, userData, userGroupId, countLimits, listOfUser) => {
     return dispatch => {
         userService.updateUserService(userId, userData)
             .then(response => {
@@ -330,7 +330,6 @@ export const updateUserFailed = (error) => {
     };
 };
 
-
 export const createUserGroupBulk = (userGroupBulk) => {
     return dispatch => {
         dispatch(createUserGroupBulkRequest());
@@ -360,7 +359,6 @@ export const createUserGroupBulk = (userGroupBulk) => {
     }
 }
 
-
 export const createUserGroupBulkRequest = () => {
     return {
         type: actionTypes.CREATE_USERGROUPBULK_REQUEST,
@@ -375,11 +373,9 @@ export const createUserGroupBulkSuccess = (response) => {
 }
 
 export const createUserGroupBulkFailure = (err) => {
-
     return {
         type: actionTypes.CREATE_USERGROUPBULK_FAILURE,
-        errorObj: err,
-
+        errorObj: err
     };
 }
 
@@ -388,3 +384,87 @@ export const cleanFlagsUsers = () => {
         type: actionTypes.USER_CLEAN_FLAGS
     }
 }
+
+export const updateUserWeekdayCount = (userId, userData, userGroupId, listOfUser) => {
+    return dispatch => {
+        const filterData = {
+            filter: {
+                where: {
+                    and: [{
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
+                    },
+                    {
+                        type: 2
+
+                    }
+                        ,
+                    {
+                        start: {
+                            'lt': userData.seniority
+                        }
+                    },
+                    {
+                        finish: {
+                            'gt': userData.seniority
+                        }
+                    }
+                    ]
+                }
+            }
+        }
+        groupSettingsService.getGroupSettings(filterData)
+            .then(resp => {
+                if (resp.length > 0) {
+
+                    const countLimits = {
+                        weekdayCountLimit: resp[0].defaultWeekDayDutyLimit,
+                        weekendCountLimit: resp[0].defaultWeekEndDutyLimit
+                    };
+                    // console.log(resp);
+
+                    userGroupService.updateUserGroup(userGroupId, countLimits)
+                        .then(response => {
+
+                            listOfUser.map((u) => {
+                                if (u.user.id == userId) {
+                                    u.user.email = userData.email
+                                    u.user.fullName = userData.fullName
+                                    u.user.workStartDate = userData.workStartDate
+                                    u.weekdayCountLimit = countLimits.weekdayCountLimit
+                                    u.weekendCountLimit = countLimits.weekendCountLimit
+
+                                }
+                            })
+
+                            dispatch(updateUserWeekdaySuccess(userId, userData, listOfUser))
+                        })
+                        .catch(err => {
+                            dispatch(updateUserFailed(err));
+                        });
+                }
+                else {
+                    dispatch(updateUserWeekdayFailed());
+                }
+            })
+
+
+    };
+};
+
+export const updateUserWeekdaySuccess = (id, userData, users) => {
+    return {
+        type: actionTypes.UPDATE_USER_WEEKDAY_SUCCESS,
+        userId: id,
+        userData: userData,
+        users: users
+    };
+};
+
+export const updateUserWeekdayFailed = () => {
+    return {
+        type: actionTypes.UPDATE_USER_WEEKDAY_FAIL,
+        error: true
+    };
+};

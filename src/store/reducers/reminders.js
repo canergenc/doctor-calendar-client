@@ -103,7 +103,7 @@ const fetchRemindersFailed = (state, action) => {
     crudSuccess: false,
     error: true,
     statusText: helperService.getErrorMessage(action.errorObj)
-  };  
+  };
   return updateObject(state, updatedState);
 }
 
@@ -114,7 +114,45 @@ const setRemindersForCrud = (state, action) => {
     error: false
   };
   return updateObject(state, updatedState);
-}
+};
+
+const getIsDraftSuccess = (state, action) => {
+  const updatedState = {
+    isDraft: action.isDraft,
+  }
+  return updateObject(state, updatedState);
+};
+
+const getIsDraftFail = (state, action) => {
+  const updatedState = {
+    isDraft: false,
+    statusText: helperService.getErrorMessage(action.errorObj)
+  }
+  return updateObject(state, updatedState);
+};
+
+const isDraftProcessStart = (state, action) => {
+  const updatedState = {
+    isDraft: action.isDraft
+  }
+  return updateObject(state, updatedState);
+};
+
+const isDraftProcessSuccess = (state, action) => {
+  const updatedState = {
+    isDraft: action.isDraft
+  }
+  return updateObject(state, updatedState);
+};
+
+const isDraftProcessFail = (state, action) => {
+  const updatedState = {
+    isDraft: action.isDraft,
+    error: true,
+    statusText: helperService.getErrorMessage(action.errorObj)
+  }
+  return updateObject(state, updatedState);
+};
 
 
 const reducer = (state = initialState, action) => {
@@ -170,6 +208,11 @@ const reducer = (state = initialState, action) => {
     case actionTypes.UPDATE_REMINDER_START: return updateRemiderStart(state, action);
     case actionTypes.UPDATE_REMINDER_SUCCESS: return updateReminderSuccess(state, action);
     case actionTypes.UPDATE_REMINDER_FAIL: return updateReminderFail(state, action);
+    case actionTypes.GET_ISDRAFT_SUCCESS: return getIsDraftSuccess(state, action);
+    case actionTypes.GET_ISDRAFT_FAIL: return getIsDraftFail(state, action);
+    case actionTypes.ISDRAFT_PROCESS_START: return isDraftProcessStart(state, action);
+    case actionTypes.ISDRAFT_PROCESS_SUCCESS: return isDraftProcessSuccess(state, action);
+    case actionTypes.ISDRAFT_PROCESS_FAIL: return isDraftProcessFail(state, action);
     default:
       return state;
   }

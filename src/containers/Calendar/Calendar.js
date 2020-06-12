@@ -14,7 +14,7 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../store/actions/index";
 import Api from "../../hoc/Config/api";
-import { holidays } from '../../variables/constants';
+import { CalendarTypes, holidays } from '../../variables/constants';
 import "./Calendar.scss";
 
 class Calendar extends Component {
@@ -65,10 +65,12 @@ class Calendar extends Component {
   }
 
   initReminders = (curMonth) => {
+    this.props.getIsDraft(curMonth);
     this.props.setCurMonth(curMonth);
     const selectedLocations = [];
     const selectedUsers = [];
     this.props.getReminders(selectedLocations, selectedUsers, curMonth);
+
     this.props.setActiveLocation("");
     var myCheckbox = document.getElementsByName("radio");
     Array.prototype.forEach.call(myCheckbox, function (el) {
@@ -284,10 +286,10 @@ class Calendar extends Component {
       // });
 
       this.props.locations.forEach((element) => {
-          if (element.name) {
-            const locationName = element.name;
-            locations.push(locationName);
-          }
+        if (element.name) {
+          const locationName = element.name;
+          locations.push(locationName);
+        }
       });
 
 
@@ -320,7 +322,7 @@ class Calendar extends Component {
 
       for (let index = 0; index < locations.length; index += 1) {
         // for (let j = 1; j <= locations[index + 1]; j++) {
-          excelData[excelData.length - 1][locations[index]] = "Test";
+        excelData[excelData.length - 1][locations[index]] = "Test";
         // }
       }
 
@@ -413,6 +415,34 @@ class Calendar extends Component {
     }, 0);
   };
 
+  isDraftProcess = (event) => {
+
+    let isDraft = false;
+    const startOfMonth=moment(this.props.curMonth).startOf("month").format("YYYY-MM-DD[T]hh:mm:ss.sss[Z]");
+
+    if (event.target.checked) {
+      console.log('checkbox control');
+      console.log(event.target.checked);
+      
+      isDraft = true;
+    }
+    
+    let isWeekend = false;
+    if (moment(startOfMonth).isoWeekday() === 6 || moment(startOfMonth).isoWeekday() === 7) {
+      isWeekend = true;
+    }
+
+    const reminder = {
+      groupId: helperService.getGroupId(),
+      startDate: startOfMonth,
+      endDate: startOfMonth,
+      isWeekend: isWeekend,
+      type: CalendarTypes.Yayin,
+      isDraft: isDraft
+    }
+    this.props.isDraftProcess(reminder, this.state.curMonth.date);
+  }
+
   render() {
     moment.locale("tr");
     const weekdays = moment.weekdays(true);
@@ -447,6 +477,7 @@ class Calendar extends Component {
           downloadExcelClick={this.downloadExcelHandler}
           refreshCalendar={() => this.initReminders(this.state.curMonth.date)}
           downloading={this.state.downloading}
+          isDraftProcess={(event) => this.isDraftProcess(event)}
         />
 
 
@@ -482,6 +513,11 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(
         actions.getReminders(selectedLocations, selectedUsers, curMonth)
       ),
+    getIsDraft: (curMonth) =>
+      dispatch(
+        actions.getIsDraft(curMonth)
+      ),
+    isDraftProcess: (reminderData, curMonth) => dispatch(actions.isDraftProcess(reminderData, curMonth))
   };
 };
 

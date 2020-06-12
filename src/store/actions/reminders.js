@@ -24,7 +24,7 @@ export const updateBulkReminder = (filter, data, waitingForApprovedFilter, appro
         dispatch(updateBulkReminderFailure(error));
       });
   }
-}
+};
 
 export const updateBulkReminderRequest = () => {
   return {
@@ -37,15 +37,14 @@ export const updateBulkReminderSuccess = (response) => {
     type: actionTypes.CALENDAR_BULKUPDATE_SUCCESS,
     response: response
   };
-
-}
+};
 
 export const updateBulkReminderFailure = (err) => {
   return {
     type: actionTypes.CALENDAR_BULKUPDATE_FAILURE,
     errorObj: err
   };
-}
+};
 
 export const setReminders = (reminders, filterData, selectedLocations, selectedUsers) => {
   return {
@@ -238,7 +237,7 @@ export const getReminders = (selectedLocations, selectedUsers, curMonth) => {
         dispatch(fetchRemindersFailed(err));
       });
   }
-}
+};
 
 export const getRemindersForCrud = (filterData) => {
   return dispatch => {
@@ -264,7 +263,7 @@ export const getRemindersForCrud = (filterData) => {
         dispatch(fetchRemindersFailed());
       });
   }
-}
+};
 
 export const createReminderSuccess = (id, reminderData) => {
   return {
@@ -293,7 +292,7 @@ export const createReminder = (reminderData, filterData) => {
         dispatch(createReminderFailed(error));
       });
   };
-}
+};
 
 export const deleteReminderSuccess = (id) => {
   return {
@@ -321,7 +320,7 @@ export const deleteReminder = (reminderId, filterData) => {
         dispatch(deleteReminderFailed(error));
       });
   };
-}
+};
 
 export const updateReminderStart = (index) => {
   return {
@@ -357,7 +356,7 @@ export const updateReminder = (id, index, reminderData, filterData) => {
         dispatch(updateReminderFail(error, index))
       });
   }
-}
+};
 
 export const getRemindersCount = (data) => {
   return dispatch => {
@@ -370,7 +369,7 @@ export const getRemindersCount = (data) => {
         dispatch(getRemindersCountFailure(err));
       });
   }
-}
+};
 
 export const getRemindersCountRequest = () => {
   return {
@@ -384,7 +383,7 @@ export const getRemindersCountSuccess = (response) => {
     status: true,
     response: response.count
   };
-}
+};
 
 export const getRemindersCountFailure = (err) => {
   return {
@@ -392,4 +391,156 @@ export const getRemindersCountFailure = (err) => {
     errorObj: err,
     status: false,
   };
-}
+};
+
+export const isDraftProcessStart = (isDraft) => {
+  return {
+    type: actionTypes.ISDRAFT_PROCESS_START,
+    isDraft: isDraft
+  };
+};
+
+export const isDraftProcessSuccess = (isDraft) => {
+  return {
+    type: actionTypes.ISDRAFT_PROCESS_SUCCESS,
+    isDraft: isDraft
+  };
+};
+
+export const isDraftProcessFail = (error, isDraft) => {
+  return {
+    type: actionTypes.ISDRAFT_PROCESS_FAIL,
+    errorObj: error,
+    isDraft: isDraft
+  };
+};
+
+export const isDraftProcess = (reminderData, curMonth) => {
+
+  const startOfMonth = moment(curMonth).startOf('month').format("YYYY-MM-DD[T]00:01:00.000[Z]");
+  const endOfMonth = moment(curMonth).endOf('month').format("YYYY-MM-DD[T]23:59:59.000[Z]");
+  const filterData = {
+    filter: {
+      where: {
+        startDate: {
+          between: [
+            startOfMonth,
+            endOfMonth
+          ]
+        },
+        or: [
+          { isDraft: true },
+          { isDraft: false }
+        ],
+        groupId: {
+          like: helperService.getGroupId()
+        },
+        type: CalendarTypes.Yayin
+      },
+      include: [
+        {
+          relation: "group"
+        }
+      ]
+    }
+  }
+
+  return dispatch => {
+    dispatch(isDraftProcessStart(reminderData.isDraft))
+    calendarService.getReminderService(filterData)
+      .then(response => {
+        console.log(response);
+
+        if (response.length > 0) {
+          calendarService.updateReminderService(response[0].id, reminderData)
+            .then(res => {
+              dispatch(isDraftProcessSuccess(reminderData.isDraft))
+            }
+            )
+            .catch(error => {
+              dispatch(isDraftProcessFail(error, reminderData.isDraft))
+            });
+        }
+        else {
+          console.log('create');
+
+          calendarService.createReminderService(reminderData)
+            .then(res => {
+              dispatch(isDraftProcessSuccess(reminderData.isDraft))
+            }
+            )
+            .catch(error => {
+              dispatch(isDraftProcessFail(error))
+            });
+        }
+      })
+      .catch(error => {
+        dispatch(isDraftProcessFail(error))
+      });
+  }
+};
+
+export const getIsDraftSuccess = (isDraft) => {
+  return {
+    type: actionTypes.GET_ISDRAFT_SUCCESS,
+    isDraft: isDraft
+  };
+};
+
+export const getIsDraftFail = (error) => {
+  return {
+    type: actionTypes.GET_ISDRAFT_FAIL,
+    errorObj: error
+  };
+};
+
+export const getIsDraft = (curMonth) => {
+  const startOfMonth = moment(curMonth).startOf('month').format("YYYY-MM-DD[T]00:01:00.000[Z]");
+  const endOfMonth = moment(curMonth).endOf('month').format("YYYY-MM-DD[T]23:59:59.000[Z]");
+  const filterData = {
+    filter: {
+      where: {
+        startDate: {
+          between: [
+            startOfMonth,
+            endOfMonth
+          ]
+        },
+        or: [
+          { isDraft: true },
+          { isDraft: false }
+        ],
+        groupId: {
+          like: helperService.getGroupId()
+        },
+        type: CalendarTypes.Yayin
+      },
+      include: [
+        {
+          relation: "group"
+        }
+      ]
+    }
+  }
+
+  return dispatch => {
+    calendarService.getReminderService(filterData)
+      .then(response => {
+        if (response.length > 0) {
+          console.log(response[0].id);
+          console.log(response[0].isDraft);
+
+          dispatch(getIsDraftSuccess(response[0].isDraft))
+
+        }
+        else {
+          console.log('draft none');
+
+          dispatch(getIsDraftSuccess(false))
+        }
+      })
+      .catch(error => {
+        dispatch(getIsDraftFail(error));
+      });
+  }
+};

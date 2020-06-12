@@ -66,7 +66,6 @@ class Location extends Component {
             var index = selectedLocationsArray.indexOf(key);
             if (index !== -1) {
                 selectedLocationsArray.splice(index, 1);
-
             }
         }
         else {
@@ -75,7 +74,6 @@ class Location extends Component {
                 ...selectedLocationsArray,
                 key
             ];
-
         }
 
         if (selectedLocationsArray) {
