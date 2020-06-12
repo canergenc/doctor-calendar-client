@@ -402,12 +402,12 @@ export const updateUserWeekdayCount = (userId, userData, userGroupId, listOfUser
                         ,
                     {
                         start: {
-                            'lt': userData.seniority
+                            'lte': userData.seniority
                         }
                     },
                     {
                         finish: {
-                            'gt': userData.seniority
+                            'gte': userData.seniority
                         }
                     }
                     ]

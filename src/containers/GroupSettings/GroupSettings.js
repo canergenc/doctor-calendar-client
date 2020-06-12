@@ -653,8 +653,8 @@ class GroupSettings extends React.Component {
                 <thead className="thead-light" >
                   <tr>
                     <th scope="col">Tanım</th>
-                    <th scope="col">Başlangıç</th>
-                    <th scope="col">Bitiş</th>
+                    <th scope="col">Başlangıç (Ay)</th>
+                    <th scope="col">Bitiş (Ay)</th>
                     <th scope="col">Haftaiçi Nöbet Sayısı</th>
                     <th scope="col">Haftasonu Nöbet Sayısı</th>
                     <th scope="col" className="text-right">İşlemler</th>
