@@ -212,16 +212,6 @@ export const deleteUserGroup = (userGroupId, filterData, users, defaultUsers) =>
 
             }
 
-
-            // console.log('DELET RES INDEX',deleteddefaultUserIndex);
-            // console.log('DELET RES DEF IDNEX',deletedUserindex);
-
-            // console.log('DELET RES',users);
-            // console.log('DELET RES DEF',defaultUsers);
-
-
-
-
             dispatch(deleteUserGroupSuccess(userGroupId, users, defaultUsers));
         }).catch(error => {
             dispatch(deleteUserFailed(error));
@@ -422,8 +412,7 @@ export const updateUserWeekdayCount = (userId, userData, userGroupId, listOfUser
                         weekdayCountLimit: resp[0].defaultWeekDayDutyLimit,
                         weekendCountLimit: resp[0].defaultWeekEndDutyLimit
                     };
-                    // console.log(resp);
-
+                    
                     userGroupService.updateUserGroup(userGroupId, countLimits)
                         .then(response => {
 

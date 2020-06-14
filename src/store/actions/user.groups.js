@@ -18,9 +18,6 @@ const createUserGroup = (groupName, groupSettingsData) => {
         }
         groupService.createGroup(name)
             .then((groupResponse) => {
-                console.log('create group');
-
-                console.log(groupResponse);
 
                 var groupId = groupResponse.id;
                 localStorage.setItem(constants.GROUPID, groupId)

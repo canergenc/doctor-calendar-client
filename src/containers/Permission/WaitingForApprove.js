@@ -27,7 +27,7 @@ import Select from 'react-select';
 import moment from 'moment/moment';
 import { permissionHelper } from "./PermissionHelper";
 import { helperService } from "../../services/helper";
-import DatePicker,{registerLocale} from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 import tr from "date-fns/locale/tr";
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
@@ -60,7 +60,7 @@ class WaitingForApproved extends Component {
             listOfPermission: [],
             //copyOfListOfPermission: [],
             userId: '',
-            searchParam:''
+            searchParam: ''
 
         }
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
@@ -89,16 +89,16 @@ class WaitingForApproved extends Component {
         const data = {
             status: CalendarStatus.Approve
         }
-        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex,this.state.searchParam);
+        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex, this.state.searchParam);
         const filterOfApproved = permissionHelper.getApprovedFilter(0);
-        this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
-        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
+        this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved);
+        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter());
         this.setState({ searchParam: this.state.searchParam });
     }
 
     rejectPermission(item) {
-        
-        
+
+
         MySwal.fire({
             title: 'Lütfen iptal nedenini giriniz',
             input: 'text',
@@ -113,7 +113,7 @@ class WaitingForApproved extends Component {
             allowOutsideClick: () => !Swal.isLoading()
         }).then((result) => {
             if (result.value) {
-                const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex,this.state.searchParam)
+                const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex, this.state.searchParam)
                 const filterOfApproved = permissionHelper.getApprovedFilter(0);
                 const data = {
                     status: CalendarStatus.Reject,
@@ -121,7 +121,7 @@ class WaitingForApproved extends Component {
                 }
                 this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved);
                 this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
-                 this.setState({ searchParam: this.state.searchParam });
+                this.setState({ searchParam: this.state.searchParam });
 
             }
         })
@@ -401,8 +401,8 @@ class WaitingForApproved extends Component {
 
                     <CardHeader style={{ paddingLeft: '0.5rem' }} className="bg-white border-0">
                         <Row className="align-items-center">
-                            <Col xl="9" lg="9" md="8" sm="9"  xs="7">
-                                <Input name="searchPermission" className="searchPermission"  style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Kullanıcı adı, soyadı veya email'e göre ara" onChange={(event) => this.inputChangeHandle(event)}></Input>
+                            <Col xl="9" lg="9" md="8" sm="9" xs="7">
+                                <Input name="searchPermission" className="searchPermission" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Kullanıcı adı, soyadı veya email'e göre ara" onChange={(event) => this.inputChangeHandle(event)}></Input>
                                 <Button
                                     color="secondary"
                                     className="btnPermission"
@@ -424,7 +424,7 @@ class WaitingForApproved extends Component {
                                 </Button>
                             </Col>
 
-                            <Col className="text-right" xl="3" lg="3" md="4" sm="3"  xs="5">
+                            <Col className="text-right" xl="3" lg="3" md="4" sm="3" xs="5">
                                 <Button
                                     color="primary"
                                     onClick={e => this.openCreateModal()}
@@ -454,13 +454,19 @@ class WaitingForApproved extends Component {
                         <tbody>
                             {this.state.listOfPermission}
                             {this.state.listOfPermission.length == 0 &&
-                                <div style={{
-                                    margin: 20,
-                                    alignSelf: 'center',
-                                    justifyContent: 'center'
-                                }} >
-                                    <p>Kayıt bulunmamaktadır.</p>
-                                </div>}
+                                <tr>
+                                    <td>
+                                        Kayıt bulunmamaktadır.
+                                    </td>
+                                </tr>
+                                // <div style={{
+                                //     margin: 20,
+                                //     alignSelf: 'center',
+                                //     justifyContent: 'center'
+                                // }} >
+                                //     <p>Kayıt bulunmamaktadır.</p>
+                                // </div>
+                            }
                         </tbody>
                     </Table>
                     <CardFooter className="py-4" style={{ position: "inherit" }}>

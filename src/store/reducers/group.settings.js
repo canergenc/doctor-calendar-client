@@ -113,6 +113,25 @@ const deleteGroupSettingsFail = (state, action) => {
     return updateObject(state, updatedState);
 };
 
+const getDefaultDaysSuccess = (state, action) => {
+    const updatedState = {
+        error: false,
+        crudSuccess: false,
+        weekdayCountLimit: action.defaultDays.weekdayCountLimit,
+        weekendCountLimit: action.defaultDays.weekendCountLimit
+    }
+    return updateObject(state, updatedState);
+};
+
+const getDefaultDaysFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: helperService.getErrorMessage(action.errorObj)
+    }
+    return updateObject(state, updatedState);
+};
+
 
 
 const reducer = (state = initialState, action) => {
@@ -132,6 +151,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.GET_SENIORITY_SUCCESS: return getSenioritySuccess(state, action);
         case actionTypes.GET_SENIORITY_FAIL: return getSeniorityFail(state, action);
         case actionTypes.GROUPSETTINGS_CLEAN_FLAGS: return groupSettingsCleanFlags(state, action);
+        case actionTypes.GET_DEFAULT_DAYS_SUCCESS: return getDefaultDaysSuccess(state, action);
+        case actionTypes.GET_DEFAULT_DAYS_FAIL: return getDefaultDaysFail(state, action);
         default:
             return state;
     }

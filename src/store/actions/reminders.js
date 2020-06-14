@@ -449,7 +449,6 @@ export const isDraftProcess = (reminderData, curMonth) => {
     dispatch(isDraftProcessStart(reminderData.isDraft))
     calendarService.getReminderService(filterData)
       .then(response => {
-        console.log(response);
 
         if (response.length > 0) {
           calendarService.updateReminderService(response[0].id, reminderData)
@@ -462,7 +461,6 @@ export const isDraftProcess = (reminderData, curMonth) => {
             });
         }
         else {
-          console.log('create');
 
           calendarService.createReminderService(reminderData)
             .then(res => {
@@ -527,14 +525,11 @@ export const getIsDraft = (curMonth) => {
     calendarService.getReminderService(filterData)
       .then(response => {
         if (response.length > 0) {
-          console.log(response[0].id);
-          console.log(response[0].isDraft);
 
           dispatch(getIsDraftSuccess(response[0].isDraft))
 
         }
         else {
-          console.log('draft none');
 
           dispatch(getIsDraftSuccess(false))
         }

@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import history from "../../hoc/Config/history"
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
-
+import { permissionHelper } from "../../containers/Permission/PermissionHelper";
 
 
 // reactstrap components
 import {
+  Badge,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
@@ -31,6 +32,7 @@ class AdminNavbar extends React.Component {
   componentDidMount() {
     if (!this.props.email) {
       this.props.getUserInfo();
+      this.props.getPermissionsCount(permissionHelper.getWaitingForApproveFilter(0));
     }
 
   }
@@ -60,8 +62,20 @@ class AdminNavbar extends React.Component {
                         alt="..."
                         src={require("../../assets/img/theme/notification-ico2.png")}
                       />
+                      {
+
+                        this.props.unapprovedPermissionCount > 0 &&
+                        <Badge
+                          style={{ color: 'white', backgroundColor: 'rgba(255, 255, 255, 0.2)', marginLeft: '-4px', marginBottom: '-12px', fontSize: '10pt' }}
+
+                        >
+                          {this.props.unapprovedPermissionCount}
+                        </Badge>
+                      }
                     </span>
+
                   </Media>
+
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-menu-arrow" right>
                   <DropdownItem className="noti-title" header tag="div">
@@ -96,7 +110,7 @@ class AdminNavbar extends React.Component {
                   </DropdownItem>
 
                   <DropdownItem divider />
-                  
+
                   <DropdownItem onClick={this.logOut}>
                     <i className="ni ni-user-run" />
                     <span>Çıkış</span>
@@ -116,11 +130,13 @@ const mapStateToProps = state => {
   return {
     // email: state.userInfo.email,
     fullName: state.userInfo.fullName,
+    unapprovedPermissionCount: state.permission.permissionCount
   };
 }
 const mapDispatchToProps = dispatch => {
   return {
     getUserInfo: () => dispatch(actions.userInfoActions.getUserInfo()),
+    getPermissionsCount: (filter) => dispatch(actions.permission.getPermissionsCount(filter))
   };
 }
 

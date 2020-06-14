@@ -6,6 +6,7 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
+  Badge,
   Collapse,
   NavbarBrand,
   Navbar,
@@ -143,7 +144,13 @@ class Sidebar extends React.Component {
                       alt="..."
                       src={require("../../assets/img/theme/notification-ico2.png")}
                     />
+                    
                   </span>
+                  <Badge
+                      color="warning"
+                    >
+                      3
+                    </Badge>
                 </Media>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>

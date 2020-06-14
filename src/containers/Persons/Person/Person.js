@@ -34,7 +34,7 @@ class Person extends Component {
                             type="checkbox"
                             name="weekend"
                             ref={this.props.userGroupId}
-                            onClick={this.props.personDayLimitHandle}
+                            onChange={this.props.personDayLimitHandle}
                             checked={this.props.defaultChecked}
                         />
                         <div className="state p-danger-o">

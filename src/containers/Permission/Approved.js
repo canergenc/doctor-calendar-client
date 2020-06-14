@@ -1,16 +1,13 @@
 import React, { Component } from "react";
-import { Button, Card, Table, CardHeader, Input, Alert, CardFooter, Row, Col } from "reactstrap";
+import { Button, Card, Table, CardHeader, Input, CardFooter, Row, Col } from "reactstrap";
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/index';
-import { CalendarStatus, constants } from '../../variables/constants';
+import { CalendarStatus } from '../../variables/constants';
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
-import { helperService } from "../../services/helper";
 import Swal from 'sweetalert2'
 import moment from 'moment/moment';
 import { permissionHelper } from "./PermissionHelper";
-import CustomPagination from "../../components/Paginations/CustomPagination";
-import { personHelper } from "../Persons/Person/PersonHelper";
 
 
 const MySwal = withReactContent(Swal)
@@ -31,11 +28,7 @@ class Approved extends Component {
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
         this.refreshPermissions = this.refreshPermissions.bind(this);
         this.keyPress = this.keyPress.bind(this);
-
-
     }
-
-
 
     inputChangeHandle(event) {
         const target = event.target;
@@ -51,8 +44,6 @@ class Approved extends Component {
     componentDidMount() {
         this.loadPermissions();
     }
-
-
 
     // onChangePaginationItem(index) {
     //     this.setState({ currentIndex: index });
@@ -84,29 +75,20 @@ class Approved extends Component {
         if (e.keyCode == 13) {
             if (e.target.value) {
                 this.props.getApprovedPermissions(permissionHelper.getApprovedSearchFilter(e.target.value));
-                this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true })
+                this.setState({ isShowPagination: false, currentIndex: 0, searchSubmitted: true });
             } else {
                 this.refreshPermissions();
-                this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false })
-
+                this.setState({ isShowPagination: true, currentIndex: 0, searchSubmitted: false });
             }
         }
     }
 
-
     refreshPermissions() {
-        this.setState({ searchParam: "",searchSubmitted: false ,isShowPagination: true });
+        this.setState({ searchParam: "", searchSubmitted: false, isShowPagination: true });
         this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(0));
-
     }
 
-  
-
     render() {
-
-
-       
-
 
         if (this.props.approvedPermissions) {
 
@@ -141,13 +123,10 @@ class Approved extends Component {
 
         return (
             <Card className="shadow">
-
-
-
                 <CardHeader style={{ paddingLeft: '0.5rem' }} className="border-0">
                     <Row className="align-items-center">
-                        <Col xl="9" lg="9" md="8" sm="9"  xs="7">
-                            <Input name="searchPermission" className="searchPermission" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Kullanıcı adı, soyadı veya email'e göre ara"  onChange={(event) => this.inputChangeHandle(event)}></Input>
+                        <Col xl="9" lg="9" md="8" sm="9" xs="7">
+                            <Input name="searchPermission" className="searchPermission" style={{ display: "inline-block" }} onKeyDown={this.keyPress} value={this.state.searchParam} placeholder="Kullanıcı adı, soyadı veya email'e göre ara" onChange={(event) => this.inputChangeHandle(event)}></Input>
                             <Button
                                 color="secondary"
                                 onClick={e => this.getPermissionsBySearch()}
@@ -167,8 +146,7 @@ class Approved extends Component {
                                 <i className="fas fa-sync-alt fa-lg"></i>
                             </Button>
                         </Col>
-                        <Col xl="3" lg="3" md="4" sm="3"  xs="5">
-
+                        <Col xl="3" lg="3" md="4" sm="3" xs="5">
                         </Col>
 
                     </Row>
@@ -189,30 +167,38 @@ class Approved extends Component {
                     </thead>
                     <tbody>
                         {this.state.listOfPermission}
-                        {this.state.listOfPermission.length == 0 && <div style={{
-                            margin: 20,
-                            alignSelf: 'center',
-                            justifyContent: 'center'
-                        }} >
-                            <p>
-                                kayıt bulunmamaktadır.
-                        </p>
-                        </div>}
+                        {this.state.listOfPermission.length == 0 &&
+
+                            <tr>
+                                <td>
+                                    Kayıt bulunmamaktadır.
+                                </td>
+                            </tr>
+                            // <div style={{
+                            //     margin: 20,
+                            //     alignSelf: 'center',
+                            //     justifyContent: 'center'
+                            // }} >
+                            //     <p>
+                            // Kayıt bulunmamaktadır.
+                            // </p>
+                            // </div>
+                        }
                     </tbody>
                 </Table>
                 <CardFooter className="py-4">
                     {this.props.permissionCount > 0 ?
                         <nav style={{ float: "right" }}>
 
-                            
 
-                                <div style={{ float: "left", margin: "6px 18px" }}>
 
-                                    Toplam : {this.state.listOfPermission.length}
-                                </div> 
-                               
+                            <div style={{ float: "left", margin: "6px 18px" }}>
 
-                            
+                                Toplam : {this.state.listOfPermission.length}
+                            </div>
+
+
+
 
 
                             {/* {

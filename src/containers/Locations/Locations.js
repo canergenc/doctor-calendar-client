@@ -124,7 +124,7 @@ class Locations extends Component {
     };
 
     componentDidUpdate() {
-        
+
         if (this.props.error) {
             MySwal.fire({
                 icon: 'error',
@@ -226,7 +226,7 @@ class Locations extends Component {
 
     render() {
         const { name, colorCode, submitted } = this.state;
-        let locations = "Lokasyonlar Yükleniyor...";
+        let locations = <tr><td>Lokasyonlar Yükleniyor...</td></tr>;
         let locationsCount = 0;
         if (this.props.locations) {
             locationsCount = this.props.locations.length;
@@ -252,7 +252,7 @@ class Locations extends Component {
                                     <span className="span"></span>
                                 </div>
                             </td>
-                            <td ><div style={{display:"block", wordWrap:"break-word"}}>{location.name}</div></td>
+                            <td ><div style={{ display: "block", wordWrap: "break-word" }}>{location.name}</div></td>
                             <td className="color-right-resp" >
                                 <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
@@ -460,8 +460,8 @@ class Locations extends Component {
                                                 <i className="fas fa-sync-alt fa-lg"></i>
                                             </Button>
                                         </Col>
-                                        <Col  xl="2" lg="3" md="4" sm="5" xs="5">
-                                            <Button color="primary" type="submit"  onClick={() => this.toggleModal("addModal", undefined)}>
+                                        <Col xl="2" lg="3" md="4" sm="5" xs="5">
+                                            <Button color="primary" type="submit" onClick={() => this.toggleModal("addModal", undefined)}>
                                                 <span className="btn-inner--icon">
                                                     <i className="ni ni-fat-add" />
                                                 </span>

@@ -52,11 +52,12 @@ class GroupSettings extends React.Component {
       locationDayLimitChange: false,
       locationDayLimitCount: "",
       locationDayLimitCountChange: false,
+      id: '',
       name: '',
       start: '',
       finish: '',
-      start: '',
-      start: '',
+      defaultWeekDayDutyLimit: '',
+      defaultWeekEndDutyLimit: '',
     };
     this.updateHandle = this.updateHandle.bind(this);
     this.deleteHandle = this.deleteHandle.bind(this);
@@ -239,13 +240,14 @@ class GroupSettings extends React.Component {
 
   toggleModal(state, senior) {
     if (senior) {
+
       this.setState({
         [state]: !this.state[state],
         seniorId: senior.id ? senior.id : '',
         id: senior.id ? senior.id : '',
         name: senior.name ? senior.name : '',
-        start: senior.start ? senior.start : '',
-        finish: senior.finish ? senior.finish : '',
+        start: senior.start > -1 ? senior.start : '',
+        finish: senior.finish > -1 ? senior.finish : '',
         defaultWeekDayDutyLimit: senior.defaultWeekDayDutyLimit > -1 ? senior.defaultWeekDayDutyLimit : '',
         defaultWeekEndDutyLimit: senior.defaultWeekEndDutyLimit > -1 ? senior.defaultWeekEndDutyLimit : ''
       });
@@ -267,7 +269,7 @@ class GroupSettings extends React.Component {
 
   render() {
     const { name, start, finish, defaultWeekDayDutyLimit, defaultWeekEndDutyLimit, submitted } = this.state;
-    let seniority = "Kıdemler yükleniyor...";
+    let seniority = <tr><td>Kıdemler yükleniyor...</td></tr>;
     if (this.props.seniority) {
       seniority = this.props.seniority.map((senior) => (
         <tr key={senior.id}>

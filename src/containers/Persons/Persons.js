@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { helperService } from "../../services";
 import UserHeader from "../../components/Headers/UserHeader.jsx";
 import Person from './Person/Person';
@@ -60,7 +60,8 @@ class Persons extends Component {
             weekdayCountLimit: 0,
             password: '',
             currentIndex: 0,
-            currentPageSize: 0
+            currentPageSize: 0,
+            isChange: false
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
@@ -106,9 +107,9 @@ class Persons extends Component {
         if (target.name === 'password')
             this.setState({ password: event.target.value, submitted: false });
         if (target.name === 'weekendCountLimit')
-            this.setState({ weekendCountLimit: event.target.value, submitted: false });
+            this.setState({ weekendCountLimit: event.target.value, submitted: false, isChangeWeekendCountLimit: true });
         if (target.name === 'weekdayCountLimit')
-            this.setState({ weekdayCountLimit: event.target.value, submitted: false });
+            this.setState({ weekdayCountLimit: event.target.value, submitted: false, isChangeWeekdayCountLimit: true });
         if (target.name === 'userDisable') {
             if (this.refs.userDisable.checked) {
                 this.setState({ weekendCountLimit: '0', weekdayCountLimit: '0', submitted: false });
@@ -122,13 +123,19 @@ class Persons extends Component {
     }
 
     inputChangeHandleDate(date) {
-        this.setState({ workStartDate: date, submitted: false });
+        const momentRange = extendMoment(moment);
+        const today = moment(new Date()).format('YYYY-MM-DD');
+        const workStartDate = moment(date).format('YYYY-MM-DD');
+        const range = momentRange.range(workStartDate, today);
+        const months = range.diff('months');
+        this.props.getDefaultDays(months);
+        this.setState({ workStartDate: date, submitted: false, isChangeWeekdayCountLimit: false, isChangeWeekendCountLimit: false });
     }
 
     updateHandle(event) {
         this.setState({ submitted: true });
-        const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
-        const weekendCountLimit = parseInt(this.state.weekendCountLimit);
+        const weekdayCountLimit = this.state.isChangeWeekdayCountLimit ? parseInt(this.state.weekdayCountLimit) : parseInt(this.props.weekdayCountLimit);
+        const weekendCountLimit = this.state.isChangeWeekendCountLimit ? parseInt(this.state.weekendCountLimit) : parseInt(this.props.weekendCountLimit);
         if (this.updateHandleValidation()) {
             let userData = {
                 fullName: this.state.name,
@@ -154,8 +161,8 @@ class Persons extends Component {
     addHandle(event) {
         this.setState({ submitted: true, searchParam: '' });
         if (this.addHandleValidation()) {
-            const weekdayCountLimit = parseInt(this.state.weekdayCountLimit);
-            const weekendCountLimit = parseInt(this.state.weekendCountLimit);
+            const weekdayCountLimit = this.state.isChangeWeekdayCountLimit ? parseInt(this.state.weekdayCountLimit) : parseInt(this.props.weekdayCountLimit);
+            const weekendCountLimit = this.state.isChangeWeekendCountLimit ? parseInt(this.state.weekendCountLimit) : parseInt(this.props.weekendCountLimit);
             const user = {
                 fullName: this.state.name,
                 email: this.state.email,
@@ -183,10 +190,6 @@ class Persons extends Component {
 
     deleteHandle() {
         if (this.state.id) {
-            // console.log(this.props.users);
-            // console.log(this.props.defaultUsers);
-
-            // debugger;
 
             this.props.deleteUser(this.state.userGroupId, personHelper.getFilter(), this.props.users, this.props.defaultUsers)
             this.toggleModal('deleteModal', undefined);
@@ -294,7 +297,9 @@ class Persons extends Component {
                 email: userGroup.user.email ? userGroup.user.email : '',
                 workStartDate: userGroup.user.workStartDate ? userGroup.user.workStartDate : '',
                 weekdayCountLimit: userGroup.weekdayCountLimit > -1 ? userGroup.weekdayCountLimit : '',
-                weekendCountLimit: userGroup.weekendCountLimit > -1 ? userGroup.weekendCountLimit : ''
+                weekendCountLimit: userGroup.weekendCountLimit > -1 ? userGroup.weekendCountLimit : '',
+                isChangeWeekdayCountLimit: true,
+                isChangeWeekendCountLimit: true
             });
 
         }
@@ -308,7 +313,9 @@ class Persons extends Component {
                 password: '',
                 workStartDate: '',
                 weekdayCountLimit: ' ',
-                weekendCountLimit: ' '
+                weekendCountLimit: ' ',
+                isChangeWeekdayCountLimit: true,
+                isChangeWeekendCountLimit: true
             });
         }
     };
@@ -341,11 +348,41 @@ class Persons extends Component {
         return isChecked;
     }
 
+    getWeekdayCountLimit = () => {
+        if (this.state.isChangeWeekdayCountLimit) {
+            return this.state.weekdayCountLimit;
+        }
+        else {
+
+
+            if (this.props.weekdayCountLimit !== undefined) {
+                return this.props.weekdayCountLimit ? this.props.weekdayCountLimit : 0;
+            }
+            else {
+                return 0;
+            }
+        }
+    }
+
+    getWeekendCountLimit = () => {
+        if (this.state.isChangeWeekendCountLimit) {
+            return this.state.weekendCountLimit;
+        }
+        else {
+            if (this.props.weekendCountLimit !== undefined) {
+                return this.props.weekendCountLimit ? this.props.weekendCountLimit : 0;
+            }
+            else {
+                return 0;
+            }
+        }
+    }
+
     render() {
 
         const { name, email, password, submitted, workStartDate } = this.state;
         const isEmailValid = EmailValidator.validate(email);
-        let users = "Kullanıcılar Yükleniyor...";
+        let users = <tr><td>Kullanıcılar Yükleniyor...</td></tr>;
         let usersCount = 0;
 
         if (this.props.users) {
@@ -361,9 +398,7 @@ class Persons extends Component {
                     weekdayCountLimit={user.weekdayCountLimit}
                     weekendCountLimit={user.weekendCountLimit}
                     defaultChecked={this.setDefaultCheck(user.weekdayCountLimit, user.weekendCountLimit)}
-                    // personDayLimitHandle={(event) => this.personDayLimitHandle(event, user.user.id, user.id)}
                     personDayLimitHandle={(event) => this.personDayLimitHandle(event, user)}
-
                     editClick={() => this.toggleModal("editModal", user)}
                     deleteClick={() => this.toggleModal("deleteModal", user)}
                 />
@@ -401,7 +436,7 @@ class Persons extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Ad - Soyad:</InputGroupText>
-                                        <Input name="name" valid={true} me type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="name" valid={true} type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 {submitted && !name &&
@@ -462,13 +497,13 @@ class Persons extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
-                                        <Input name="weekdayCountLimit" type="number" min="0" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="weekdayCountLimit" type="number" min="0" value={this.getWeekdayCountLimit()} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
-                                        <Input name="weekendCountLimit" type="number" min="0" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="weekendCountLimit" type="number" min="0" value={this.getWeekendCountLimit()} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                             </FormGroup>
@@ -570,13 +605,13 @@ class Persons extends Component {
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
-                                        <Input name="weekdayCountLimit" type="number" min="0" value={this.state.weekdayCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="weekdayCountLimit" type="number" min="0" value={this.getWeekdayCountLimit()} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
-                                        <Input name="weekendCountLimit" type="number" min="0" value={this.state.weekendCountLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                                        <Input name="weekendCountLimit" type="number" min="0" value={this.getWeekendCountLimit()} onChange={(event) => this.inputChangeHandle(event)} />
                                     </InputGroupAddon>
                                 </InputGroup>
                             </FormGroup>
@@ -681,16 +716,17 @@ class Persons extends Component {
                                             <th scope="col" className="text-right">İşlemler</th>
                                         </tr>
                                     </thead>
-                                    <tbody >
+                                    <tbody>
                                         {users}
-                                        {users.length == 0 &&
+                                        {users.length === 0 &&
                                             <div style={{
                                                 margin: 20,
                                                 alignSelf: 'center',
                                                 justifyContent: 'center'
                                             }} >
                                                 <p>Kayıt bulunmamaktadır.</p>
-                                            </div>}
+                                            </div>
+                                        }
                                     </tbody>
                                 </Table>
 
@@ -732,6 +768,8 @@ const mapStateToProps = state => {
         crudSuccess: state.users.crudSuccess,
         message: state.users.message,
         error: state.users.error,
+        weekdayCountLimit: state.groupSettings.weekdayCountLimit,
+        weekendCountLimit: state.groupSettings.weekendCountLimit
         //errorMessage: state.users.statusText
     };
 };
@@ -740,7 +778,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onInitUsers: (filterData) => dispatch(actions.getUsers(filterData)),
         searchUser: (filterKey, defaultUsers) => dispatch(actions.searchUser(filterKey, defaultUsers)),
-
+        getDefaultDays: (months) => dispatch(actions.getDefaultDays(months)),
         createUser: (userData, countLimits, filterData) => dispatch(actions.createUser(userData, countLimits, filterData)),
         deleteUser: (userGroupId, filterData, users, defaultUsers) => dispatch(actions.deleteUserGroup(userGroupId, filterData, users, defaultUsers)),
         updateUser: (userId, userData, userGroupId, countLimits, users) => dispatch(actions.updateUser(userId, userData, userGroupId, countLimits, users)),

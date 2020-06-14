@@ -87,16 +87,16 @@ export const getSeniority = () => {
                     },
                     {
                         type: 2
-                        
+
                     }]
                 }
             }
         }
         groupSettingsService.getGroupSettings(filterData)
             .then(response => {
-                
-                    dispatch(getSenioritySuccess(response));
-                
+
+                dispatch(getSenioritySuccess(response));
+
             })
             .catch(error => {
                 dispatch(getSeniorityFailed(error))
@@ -160,8 +160,6 @@ export const updateSeniority = (groupSettingsId, data) => {
 };
 
 export const updateSenioritySuccess = () => {
-    console.log('updateSenioritySuccess');
-    
     return {
         type: actionTypes.UPDATE_SENIORITY_SUCCESS
     };
@@ -197,5 +195,71 @@ export const deleteGroupSettingsFailed = (error) => {
     return {
         type: actionTypes.DELETE_GROUPSETTINGS_FAIL,
         errorObj: error
+    };
+};
+
+
+export const getDefaultDays = (months) => {
+    return dispatch => {
+        const filterData = {
+            filter: {
+                where: {
+                    and: [{
+                        groupId: {
+                            like: helperService.getGroupId()
+                        }
+                    },
+                    {
+                        type: 2
+
+                    }
+                        ,
+                    {
+                        start: {
+                            'lte': months
+                        }
+                    },
+                    {
+                        finish: {
+                            'gte': months
+                        }
+                    }
+                    ]
+                }
+            }
+        }
+        groupSettingsService.getGroupSettings(filterData)
+            .then(resp => {
+                const countLimits = {};
+                if (resp.length > 0) {
+                    countLimits.weekdayCountLimit = resp[0].defaultWeekDayDutyLimit;
+                    countLimits.weekendCountLimit = resp[0].defaultWeekEndDutyLimit;
+                }
+                else {
+                    countLimits.weekdayCountLimit = 0;
+                    countLimits.weekendCountLimit = 0;
+                }
+                
+                dispatch(getDefaultDaysSuccess(countLimits));
+            })
+            .catch(err => {
+                dispatch(getDefaultDaysFailed(err));
+            })
+
+
+    };
+};
+
+export const getDefaultDaysSuccess = (defaultDays) => {
+    return {
+        type: actionTypes.GET_DEFAULT_DAYS_SUCCESS,
+        defaultDays: defaultDays
+    };
+};
+
+export const getDefaultDaysFailed = () => {
+    return {
+        type: actionTypes.GET_DEFAULT_DAYS_FAIL,
+        error: true
     };
 };
