@@ -10,6 +10,9 @@ import ResetPassword from "../../containers/Login/ResetPassword";
 
 import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
+import EmailConfirm from "../../containers/Login/EmailConfirm";
+
+
 
 
 
@@ -28,7 +31,7 @@ var routes = [
         component: Profile,
         layout: "/admin"
     },
-    
+
     {
         path: "/login",
         name: "Login",
@@ -56,6 +59,17 @@ var routes = [
 
 
     {
+        path: "/confirm-email/:key",
+        name: "Email Doğrula",
+        icon: "ni ni-circle-08 text-pink",
+        hash: "#the-hash",
+        component: EmailConfirm ,
+        layout: "/auth"
+    },
+
+
+
+    {
         path: "/password-forgot",
         name: "Şifremi Unuttum",
         icon: "ni ni-active-40 text-primary",
@@ -71,11 +85,11 @@ var routes = [
         layout: "/auth"
     }
 
-    
 
-    
-   
 
-   
+
+
+
+
 ];
 export default routes;
