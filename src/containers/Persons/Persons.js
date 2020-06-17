@@ -61,7 +61,8 @@ class Persons extends Component {
             password: '',
             currentIndex: 0,
             currentPageSize: 0,
-            isChange: false
+            isChange: false,
+            isSeniorityDescription: false
         }
         this.updateHandle = this.updateHandle.bind(this);
         this.deleteHandle = this.deleteHandle.bind(this);
@@ -129,7 +130,7 @@ class Persons extends Component {
         const range = momentRange.range(workStartDate, today);
         const months = range.diff('months');
         this.props.getDefaultDays(months);
-        this.setState({ workStartDate: date, submitted: false, isChangeWeekdayCountLimit: false, isChangeWeekendCountLimit: false });
+        this.setState({ workStartDate: date, submitted: false, isChangeWeekdayCountLimit: false, isChangeWeekendCountLimit: false, isSeniorityDescription: true });
     }
 
     updateHandle(event) {
@@ -299,7 +300,8 @@ class Persons extends Component {
                 weekdayCountLimit: userGroup.weekdayCountLimit > -1 ? userGroup.weekdayCountLimit : '',
                 weekendCountLimit: userGroup.weekendCountLimit > -1 ? userGroup.weekendCountLimit : '',
                 isChangeWeekdayCountLimit: true,
-                isChangeWeekendCountLimit: true
+                isChangeWeekendCountLimit: true,
+                isSeniorityDescription: false
             });
 
         }
@@ -315,7 +317,8 @@ class Persons extends Component {
                 weekdayCountLimit: ' ',
                 weekendCountLimit: ' ',
                 isChangeWeekdayCountLimit: true,
-                isChangeWeekendCountLimit: true
+                isChangeWeekendCountLimit: true,
+                isSeniorityDescription: false
             });
         }
     };
@@ -353,8 +356,6 @@ class Persons extends Component {
             return this.state.weekdayCountLimit;
         }
         else {
-
-
             if (this.props.weekdayCountLimit !== undefined) {
                 return this.props.weekdayCountLimit ? this.props.weekdayCountLimit : 0;
             }
@@ -376,6 +377,35 @@ class Persons extends Component {
                 return 0;
             }
         }
+    }
+
+    getSeniorityDescription = () => {
+        if (this.state.isSeniorityDescription) {
+            if (this.props.seniorityDescription !== undefined) {
+                return this.props.seniorityDescription ? this.props.seniorityDescription : '';
+            }
+            else {
+                return '';
+            }
+        }
+        else {
+            return '';
+        }
+    }
+
+    getSeniorityMonths = () => {
+        if (this.state.isSeniorityDescription) {
+            if (this.props.seniorityMonths !== undefined) {
+                return this.props.seniorityMonths ? this.props.seniorityMonths : '';
+            }
+            else {
+                return '';
+            }
+        }
+        else {
+            return '';
+        }
+
     }
 
     render() {
@@ -494,6 +524,18 @@ class Persons extends Component {
 
                                     <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">İş Başlangıç Tarihi gerekli.</p>
                                 }
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
+                                        <InputGroupText>Kıdem (Ay):</InputGroupText>
+                                        <Input name="seniorityMonths" type="text" readOnly value={this.getSeniorityMonths()} style={{ paddingInlineStart: '12px' }} />
+                                    </InputGroupAddon>
+                                </InputGroup>
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
+                                        <InputGroupText>Kıdem  Aralığı:</InputGroupText>
+                                        <Input name="seniorityDescription" type="text" readOnly value={this.getSeniorityDescription()} style={{ paddingInlineStart: '12px' }} />
+                                    </InputGroupAddon>
+                                </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
@@ -708,6 +750,7 @@ class Persons extends Component {
                                     <thead className="thead-light" >
                                         <tr>
                                             <th scope="col">Ad Soyad</th>
+                                            <th scope="col">İş Başlangıç Tarihi</th>
                                             <th scope="col">Kıdem</th>
                                             <th scope="col">E-Mail</th>
                                             <th scope="col">Nöbet Durumu</th>
@@ -768,8 +811,10 @@ const mapStateToProps = state => {
         crudSuccess: state.users.crudSuccess,
         message: state.users.message,
         error: state.users.error,
+        seniorityDescription: state.groupSettings.seniorityDescription,
         weekdayCountLimit: state.groupSettings.weekdayCountLimit,
-        weekendCountLimit: state.groupSettings.weekendCountLimit
+        weekendCountLimit: state.groupSettings.weekendCountLimit,
+        seniorityMonths: state.groupSettings.seniorityMonths
         //errorMessage: state.users.statusText
     };
 };

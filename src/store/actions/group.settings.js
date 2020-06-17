@@ -232,14 +232,22 @@ export const getDefaultDays = (months) => {
             .then(resp => {
                 const countLimits = {};
                 if (resp.length > 0) {
+                    countLimits.name = resp[0].name;
+                    countLimits.start = resp[0].start;
+                    countLimits.finish = resp[0].finish;
                     countLimits.weekdayCountLimit = resp[0].defaultWeekDayDutyLimit;
                     countLimits.weekendCountLimit = resp[0].defaultWeekEndDutyLimit;
+                    countLimits.seniorityMonths=months
                 }
                 else {
+                    countLimits.name = '';
+                    countLimits.start = '';
+                    countLimits.finish = '';
                     countLimits.weekdayCountLimit = 0;
                     countLimits.weekendCountLimit = 0;
+                    countLimits.seniorityMonths=months;
                 }
-                
+
                 dispatch(getDefaultDaysSuccess(countLimits));
             })
             .catch(err => {

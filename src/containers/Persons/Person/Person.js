@@ -26,6 +26,7 @@ class Person extends Component {
         return (
             <tr key={this.props.id}>
                 <td>{this.props.fullName}</td>
+                <td>{workStartDate}</td>
                 <td>{seniority}</td>
                 <td>{this.props.email}</td>
                 <td>

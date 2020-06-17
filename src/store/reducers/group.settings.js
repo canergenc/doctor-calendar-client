@@ -117,8 +117,10 @@ const getDefaultDaysSuccess = (state, action) => {
     const updatedState = {
         error: false,
         crudSuccess: false,
+        seniorityDescription: action.defaultDays.name + ' : ' + action.defaultDays.start + ' ay ile ' + action.defaultDays.finish + ' ay arası',
         weekdayCountLimit: action.defaultDays.weekdayCountLimit,
-        weekendCountLimit: action.defaultDays.weekendCountLimit
+        weekendCountLimit: action.defaultDays.weekendCountLimit,
+        seniorityMonths: action.defaultDays.seniorityMonths,
     }
     return updateObject(state, updatedState);
 };
