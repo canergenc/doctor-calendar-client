@@ -117,6 +117,10 @@ const setRemindersForCrud = (state, action) => {
 };
 
 const getIsDraftSuccess = (state, action) => {
+  console.log('getIsDraft');
+  
+  console.log(action.isDraft);
+  
   const updatedState = {
     isDraft: action.isDraft,
   }

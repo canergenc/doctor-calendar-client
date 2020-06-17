@@ -146,11 +146,7 @@ class Sidebar extends React.Component {
                     />
                     
                   </span>
-                  <Badge
-                      color="warning"
-                    >
-                      3
-                    </Badge>
+                  
                 </Media>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
