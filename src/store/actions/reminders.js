@@ -462,6 +462,7 @@ export const isDraftProcess = (reminderData, curMonth) => {
         }
         else {
 
+
           calendarService.createReminderService(reminderData)
             .then(res => {
               dispatch(isDraftProcessSuccess(reminderData.isDraft))
@@ -530,8 +531,8 @@ export const getIsDraft = (curMonth) => {
 
         }
         else {
-
-          dispatch(getIsDraftSuccess(false))
+          console.log('isdraft none');
+          dispatch(getIsDraftSuccess(true))
         }
       })
       .catch(error => {

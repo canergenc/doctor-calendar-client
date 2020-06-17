@@ -28,7 +28,6 @@ class HeaderMonth extends Component {
   }
 
   defaultIsDraft = () => {
-
     if (this.props.isDraft !== undefined) {
       return this.props.isDraft ? false : true;
     }
@@ -41,7 +40,6 @@ class HeaderMonth extends Component {
 
     return (
       <div>
-
         <header className="month-header">
           <div className="row">
             <button className="prevNext" onClick={this.props.prevMonthClick}>
