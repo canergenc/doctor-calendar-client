@@ -66,7 +66,7 @@ class AdminNavbar extends React.Component {
 
                         this.props.unapprovedPermissionCount > 0 &&
                         <Badge
-                          style={{ color: 'white', backgroundColor: 'rgb(251, 99, 64)', marginLeft: '-4px', marginBottom: '-12px', fontSize: '10pt' }}
+                          style={{ color: 'white', backgroundColor: '#fc8266', marginLeft: '-4px', marginBottom: '-12px', fontSize: '10pt' }}
 
                         >
                           {this.props.unapprovedPermissionCount}
