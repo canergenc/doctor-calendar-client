@@ -1,6 +1,7 @@
 
 import GroupSplash from "../../containers/Splash/Group";
 import LocationSplash from "../../containers/Splash/Location";
+import EmailCheckSplash from "../../containers/Splash/EmailCheck";
 import NotFoundPage from "../../containers/NotFound/NotFoundPage";
 
 
@@ -19,6 +20,13 @@ var routes = [
         icon: "ni ni-tv-2 text-primary",
         component: LocationSplash,
         layout: "/splash"
+    },
+    {
+        path: "/emailCheck",
+        name: "OOOPS",
+        icon: "ni ni-tv-2 text-primary",
+        component: EmailCheckSplash,
+        layout: "/emailCheck"
     },
 
     {

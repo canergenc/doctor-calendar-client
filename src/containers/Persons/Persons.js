@@ -290,12 +290,22 @@ class Persons extends Component {
 
 
         if (userGroup) {
+            let months=0;
+            if (userGroup.user.workStartDate) {
+                const momentRange = extendMoment(moment);
+                const today = moment(new Date()).format('YYYY-MM-DD');
+                const workStartDate = moment(userGroup.user.workStartDate).format('YYYY-MM-DD');
+                const range = momentRange.range(workStartDate, today);
+                months = range.diff('months');
+            }
+
             this.setState({
                 [state]: !this.state[state],
                 userGroupId: userGroup.id ? userGroup.id : '',
                 id: userGroup.user.id ? userGroup.user.id : '',
                 name: userGroup.user.fullName ? userGroup.user.fullName : '',
                 email: userGroup.user.email ? userGroup.user.email : '',
+                seniorityMonths: months,
                 workStartDate: userGroup.user.workStartDate ? userGroup.user.workStartDate : '',
                 weekdayCountLimit: userGroup.weekdayCountLimit > -1 ? userGroup.weekdayCountLimit : '',
                 weekendCountLimit: userGroup.weekendCountLimit > -1 ? userGroup.weekendCountLimit : '',
@@ -314,6 +324,7 @@ class Persons extends Component {
                 email: '',
                 password: '',
                 workStartDate: '',
+                seniorityMonths: '',
                 weekdayCountLimit: ' ',
                 weekendCountLimit: ' ',
                 isChangeWeekdayCountLimit: true,
@@ -627,6 +638,12 @@ class Persons extends Component {
 
                                     <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">İş Başlangıç Tarihi gerekli.</p>
                                 }
+                                <InputGroup className="input-group-alternative mb-3">
+                                    <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
+                                        <InputGroupText>Kıdem (Ay):</InputGroupText>
+                                        <Input name="weekdayCountLimit" type="text" readOnly value={this.state.seniorityMonths} />
+                                    </InputGroupAddon>
+                                </InputGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                                         <InputGroupText>Nöbet Atamayı Devre Dışı Bırak:</InputGroupText>

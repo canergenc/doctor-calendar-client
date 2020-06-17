@@ -62,7 +62,15 @@ const deleteUserService = (id) => {
         url: '/users/' + id,
         method: 'DELETE'
     })
-}
+};
+
+const emailCheckService = (email) => {
+    return request({
+        url: '/users',
+        method: 'GET',
+        email: email
+    });
+};
 
 export const userService = {
     getUsers,
@@ -70,6 +78,7 @@ export const userService = {
     getGroupUsersCount,
     userMe,
     userInfo,
+    emailCheckService,
     createUserService,
     updateUserService,
     deleteUserService

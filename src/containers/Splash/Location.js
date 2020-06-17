@@ -119,7 +119,7 @@ class LocationSplash extends React.Component {
                         <Col xs="3" >
                             <Button onClick={() => this.addItemToLocationList()} style={{ marginRight: '5%' }} color="primary"> EKLE</Button>{' '}
                         </Col>
-                    </Row>">
+                    </Row>
 
                     <Row style={{ marginTop: 5 }}>
 

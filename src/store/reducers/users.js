@@ -154,6 +154,24 @@ const updateUserWeekdayFail = (state, action) => {
     return updateObject(state, updatedState);
 };
 
+const emailCheckSuccess = (state, action) => {
+    const updatedState = {
+        error: false,
+        crudSuccess: false,
+        statusText: 'Email Doğrulandı'
+    };
+    return updateObject(state, updatedState);
+};
+
+const emailCheckFail = (state, action) => {
+    const updatedState = {
+        error: true,
+        crudSuccess: false,
+        statusText: 'Email Doğrulanamadı'
+    };
+    return updateObject(state, updatedState);
+};
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -173,6 +191,8 @@ const reducer = (state = initialState, action) => {
         case actionTypes.UPDATE_USER_WEEKDAY_SUCCESS: return updateUserWeekdaySuccess(state, action);
         case actionTypes.UPDATE_USER_WEEKDAY_FAIL: return updateUserWeekdayFail(state, action);
         case actionTypes.USER_CLEAN_FLAGS: return userCleanFlags(state, action);
+        case actionTypes.EMAIL_CHECK_SUCCESS: return emailCheckSuccess(state, action);
+        case actionTypes.EMAIL_CHECK_FAIL: return emailCheckFail(state, action);
         default:
             return state;
     }

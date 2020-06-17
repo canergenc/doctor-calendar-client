@@ -457,3 +457,29 @@ export const updateUserWeekdayFailed = () => {
         error: true
     };
 };
+
+export const emailCheck = (email) => {
+    return dispatch => {
+        userService.emailCheckService(email)
+            .then(response => {
+                dispatch(emailCheckSuccess());
+            })
+            .catch(error => {
+                dispatch(emailCheckFailed(error));
+            });
+    };
+};
+
+export const emailCheckSuccess = (id, userData, users) => {
+    return {
+        type: actionTypes.EMAIL_CHECK_SUCCESS
+    };
+};
+
+export const emailCheckFailed = (error) => {
+    return {
+        type: actionTypes.EMAIL_CHECK_FAIL,
+        errorObj: error,
+        error: true
+    };
+};
