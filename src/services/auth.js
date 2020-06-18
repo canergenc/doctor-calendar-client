@@ -49,6 +49,16 @@ export const resetPassword = (email,password,token) => {
 };
 
 
+export const confirmEmail = (key) => {
+    return request({
+        url: `/users/verification/${key}`,
+        method: 'GET',
+        data:null
+    },false);
+};
+
+
+
 
 
 
@@ -56,5 +66,6 @@ export const authService = {
     login,
     register,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    confirmEmail
 };

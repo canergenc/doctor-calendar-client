@@ -3,7 +3,7 @@ import  './Spinner.css';
 
 const spinner = () => (
 
-    <div className="Loader" >Loading...</div>
+    <div className="Loader" >Yükleniyor...</div>
 );
 
 export default spinner;

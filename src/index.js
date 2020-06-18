@@ -30,9 +30,7 @@ import authenticationReducer from "./store/reducers/auth";
 import registerReducer from "./store/reducers/register";
 import passwordForgotReducer from "./store/reducers/password.forgot";
 import resetPasswordReducer from "./store/reducers/reset.password";
-
-
-
+import confirmEmailReducer from "./store/reducers/confirm.email";
 import history from "./hoc/Config/history";
 import { constants } from "./variables/constants";
 
@@ -45,7 +43,8 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   users: usersReducer,
   passwordForgot: passwordForgotReducer,
-  resetPassword:resetPasswordReducer,
+  resetPassword: resetPasswordReducer,
+  confirmEmail: confirmEmailReducer,
   reminders: remindersReducer,
   locations: locationsReducer,
   // alertReducer:alertReducer,
@@ -56,7 +55,7 @@ const rootReducer = combineReducers({
   userInfo: userInfoReducer,
   bulkLocation: bulkLocationReducer,
   calendar: calendarReducer,
-  groupSettings:groupsSettingsReducer
+  groupSettings: groupsSettingsReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
@@ -91,7 +90,7 @@ ReactDOM.render(
         <Route path="/auth" render={props => <AsyncAuthLayout {...props} />} />
         <Route path="/splash" render={props => <AsyncSplashLayout {...props} />} />
 
-        {token && isRememberMe===1 ? <Redirect from="/" to="/admin/index" /> : <Redirect from="/" to="/auth/login" />}
+        {token && isRememberMe === 1 ? <Redirect from="/" to="/admin/index" /> : <Redirect from="/" to="/auth/login" />}
 
       </Switch>
     </Router>

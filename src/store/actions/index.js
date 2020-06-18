@@ -10,6 +10,8 @@ export { userGroupActions } from "./user.groups";
 export { userInfoActions } from "./user.info";
 export { passwordForgotAction } from "./password.forgot";
 export { resetPasswordAction } from "./reset.password";
+export { confirmEmailAction } from "./confirm.email";
+
 
 
 

@@ -5,11 +5,13 @@ import * as actions from '../../store/actions/index';
 import { CalendarStatus } from '../../variables/constants';
 import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content'
-import Swal from 'sweetalert2'
 import moment from 'moment/moment';
 import { permissionHelper } from "./PermissionHelper";
 
+import { extendMoment } from "moment-range";
 
+
+import Swal from 'sweetalert2'
 const MySwal = withReactContent(Swal)
 class Approved extends Component {
     constructor(props) {
@@ -52,12 +54,42 @@ class Approved extends Component {
 
 
     revokePermission(item) {
-        const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(0);
-        const filterOfApproved = permissionHelper.getApprovedFilter(this.state.currentIndex, this.state.searchParam);
-        const data = {
-            status: CalendarStatus.WaitingForApprove
+
+        let currentDate = moment().format("YYYY-MM-DD");
+        let startDate = moment(item.startDate).format("YYYY-MM-DD")
+
+        if (currentDate > startDate) {
+
+            MySwal.fire({
+                icon: 'warning',
+                title: 'UYARI',
+                text: 'Geçmiş tarihli izin kaytıları üzerinden işlem yapamazsınız',
+
+                // text: "Lütfen "
+            });
+
+
+        } else {
+
+
+            const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(0);
+            const filterOfApproved = permissionHelper.getApprovedFilter(this.state.currentIndex, this.state.searchParam);
+            const data = {
+                status: CalendarStatus.WaitingForApprove
+            }
+            this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
+
         }
-        this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
+
+
+
+
+
+
+
+
+
+
     }
 
 
