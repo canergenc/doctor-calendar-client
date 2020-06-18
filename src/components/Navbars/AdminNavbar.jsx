@@ -30,12 +30,13 @@ class AdminNavbar extends React.Component {
 
 
   componentDidMount() {
+
     if (!this.props.email) {
       this.props.getUserInfo();
     }
 
     if (!this.props.unapprovedPermissionCount) {
-      this.props.getPermissionsCount(permissionHelper.getWaitingForApproveFilter(0));
+      this.props.getPermissionsCountAdmin(permissionHelper.getWaitingForApproveFilter(0));
     }
 
   }
@@ -130,7 +131,7 @@ class AdminNavbar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    // email: state.userInfo.email,
+    email: state.userInfo.email,
     fullName: state.userInfo.fullName,
     unapprovedPermissionCount: state.permission.permissionCount
   };
@@ -138,7 +139,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getUserInfo: () => dispatch(actions.userInfoActions.getUserInfo()),
-    getPermissionsCount: (filter) => dispatch(actions.permission.getPermissionsCount(filter))
+    getPermissionsCountAdmin: (filter) => dispatch(actions.permission.getPermissionsCount(filter))
   };
 }
 

@@ -92,7 +92,7 @@ class WaitingForApproved extends Component {
         const filterOfWaitingFor = permissionHelper.getWaitingForApproveFilter(this.state.currentIndex, this.state.searchParam);
         const filterOfApproved = permissionHelper.getApprovedFilter(0);
         this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved);
-        this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter());
+        this.props.getPermissionsCount(permissionHelper.getWaitingForApproveFilter(0));
         this.setState({ searchParam: this.state.searchParam });
     }
 
@@ -120,7 +120,7 @@ class WaitingForApproved extends Component {
                     description: result.value
                 }
                 this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved);
-                this.props.getPermissionsCount(permissionHelper.getApprovedCountFilter())
+
                 this.setState({ searchParam: this.state.searchParam });
 
             }
@@ -165,13 +165,11 @@ class WaitingForApproved extends Component {
                 status: status,
                 type: type,
                 description: description,
-                isWeekend: false,
-
+                isWeekend: false
             }
             this.props.createPermissions(data);
-            this.setState({ submitted: true, searchParam: '' })
+            this.setState({ submitted: true, searchParam: '' });
         }
-
     }
 
     getPermissionsBySearch() {
@@ -200,13 +198,11 @@ class WaitingForApproved extends Component {
     }
 
     setEndDate(date) {
-        this.setState({ submitted: false })
-        this.setState({ endDate: date })
+        this.setState({ endDate: date, submitted: false });
     }
 
     setStartDate(date) {
-        this.setState({ submitted: false })
-        this.setState({ startDate: date })
+        this.setState({ startDate: date, submitted: false });
     }
 
     keyPress(e) {
@@ -215,7 +211,6 @@ class WaitingForApproved extends Component {
                 this.props.getPermissions(permissionHelper.getWaitingForApproveSearchFilter(e.target.value));
             } else {
                 this.refreshPermissions();
-
             }
         }
     }

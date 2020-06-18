@@ -1,7 +1,6 @@
 import * as actionTypes from "./actionTypes";
-import { calendarService } from "../../services/calendar"
-import StateManager from "react-select";
-
+import { calendarService } from "../../services/calendar";
+import { permissionHelper } from "../../containers/Permission/PermissionHelper";
 
 
 const getPermissionsCount = (filterData) => {
@@ -21,10 +20,7 @@ const getPermissionsCount = (filterData) => {
                     permissionCount = permissions.length;
                 }
 
-                
-
                 dispatch(getPermissionsCountSuccess(permissionCount));
-
 
             })
             .catch(err => {
@@ -54,15 +50,31 @@ const getPermissionsCountFailure = (err) => {
 }
 
 
-
-
 const createPermission = (data) => {
     return dispatch => {
         dispatch(createPermissionRequest());
         calendarService.createReminderService(data)
             .then(response => {
-                dispatch(createPermissionSuccess(response));
+                calendarService.getReminderService(permissionHelper.getWaitingForApproveFilter(0))
+                    .then(res => {
 
+                        let permissions = []
+                        let permissionCount = 0;
+                        if (res) {
+                            res.forEach(element => {
+                                if (element !== null && element.user && element.startDate && element.endDate) {
+                                    permissions.push(element);
+                                }
+                            });
+                            permissionCount = permissions.length;
+                        }
+
+                        dispatch(createPermissionSuccess(response, permissionCount));
+
+                    })
+                    .catch(err => {
+                        dispatch(getPermissionsCountFailure(err));
+                    });
 
             })
             .catch(err => {
@@ -73,14 +85,15 @@ const createPermission = (data) => {
 
 const createPermissionRequest = () => {
     return {
-        type: actionTypes.CREATE_PERMISSION_REQUEST,
+        type: actionTypes.CREATE_PERMISSION_REQUEST
     };
 };
 
-const createPermissionSuccess = (response) => {
+const createPermissionSuccess = (response, permissionCount) => {
     return {
         type: actionTypes.CREATE_PERMISSION_SUCCESS,
-        response: response
+        response: response,
+        permissionCount: permissionCount
     };
 }
 
@@ -92,16 +105,37 @@ const createPermissionFailure = (err) => {
 }
 
 
-
-
 const updatePermission = (id, data, filterOrWaitingFor, fiterOfApproved) => {
     return dispatch => {
         dispatch(updatePermissionRequest());
         calendarService.updateReminderService(id, data)
             .then(response => {
-                dispatch(updatePermissionSuccess(response));
-                dispatch(getPermissions(filterOrWaitingFor));
-                dispatch(getApprovedPermissions(fiterOfApproved));
+
+                calendarService.getReminderService(permissionHelper.getWaitingForApproveFilter(0))
+                    .then(res => {
+
+                        let permissions = []
+                        let permissionCount = 0;
+                        if (res) {
+                            res.forEach(element => {
+                                if (element !== null && element.user && element.startDate && element.endDate) {
+                                    permissions.push(element);
+                                }
+                            });
+                            permissionCount = permissions.length;
+                        }
+
+                        dispatch(updatePermissionSuccess(response, permissionCount));
+                        dispatch(getPermissions(filterOrWaitingFor));
+                        dispatch(getApprovedPermissions(fiterOfApproved));
+
+                    })
+                    .catch(err => {
+                        dispatch(getPermissionsCountFailure(err));
+                    });
+
+
+
 
             })
             .catch(err => {
@@ -116,10 +150,11 @@ const updatePermissionRequest = () => {
     };
 };
 
-const updatePermissionSuccess = (response) => {
+const updatePermissionSuccess = (response, permissionCount) => {
     return {
         type: actionTypes.UPDATE_PERMISSION_SUCCESS,
-        response: response
+        response: response,
+        permissionCount: permissionCount
     };
 }
 
@@ -177,8 +212,6 @@ const getPermissionsFailed = (error) => {
 };
 
 
-
-
 const getApprovedPermissions = (filter) => {
     return dispatch => {
         dispatch(getApprovedPermissionsRequest());
@@ -227,11 +260,6 @@ const getApprovedPermissionsFailure = (err) => {
         errorObj: err,
     };
 }
-
-
-
-
-
 
 
 export const permission = {

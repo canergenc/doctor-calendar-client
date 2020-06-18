@@ -4,15 +4,15 @@ import { helperService } from "../../services/helper";
 const initialState = {
     eror: false,
     responseOnGetPermission: [],
-    responseOnGetApprovedPermission:[]
+    responseOnGetApprovedPermission: []
 };
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
-
         case actionTypes.GET_PERMISSION_COUNT_REQUEST:
             return {
+                ...state,
                 getPermissionCountReqLoading: true
             };
         case actionTypes.GET_PERMISSION_COUNT_SUCCESS:
@@ -30,10 +30,9 @@ const reducer = (state = initialState, action) => {
                 permissionCount: {},
                 statusTextAtPermissionCount: helperService.getErrorMessage(action.errorObj)
             };
-
-
         case actionTypes.CREATE_PERMISSION_REQUEST:
             return {
+                ...state,
                 createPermissionReqLoading: true
             };
         case actionTypes.CREATE_PERMISSION_SUCCESS:
@@ -41,7 +40,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 createPermissionReqLoading: false,
                 errorOnCreatePermission: false,
-                responseOnCreatePermission: action.response
+                responseOnCreatePermission: action.response,
+                permissionCount: action.permissionCount
             };
         case actionTypes.CREATE_PERMISSION_FAILURE:
             return {
@@ -51,10 +51,9 @@ const reducer = (state = initialState, action) => {
                 responseOnCreatePermission: {},
                 statusTextAtCreatePermission: helperService.getErrorMessage(action.errorObj)
             };
-
-
         case actionTypes.UPDATE_PERMISSION_REQUEST:
             return {
+                ...state,
                 updatePermissionReqLoading: true
             };
         case actionTypes.UPDATE_PERMISSION_SUCCESS:
@@ -62,7 +61,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 updatePermissionReqLoading: false,
                 errorOnUpdatePermission: false,
-                responseOnUpdatePermission: action.response
+                responseOnUpdatePermission: action.response,
+                permissionCount: action.permissionCount
             };
         case actionTypes.UPDATE_PERMISSION_FAILURE:
             return {
@@ -72,10 +72,9 @@ const reducer = (state = initialState, action) => {
                 responseOnUpdatePermission: {},
                 statusTextAtUpdatePermission: helperService.getErrorMessage(action.errorObj)
             };
-
-
         case actionTypes.GET_PERMISSIONS_REQUEST:
             return {
+                ...state,
                 getPermissionReqLoading: true
             };
         case actionTypes.GET_PERMISSIONS_SUCCESS:
@@ -83,8 +82,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 getPermissionReqLoading: false,
                 errorOnGetPermission: false,
-                responseOnGetPermission: action.response,
-                //permissionCount:action.permissionCount
+                responseOnGetPermission: action.response
             };
         case actionTypes.GET_PERMISSIONS_FAILURE:
             return {
@@ -94,10 +92,9 @@ const reducer = (state = initialState, action) => {
                 responseOnGetPermission: {},
                 statusTexAtGet: helperService.getErrorMessage(action.errorObj)
             };
-
-
         case actionTypes.GET_APPROVED_PERMISSIONS_REQUEST:
             return {
+                ...state,
                 getApprovedPermissionReqLoading: true
             };
         case actionTypes.GET_APPROVED_PERMISSIONS__SUCCESS:
@@ -106,7 +103,7 @@ const reducer = (state = initialState, action) => {
                 getApprovedPermissionReqLoading: false,
                 errorOnGetApprovedPermission: false,
                 responseOnGetApprovedPermission: action.response,
-                approvedPermissionCount:action.permissionCount
+                approvedPermissionCount: action.permissionCount
             };
         case actionTypes.GET_APPROVED_PERMISSIONS__FAILURE:
             return {
@@ -116,8 +113,6 @@ const reducer = (state = initialState, action) => {
                 responseOnGetApprovedPermission: {},
                 statusTexAtGetApproved: helperService.getErrorMessage(action.errorObj)
             };
-
-
         default:
             return state;
     }
