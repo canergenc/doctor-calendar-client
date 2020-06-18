@@ -259,7 +259,13 @@ const getApprovedPermissionsFailure = (err) => {
         type: actionTypes.GET_APPROVED_PERMISSIONS__FAILURE,
         errorObj: err,
     };
-}
+};
+
+const cleanFlagsPermissions = () => {
+    return {
+        type: actionTypes.PERMISSIONS_CLEAN_FLAGS
+    }
+};
 
 
 export const permission = {
@@ -267,6 +273,7 @@ export const permission = {
     createPermission,
     getPermissions,
     getApprovedPermissions,
-    updatePermission
+    updatePermission,
+    cleanFlagsPermissions
 };
 

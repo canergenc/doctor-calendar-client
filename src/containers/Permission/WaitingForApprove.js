@@ -227,12 +227,13 @@ class WaitingForApproved extends Component {
 
     componentDidUpdate() {
 
-        if (this.props.statusTextAtCreatePermission || this.props.statusTextAtUpdatePermission) {
+        if (this.props.error) {
             MySwal.fire({
                 icon: 'error',
                 title: 'İşlem Başarısız',
                 text: this.props.statusTextAtCreatePermission || this.props.statusTextAtUpdatePermission
             });
+            this.props.cleanFlags();
         }
     }
 
@@ -242,7 +243,6 @@ class WaitingForApproved extends Component {
             this.props.users.forEach(u => {
                 options.push({ label: u.user.fullName + '-' + u.user.email, value: u.userId })
             });
-
         }
 
         if (this.props.permissions) {
@@ -481,6 +481,7 @@ const mapStateToProps = state => {
         responseOnCreatePermission: state.permission.responseOnCreatePermission,
         globalUsers: state.users.globalUsers,
         totalPermissionCount: state.permission.permissionCount,
+        error: state.permission.errorPermission
     }
 }
 
@@ -491,11 +492,9 @@ const mapDispatchToProps = dispatch => {
         createPermissions: (data) => dispatch(actions.permission.createPermission(data)),
         getPermissionsCount: (filter) => dispatch(actions.permission.getPermissionsCount(filter)),
         updatePermission: (id, data, filterOfWaitingFor, filterOfApproved) => dispatch(actions.permission.updatePermission(id, data, filterOfWaitingFor, filterOfApproved)),
+        cleanFlags: () => dispatch(actions.permission.cleanFlagsPermissions())
     };
 };
 
 
-
-
 export default connect(mapStateToProps, mapDispatchToProps)(WaitingForApproved);
-

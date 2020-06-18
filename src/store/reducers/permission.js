@@ -28,6 +28,7 @@ const reducer = (state = initialState, action) => {
                 getPermissionCountReqLoading: false,
                 errorOnPermissionCount: true,
                 permissionCount: {},
+                errorPermission: true,
                 statusTextAtPermissionCount: helperService.getErrorMessage(action.errorObj)
             };
         case actionTypes.CREATE_PERMISSION_REQUEST:
@@ -49,6 +50,8 @@ const reducer = (state = initialState, action) => {
                 createPermissionReqLoading: false,
                 errorOnCreatePermission: true,
                 responseOnCreatePermission: {},
+                errorPermission: true,
+                crudSuccess: false,
                 statusTextAtCreatePermission: helperService.getErrorMessage(action.errorObj)
             };
         case actionTypes.UPDATE_PERMISSION_REQUEST:
@@ -69,6 +72,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 updatePermissionReqLoading: false,
                 errorOnUpdatePermission: true,
+                errorPermission: true,
                 responseOnUpdatePermission: {},
                 statusTextAtUpdatePermission: helperService.getErrorMessage(action.errorObj)
             };
@@ -90,6 +94,7 @@ const reducer = (state = initialState, action) => {
                 getPermissionReqLoading: false,
                 errorOnGetPermission: true,
                 responseOnGetPermission: {},
+                errorPermission: true,
                 statusTexAtGet: helperService.getErrorMessage(action.errorObj)
             };
         case actionTypes.GET_APPROVED_PERMISSIONS_REQUEST:
@@ -111,7 +116,13 @@ const reducer = (state = initialState, action) => {
                 getApprovedPermissionReqLoading: false,
                 errorOnGetApprovedPermission: true,
                 responseOnGetApprovedPermission: {},
+                errorPermission: true,
                 statusTexAtGetApproved: helperService.getErrorMessage(action.errorObj)
+            };
+        case actionTypes.PERMISSIONS_CLEAN_FLAGS:
+            return {
+                ...state,
+                errorPermission: false
             };
         default:
             return state;

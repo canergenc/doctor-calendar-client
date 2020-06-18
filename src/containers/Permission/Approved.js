@@ -47,12 +47,6 @@ class Approved extends Component {
         this.loadPermissions();
     }
 
-    // onChangePaginationItem(index) {
-    //     this.setState({ currentIndex: index });
-    //     this.props.getApprovedPermissions(permissionHelper.getApprovedFilter(index));
-    // }
-
-
     revokePermission(item) {
 
         let currentDate = moment().format("YYYY-MM-DD");
@@ -65,7 +59,6 @@ class Approved extends Component {
                 title: 'UYARI',
                 text: 'Geçmiş tarihli izin kaytıları üzerinden işlem yapamazsınız',
 
-                // text: "Lütfen "
             });
 
 
@@ -80,16 +73,6 @@ class Approved extends Component {
             this.props.updatePermission(item.id, data, filterOfWaitingFor, filterOfApproved)
 
         }
-
-
-
-
-
-
-
-
-
-
     }
 
 
@@ -141,17 +124,14 @@ class Approved extends Component {
                                     size="sm"
                                 >
                                     ONAYI İPTAL ET
-                            </Button>
+                                </Button>
 
                             </td>
                         </tr>
                     )
                 }
-            }
-            );
+            });
         }
-
-
 
         return (
             <Card className="shadow">
@@ -180,7 +160,6 @@ class Approved extends Component {
                         </Col>
                         <Col xl="3" lg="3" md="4" sm="3" xs="5">
                         </Col>
-
                     </Row>
                 </CardHeader>
 
@@ -219,21 +198,6 @@ class Approved extends Component {
 
                                 Toplam : {this.state.listOfPermission.length}
                             </div>
-
-
-
-
-
-                            {/* {
-                                this.state.isShowPagination &&
-                                <CustomPagination
-                                    paginationItemCount={helperService.getPaginationItemCount(this.props.totalPermissionCount, constants.PAGESIZE_INPERMISSION_PAGE)}
-                                    paginationItemClick={(index) => this.onChangePaginationItem(index)}
-                                    currentIndex={this.state.currentIndex}
-                                />
-                            } */}
-
-
 
 
                         </nav>
