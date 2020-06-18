@@ -32,6 +32,9 @@ class AdminNavbar extends React.Component {
   componentDidMount() {
     if (!this.props.email) {
       this.props.getUserInfo();
+    }
+
+    if (!this.props.unapprovedPermissionCount) {
       this.props.getPermissionsCount(permissionHelper.getWaitingForApproveFilter(0));
     }
 
@@ -67,7 +70,6 @@ class AdminNavbar extends React.Component {
                         this.props.unapprovedPermissionCount > 0 &&
                         <Badge
                           style={{ color: 'white', backgroundColor: '#fc8266', marginLeft: '-4px', marginBottom: '-12px', fontSize: '10pt' }}
-
                         >
                           {this.props.unapprovedPermissionCount}
                         </Badge>

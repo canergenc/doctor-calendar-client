@@ -174,15 +174,6 @@ class Approved extends Component {
                                     Kayıt bulunmamaktadır.
                                 </td>
                             </tr>
-                            // <div style={{
-                            //     margin: 20,
-                            //     alignSelf: 'center',
-                            //     justifyContent: 'center'
-                            // }} >
-                            //     <p>
-                            // Kayıt bulunmamaktadır.
-                            // </p>
-                            // </div>
                         }
                     </tbody>
                 </Table>
