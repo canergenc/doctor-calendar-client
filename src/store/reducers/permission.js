@@ -122,7 +122,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.PERMISSIONS_CLEAN_FLAGS:
             return {
                 ...state,
-                errorPermission: false
+                errorPermission: false,
+                statusTextAtCreatePermission: null,
+                responseOnCreatePermission: null
             };
         default:
             return state;

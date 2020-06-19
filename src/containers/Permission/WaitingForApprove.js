@@ -233,6 +233,7 @@ class WaitingForApproved extends Component {
                 title: 'İşlem Başarısız',
                 text: this.props.statusTextAtCreatePermission || this.props.statusTextAtUpdatePermission
             });
+            this.setState({ submitted: false });
             this.props.cleanFlags();
         }
     }
