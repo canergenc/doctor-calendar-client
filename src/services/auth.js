@@ -58,6 +58,15 @@ export const confirmEmail = (key) => {
 };
 
 
+export const reConfirmEmail = (email) => {
+    return request({
+        url: `/users/verification/${email}`,
+        method: 'GET',
+        data:null
+    },false);
+};
+
+
 
 
 
@@ -67,5 +76,7 @@ export const authService = {
     register,
     forgotPassword,
     resetPassword,
-    confirmEmail
+    confirmEmail,
+    reConfirmEmail
+
 };

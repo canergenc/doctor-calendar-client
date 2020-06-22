@@ -59,7 +59,7 @@ var routes = [
 
 
     {
-        path: "/confirm-email/:key",
+        path: "/confirm-email/:email/:key",
         name: "Email Doğrula",
         icon: "ni ni-circle-08 text-pink",
         hash: "#the-hash",

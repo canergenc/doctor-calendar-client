@@ -2,6 +2,49 @@ import { authService } from "../../services/auth"
 import * as actionTypes from "./actionTypes";
 
 
+
+
+const reConfirmEmail = (email) => {
+    return dispatch => {
+        dispatch(reConfirmEmailRequest());
+        authService.reConfirmEmail(email).then((response) => {
+            dispatch(reConfirmEmailSuccess(response))
+        }).catch((error) => {
+            dispatch(reConfirmEmailFailure(error));
+        });
+    }
+}
+
+
+
+const reConfirmEmailRequest = () => {
+    return {
+        type: actionTypes.RE_CONFIRM_EMAIL_REQUEST,
+    };
+};
+
+const reConfirmEmailSuccess = (response) => {
+
+
+    return {
+        type: actionTypes.RE_CONFIRM_EMAIL_SUCCESS,
+        response: response
+
+
+    };
+}
+
+
+const reConfirmEmailFailure = (err) => {
+    return {
+        type: actionTypes.RE_CONFIRM_EMAIL_FAILURE,
+        erorObj: err,
+    };
+}
+
+
+
+
 const confirmEmail = (key) => {
     return dispatch => {
         dispatch(confirmEmailRequest());
@@ -17,8 +60,11 @@ const confirmEmail = (key) => {
 const resetState = () => {
     return dispatch => {
         dispatch(confirmEmailRequest());
+        dispatch(reConfirmEmailRequest());
         dispatch(confirmEmailSuccess(null))
         dispatch(confirmEmailFailure(null));
+        dispatch(reConfirmEmailSuccess(null))
+        dispatch(reConfirmEmailFailure(null));
 
     }
 }
@@ -52,7 +98,8 @@ const confirmEmailFailure = (err) => {
 
 export const confirmEmailAction = {
     confirmEmail,
-    resetState
+    resetState,
+    reConfirmEmail
 };
 
 

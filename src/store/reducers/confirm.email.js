@@ -23,6 +23,22 @@ const reducer = (state = initialState, action) => {
                 statusText: helperService.getErrorMessage(action.erorObj)
 
             };
+
+        case actionTypes.RE_CONFIRM_EMAIL_REQUEST:
+            return {
+                reConfirmLoading: true,
+            };
+        case actionTypes.RE_CONFIRM_EMAIL_SUCCESS:
+            return {
+                reConfirmLoading: false,
+                reConfirmResponse: action.response
+            };
+        case actionTypes.RE_CONFIRM_EMAIL_FAILURE:
+            return {
+                reConfirmLoading: false,
+                reConfirmStatusText: helperService.getErrorMessage(action.erorObj)
+
+            };
         default:
             return state;
     }

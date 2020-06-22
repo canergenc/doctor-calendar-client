@@ -24,7 +24,16 @@ class EmailConfirmPage extends React.Component {
 
     async componentDidMount() {
         const { key } = this.props.match.params;
-        console.log('key', key);
+
+        const { email } = this.props.match.params;
+
+
+        console.log('email',email);
+
+        console.log('key',key);
+
+        
+
         await this.props.confirmEmail(key);
 
         if (this.props.response) {
@@ -48,12 +57,18 @@ class EmailConfirmPage extends React.Component {
             MySwal.fire({
                 icon: 'error',
                 title: 'Hay aksi',
-                text: 'İşlem sırasında hata oluştu. Lütfen sistem yöneticisine bildiriniz',
+                text: 'Email adresinize yeni doğrulama linki gönderilecek. Lütfen tekrar deneyiniz.',
                 confirmButtonText: 'Tamam',
 
-            }).then(() => {
-                this.props.resetState();
-                this.backLogin();
+            }).then(async() => {
+                //this.props.resetState();
+                
+                await this.props.reConfirmEmail(email)
+
+                console.log('test',this.props.reConfirmResponse)
+                
+
+
             })
 
         }
@@ -68,7 +83,7 @@ class EmailConfirmPage extends React.Component {
     render() {
 
 
-
+       
 
 
 
@@ -91,12 +106,18 @@ const mapStateToProps = state => {
         statusText: state.confirmEmail.statusText,
         response: state.confirmEmail.response,
 
+        reConfirmLoading: state.confirmEmail.reConfirmLoading,
+        reConfirmStatusText: state.confirmEmail.reConfirmStatusText,
+        reConfirmResponse: state.confirmEmail.reConfirmResponse,
+
     };
 }
 const mapDispatchToProps = dispatch => {
     return {
         resetState: () => dispatch(actions.confirmEmailAction.resetState()),
         confirmEmail: (key) => dispatch(actions.confirmEmailAction.confirmEmail(key)),
+        reConfirmEmail: (email) => dispatch(actions.confirmEmailAction.reConfirmEmail(email)),
+
     };
 }
 
