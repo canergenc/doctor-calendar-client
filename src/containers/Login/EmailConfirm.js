@@ -28,11 +28,11 @@ class EmailConfirmPage extends React.Component {
         const { email } = this.props.match.params;
 
 
-        console.log('email',email);
+        console.log('email', email);
 
-        console.log('key',key);
+        console.log('key', key);
 
-        
+
 
         await this.props.confirmEmail(key);
 
@@ -54,27 +54,36 @@ class EmailConfirmPage extends React.Component {
 
         } else {
 
-            MySwal.fire({
-                icon: 'error',
-                title: 'Hay aksi',
-                text: 'Email adresinize yeni doğrulama linki gönderilecek. Lütfen tekrar deneyiniz.',
-                confirmButtonText: 'Tamam',
+            if (this.props.statusText) {
 
-            }).then(async() => {
-                //this.props.resetState();
-                
-                await this.props.reConfirmEmail(email)
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Hay aksi',
+                    text: this.props.statusText,
+                    confirmButtonText: 'Tamam',
 
-                console.log('test',this.props.reConfirmResponse)
-                
+                }).then(async () => {
+                    this.props.resetState();
+
+                    await this.props.reConfirmEmail(email)
+
+                    console.log('test', this.props.reConfirmResponse)
 
 
-            })
+
+                })
+
+            }
+
+
+
 
         }
+
+
     }
 
- 
+
     backLogin() {
         history.push('/auth/login');
     }
@@ -83,7 +92,7 @@ class EmailConfirmPage extends React.Component {
     render() {
 
 
-       
+
 
 
 

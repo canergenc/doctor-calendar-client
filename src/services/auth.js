@@ -60,7 +60,7 @@ export const confirmEmail = (key) => {
 
 export const reConfirmEmail = (email) => {
     return request({
-        url: `/users/verification/${email}`,
+        url: `/users/re-verification/${email}`,
         method: 'GET',
         data:null
     },false);
