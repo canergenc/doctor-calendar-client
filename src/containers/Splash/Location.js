@@ -43,7 +43,7 @@ class LocationSplash extends React.Component {
 
         if (this.state.locationInput && this.state.locationInput.length > 0) {
 
-            lists.push({ id: lists.length, context: this.state.locationInput, modifier: helperService.getColorName(currentIndex) });
+            lists.push({ id: lists.length, context: this.state.locationInput, modifier: helperService.getColorName(currentIndex), sortOrder:currentIndex + 1 });
             this.setState({ listOfLocation: lists, locationInput: '', currentIndex: currentIndex + 1 });
 
         }
