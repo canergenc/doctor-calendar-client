@@ -37,7 +37,7 @@ const registerSuccess = (user) => {
 
 const registerFailure = (err) => {
     return {
-        erorObj: err,
+        errorObj: err,
         type: actionTypes.REGISTER_FAILURE,
         // statusCode: err.data.error.statusCode, // BadRequestError
         // statusText: err.data.error.message,  // Invalid email or password

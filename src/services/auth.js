@@ -8,7 +8,7 @@ export const login = (email, password) => {
             'email': email,
             'password': password
         }
-    },false);
+    }, false);
 };
 
 export const register = (email, fullName, password) => {
@@ -20,9 +20,9 @@ export const register = (email, fullName, password) => {
             'password': password,
             'fullName': fullName,
             "deviceId": "QWE123",
-            "platform":1
+            "platform": 1
         }
-    },false);
+    }, false);
 };
 
 const forgotPassword = (email) => {
@@ -30,31 +30,30 @@ const forgotPassword = (email) => {
         url: `/users/forgot`,
         method: 'GET',
         params: {
-            'email':email
+            'email': email
         }
-    },false);
+    }, false);
 };
 
 
-export const resetPassword = (email,password,token) => {
+export const resetPassword = (email, password, token) => {
     return request({
         url: `/users/resetPassword`,
         method: 'POST',
         data: {
             'email': email,
-            'password': password,  
-            'code':    token
+            'password': password,
+            'code': token
         }
-    },false);
+    }, false);
 };
 
 
 export const confirmEmail = (key) => {
     return request({
         url: `/users/verification/${key}`,
-        method: 'GET',
-        data:null
-    },false);
+        method: 'GET'
+    }, false);
 };
 
 
@@ -63,9 +62,9 @@ export const reConfirmEmail = (email) => {
         url: `/users/re-verification/`,
         method: 'GET',
         params: {
-            'email':email
+            'email': email
         }
-    },false);
+    }, false);
 };
 
 

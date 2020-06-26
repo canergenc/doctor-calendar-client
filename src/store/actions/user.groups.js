@@ -79,7 +79,7 @@ const createUserGroupFailure = (err) => {
 
     return {
         type: actionTypes.CREATE_USER_GROUP_FAILURE,
-        erorObj: err,
+        errorObj: err,
     };
 }
 

@@ -2,8 +2,6 @@ import { authService } from "../../services/auth"
 import * as actionTypes from "./actionTypes";
 
 
-
-
 const reConfirmEmail = (email) => {
     return dispatch => {
         dispatch(reConfirmEmailRequest());
@@ -12,10 +10,8 @@ const reConfirmEmail = (email) => {
         }).catch((error) => {
             dispatch(reConfirmEmailFailure(error));
         });
-    }
+    };
 }
-
-
 
 const reConfirmEmailRequest = () => {
     return {
@@ -24,53 +20,39 @@ const reConfirmEmailRequest = () => {
 };
 
 const reConfirmEmailSuccess = (response) => {
-
-
     return {
         type: actionTypes.RE_CONFIRM_EMAIL_SUCCESS,
         response: response
-
-
     };
 }
-
 
 const reConfirmEmailFailure = (err) => {
     return {
         type: actionTypes.RE_CONFIRM_EMAIL_FAILURE,
-        erorObj: err,
+        errorObj: err,
     };
 }
 
-
-
-
 const confirmEmail = (key) => {
+    console.log('confirm Mail');
     return dispatch => {
         dispatch(confirmEmailRequest());
         authService.confirmEmail(key).then((response) => {
-            dispatch(confirmEmailSuccess(response))
+            console.log('confirm Mail');
+
+            console.log(response);
+            if (response) {
+                if (response.statusCode) {
+                    if (response.statusCode === 200 && response.statusCode === 409) {
+                        dispatch(confirmEmailSuccess(response))
+                    }
+                }
+            }
         }).catch((error) => {
             dispatch(confirmEmailFailure(error));
         });
     }
 }
-
-
-const resetState = () => {
-    return dispatch => {
-        dispatch(confirmEmailRequest());
-        dispatch(reConfirmEmailRequest());
-        dispatch(confirmEmailSuccess(null))
-        dispatch(confirmEmailFailure(null));
-        dispatch(reConfirmEmailSuccess(null))
-        dispatch(reConfirmEmailFailure(null));
-
-        
-
-    }
-}
-
 
 const confirmEmailRequest = () => {
     return {
@@ -79,29 +61,32 @@ const confirmEmailRequest = () => {
 };
 
 const confirmEmailSuccess = (response) => {
-
-
     return {
         type: actionTypes.CONFIRM_EMAIL_SUCCESS,
         response: response
-
-
     };
-}
-
+};
 
 const confirmEmailFailure = (err) => {
     return {
         type: actionTypes.CONFIRM_EMAIL_FAILURE,
-        erorObj: err,
+        errorObj: err,
     };
-}
+};
 
+const resetState = () => {
+    return dispatch => {
+        dispatch(confirmEmailRequest());
+        dispatch(reConfirmEmailRequest());
+        dispatch(confirmEmailSuccess(null));
+        dispatch(confirmEmailFailure(null));
+        dispatch(reConfirmEmailSuccess(null));
+        dispatch(reConfirmEmailFailure(null));
+    }
+}
 
 export const confirmEmailAction = {
     confirmEmail,
     resetState,
     reConfirmEmail
 };
-
-

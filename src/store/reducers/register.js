@@ -30,7 +30,7 @@ const reducer = (state = initialState, action) => {
                 isRegistered: false,
                 user: {},
                 //statusText: `Authentication Error: ${action.statusCode} ${action.statusText}`
-                statusText: helperService.getErrorMessage(action.erorObj)
+                statusText: helperService.getErrorMessage(action.errorObj)
             };
         default:
             return state;

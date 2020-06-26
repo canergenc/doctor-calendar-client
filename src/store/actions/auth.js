@@ -52,7 +52,7 @@ const loginSuccess = (tokenModel) => {
 const loginFailure = (err) => {
     return {
         type: actionTypes.LOGIN_FAILURE,
-        erorObj: err,
+        errorObj: err,
     };
 }
 

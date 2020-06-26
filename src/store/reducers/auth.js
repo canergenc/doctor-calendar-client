@@ -33,7 +33,7 @@ const reducer = (state = initialState, action) => {
                 isAuthenticating: false,
                 isAuthenticated: false,
                 //statusText: `Authentication Error: ${action.statusCode} ${action.statusText}`
-                statusText: helperService.getErrorMessage(action.erorObj)
+                statusText: helperService.getErrorMessage(action.errorObj)
 
             };
         default:

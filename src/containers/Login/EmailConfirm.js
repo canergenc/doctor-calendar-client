@@ -5,6 +5,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import withReactContent from 'sweetalert2-react-content';
 import history from "../../hoc/Config/history"
 import Swal from 'sweetalert2'
+
 const MySwal = withReactContent(Swal)
 
 import {
@@ -31,16 +32,12 @@ class EmailConfirmPage extends React.Component {
             this.setState({ email: event.target.value });
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         const { key } = this.props.match.params;
 
         const { email } = this.props.match.params;
 
         this.setState({ email: email });
-
-        console.log('email', email);
-
-        console.log('key', key);
 
         this.props.confirmEmail(key);
     }
@@ -52,14 +49,10 @@ class EmailConfirmPage extends React.Component {
                 icon: 'success',
                 title: 'SÜPER!',
                 text: 'Hesabınız doğrulandı.',
-
-                confirmButtonText: 'Tamam',
-
-
+                confirmButtonText: 'Tamam'
             }).then(() => {
                 this.props.resetState();
                 this.backLogin();
-
             })
 
         } else {
@@ -95,10 +88,6 @@ class EmailConfirmPage extends React.Component {
 
 
     render() {
-
-        console.log('A', this.props.statusCode);
-
-        console.log('B', this.props.reConfirmStatusCode);
 
         return (
             <>
@@ -168,7 +157,8 @@ const mapStateToProps = state => {
         reConfirmResponse: state.confirmEmail.reConfirmResponse,
 
         reConfirmStatusCode: state.confirmEmail.reConfirmStatusCode,
-        statusCode: state.confirmEmail.statusCode
+        statusCode: state.confirmEmail.statusCode,
+        confirmSuccess: state.confirmEmail.confirmSuccess
     };
 }
 

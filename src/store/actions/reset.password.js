@@ -35,7 +35,7 @@ const resetPasswordSuccess = (response) => {
 const resetPasswordFailure = (err) => {
     return {
         type: actionTypes.RESET_PASSWORD_FAILURE,
-        erorObj: err,
+        errorObj: err,
     };
 }
 

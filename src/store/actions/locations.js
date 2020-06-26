@@ -37,7 +37,7 @@ export const createBulkLocationSuccess = (response) => {
 export const createBulkLocationFailure = (err) => {
     return {
         type: actionTypes.CREATE_BULK_LOCATION_FAILURE,
-        erorObj: err,
+        errorObj: err,
     };
 }
 

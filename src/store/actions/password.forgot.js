@@ -37,7 +37,7 @@ const passwordForgotSuccess = (response) => {
 const passwordForgotFailure = (err) => {
     return {
         type: actionTypes.FORGOT_FAILURE,
-        erorObj: err,
+        errorObj: err,
     };
 }
 

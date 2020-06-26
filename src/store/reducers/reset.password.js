@@ -20,7 +20,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.RESET_PASSWORD_FAILURE:
             return {
                 loading: false,
-                statusText: helperService.getErrorMessage(action.erorObj)
+                statusText: helperService.getErrorMessage(action.errorObj)
 
             };
         default:

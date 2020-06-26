@@ -3,7 +3,7 @@ import { constants } from '../../variables/constants';
 import { helperService } from "../../services/helper"
 
 const initialState = {
-
+    confirmSuccess: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -15,17 +15,17 @@ const reducer = (state = initialState, action) => {
         case actionTypes.CONFIRM_EMAIL_SUCCESS:
             return {
                 loading: false,
-                response: action.response
+                response: action.response,
+                confirmSuccess: true,
+                message: action.response.message
             };
         case actionTypes.CONFIRM_EMAIL_FAILURE:
             return {
                 loading: false,
-                statusCode:null,
-                statusText: helperService.getErrorMessage(action.erorObj)
-
-
+                statusCode: null,
+                confirmSuccess: false,
+                statusText: helperService.getErrorMessage(action.errorObj)
             };
-
         case actionTypes.RE_CONFIRM_EMAIL_REQUEST:
             return {
                 reConfirmLoading: true,
@@ -38,9 +38,9 @@ const reducer = (state = initialState, action) => {
         case actionTypes.RE_CONFIRM_EMAIL_FAILURE:
             return {
                 reConfirmLoading: false,
-                reConfirmStatusCode:null,
-                reConfirmStatusText: helperService.getErrorMessage(action.erorObj)
-
+                reConfirmStatusCode: null,
+                confirmSuccess: false,
+                reConfirmStatusText: helperService.getErrorMessage(action.errorObj)
             };
         default:
             return state;
