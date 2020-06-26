@@ -10,6 +10,11 @@ const request = async function (options, isHeader = true) {
     header = {
       Authorization: `Bearer ${authHeader} `,
     }
+  } else{
+    header = {
+      'Content-Type': `application/json`,
+    }
+
   }
 
   const client = axios.create({

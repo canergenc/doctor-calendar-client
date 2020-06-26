@@ -66,6 +66,8 @@ const resetState = () => {
         dispatch(reConfirmEmailSuccess(null))
         dispatch(reConfirmEmailFailure(null));
 
+        
+
     }
 }
 

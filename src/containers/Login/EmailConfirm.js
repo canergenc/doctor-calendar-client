@@ -9,6 +9,20 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 import Swal from 'sweetalert2'
 const MySwal = withReactContent(Swal)
 
+import {
+    Alert,
+    Card,
+    CardBody,
+    Badge,
+    Button,
+    Row,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
+    Input
+
+} from "reactstrap";
+
 
 
 class EmailConfirmPage extends React.Component {
@@ -17,15 +31,24 @@ class EmailConfirmPage extends React.Component {
         this.state = {
             isConfirmation: false,
             responseData: null,
+            email: ''
 
         };
 
+    }
+
+
+    handleInputChange = (event) => {
+        if (target.name === 'email')
+            this.setState({ email: event.target.value });
     }
 
     async componentDidMount() {
         const { key } = this.props.match.params;
 
         const { email } = this.props.match.params;
+
+        this.setState({ email: email });
 
 
         console.log('email', email);
@@ -63,11 +86,10 @@ class EmailConfirmPage extends React.Component {
                     confirmButtonText: 'Tamam',
 
                 }).then(async () => {
-                    this.props.resetState();
 
-                    await this.props.reConfirmEmail(email)
+                    //await this.props.reConfirmEmail(email)
 
-                    console.log('test', this.props.reConfirmResponse)
+                    //console.log('test', this.props.reConfirmResponse)
 
 
 
@@ -89,8 +111,20 @@ class EmailConfirmPage extends React.Component {
     }
 
 
+    sendLink = async () => {
+        this.props.resetState();
+
+        await this.props.reConfirmEmail(this.state.email)
+
+    }
+
+
     render() {
 
+
+        console.log('A', this.props.statusCode);
+
+        console.log('B', this.props.reConfirmStatusCode);
 
 
 
@@ -102,6 +136,82 @@ class EmailConfirmPage extends React.Component {
 
         return (
             <>
+
+                <Card className="bg-secondary shadow border-0">
+
+                    <CardBody className="px-lg-5 py-lg-5">
+
+                        <div className="text-center text-muted mb-4">
+                            <h1> <Badge color="light">Hesap Doğrulama</Badge></h1>
+                        </div>
+
+                        {this.props.statusText ?
+                            <Alert color="danger">
+                                Hata:  {this.props.statusText}
+                            </Alert>
+                            : ''}
+
+                        {this.props.reConfirmStatusText ?
+                            <Alert color="danger">
+                                Hata:  {this.props.reConfirmStatusText}
+                            </Alert>
+                            : ''}
+
+
+                        <Row style={{ justifyContent: 'center' }}>
+
+
+                            {/* <InputGroup className="input-group-alternative mb-3">
+                                <InputGroupAddon addonType="prepend">
+                                    <InputGroupText>
+                                        <i className="ni ni-email-83" />
+                                    </InputGroupText>
+                                </InputGroupAddon>
+                                <Input name="email" placeholder="Email" type="text" value={this.state.email} onChange={this.handleInputChange} />
+                            </InputGroup> */}
+
+
+
+                            {
+
+                                this.props.statusCode == 409 &&
+
+                                <Button onClick={this.sendLink} color="primary" color="primary" >
+                                    Tekrar Link Gönder
+                            </Button>
+
+                            }
+
+
+                            {
+
+                                this.props.statusCode == 401 &&
+
+                                <Button onClick={this.sendLink} color="primary" color="primary" >
+                                    Tekrar Link Gönder
+                                    </Button>
+
+                            }
+
+
+
+
+
+                        </Row>
+
+
+
+
+
+
+
+
+                    </CardBody>
+
+
+
+
+                </Card>
 
             </>
         );
@@ -118,6 +228,11 @@ const mapStateToProps = state => {
         reConfirmLoading: state.confirmEmail.reConfirmLoading,
         reConfirmStatusText: state.confirmEmail.reConfirmStatusText,
         reConfirmResponse: state.confirmEmail.reConfirmResponse,
+
+        reConfirmStatusCode: state.confirmEmail.reConfirmStatusCode,
+        statusCode: state.confirmEmail.statusCode,
+
+
 
     };
 }
