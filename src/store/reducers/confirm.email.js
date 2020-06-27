@@ -16,8 +16,7 @@ const reducer = (state = initialState, action) => {
             return {
                 loading: false,
                 response: action.response,
-                confirmSuccess: true,
-                message: action.response.message
+                confirmSuccess: true
             };
         case actionTypes.CONFIRM_EMAIL_FAILURE:
             return {

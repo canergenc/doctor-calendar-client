@@ -50,27 +50,9 @@ class EmailConfirmPage extends React.Component {
                 title: 'SÜPER!',
                 text: 'Hesabınız doğrulandı.',
                 confirmButtonText: 'Tamam'
-            }).then(() => {
-                this.props.resetState();
-                this.backLogin();
-            })
-
-        } else {
-
-            if (this.props.statusText) {
-
-                MySwal.fire({
-                    icon: 'error',
-                    title: 'Hay aksi',
-                    text: this.props.statusText,
-                    confirmButtonText: 'Tamam',
-
-                }).then(async () => {
-
-                    this.props.reConfirmEmail(email)
-
-                })
-            }
+            });
+            
+            this.backLogin();
         }
     }
 
@@ -79,7 +61,6 @@ class EmailConfirmPage extends React.Component {
     }
 
     sendLink = async () => {
-        this.props.resetState();
 
         this.props.reConfirmEmail(this.state.email);
     }
