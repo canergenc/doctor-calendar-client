@@ -67,9 +67,7 @@ class EmailConfirmPage extends React.Component {
 
                 }).then(async () => {
 
-                    //await this.props.reConfirmEmail(email)
-
-                    //console.log('test', this.props.reConfirmResponse)
+                    this.props.reConfirmEmail(email)
 
                 })
             }

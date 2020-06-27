@@ -42,10 +42,18 @@ const confirmEmail = (key) => {
 
             console.log(response);
             if (response) {
+                console.log('response true');
+                
                 if (response.statusCode) {
-                    if (response.statusCode === 200 && response.statusCode === 409) {
-                        dispatch(confirmEmailSuccess(response))
+                    console.log('response has statusCode');
+                    if (response.statusCode === 200 || response.statusCode === 409) {
+                        console.log('response  statusCode 200 or 409');
+                        dispatch(confirmEmailSuccess(response));
                     }
+                }
+                else{
+                    console.log('response has no statusCode');
+                    dispatch(confirmEmailSuccess(response));
                 }
             }
         }).catch((error) => {

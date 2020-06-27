@@ -338,7 +338,6 @@ class Calendar extends Component {
               date.format("DD.MM.YYYY")
             ) {
               let columnNameIndex = 2;
-              debugger;
               if (firstAdd) {
                 excelData.push({
                   Tarih: moment(element.startDate).format("DD.MM.YYYY"),
