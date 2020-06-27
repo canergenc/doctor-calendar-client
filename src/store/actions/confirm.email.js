@@ -38,7 +38,6 @@ const confirmEmail = (key) => {
     return dispatch => {
         dispatch(confirmEmailRequest());
         authService.confirmEmail(key).then((response) => {
-            console.log('confirm Mail');
 
             console.log(response);
             if (response) {
@@ -71,7 +70,8 @@ const confirmEmailRequest = () => {
 const confirmEmailSuccess = (response) => {
     return {
         type: actionTypes.CONFIRM_EMAIL_SUCCESS,
-        response: response
+        response: response,
+        statusCode:response.statusCode
     };
 };
 

@@ -70,7 +70,7 @@ class EmailConfirmPage extends React.Component {
 
     render() {
 
-        console.log('FFF',this.props.statusCode);
+        console.log('STATUS CODE',this.props.statusCode);
         
         
 
