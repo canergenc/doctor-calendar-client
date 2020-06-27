@@ -50,9 +50,11 @@ class EmailConfirmPage extends React.Component {
                 title: 'SÜPER!',
                 text: 'Hesabınız doğrulandı.',
                 confirmButtonText: 'Tamam'
-            });
-            
-            this.backLogin();
+            }).then(() => {
+                this.backLogin();
+            })
+
+
         }
     }
 
@@ -70,56 +72,66 @@ class EmailConfirmPage extends React.Component {
 
         return (
             <>
-                <Card className="bg-secondary shadow border-0">
 
-                    <CardBody className="px-lg-5 py-lg-5">
 
-                        <div className="text-center text-muted mb-4">
-                            <h1> <Badge color="light">Hesap Doğrulama</Badge></h1>
-                        </div>
+                {!this.props.response &&
 
-                        {this.props.statusText ?
-                            <Alert color="danger">
-                                Hata:  {this.props.statusText}
-                            </Alert>
-                            : ''}
+                    <Card className="bg-secondary shadow border-0">
 
-                        {this.props.reConfirmStatusText ?
-                            <Alert color="danger">
-                                Hata:  {this.props.reConfirmStatusText}
-                            </Alert>
-                            : ''}
+                        <CardBody className="px-lg-5 py-lg-5">
 
-                        <Row style={{ justifyContent: 'center' }}>
+                            <div className="text-center text-muted mb-4">
+                                <h1> <Badge color="light">Hesap Doğrulama</Badge></h1>
+                            </div>
 
-                            {/* <InputGroup className="input-group-alternative mb-3">
-                                <InputGroupAddon addonType="prepend">
-                                    <InputGroupText>
-                                        <i className="ni ni-email-83" />
-                                    </InputGroupText>
-                                </InputGroupAddon>
-                                <Input name="email" placeholder="Email" type="text" value={this.state.email} onChange={this.handleInputChange} />
-                            </InputGroup> */}
+                            {this.props.statusText ?
+                                <Alert color="danger">
+                                    Hata:  {this.props.statusText}
+                                </Alert>
+                                : ''}
 
-                            {
-                                this.props.statusCode == 409 &&
+                            {this.props.reConfirmStatusText ?
+                                <Alert color="danger">
+                                    Hata:  {this.props.reConfirmStatusText}
+                                </Alert>
+                                : ''}
 
-                                <Button onClick={this.sendLink} color="primary" color="primary" >
-                                    Tekrar Link Gönder
-                                </Button>
-                            }
+                            <Row style={{ justifyContent: 'center' }}>
 
-                            {
-                                this.props.statusCode == 401 &&
+                                {/* <InputGroup className="input-group-alternative mb-3">
+            <InputGroupAddon addonType="prepend">
+                <InputGroupText>
+                    <i className="ni ni-email-83" />
+                </InputGroupText>
+            </InputGroupAddon>
+            <Input name="email" placeholder="Email" type="text" value={this.state.email} onChange={this.handleInputChange} />
+        </InputGroup> */}
 
-                                <Button onClick={this.sendLink} color="primary" color="primary" >
-                                    Tekrar Link Gönder
-                                </Button>
-                            }
+                                {
+                                    this.props.statusCode == 409 &&
 
-                        </Row>
-                    </CardBody>
-                </Card>
+                                    <Button onClick={this.sendLink} color="primary" color="primary" >
+                                        Tekrar Link Gönder
+            </Button>
+                                }
+
+                                {
+                                    this.props.statusCode == 401 &&
+
+                                    <Button onClick={this.sendLink} color="primary" color="primary" >
+                                        Tekrar Link Gönder
+            </Button>
+                                }
+
+                            </Row>
+                        </CardBody>
+                    </Card>
+
+
+
+                }
+
+
             </>
         );
     }
