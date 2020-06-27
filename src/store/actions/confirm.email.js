@@ -77,7 +77,7 @@ const confirmEmailSuccess = (response) => {
     return {
         type: actionTypes.CONFIRM_EMAIL_SUCCESS,
         response: response,
-        statusCode:response.statusCode
+        
     };
 };
 
@@ -85,6 +85,7 @@ const confirmEmailFailure = (err) => {
     return {
         type: actionTypes.CONFIRM_EMAIL_FAILURE,
         errorObj: err,
+        statusCode:err.status
     };
 };
 
