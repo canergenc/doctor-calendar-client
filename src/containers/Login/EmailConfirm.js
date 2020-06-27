@@ -70,11 +70,15 @@ class EmailConfirmPage extends React.Component {
 
     render() {
 
+        console.log('FFF',this.props.statusCode);
+        
+        
+
         return (
             <>
 
 
-                {!this.props.response &&
+                
 
                     <Card className="bg-secondary shadow border-0">
 
@@ -110,9 +114,9 @@ class EmailConfirmPage extends React.Component {
                                 {
                                     this.props.statusCode == 409 &&
 
-                                    <Button onClick={this.sendLink} color="primary" color="primary" >
-                                        Tekrar Link Gönder
-            </Button>
+                                    <Button onClick={this.backLogin} color="primary" color="primary" >
+                                        Giriş Sayfasına Git
+                                    </Button>
                                 }
 
                                 {
@@ -120,7 +124,7 @@ class EmailConfirmPage extends React.Component {
 
                                     <Button onClick={this.sendLink} color="primary" color="primary" >
                                         Tekrar Link Gönder
-            </Button>
+                                    </Button>
                                 }
 
                             </Row>
@@ -129,7 +133,7 @@ class EmailConfirmPage extends React.Component {
 
 
 
-                }
+                
 
 
             </>

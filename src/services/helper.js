@@ -1,6 +1,20 @@
 import style from "../containers/Locations/Locations.scss";
 import { constants, listOfColorName } from "../variables/constants";
 
+
+
+
+
+const getErrorStatusCode = (err) => {
+
+    let statusCode = "";
+    if (err && err.status) {
+        statusCode = err.status.toString();
+    }
+    
+    return statusCode
+}
+
 const getErrorMessage = (err) => {
 
     let errorMessage = "";
@@ -99,6 +113,7 @@ const getPaginationItemCount = (totalListCount, pageSize) => {
 }
 
 export const helperService = {
+    getErrorStatusCode,
     getErrorMessage,
     getGroupId,
     uniqGroupName,
