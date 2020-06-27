@@ -102,14 +102,7 @@ class EmailConfirmPage extends React.Component {
 
                             <Row style={{ justifyContent: 'center' }}>
 
-                                {/* <InputGroup className="input-group-alternative mb-3">
-            <InputGroupAddon addonType="prepend">
-                <InputGroupText>
-                    <i className="ni ni-email-83" />
-                </InputGroupText>
-            </InputGroupAddon>
-            <Input name="email" placeholder="Email" type="text" value={this.state.email} onChange={this.handleInputChange} />
-        </InputGroup> */}
+      
 
                                 {
                                     this.props.statusCode == 409 &&
