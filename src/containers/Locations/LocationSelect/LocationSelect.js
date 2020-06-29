@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import PropTypes from "prop-types";
 import ScrollMenu from "react-horizontal-scrolling-menu";
+import 'pretty-checkbox';
 
 import '../Locations.scss';
 
@@ -39,13 +40,33 @@ class Location extends Component {
 
     createMenu = (list, selectedLocations) => {
         let menu = list.map((el) => (
-            <Button
-                outline
+            <div
                 key={el.id}
-                color={el.colorCode}
-                className={`${selectedLocations.includes(el.id) ? "active" : ""}`}
-            > {el.name}
-            </Button>
+            >
+                <Button
+                    outline
+                    color={el.colorCode}
+                    className={`${this.props.activeLocationId === el.id ? "active" : ""}`}
+                    style={{paddingRight:"40px"}}
+                    onClick={() => this.setActiveLocation(el.id)}
+                > {el.name}
+
+                </Button>
+                <div className="pretty p-default p-curve p-thick" style={{ marginLeft: "-35px", marginBottom: "auto", marginTop: "auto", marginRight: "auto" }} >
+                    <input
+                        type="checkbox"
+                        name="radio"
+                        onChange={() => this.onSelect(el.id)}
+                        checked={selectedLocations.includes(el.id) ? true : false}
+                        
+                    />
+                    <div className="state p-success-o"
+                    style={{  marginTop: "-1px"}}
+                    >
+                        <label></label>
+                    </div>
+                </div>
+            </div>
         ));
 
         return menu;
@@ -56,6 +77,19 @@ class Location extends Component {
         this.setState({ translate });
     };
 
+
+    setActiveLocation = key => {
+        console.log('setActiveLocation');
+
+        console.log(key);
+
+        if (this.props.activeLocationId === key) {
+            this.props.setActiveLocationId("");
+        }
+        else {
+            this.props.setActiveLocationId(key);
+        }
+    }
 
     onSelect = key => {
 
@@ -74,18 +108,6 @@ class Location extends Component {
                 ...selectedLocationsArray,
                 key
             ];
-        }
-
-        if (selectedLocationsArray) {
-            if (selectedLocationsArray.length === 1) {
-                this.props.setActiveLocationId(selectedLocationsArray[0]);
-            }
-            else {
-                this.props.setActiveLocationId("");
-            }
-        }
-        else {
-            this.props.setActiveLocationId("");
         }
 
         this.props.getReminders(selectedLocationsArray, this.props.selectedUsers, this.props.curMonth);
@@ -130,7 +152,6 @@ class Location extends Component {
                 dragging={dragging}
                 hideArrows={hideArrows}
                 hideSingleArrow={hideSingleArrow}
-                onSelect={this.onSelect}
                 onUpdate={this.onUpdate}
                 scrollToSelected={scrollToSelected}
                 transition={transition}
