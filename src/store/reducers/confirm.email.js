@@ -21,7 +21,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.CONFIRM_EMAIL_FAILURE:
             return {
                 loading: false,
-                statusCode: null,
+                statusCode:action.statusCode,
                 confirmSuccess: false,
                 statusText: helperService.getErrorMessage(action.errorObj)
             };
@@ -37,7 +37,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.RE_CONFIRM_EMAIL_FAILURE:
             return {
                 reConfirmLoading: false,
-                reConfirmStatusCode: null,
+                reConfirmStatusCode: Number(action.errorObj.status),
                 confirmSuccess: false,
                 reConfirmStatusText: helperService.getErrorMessage(action.errorObj)
             };

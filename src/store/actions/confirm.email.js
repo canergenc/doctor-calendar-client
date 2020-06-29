@@ -34,15 +34,15 @@ const reConfirmEmailFailure = (err) => {
 }
 
 const confirmEmail = (key) => {
-    console.log('confirm Mail');
     return dispatch => {
         dispatch(confirmEmailRequest());
         authService.confirmEmail(key).then((response) => {
-            console.log('confirm Mail');
 
-            console.log(response);
+
+
+
+            console.log('ACTION RESPONSE',response);
             if (response) {
-                console.log('response true');
                 
                 if (response.statusCode) {
                     console.log('response has statusCode');
@@ -57,6 +57,11 @@ const confirmEmail = (key) => {
                 }
             }
         }).catch((error) => {
+
+            console.log('ERR RESPONSE',error);
+
+
+
             dispatch(confirmEmailFailure(error));
         });
     }
@@ -71,7 +76,8 @@ const confirmEmailRequest = () => {
 const confirmEmailSuccess = (response) => {
     return {
         type: actionTypes.CONFIRM_EMAIL_SUCCESS,
-        response: response
+        response: response,
+        
     };
 };
 
@@ -79,6 +85,7 @@ const confirmEmailFailure = (err) => {
     return {
         type: actionTypes.CONFIRM_EMAIL_FAILURE,
         errorObj: err,
+        statusCode:err.status
     };
 };
 
