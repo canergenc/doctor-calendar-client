@@ -158,6 +158,7 @@ class Profile extends React.Component {
       password: '',
       newPassword: '',
       newPasswordAgain: '',
+      submitted:false
     });
   };
 
