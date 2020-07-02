@@ -327,7 +327,8 @@ class Persons extends Component {
                 weekendCountLimit: ' ',
                 isChangeWeekdayCountLimit: true,
                 isChangeWeekendCountLimit: true,
-                isSeniorityDescription: false
+                isSeniorityDescription: false,
+                submitted:false
             });
         }
     };
