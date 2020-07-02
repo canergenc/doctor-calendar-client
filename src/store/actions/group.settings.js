@@ -87,14 +87,16 @@ export const getSeniority = () => {
                     },
                     {
                         type: 2
-
                     }]
                 }
             }
         }
         groupSettingsService.getGroupSettings(filterData)
             .then(response => {
-
+                response.sort(function (a, b) {
+                    var startA = new Date(a.start), startB = new Date(b.start);
+                    return startA - startB;
+                });
                 dispatch(getSenioritySuccess(response));
 
             })

@@ -57,7 +57,6 @@ const groupSettingsCleanFlags = (state, action) => {
     return updateObject(state, updatedState);
 };
 
-
 const getSenioritySuccess = (state, action) => {
     const updatedState = {
         seniority: action.seniority,

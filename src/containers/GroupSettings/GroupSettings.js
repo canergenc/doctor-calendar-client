@@ -519,7 +519,7 @@ class GroupSettings extends React.Component {
                           className="form-control-label mr-sm-2"
                           htmlFor="checkbox-weekday"
                         >
-                          Haftaiçi Nöbet Limiti
+                          Haftaiçi Nöbet Limiti Aktif
                             </Label>
                         <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
                           <input
@@ -543,7 +543,7 @@ class GroupSettings extends React.Component {
                             className="form-control-label mr-sm-2"
                             htmlFor="checkbox-weekend"
                           >
-                            Haftasonu Nöbet Limiti
+                            Haftasonu Nöbet Limiti Aktif
                           </Label>
                           <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
                             <input
