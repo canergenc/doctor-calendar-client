@@ -67,10 +67,8 @@ class GroupSettings extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.isWeekdayControl || !this.props.isWeekendControl || !this.props.sequentialOrderLimitCount || !this.props.locationDayLimit) {
-      this.props.getGroupSettings();
-      this.props.getSeniority();
-    }
+    this.props.getGroupSettings();
+    this.props.getSeniority();
   }
 
   componentDidUpdate() {
@@ -147,6 +145,22 @@ class GroupSettings extends React.Component {
       formIsValid = false;
     }
 
+    if (start && start < 0) {
+      formIsValid = false;
+    }
+
+    if (finish && finish <= 0) {
+      formIsValid = false;
+    }
+
+    if (defaultWeekDayDutyLimit && defaultWeekDayDutyLimit < 0) {
+      formIsValid = false;
+    }
+
+    if (defaultWeekEndDutyLimit && defaultWeekEndDutyLimit < 0) {
+      formIsValid = false;
+    }
+
     return formIsValid
   }
 
@@ -158,6 +172,22 @@ class GroupSettings extends React.Component {
     }
 
     if (finish < start) {
+      formIsValid = false;
+    }
+
+    if (start && start < 0) {
+      formIsValid = false;
+    }
+
+    if (finish && finish <= 0) {
+      formIsValid = false;
+    }
+
+    if (defaultWeekDayDutyLimit && defaultWeekDayDutyLimit < 0) {
+      formIsValid = false;
+    }
+
+    if (defaultWeekEndDutyLimit && defaultWeekEndDutyLimit < 0) {
       formIsValid = false;
     }
 
@@ -313,17 +343,21 @@ class GroupSettings extends React.Component {
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Başlangıç (Ay):</InputGroupText>
-                  <Input name="start" valid={true} type="number" value={this.state.start} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="start" valid={true} type="number" min={0} value={this.state.start} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !start &&
                 <p style={{ fontSize: 12 }} className="text-warning">Başlangıç gerekli.</p>
               }
 
+              {submitted && start && start < 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Başlangıç sıfırdan küçük olamaz.</p>
+              }
+
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Bitiş (Ay):</InputGroupText>
-                  <Input name="finish" valid={true} type="number" value={this.state.finish} min={this.state.start} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="finish" valid={true} type="number" min={0} value={this.state.finish} min={this.state.start} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !finish &&
@@ -332,26 +366,34 @@ class GroupSettings extends React.Component {
               {submitted && finish && finish < start &&
                 <p style={{ fontSize: 12 }} className="text-warning">Bitiş Başlangıça eşit ya da büyük olmalı.</p>
               }
+              {submitted && finish && finish <= 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Bitiş sıfırdan küçük olamaz.</p>
+              }
 
 
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
-                  <Input name="defaultWeekDayDutyLimit" type="number" min="0" value={this.state.defaultWeekDayDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="defaultWeekDayDutyLimit" type="number" min={0} value={this.state.defaultWeekDayDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !defaultWeekDayDutyLimit &&
                 <p style={{ fontSize: 12 }} className="text-warning">Haftaiçi Nöbet Sayısı gerekli.</p>
               }
-
+              {submitted && defaultWeekDayDutyLimit && defaultWeekDayDutyLimit < 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Haftaiçi Nöbet Sayısı sıfırdan küçük olamaz.</p>
+              }
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
-                  <Input name="defaultWeekEndDutyLimit" type="number" min="0" value={this.state.defaultWeekEndDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="defaultWeekEndDutyLimit" type="number" min={0} value={this.state.defaultWeekEndDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !defaultWeekEndDutyLimit &&
                 <p style={{ fontSize: 12 }} className="text-warning">Haftasonu Nöbet Sayısı gerekli.</p>
+              }
+              {submitted && defaultWeekEndDutyLimit && defaultWeekEndDutyLimit < 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Haftasonu Nöbet Sayısı sıfırdan küçük olamaz.</p>
               }
 
             </FormGroup>
@@ -364,7 +406,7 @@ class GroupSettings extends React.Component {
             data-dismiss="modal"
             type="button"
             onClick={() => this.toggleModal("addModal", undefined)}>Kapat
-                        </Button>
+          </Button>
           <Button color="primary" type="submit" onClick={this.addHandle}>Kaydet</Button>
         </div>
       </Modal>
@@ -401,18 +443,21 @@ class GroupSettings extends React.Component {
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Başlangıç (Ay):</InputGroupText>
-                  <Input name="start" type="number" value={this.state.start} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="start" type="number" value={this.state.start} min={0} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !start &&
                 <p style={{ fontSize: 12 }} className="text-warning">Başlangıç gerekli.</p>
+              }
+              {submitted && start && start < 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Başlangıç sıfırdan küçük olamaz.</p>
               }
 
 
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Bitiş (Ay):</InputGroupText>
-                  <Input name="finish" type="number" value={this.state.finish} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="finish" type="number" value={this.state.finish} min={0} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !finish &&
@@ -421,25 +466,33 @@ class GroupSettings extends React.Component {
               {submitted && finish && finish < start &&
                 <p style={{ fontSize: 12 }} className="text-warning">Bitiş Başlangıça eşit ya da büyük olmalı.</p>
               }
+              {submitted && finish && finish <= 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Bitiş sıfırdan küçük olamaz.</p>
+              }
 
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Haftaiçi Nöbet Sayısı:</InputGroupText>
-                  <Input name="defaultWeekDayDutyLimit" type="number" min="0" value={this.state.defaultWeekDayDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="defaultWeekDayDutyLimit" type="number" min={0} value={this.state.defaultWeekDayDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !defaultWeekDayDutyLimit &&
                 <p style={{ fontSize: 12 }} className="text-warning">Haftaiçi Nöbet Sayısı gerekli.</p>
               }
-
+              {submitted && defaultWeekDayDutyLimit && defaultWeekDayDutyLimit < 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Haftaiçi Nöbet Sayısı sıfırdan küçük olamaz.</p>
+              }
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Haftasonu Nöbet Sayısı:</InputGroupText>
-                  <Input name="defaultWeekEndDutyLimit" type="number" min="0" value={this.state.defaultWeekEndDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="defaultWeekEndDutyLimit" type="number" min={0} value={this.state.defaultWeekEndDutyLimit} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !defaultWeekEndDutyLimit &&
                 <p style={{ fontSize: 12 }} className="text-warning">Haftasonu Nöbet Sayısı gerekli.</p>
+              }
+              {submitted && defaultWeekEndDutyLimit && defaultWeekEndDutyLimit < 0 &&
+                <p style={{ fontSize: 12 }} className="text-warning">Haftasonu Nöbet Sayısı sıfırdan küçük olamaz.</p>
               }
 
             </FormGroup>
