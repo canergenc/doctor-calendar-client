@@ -101,22 +101,6 @@ class GroupSettings extends React.Component {
 
     const target = event.target;
 
-    if (target.name === 'weekday')
-      this.setState({ isWeekdayControl: this.refs.weekday.checked, isWeekdayControlChange: true });
-    if (target.name === 'weekend')
-      this.setState({ isWeekendControl: this.refs.weekend.checked, isWeekendControlChange: true });
-    if (target.name === 'sequentialOrderLimitCount')
-      this.setState({ sequentialOrderLimitCount: event.target.value, sequentialOrderLimitCountChange: true });
-    if (target.name === 'locationDayLimit') {
-      if (this.refs.locationDayLimit.checked === false) {
-        this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true, locationDayLimitCount: '', locationDayLimitCountChange: false })
-      }
-      else {
-        this.setState({ locationDayLimit: this.refs.locationDayLimit.checked, locationDayLimitChange: true });
-      }
-    }
-    if (target.name === 'locationDayLimitCount')
-      this.setState({ locationDayLimitCount: event.target.value, locationDayLimitCountChange: true });
     if (target.name === 'name')
       this.setState({ name: event.target.value, submitted: false });
     if (target.name === 'start')
@@ -129,41 +113,37 @@ class GroupSettings extends React.Component {
       this.setState({ defaultWeekEndDutyLimit: event.target.value, submitted: false });
   }
 
-  updateGroupSettings() {
+  updateGroupSettings(event) {
+    
+    const target = event.target;
     let groupSettings = {};
-    if (this.state.isWeekdayControlChange) {
-      groupSettings.isWeekdayControl = this.state.isWeekdayControl;
+
+    if (target.name === 'weekday')
+      groupSettings.isWeekdayControl = this.refs.weekday.checked;
+    if (target.name === 'weekend')
+      groupSettings.isWeekendControl = this.refs.weekend.checked;
+    if (target.name === 'sequentialOrderLimitCount')
+      groupSettings.sequentialOrderLimitCount = parseInt(event.target.value);
+    if (target.name === 'locationDayLimit') {
+      groupSettings.locationDayLimit = this.refs.locationDayLimit.checked;
     }
-    if (this.state.isWeekendControlChange) {
-      groupSettings.isWeekendControl = this.state.isWeekendControl;
-    }
-    if (this.state.sequentialOrderLimitCountChange) {
-      groupSettings.sequentialOrderLimitCount = parseInt(this.state.sequentialOrderLimitCount);
-    }
-    if (this.state.locationDayLimitChange) {
-      groupSettings.locationDayLimit = this.state.locationDayLimit;
-    }
-    if (this.state.locationDayLimitCountChange && (this.state.locationDayLimit === '' ? this.props.locationDayLimit : this.state.locationDayLimit)) {
-      groupSettings.locationDayLimitCount = parseInt(this.state.locationDayLimitCount);
-    }
+    if (target.name === 'locationDayLimitCount')
+      groupSettings.locationDayLimitCount = parseInt(event.target.value);
+
 
     if (Object.keys(groupSettings).length !== 0) {
       this.props.updateGroupSettings(this.props.groupSettingsId, groupSettings);
-      this.setState({
-        isWeekdayControlChange: false,
-        isWeekendControlChange: false,
-        sequentialOrderLimitCountChange: false,
-        locationDayLimitChange: false,
-        locationDayLimitCountChange: false
-      })
     }
-
   }
 
   addHandleValidation() {
     let formIsValid = true;
     const { name, start, finish, defaultWeekDayDutyLimit, defaultWeekEndDutyLimit } = this.state;
     if (!name || !start || !finish || !defaultWeekDayDutyLimit || !defaultWeekEndDutyLimit) {
+      formIsValid = false;
+    }
+
+    if (finish < start) {
       formIsValid = false;
     }
 
@@ -176,9 +156,13 @@ class GroupSettings extends React.Component {
     if (!name || !start || !finish || !defaultWeekDayDutyLimit || !defaultWeekEndDutyLimit) {
       formIsValid = false;
     }
+
+    if (finish < start) {
+      formIsValid = false;
+    }
+
     return formIsValid
   }
-
 
   updateHandle(event) {
     this.setState({ submitted: true });
@@ -318,7 +302,7 @@ class GroupSettings extends React.Component {
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Tanım:</InputGroupText>
-                  <Input name="name" valid={true} type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="name" valid={true} type="text" value={this.state.name} maxLength={30} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !name &&
@@ -338,11 +322,14 @@ class GroupSettings extends React.Component {
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Bitiş (Ay):</InputGroupText>
-                  <Input name="finish" valid={true} type="number" value={this.state.finish} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="finish" valid={true} type="number" value={this.state.finish} min={this.state.start} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !finish &&
                 <p style={{ fontSize: 12 }} className="text-warning">Bitiş gerekli.</p>
+              }
+              {submitted && finish && finish < start &&
+                <p style={{ fontSize: 12 }} className="text-warning">Bitiş Başlangıça eşit ya da büyük olmalı.</p>
               }
 
 
@@ -403,7 +390,7 @@ class GroupSettings extends React.Component {
               <InputGroup className="input-group-alternative mb-3">
                 <InputGroupAddon addonType="prepend" style={{ width: "100%" }}>
                   <InputGroupText>Tanım:</InputGroupText>
-                  <Input name="name" type="text" value={this.state.name} onChange={(event) => this.inputChangeHandle(event)} />
+                  <Input name="name" type="text" value={this.state.name} maxLength={30} onChange={(event) => this.inputChangeHandle(event)} />
                 </InputGroupAddon>
               </InputGroup>
               {submitted && !name &&
@@ -429,6 +416,9 @@ class GroupSettings extends React.Component {
               </InputGroup>
               {submitted && !finish &&
                 <p style={{ fontSize: 12 }} className="text-warning">Bitiş gerekli.</p>
+              }
+              {submitted && finish && finish < start &&
+                <p style={{ fontSize: 12 }} className="text-warning">Bitiş Başlangıça eşit ya da büyük olmalı.</p>
               }
 
               <InputGroup className="input-group-alternative mb-3">
@@ -507,14 +497,14 @@ class GroupSettings extends React.Component {
                     <h3 className="mb-0">Takvim Ayarları</h3>
                   </Col>
                   <Col className="text-right" xl="3" lg="4" md="4" xs="7">
-                    <Button
+                    {/* <Button
                       type="button"
                       color="primary"
                       size="sm"
                       onClick={() => this.updateGroupSettings()}
                     >
                       GÜNCELLE
-                      </Button>
+                      </Button> */}
                   </Col>
                 </Row>
               </CardHeader>
@@ -535,7 +525,7 @@ class GroupSettings extends React.Component {
                             type="checkbox"
                             name="weekday"
                             ref="weekday"
-                            onClick={event => this.inputChangeHandle(event)}
+                            onClick={event => this.updateGroupSettings(event)}
                             defaultChecked={this.props.isWeekdayControl}
                           />
                           <div className="state p-success-o">
@@ -559,7 +549,7 @@ class GroupSettings extends React.Component {
                               type="checkbox"
                               name="weekend"
                               ref="weekend"
-                              onClick={event => this.inputChangeHandle(event)}
+                              onClick={event => this.updateGroupSettings(event)}
                               defaultChecked={this.props.isWeekendControl}
                             />
                             <div className="state p-success-o">
@@ -584,7 +574,7 @@ class GroupSettings extends React.Component {
                           >
                             Maksimum Ardışık Nöbet Sınırı
                             </Label>
-                          <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
+                          <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.updateGroupSettings(event)} />
 
                         </FormGroup>
                       </Form>
@@ -603,7 +593,7 @@ class GroupSettings extends React.Component {
                             type="checkbox"
                             name="locationDayLimit"
                             ref="locationDayLimit"
-                            onClick={event => this.inputChangeHandle(event)}
+                            onClick={event => this.updateGroupSettings(event)}
                             defaultChecked={this.props.locationDayLimit}
                           />
                           <div className="state p-success-o">
@@ -618,7 +608,7 @@ class GroupSettings extends React.Component {
                           min="0"
                           defaultValue={this.props.locationDayLimitCount}
                           disabled={this.state.locationDayLimit === '' ? !this.props.locationDayLimit : !this.state.locationDayLimit}
-                          onChange={(event) => this.inputChangeHandle(event)}
+                          onChange={(event) => this.updateGroupSettings(event)}
                         />
                       </Form>
                     </Col>

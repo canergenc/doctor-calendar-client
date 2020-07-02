@@ -6,15 +6,12 @@ import 'font-awesome/css/font-awesome.min.css';
 // reactstrap components
 import {
   Button,
-  Modal,
-  Label,
   Alert,
   Card,
   Badge,
   CardBody,
   FormGroup,
   Form,
-  
   Input,
   InputGroupAddon,
   InputGroupText,
@@ -23,6 +20,7 @@ import {
   Col
 } from "reactstrap";
 import * as EmailValidator from 'email-validator';
+
 class Register extends React.Component {
   constructor(props) {
     super(props);

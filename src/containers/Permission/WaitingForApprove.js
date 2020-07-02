@@ -58,17 +58,14 @@ class WaitingForApproved extends Component {
             currentIndex: 0,
             submitted: false,
             listOfPermission: [],
-            //copyOfListOfPermission: [],
             userId: '',
             searchParam: ''
-
         }
         this.inputChangeHandle = this.inputChangeHandle.bind(this);
         this.createPermission = this.createPermission.bind(this);
         this.getPermissionsBySearch = this.getPermissionsBySearch.bind(this);
         this.refreshPermissions = this.refreshPermissions.bind(this);
         this.keyPress = this.keyPress.bind(this);
-
     }
 
     loadPermissions() {
@@ -168,7 +165,7 @@ class WaitingForApproved extends Component {
                 isWeekend: false
             }
             this.props.createPermissions(data);
-            this.setState({ submitted: true, searchParam: '' });
+            this.setState({ submitted: true, searchParam: '', isOpenCreateModal: false });
         }
     }
 
@@ -235,6 +232,19 @@ class WaitingForApproved extends Component {
             });
             this.setState({ submitted: false });
             this.props.cleanFlags();
+        }
+        else if (this.props.crudSuccess) {
+
+            MySwal.fire({
+                icon: 'success',
+                title: 'Başarılı',
+                text: this.props.message,
+                showConfirmButton: true
+
+            });
+            this.setState({ submitted: false });
+            this.props.cleanFlags();
+            this.loadPermissions();
         }
     }
 
@@ -482,6 +492,8 @@ const mapStateToProps = state => {
         responseOnCreatePermission: state.permission.responseOnCreatePermission,
         globalUsers: state.users.globalUsers,
         totalPermissionCount: state.permission.permissionCount,
+        crudSuccess: state.permission.crudSuccess,
+        message: state.permission.message,
         error: state.permission.errorPermission
     }
 }

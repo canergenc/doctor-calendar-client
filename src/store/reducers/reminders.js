@@ -147,7 +147,7 @@ const isDraftProcessSuccess = (state, action) => {
 
 const isDraftProcessFail = (state, action) => {
   const updatedState = {
-    isDraft: action.isDraft,
+    isDraft: !action.isDraft,
     error: true,
     statusText: helperService.getErrorMessage(action.errorObj)
   }

@@ -14,6 +14,7 @@ class Person extends Component {
         
         const momentRange = extendMoment(moment);
 
+        const workStartDateDisplay = moment(this.props.workStartDate).format('DD-MM-YYYY');
         const workStartDate = moment(this.props.workStartDate).format('YYYY-MM-DD');
         const today = moment(new Date()).format('YYYY-MM-DD');
         const range = momentRange.range(workStartDate, today);
@@ -26,7 +27,7 @@ class Person extends Component {
         return (
             <tr key={this.props.id}>
                 <td>{this.props.fullName}</td>
-                <td>{workStartDate}</td>
+                <td>{workStartDateDisplay}</td>
                 <td>{seniority}</td>
                 <td>{this.props.email}</td>
                 <td>

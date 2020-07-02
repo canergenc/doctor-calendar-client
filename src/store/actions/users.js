@@ -163,10 +163,6 @@ export const findUser = (filterKey, users) => {
 }
 
 export const deleteUser = (userId, filterData) => {
-
-
-
-
     return dispatch => {
         userService.deleteUserService(userId).then(result => {
             dispatch(getUsers(filterData));

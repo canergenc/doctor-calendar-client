@@ -201,6 +201,7 @@ export const deleteGroupSettingsFailed = (error) => {
 
 export const getDefaultDays = (months) => {
     return dispatch => {
+        dispatch(getDefaultDaysStart());
         const filterData = {
             filter: {
                 where: {
@@ -230,6 +231,8 @@ export const getDefaultDays = (months) => {
         }
         groupSettingsService.getGroupSettings(filterData)
             .then(resp => {
+                console.log('then ');
+                
                 const countLimits = {};
                 if (resp.length > 0) {
                     countLimits.name = resp[0].name;
@@ -255,6 +258,12 @@ export const getDefaultDays = (months) => {
             })
 
 
+    };
+};
+
+export const getDefaultDaysStart = () => {
+    return {
+        type: actionTypes.GET_DEFAULT_DAYS_START
     };
 };
 

@@ -31,14 +31,13 @@ const MySwal = withReactContent(Swal)
 
 class Profile extends React.Component {
 
-
   constructor(props) {
     super(props);
     this.state = {
+      submitted: false,
       editModal: false,
       email: this.props.email,
       fullName: "",
-      deviceId: "",
       password: "",
       newPassword: "",
       newPasswordAgain: ""
@@ -47,9 +46,7 @@ class Profile extends React.Component {
     this.updateUserInfo = this.updateUserInfo.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.setInputDefaultValue = this.updateUserInfo.bind(this);
-
   }
-
 
   componentDidMount() {
     if (!this.props.email || !this.props.fullName) {
@@ -79,23 +76,18 @@ class Profile extends React.Component {
   inputChangeHandle(event) {
     const target = event.target;
     if (target.name === 'email')
-      this.setState({ email: event.target.value });
+      this.setState({ email: event.target.value, submitted: false });
     if (target.name === 'fullName')
-      this.setState({ fullName: event.target.value });
-    if (target.name === 'deviceId')
-      this.setState({ deviceId: event.target.value });
+      this.setState({ fullName: event.target.value, submitted: false });
     if (target.name === 'password')
-      this.setState({ password: event.target.value });
+      this.setState({ password: event.target.value, submitted: false });
     if (target.name === 'newPassword')
-      this.setState({ newPassword: event.target.value });
+      this.setState({ newPassword: event.target.value, submitted: false });
     if (target.name === 'newPasswordAgain')
-      this.setState({ newPasswordAgain: event.target.value });
+      this.setState({ newPasswordAgain: event.target.value, submitted: false });
   }
 
   setInputDefaultValue() {
-    if (this.props.deviceId) {
-      this.setState({ deviceId: this.props.deviceId });
-    }
     if (this.props.email) {
       this.setState({ email: this.props.email });
     }
@@ -103,37 +95,47 @@ class Profile extends React.Component {
     if (this.props.fullName) {
       this.setState({ fullName: this.props.fullName });
     }
+  }
 
+  passwordValidation() {
+    let formIsValid = true;
+    const { password, newPassword, newPasswordAgain } = this.state;
+
+    if (!password || !newPassword || !newPasswordAgain) {
+      formIsValid = false;
+    }
+
+    if (password && password.length < 8) {
+      formIsValid = false;
+    }
+
+    if (newPassword && newPassword.length < 8) {
+      formIsValid = false;
+    }
+
+    if (newPasswordAgain && newPasswordAgain.length < 8) {
+      formIsValid = false;
+    }
+
+    if (newPassword && newPasswordAgain && newPasswordAgain !== newPassword) {
+      formIsValid = false;
+    }
+
+    return formIsValid
   }
 
   updatePassword(event) {
-
-    if (this.state.password && this.state.newPassword) {
-      if (this.state.newPassword === this.state.newPasswordAgain) {
-        var data = {
-          oldPassword: this.state.password,
-          currentPassword: this.state.newPassword
-        }
-
-        var userId = helperService.getUserId();
-        this.props.updateUserInfo(userId, data);
-        this.toggleModal('editModal');
-        event.preventDefault();
+    this.setState({ submitted: true });
+    if (this.passwordValidation()) {
+      var data = {
+        oldPassword: this.state.password,
+        currentPassword: this.state.newPassword
       }
-      else {
-        MySwal.fire({
-          icon: 'warning',
-          title: 'Lütfen',
-          text: 'Yeni şifre alanları aynı olmalıdır.'
-        });
-      }
-    }
-    else {
-      MySwal.fire({
-        icon: 'warning',
-        title: 'Lütfen',
-        text: 'zorunlu alanları doldurunuz'
-      });
+
+      var userId = helperService.getUserId();
+      this.props.updateUserInfo(userId, data);
+      this.toggleModal('editModal');
+      event.preventDefault();
     }
   }
 
@@ -152,13 +154,15 @@ class Profile extends React.Component {
 
   toggleModal(state) {
     this.setState({
-      [state]: !this.state[state]
+      [state]: !this.state[state],
+      password: '',
+      newPassword: '',
+      newPasswordAgain: '',
     });
   };
 
-
   render() {
-
+    const { submitted, password, newPassword, newPasswordAgain } = this.state;
     return (
       <>
         <UserHeader fullName={this.props.fullName} />
@@ -184,22 +188,46 @@ class Profile extends React.Component {
               <FormGroup>
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
-                    <InputGroupText>Şifre:</InputGroupText>
+                    <InputGroupText>Geçerli Şifre:</InputGroupText>
                     <Input name="password" type="password" value={this.state.password} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
+                {submitted && !password &&
+                  <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre gerekli.</p>
+                }
+                {submitted && password && password.length < 8 &&
+                  <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre en az 8 karekter olmalı.</p>
+                }
+
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>Yeni Şifre:</InputGroupText>
                     <Input name="newPassword" type="password" value={this.state.newPassword} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
+                {submitted && !newPassword &&
+                  <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Yeni Şifre gerekli.</p>
+                }
+                {submitted && newPassword && newPassword.length < 8 &&
+                  <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Yeni Şifre en az 8 karekter olmalı.</p>
+                }
+
                 <InputGroup className="input-group-alternative mb-3">
                   <InputGroupAddon addonType="prepend">
                     <InputGroupText>Yeni Şifre (Tekrar):</InputGroupText>
                     <Input name="newPasswordAgain" type="password" value={this.state.newPasswordAgain} onChange={(event) => this.inputChangeHandle(event)} />
                   </InputGroupAddon>
                 </InputGroup>
+                {submitted && !newPasswordAgain &&
+                  <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Yeni Şifre (Tekrar) gerekli.</p>
+                }
+                {submitted && newPasswordAgain && newPasswordAgain.length < 8 &&
+                  <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Yeni Şifre (Tekrar) en az 8 karekter olmalı.</p>
+                }
+                {submitted && newPasswordAgain && newPasswordAgain.length >= 8 && newPasswordAgain !== newPassword &&
+                  <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Yeni Şifre ve Yeni Şifre (Tekrar) aynı olmalı.</p>
+                }
+
               </FormGroup>
             </Form>
           </div>
@@ -209,13 +237,13 @@ class Profile extends React.Component {
               data-dismiss="modal"
               type="button"
               onClick={() => this.toggleModal("editModal")}>Kapat
-                        </Button>
+            </Button>
             <Button color="primary" type="submit" onClick={this.updatePassword}>Şifre Güncelle</Button>
           </div>
         </Modal>
 
         {/* Page content */}
-        <Container style={{ marginTop: "-12rem" }} fluid className="profile"> 
+        <Container style={{ marginTop: "-12rem" }} fluid className="profile">
           <Row>
 
             <Col className="order-xl-1" xl="12">
@@ -225,7 +253,7 @@ class Profile extends React.Component {
                     <Col xl="8" lg="6" md="3" sm="2" xs="3">
                       <h3 className="mb-0">Hesabım</h3>
                     </Col>
-                    <Col className="text-right" xl="4" lg="6"  md="9" sm="10" xs="9">
+                    <Col className="text-right" xl="4" lg="6" md="9" sm="10" xs="9">
                       <Button
                         type="button"
                         color="primary"
@@ -301,7 +329,6 @@ class Profile extends React.Component {
                       </Row>
                     </div>
                     <hr className="my-4" />
-
 
                   </Form>
                 </CardBody>

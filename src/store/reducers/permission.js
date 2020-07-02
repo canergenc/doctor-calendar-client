@@ -42,7 +42,9 @@ const reducer = (state = initialState, action) => {
                 createPermissionReqLoading: false,
                 errorOnCreatePermission: false,
                 responseOnCreatePermission: action.response,
-                permissionCount: action.permissionCount
+                permissionCount: action.permissionCount,
+                crudSuccess:true,
+                message:'İzin oluşturuldu'
             };
         case actionTypes.CREATE_PERMISSION_FAILURE:
             return {
@@ -52,6 +54,7 @@ const reducer = (state = initialState, action) => {
                 responseOnCreatePermission: {},
                 errorPermission: true,
                 crudSuccess: false,
+                message:'İzin oluşturulamadı',
                 statusTextAtCreatePermission: helperService.getErrorMessage(action.errorObj)
             };
         case actionTypes.UPDATE_PERMISSION_REQUEST:
@@ -64,6 +67,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 updatePermissionReqLoading: false,
                 errorOnUpdatePermission: false,
+                crudSuccess:true,
+                message:'işlem başarılı',
                 responseOnUpdatePermission: action.response,
                 permissionCount: action.permissionCount
             };
@@ -73,6 +78,8 @@ const reducer = (state = initialState, action) => {
                 updatePermissionReqLoading: false,
                 errorOnUpdatePermission: true,
                 errorPermission: true,
+                crudSuccess: false,
+                message:'işlem başarısız',
                 responseOnUpdatePermission: {},
                 statusTextAtUpdatePermission: helperService.getErrorMessage(action.errorObj)
             };
@@ -123,6 +130,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 errorPermission: false,
+                crudSuccess:false,
                 statusTextAtCreatePermission: null,
                 responseOnCreatePermission: null
             };
