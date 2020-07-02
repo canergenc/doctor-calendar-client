@@ -114,7 +114,7 @@ class GroupSettings extends React.Component {
   }
 
   updateGroupSettings(event) {
-    
+
     const target = event.target;
     let groupSettings = {};
 
@@ -244,7 +244,8 @@ class GroupSettings extends React.Component {
         start: '',
         finish: '',
         defaultWeekDayDutyLimit: '',
-        defaultWeekEndDutyLimit: ''
+        defaultWeekEndDutyLimit: '',
+        submitted: false
       });
     }
   };
