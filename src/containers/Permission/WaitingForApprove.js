@@ -126,10 +126,13 @@ class WaitingForApproved extends Component {
 
     openCreateModal() {
         this.setState({
-            isOpenCreateModal: true
-        });
-        this.setState({
-            submitted: false
+            isOpenCreateModal: true,
+            submitted: false,
+            startDate: new Date(),
+            endDate: new Date(),
+            permissionType: CalendarTypes.OzelDurum,
+            description: '',
+            userId: ''
         });
     }
 
@@ -165,7 +168,7 @@ class WaitingForApproved extends Component {
                 isWeekend: false
             }
             this.props.createPermissions(data);
-            this.setState({ submitted: true, searchParam: '', isOpenCreateModal: false });
+            this.setState({ submitted: false, searchParam: '', isOpenCreateModal: false });
         }
     }
 
