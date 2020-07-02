@@ -519,7 +519,7 @@ class GroupSettings extends React.Component {
                           className="form-control-label mr-sm-2"
                           htmlFor="checkbox-weekday"
                         >
-                          Haftaiçi Kontrolü
+                          Haftaiçi Nöbet Limiti
                             </Label>
                         <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
                           <input
@@ -543,8 +543,8 @@ class GroupSettings extends React.Component {
                             className="form-control-label mr-sm-2"
                             htmlFor="checkbox-weekend"
                           >
-                            Haftasonu Kontrolü
-                            </Label>
+                            Haftasonu Nöbet Limiti
+                          </Label>
                           <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
                             <input
                               type="checkbox"
@@ -573,8 +573,8 @@ class GroupSettings extends React.Component {
                             className="form-control-label mr-sm-2"
                             htmlFor="sequentialOrderLimitCount"
                           >
-                            Maksimum Ardışık Nöbet Sınırı
-                            </Label>
+                            Maksimum Ardışık Nöbet Limiti
+                          </Label>
                           <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.updateGroupSettings(event)} />
 
                         </FormGroup>
@@ -586,8 +586,8 @@ class GroupSettings extends React.Component {
                           className="form-control-label"
                           htmlFor="checkbox-locationDayLimit"
                         >
-                          Maksimum Lokasyon - Gün Sınırı
-                            </Label>
+                          Maksimum Lokasyon - Gün Limiti
+                        </Label>
 
                         <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
                           <input
@@ -637,7 +637,7 @@ class GroupSettings extends React.Component {
                       onClick={() => this.toggleModal("addModal", undefined)}
                     >
                       Yeni
-                      </Button>
+                    </Button>
                   </Col>
                 </Row>
               </CardHeader>
