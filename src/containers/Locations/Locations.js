@@ -224,6 +224,22 @@ class Locations extends Component {
         ...draggableStyle
     });
 
+    locationSetIsActive = (event, id) => {
+
+        const locationData = {};
+
+        if (event.target.checked) {
+            locationData.isActive = false;
+            locationData.sortOrder=this.props.locations[this.props.locations.length-1].sortOrder + 1;
+            this.props.updateLocation(id, locationData);
+        }
+        else {
+            locationData.isActive = true;
+            locationData.sortOrder=this.props.locations[0].sortOrder - 1;
+            this.props.updateLocation(id, locationData);
+        }
+    }
+
     render() {
         const { name, colorCode, submitted } = this.state;
         let locations = <tr><td>Lokasyonlar Yükleniyor...</td></tr>;
@@ -253,6 +269,19 @@ class Locations extends Component {
                                 </div>
                             </td>
                             <td ><div style={{ display: "block", wordWrap: "break-word" }}>{location.name}</div></td>
+                            <td>
+                                <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
+                                    <input
+                                        type="checkbox"
+                                        name="weekend"
+                                        onChange={(event) => this.locationSetIsActive(event, location.id)}
+                                        checked={(location.isActive===false) ? true : false}
+                                    />
+                                    <div className="state p-danger-o">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </td>
                             <td className="color-right-resp" >
                                 <label className="radioLabelList" type="radioLabel" title={location.colorCode} htmlFor={location.colorCode}><span type="radioSpan" className={"radioSpanList " + location.colorCode} ></span></label>
                             </td>
@@ -477,6 +506,7 @@ class Locations extends Component {
                                             <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">Adı</th>
+                                                <th scope="col">Pasif mi?</th>
                                                 <th scope="col" className="color-right-resp">Renk</th>
                                                 <th scope="col" className="text-right">İşlemler</th>
                                             </tr>
