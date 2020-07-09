@@ -43,7 +43,7 @@ class Day extends Component {
         let remindersCount = 0;
         array.slice().reverse().forEach((element, index) => {
           if (element.user) {
-            if (remindersCount <= 3) {
+            // if (remindersCount <= 3) {
               preReminders.push(<Reminder
                 isDrag={true}
                 isMonthPast={this.props.isMonthPast}
@@ -56,7 +56,7 @@ class Day extends Component {
                 onClickDeleteReminder={() => this.props.deleteReminder(element.id)}
               />);
               remindersCount += 1;
-            }
+            // }
           }
         });
 
@@ -144,12 +144,12 @@ class Day extends Component {
           isDropDisabled={this.props.isMonthPast}
         >
           {provided => (
-            <article className={day}
+            <article className={day} id="style-5"
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
               <React.Fragment>
-                <header>{this.props.day}</header>
+                <header className="stickyDay" >{this.props.day}</header>
                 {preReminders}
               </React.Fragment>
             </article>)}
