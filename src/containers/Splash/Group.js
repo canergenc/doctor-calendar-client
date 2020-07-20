@@ -72,8 +72,8 @@ class GroupSplash extends React.Component {
 
     handleSubmit(event) {
         const { groupName } = this.state;
-        
-        let groupSettings = {type:1};
+
+        let groupSettings = { type: 1 };
         if (this.state.isWeekdayControlChange) {
             groupSettings.isWeekdayControl = this.state.isWeekdayControl;
         }
@@ -102,7 +102,7 @@ class GroupSplash extends React.Component {
         this.props.createGroup(null);
     }
 
-   
+
 
 
     showSwal() {
@@ -125,12 +125,12 @@ class GroupSplash extends React.Component {
 
         return (
             <>
-                <Col lg="6" md="8">
+                <Col lg="8" md="8">
                     <Card className="bg-secondary shadow border-0">
 
                         <CardBody >
-                            <div className="text-center text-muted mb-4">
-                                <h2> <Badge color="light" style={{ textTransform: 'none' }} >Grup adını düzenleyebilirsiniz,Örn: Pediatri Grubu</Badge></h2>
+                            <div className="text-center text-muted mb-2">
+                                <h2> <Badge color="light" style={{ textTransform: 'none',fontSize:'75%' }} >Grup adını düzenleyebilirsiniz,Örn: Pediatri Grubu</Badge></h2>
                             </div>
 
 
@@ -147,13 +147,17 @@ class GroupSplash extends React.Component {
 
                                 </FormGroup>
                                 <div className="pl-lg-1">
+                                    <div className="text-center text-muted mt-5 mb-3">
+                                        <h2> <Badge color="light" style={{ textTransform: 'none',fontSize:'75%' }} >Takvim Ayarları</Badge></h2>
+                                    </div>
                                     <Row>
-                                        <Col lg="6" className="formRow">
+                                        <Col lg="1"></Col>
+                                        <Col lg="5" className="formRow">
                                             <Label
                                                 className="form-control-label mr-sm-2"
                                                 htmlFor="checkbox-weekday"
                                             >
-                                                Haftaiçi Kontrolü
+                                                Haftaiçi Nöbet Limiti Aktif
                                             </Label>
                                             <div id="checkbox-weekday" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
                                                 <input
@@ -168,14 +172,14 @@ class GroupSplash extends React.Component {
                                                 </div>
                                             </div>
                                         </Col>
-                                        <Col lg="6">
+                                        <Col lg="5">
                                             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 
                                                 <Label
                                                     className="form-control-label mr-sm-2"
                                                     htmlFor="checkbox-weekend"
                                                 >
-                                                    Haftasonu Kontrolü
+                                                    Haftasonu Nöbet Limiti Aktif
                                                     </Label>
                                                 <div className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "4px", marginRight: "auto" }} >
                                                     <input
@@ -192,29 +196,30 @@ class GroupSplash extends React.Component {
 
                                             </FormGroup>
                                         </Col>
-
+                                        <Col lg="1"></Col>
                                     </Row>
 
                                     <Row style={{ marginTop: "25px" }}>
-                                        <Col lg="6" className="formRow">
+                                    <Col lg="1"></Col>
+                                        <Col lg="5" className="formRow">
                                             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 ">
 
                                                 <Label
                                                     className="form-control-label mr-sm-2"
                                                     htmlFor="sequentialOrderLimitCount"
                                                 >
-                                                    Maksimum Ardışık Nöbet Sınırı
+                                                    Maksimum Ardışık Nöbet Limiti
                                                     </Label>
                                                 <Input id="sequentialOrderLimitCount" className="sequentialOrderLimitCount" bsSize="sm" name="sequentialOrderLimitCount" type="number" min="0" defaultValue={this.props.sequentialOrderLimitCount} onChange={(event) => this.inputChangeHandle(event)} />
 
                                             </FormGroup>
                                         </Col>
-                                        <Col lg="6">
+                                        <Col lg="5">
                                             <Label
                                                 className="form-control-label"
                                                 htmlFor="checkbox-locationDayLimit"
                                             >
-                                                Maksimum Lokasyon - Gün Sınırı
+                                                Maksimum Lokasyon - Gün Limiti
                                                 </Label>
 
                                             <div id="checkbox-locationDayLimit" className="pretty p-default p-curve" style={{ marginLeft: "5px", marginBottom: "auto", marginTop: "auto", marginRight: "5px" }} >
@@ -240,6 +245,7 @@ class GroupSplash extends React.Component {
                                                 onChange={(event) => this.inputChangeHandle(event)}
                                             />
                                         </Col>
+                                        <Col lg="1"></Col>
                                     </Row>
 
                                 </div>

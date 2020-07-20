@@ -44,6 +44,7 @@ class LocationSplash extends React.Component {
         if (this.state.locationInput && this.state.locationInput.length > 0) {
 
             lists.push({ id: lists.length, context: this.state.locationInput, modifier: helperService.getColorName(currentIndex), sortOrder:currentIndex + 1 });
+            console.log(lists);
             this.setState({ listOfLocation: lists, locationInput: '', currentIndex: currentIndex + 1 });
 
         }
@@ -76,7 +77,8 @@ class LocationSplash extends React.Component {
             let locModel = {
                 name: loc.context,
                 colorCode: loc.modifier,
-                groupId: this.state.groupId
+                groupId: this.state.groupId,
+                sortOrder:loc.sortOrder
             }
             result.push(locModel);
         });
