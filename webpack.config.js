@@ -40,7 +40,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(woff|woff2|ttf|eot|svg|otf|gif|png|jpg|jpeg|ico|json)$/,
+                test: /\.(woff|woff2|ttf|eot|svg|otf|gif|png|jpg|jpeg|ico)$/,
                 use: [{
                     loader: 'file-loader'
                 }]

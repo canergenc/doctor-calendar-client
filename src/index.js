@@ -33,7 +33,7 @@ import resetPasswordReducer from "./store/reducers/reset.password";
 import confirmEmailReducer from "./store/reducers/confirm.email";
 import history from "./hoc/Config/history";
 import { constants } from "./variables/constants";
-
+import './i18n';
 // Redux Chrome Devtool Extension
 const composeEnhancers =
   (process.env.NODE_ENV === "development"

@@ -1,0 +1,24 @@
+{
+  "general": {
+    "wait": "Please wait..."
+  },
+  "email": { "need": "Email gerekli.", "format": "Email formatı uygun değil." },
+  "password": {
+    "need": "Şifre gerekli.",
+    "char": "Şifre 8 karakter olmalı.",
+    "forget": "Şifremi Unuttum"
+  },
+
+  "login": {
+    "button": "Giriş Yap",
+    "rememberMe": "Beni hatırla."
+  },
+  "register": {
+    "header": "Üyelik",
+    "signUp":"Kayıt ol",
+    "needFullName":"Ad ve soyad gerekli.",
+    "termsOfMembership":"Üyelik koşullarını ve kişisel verilerimin korunmasını kabul ediyorum",
+    "privacyPolicy":"Gizlilik politikası onaylanmalı"
+  },
+  "header": "Üye Girişi"
+}

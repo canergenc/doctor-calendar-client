@@ -1,0 +1,30 @@
+{
+  "general":{
+    "wait": "Please wait..."
+  },
+  "email": {
+    "need": "Need e-mail.",
+    "format": "E-mail format is not correct."
+  },
+  "password": {
+    "password":"Password",
+    "need": "Need password.",
+    "char": "Password must be 8 char.",
+    "forget": "Forgot my password"
+  },
+  "login": {
+    "button": "Login",
+    "rememberMe": "Remember me."
+  },
+  "register": {
+    "fullName":"Full Name",
+    "header": "Register",
+    "signUp":"Sign up",
+    "needFullName":"Need full name.",
+    "email":"Email",
+    "needEmail":"Email gerekli.",
+    "termsOfMembership":"I accept the terms of membership and the protection of my personal data",
+    "privacyPolicy":"Privacy policy must be approved"
+  },
+  "header": "Member Login"
+}

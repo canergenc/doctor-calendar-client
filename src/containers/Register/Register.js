@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import React from "react";
-import { Link } from "react-router-dom";
 import * as actions from '../../store/actions/index';
 import 'font-awesome/css/font-awesome.min.css';
 // reactstrap components
@@ -20,6 +19,7 @@ import {
   Col
 } from "reactstrap";
 import * as EmailValidator from 'email-validator';
+import { withTranslation } from "react-i18next";
 
 class Register extends React.Component {
   constructor(props) {
@@ -48,7 +48,6 @@ class Register extends React.Component {
     else if (target.name === 'privacyPolicy')
       this.setState({ privacyPolicy: !this.state.privacyPolicy })
   }
-
 
   handleValidation() {
     let formIsValid = true;
@@ -84,6 +83,7 @@ class Register extends React.Component {
   };
 
   render() {
+    const { t } = this.props;
     const { fullName, email, password, submitted, privacyPolicy } = this.state;
     const isEmailValid = EmailValidator.validate(email);
     return (
@@ -126,7 +126,7 @@ class Register extends React.Component {
 
             <CardBody className="px-lg-5 py-lg-5">
               <div className="text-center text-muted mb-4">
-                <h1> <Badge color="light">ÜYE OL</Badge></h1>
+                <h1> <Badge color="light">{t('register.header')}</Badge></h1>
               </div>
 
               {this.props.statusText ?
@@ -143,12 +143,11 @@ class Register extends React.Component {
                         <i className="ni ni-single-02" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Ad ve Soyad" name="fullName" type="text" value={this.state.fullName} onChange={this.handleInputChange} />
+                    <Input placeholder={t('register.fullName')} name="fullName" type="text" value={this.state.fullName} onChange={this.handleInputChange} />
                   </InputGroup>
                   {submitted && !fullName &&
 
-                    <p style={{ fontSize: 12 }} className="text-warning">Ad ve soyad gerekli.</p>
-                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                    <p style={{ fontSize: 12 }} className="text-warning">{t('register.needFullName')}</p>
                   }
 
                 </FormGroup>
@@ -160,19 +159,17 @@ class Register extends React.Component {
                         <i className="ni ni-email-83" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input name="email" placeholder="Email" type="text" value={this.state.email} onChange={this.handleInputChange} />
+                    <Input name="email" placeholder={t('register.email')} type="text" value={this.state.email} onChange={this.handleInputChange} />
                   </InputGroup>
 
                   {submitted && !email &&
 
-                    <p style={{ fontSize: 12 }} className="text-warning">Email gerekli.</p>
-                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                    <p style={{ fontSize: 12 }} className="text-warning">{t('email.need')}</p>
                   }
 
                   {submitted && email && !isEmailValid &&
 
-                    <p style={{ fontSize: 12 }} className="text-warning">Email formatı uygun değil.</p>
-                    // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
+                    <p style={{ fontSize: 12 }} className="text-warning">{t('email.format')}</p>
                   }
                 </FormGroup>
                 <FormGroup>
@@ -182,11 +179,11 @@ class Register extends React.Component {
                         <i className="ni ni-lock-circle-open" />
                       </InputGroupText>
                     </InputGroupAddon>
-                    <Input placeholder="Şifre" type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
+                    <Input placeholder={t('password.password')} type="password" name="password" value={this.state.password} onChange={this.handleInputChange} />
                   </InputGroup>
                   {submitted && !password &&
 
-                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre gerekli.</p>
+                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">{t('password.need')}</p>
 
 
                     // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
@@ -195,7 +192,7 @@ class Register extends React.Component {
 
                   {submitted && password && password.length < 8 &&
 
-                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">Şifre en az 8 karekter olmalı.</p>
+                    <p style={{ fontSize: 12, marginTop: '2%' }} className="text-warning">{t('password.char')}</p>
 
 
                     // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
@@ -224,28 +221,20 @@ class Register extends React.Component {
                       >
                         <span className="text-muted">
                           <a href="https://omnicali-demo.web.app/terms_and_conditions.htm" >
-                            Üyelik koşullarını{" "}
+                            {t('register.termsOfMembership')}
                           </a>
-                          ve{" "}
-                          <a href="https://omnicali-demo.web.app/terms_and_conditions.htm" >
-                            kişisel verilerimin korunmasını{" "}
-                          </a>
-                          kabul ediyorum
                         </span>
                       </label>
                     </div>
                   </Col>
                 </Row>
 
-
                 {submitted && !privacyPolicy &&
-                  <p style={{ fontSize: 12 }} className="text-warning">Gizlilik politikası onaylanmalı</p>
+                  <p style={{ fontSize: 12 }} className="text-warning">{t('register.privacyPolicy')}</p>
                   // <div style={{ color: 'red', fontSize: 12, marginTop: '2%' }}>Email gerekli.</div>
                 }
 
-
                 <Row>
-
                   <Button  style={{ height: '45px' }} block color="primary" color="primary" type="submit" disabled={this.props.isRegistiring} >
 
                     {this.props.isRegistiring && (
@@ -255,23 +244,14 @@ class Register extends React.Component {
                       />
                     )}
 
-                    {this.props.isRegistiring && <span>Lütfen bekleyin...</span>}
-                    {!this.props.isRegistiring && <span>Kayıt Ol</span>}
+                    {this.props.isRegistiring && <span>{t('general.wait')}</span>}
+                    {!this.props.isRegistiring && <span>{t('register.signUp')}</span>}
                   </Button>
 
                 </Row>
-
-
-
-
               </Form>
             </CardBody>
           </Card>
-
-          
-
-
-
         </Col>
       </>
     );
@@ -284,8 +264,6 @@ const mapStateToProps = state => {
     isRegistered: state.register.isRegistered,
     user: state.register.user,
     statusText: state.register.statusText
-
-
   };
 }
 const mapDispatchToProps = dispatch => {
@@ -293,6 +271,4 @@ const mapDispatchToProps = dispatch => {
     register: (email, fullName, password) => dispatch(actions.registerActions.register(email, fullName, password)),
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
-
-
+export default withTranslation()(connect(mapStateToProps, mapDispatchToProps)(Register));
