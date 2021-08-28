@@ -27,8 +27,8 @@ import {
 
 const login = (props) => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const isEmailValid = EmailValidator.validate(email);
@@ -70,7 +70,6 @@ const login = (props) => {
 
   const handleValidation = () => {
     let formIsValid = true;
-    const { email, password } = this.state;
     if (!email || !password) {
       formIsValid = false;
     }
@@ -87,9 +86,8 @@ const login = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { email, password, rememberMe } = this.state;
     setSubmitted(true);
-    if (this.handleValidation()) {
+    if (handleValidation()) {
       props.loginAction(email, password, rememberMe);
     }
   };
