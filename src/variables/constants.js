@@ -1,7 +1,7 @@
 export const constants = {
 
 
-    BASE_URL: "https://doctorcalendar.eu-gb.mybluemix.net",
+    BASE_URL: "http://localhost:3000",
 
     ERRORCODE: {
         422: '422',
