@@ -7,7 +7,6 @@ import "font-awesome/css/font-awesome.min.css";
 import * as EmailValidator from "email-validator";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-const MySwal = withReactContent(Swal);
 
 import {
   Button,
@@ -22,13 +21,14 @@ import {
   Row,
   Badge,
   Col,
-  Alert
+  Alert,
 } from "reactstrap";
+const MySwal = withReactContent(Swal);
 
 const login = (props) => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const isEmailValid = EmailValidator.validate(email);
@@ -99,7 +99,7 @@ const login = (props) => {
           <CardBody className="px-lg-5 py-lg-5">
             <div className="text-center text-muted mb-4">
               <h1>
-                <Badge color="light">{t('header')}</Badge>
+                <Badge color="light">{t("header")}</Badge>
               </h1>
             </div>
             <Form role="form" onSubmit={handleSubmit}>
@@ -129,7 +129,7 @@ const login = (props) => {
                     style={{ fontSize: 12, marginTop: "1%" }}
                     className="text-warning"
                   >
-                    {t('email.need')}
+                    {t("email.need")}
                   </p>
                 ) : null}
 
@@ -138,7 +138,7 @@ const login = (props) => {
                     style={{ fontSize: 12, marginTop: "1%" }}
                     className="text-warning"
                   >
-                    {t('email.format')}
+                    {t("email.format")}
                   </p>
                 ) : null}
               </FormGroup>
@@ -163,7 +163,7 @@ const login = (props) => {
                     style={{ fontSize: 12, marginTop: "1%" }}
                     className="text-warning"
                   >
-                    {t('password.need')}
+                    {t("password.need")}
                   </p>
                 ) : null}
 
@@ -172,7 +172,7 @@ const login = (props) => {
                     style={{ fontSize: 12, marginTop: "1%" }}
                     className="text-warning"
                   >
-                    {t('password.char')}
+                    {t("password.char")}
                   </p>
                 ) : null}
               </FormGroup>
@@ -191,14 +191,16 @@ const login = (props) => {
                       className="custom-control-label"
                       htmlFor="customCheckRegister"
                     >
-                      <span className="text-muted">{t('login.rememberMe')}</span>
+                      <span className="text-muted">
+                        {t("login.rememberMe")}
+                      </span>
                     </label>
                   </div>
                 </Col>
 
                 <Col xs="5">
                   <Link to="/auth/password-forgot">
-                    <small>{t('password.forget')}</small>
+                    <small>{t("password.forget")}</small>
                   </Link>
                 </Col>
               </Row>
@@ -212,8 +214,8 @@ const login = (props) => {
                     />
                   )}
 
-                  {props.isAuthenticating && <span>{t('general.wait')}</span>}
-                  {!props.isAuthenticating && <span>{t('login.button')}</span>}
+                  {props.isAuthenticating && <span>{t("general.wait")}</span>}
+                  {!props.isAuthenticating && <span>{t("login.button")}</span>}
                 </Button>
               </Row>
             </Form>

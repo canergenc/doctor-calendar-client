@@ -11,14 +11,14 @@
 
   "login": {
     "button": "Giriş Yap",
-    "rememberMe": "Beni hatırla."
+    "rememberMe": "Beni hatırla"
   },
   "register": {
     "header": "Üyelik",
-    "signUp":"Kayıt ol",
-    "needFullName":"Ad ve soyad gerekli.",
-    "termsOfMembership":"Üyelik koşullarını ve kişisel verilerimin korunmasını kabul ediyorum",
-    "privacyPolicy":"Gizlilik politikası onaylanmalı"
+    "signUp": "Kayıt ol",
+    "needFullName": "Ad ve soyad gerekli.",
+    "termsOfMembership": "Üyelik koşullarını ve kişisel verilerimin korunmasını kabul ediyorum",
+    "privacyPolicy": "Gizlilik politikası onaylanmalı"
   },
   "header": "Üye Girişi"
 }
